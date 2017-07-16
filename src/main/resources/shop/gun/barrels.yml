@@ -1,0 +1,57 @@
+
+small:
+  display-name: 'Small Barrel'
+  cost: 0
+  default: true
+  icon:
+    type: 'FIREWORK'
+    lore:
+    - '&7Choose a firework shape!'
+    - ''
+    - '&7Cost: &6%cost%'
+  firework-type: 'BALL'
+
+large:
+  display-name: 'Large Barrel'
+  cost: 9000
+  icon:
+    type: 'FIREBALL'
+    lore:
+    - '&7Choose a firework shape!'
+    - ''
+    - '&7Cost: &6%cost%'
+  firework-type: 'LARGE_BALL'
+
+creeper:
+  display-name: 'Creeper Barrel'
+  cost: 9000
+  icon:
+    type: 'SKULL_ITEM'
+    data: 4
+    lore:
+    - '&7Choose a firework shape!'
+    - ''
+    - '&7Cost: &6%cost%'
+  firework-type: 'CREEPER'
+
+burst:
+  display-name: 'Burst Barrel'
+  cost: 9000
+  icon:
+    type: 'FEATHER'
+    lore:
+    - '&7Choose a firework shape!'
+    - ''
+    - '&7Cost: &6%cost%'
+  firework-type: 'BURST'
+
+star:
+  display-name: 'Star Barrel'
+  cost: 9000
+  icon:
+    type: 'GOLD_NUGGET'
+    lore:
+    - '&7Choose a firework shape!'
+    - ''
+    - '&7Cost: &6%cost%'
+  firework-type: 'STAR'

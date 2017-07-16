@@ -1,0 +1,26 @@
+
+example:
+  display-name: 'The Example'
+  icon:
+    type: 'IRON_HOE'
+    lore:
+      - '&7Choose a gun!'
+      - ''
+      - 'Barrel: %barrel%'
+      - 'Case: %case%'
+      - 'Laser: %laser%'
+      - 'Muzzle: %muzzle%'
+      - 'Trigger: %trigger%'
+
+  barrel: 'burst'
+  case: 'reinforced'
+  laser: 'red'
+  muzzle: 'golden'
+  trigger: '0-9-s'
+
+  links:
+    - type: 'IRON_INGOT'
+      amount: 2
+
+  particles:
+    - type: 'REDSTONE'

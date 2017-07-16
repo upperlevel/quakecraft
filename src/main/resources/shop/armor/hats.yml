@@ -1,0 +1,35 @@
+cactus:
+  display-name: 'Cactus Hat'
+  cost: 350
+  icon:
+    type: 'CACTUS'
+    lore:
+      - '&7Collect all the hats!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'CACTUS'
+
+melon:
+  display-name: 'Melon Hat'
+  cost: 350
+  icon:
+    type: 'MELON'
+    lore:
+      - '&7Collect all the hats!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'MELON'
+
+spaceman:
+  display-name: 'Spaceman Hat'
+  cost: 700
+  icon:
+    type: 'GLASS'
+    lore:
+      - '&7Collect all the hats!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'GLASS'

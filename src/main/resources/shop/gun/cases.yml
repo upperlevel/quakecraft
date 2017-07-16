@@ -1,0 +1,148 @@
+
+wood:
+  display-name: 'Wooden Case'
+  cost: 0
+  default: true
+  icon:
+    type: 'WOOD_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'WOOD_HOE'
+
+marbled:
+  display-name: 'Marbled Case'
+  cost: 1000
+  icon:
+    type: 'STONE_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'STONE_HOE'
+
+varnished-wood:
+  display-name: 'Varnished Wood Case'
+  cost: 1000
+  icon:
+    type: 'WOOD_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+    enchantments:
+    - type: 'POWER'
+      level: 10
+  display:
+    type: 'WOOD_HOE'
+    enchantments:
+    - type: 'POWER'
+      level: 10
+
+polished-wood:
+  display-name: 'Polished Wood Case'
+  cost: 1000
+  icon:
+    type: 'STONE_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+    enchantments:
+    - type: 'POWER'
+      level: 10
+  display:
+    type: 'STONE_HOE'
+    enchantments:
+    - type: 'POWER'
+      level: 10
+
+reinforced:
+  display-name: 'Reinforced Case'
+  cost: 2500
+  icon:
+    type: 'IRON_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'IRON_HOE'
+
+plated:
+  display-name: 'Plated Case'
+  cost: 4000
+  icon:
+    type: 'GOLD_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'GOLD_HOE'
+
+bling:
+  display-name: 'Bling Case'
+  cost: 7000
+  icon:
+    type: 'DIAMOND_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'DIAMOND_HOE'
+
+polished-plated:
+  display-name: 'Polished Plated Case'
+  cost: 14000
+  icon:
+    type: 'GOLD_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+  display:
+    type: 'GOLD_HOE'
+    enchantments:
+    - type: 'POWER'
+      level: 10
+
+polished-bling-case:
+  display-name: 'Polished Bling Case'
+  cost: 100000
+  icon:
+    type: 'DIAMOND_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+    enchantments:
+      - type: 'POWER'
+        level: 10
+  display:
+    type: 'DIAMOND_HOE'
+    enchantments:
+      - type: 'POWER'
+        level: 10
+
+polished-reinforced-case:
+  display-name: 'Polished Reinforced Case'
+  cost: 200000
+  icon:
+    type: 'IRON_HOE'
+    lore:
+      - '&7Choose an appearance!'
+      - ''
+      - '&7Cost: &6%cost%'
+    enchantments:
+      - type: 'POWER'
+        level: 10
+  display:
+    type: 'IRON_HOE'
+    enchantments:
+      - type: 'POWER'
+        level: 10

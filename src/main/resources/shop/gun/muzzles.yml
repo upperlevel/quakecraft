@@ -1,0 +1,265 @@
+none:
+  display-name: 'No Muzzle'
+  cost: 0
+  default: true
+  icon:
+    type: 'GLASS'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'REDSTONE'
+      color: 'RED'
+
+clay:
+  display-name: 'Clay Muzzle'
+  cost: 5000
+  icon:
+    type: 'CLAY'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'CLAY'
+
+wooden:
+  display-name: 'Wooden Muzzle'
+  cost: 5000
+  icon:
+    type: 'WOOD'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'WOOD'
+
+golden:
+  display-name: 'Golden Muzzle'
+  cost: 7500
+  icon:
+    type: 'GOLD_BLOCK'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'GOLD_BLOCK'
+
+redstone:
+  display-name: 'Redstone Muzzle'
+  cost: 7500
+  icon:
+    type: 'REDSTONE_BLOCK'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'REDSTONE_BLOCK'
+
+iron:
+  display-name: 'Iron Muzzle'
+  cost: 8200
+  icon:
+    type: 'IRON_BLOCK'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'IRON_BLOCK'
+
+ender-stone:
+  display-name: 'Ender Stone Muzzle'
+  cost: 8500
+  icon:
+    type: 'ENDER_STONE'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'ENDER_STONE'
+
+diamond:
+  display-name: 'Diamond Muzzle'
+  cost: 9000
+  icon:
+    type: 'DIAMOND_BLOCK'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'DIAMOND_BLOCK'
+
+quartz:
+  display-name: 'Quartz Muzzle'
+  cost: 15000
+  icon:
+    type: 'QUARTZ_ORE'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'QUARTZ_ORE'
+
+emerald:
+  display-name: 'Emerald Muzzle'
+  cost: 25000
+  icon:
+    type: 'EMERALD_BLOCK'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'EMERALD_BLOCK'
+
+lapis:
+  display-name: 'Lapis Muzzle'
+  cost: 25000
+  icon:
+    type: 'LAPIS_BLOCK'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'LAPIS_BLOCK'
+
+obsidian:
+  display-name: 'Obsidian Muzzle'
+  cost: 50000
+  icon:
+    type: 'OBSIDIAN'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'OBSIDIAN'
+
+sponge:
+  display-name: 'Sponge Muzzle'
+  cost: 50000
+  icon:
+    type: 'SPONGE'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'SPONGE'
+
+sea-lantern:
+  display-name: 'Sea Lantern Muzzle'
+  cost: 75000
+  icon:
+    type: 'SEA_LANTERN'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+    particles:
+      - type: 'BLOCK_DUST'
+        block:
+          type: 'SEA_LANTERN'
+
+command-block:
+  display-name: 'Command Block Muzzle'
+  cost: 100000
+  icon:
+    type: 'COMMAND'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+    particles:
+      - type: 'BLOCK_DUST'
+        block:
+          type: 'COMMAND'
+
+prismarine:
+  display-name: 'Prismarine Muzzle'
+  cost: 100000
+  icon:
+    type: 'PRISMARINE'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+    particles:
+      - type: 'BLOCK_DUST'
+        block:
+          type: 'PRISMARINE'
+
+melon:
+  display-name: 'Melon Muzzle'
+  cost: 125000
+  icon:
+    type: 'MELON'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+    particles:
+      - type: 'BLOCK_DUST'
+        block:
+          type: 'MELON'
+
+pumpkin:
+  display-name: 'Pumpkin Muzzle'
+  cost: 100000
+  icon:
+    type: 'PUMPKIN'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+    particles:
+      - type: 'BLOCK_DUST'
+        block:
+          type: 'PUMPKIN'
+
+soul-sand:
+  display-name: 'Soul Sand Muzzle'
+  cost: 500000
+  icon:
+    type: 'SOUL_SAND'
+    lore:
+      - '&7Choose a particle effect!'
+      - ''
+      - '&7Cost: &7%cost%'
+    particles:
+      - type: 'BLOCK_DUST'
+        block:
+          type: 'SOUL_SAND'

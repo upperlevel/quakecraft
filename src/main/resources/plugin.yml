@@ -1,0 +1,11 @@
+name: QuakeCraftReloaded
+version: 1.0
+main: xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded
+author: [upperlevel]
+
+softdepend: [PlaceholderAPI]
+
+commands:
+  qcr:
+    description: 'Main commands of QuakeCraftReloaded.'
+    aliases: [qc,quakecraft,quake,quakecraftreloaded,quakereloaded]
