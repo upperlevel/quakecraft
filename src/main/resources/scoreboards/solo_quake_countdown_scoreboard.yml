@@ -1,0 +1,9 @@
+title: '&e&lQUAKECRAFT'
+lines:
+  - ''
+  - '&fMap: &a%quake_game_name%'
+  - '&fPlayers: &a%quake_game_players%/%quake_game_max_players%'
+  - ''
+  - '&fStarting in &a%quake_lobby_countdown%s'
+  - ''
+  - '&ewww.upperlevel.xyz'

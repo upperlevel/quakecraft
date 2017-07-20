@@ -50,10 +50,10 @@ public class QuakeCraftReloaded extends JavaPlugin {
         guis = GuiSystem.subscribe(this);
 
         hotbars = HotbarSystem.subscribe(this);
+        hotbars.loadDefaultFolder();
 
         scoreboards = ScoreboardSystem.subscribe(this);
-        scoreboards.load(new File(scoreboards.getFolder(), "solo_quake_lobby.yml"));
-        scoreboards.load(new File(scoreboards.getFolder(), "solo_quake_countdown.yml"));
+        scoreboards.loadDefaultFolder();
 
         arenaManager.load();
         gameManager.load();

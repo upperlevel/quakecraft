@@ -1,0 +1,22 @@
+gun:
+  slot: 0
+  item:
+    type: '%quake_gun_case_type%'
+    data: '%quake_gun_case_data%'
+    name: '&7Railgun'
+    lore:
+      - '&7Case: &a%quake_gun_case_name%'
+      - '&7Laser: &a%quake_gun_laser_name%'
+      - '&7Barrel: &a&quake_gun_barrel_name%'
+      - '&7Muzzle: &a&quake_gun_muzzle_name%'
+      - '&7Trigger: &a&quake_gun_trigger_name%'
+      - ''
+      - '&eRight-click to shoot!'
+      - '&eLeft-click to dash forward!'
+tracker:
+  slot: 1
+  item:
+    type: compass
+    name: '&aTracking Device'
+    lore:
+      - '&7Points the closest enemy!'

@@ -1,0 +1,11 @@
+icons:
+  - slot: 8
+    item:
+      type: bed
+      name: '&c&lReturn to Lobby'
+      lore:
+        - '&7Right-click to leave to the lobby!'
+      actions:
+        - command:
+            command: quake leave %quake_game_name%
+            executor: player
