@@ -17,7 +17,9 @@ import xyz.upperlevel.spigot.quakecraft.event.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.event.GameQuitEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 
@@ -27,6 +29,8 @@ public class Game implements Listener {
     private final Arena arena;
     private final PhaseManager phaseManager = new PhaseManager();
     private final List<Player> players = new ArrayList<>();
+
+    private Player winner;
 
     /**
      * Gets name of this arena.
@@ -67,12 +71,11 @@ public class Game implements Listener {
     }
 
     public void join(Player player) {
+        players.add(player);
         GameJoinEvent e = new GameJoinEvent(this, player);
-
         Bukkit.getPluginManager().callEvent(e);
-
-        if (!e.isCancelled())
-            players.add(player);
+        if (e.isCancelled())
+            players.remove(player);
     }
 
     public boolean isPlaying(Player player) {

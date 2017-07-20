@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.commands.arguments;
+package xyz.upperlevel.spigot.quakecraft.arguments;
 
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.uppercore.command.arguments.ArgumentParser;
-import xyz.upperlevel.uppercore.command.arguments.exceptions.ParseException;
+import xyz.upperlevel.uppercore.command.argument.ArgumentParser;
+import xyz.upperlevel.uppercore.command.argument.exceptions.ParseException;
 
 import java.util.List;
 

@@ -2,17 +2,14 @@ package xyz.upperlevel.spigot.quakecraft.arena;
 
 import lombok.Data;
 import org.bukkit.Location;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
-import xyz.upperlevel.uppercore.util.Config;
+import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.util.SerializationUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.bukkit.ChatColor.GREEN;
 
 @Data
 public class Arena {
@@ -69,10 +66,10 @@ public class Arena {
         players.put("max", maxPlayers);
         data.put("players", players);
 
-        List<Map<String, Object>> spawns = new ArrayList<>();
-        for (Location spawn : this.spawns)
-            spawns.add(SerializationUtil.serialize(spawn));
-        data.put("spawns", spawns);
+        List<Map<String, Object>> spawnsDt = new ArrayList<>();
+        for (Location spawn : spawns)
+            spawnsDt.add(SerializationUtil.serialize(spawn));
+        data.put("spawns", spawnsDt);
         return data;
     }
 
@@ -82,11 +79,11 @@ public class Arena {
         arena.displayName = config.getString("display-name");
         arena.lobby = config.getLocation("lobby");
 
-        Config players = config.getSection("players");
+        Config players = config.getConfig("players");
         arena.minPlayers = players.getInt("min");
         arena.maxPlayers = players.getInt("max");
 
-        arena.spawns = config.getLocationList("spawns");
+        arena.spawns = config.getList("spawns");
         return arena;
     }
 

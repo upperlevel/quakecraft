@@ -12,7 +12,7 @@ import java.util.List;
 import static org.bukkit.ChatColor.RESET;
 
 /**
- * ScoreboardWrapper is a class that wraps Bukkit Scoreboard API
+ * ScoreboardWrapper is a class that wraps Bukkit Board API
  * and makes your life easier.
  */
 public class ScoreboardHandler {
@@ -90,7 +90,7 @@ public class ScoreboardHandler {
     }
 
     /**
-     * Gets the Bukkit Scoreboard.
+     * Gets the Bukkit Board.
      */
     public Scoreboard getHandle() {
         return handle;

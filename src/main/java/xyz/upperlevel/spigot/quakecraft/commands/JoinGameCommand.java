@@ -22,7 +22,7 @@ public class JoinGameCommand extends Command {
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
         Game game = QuakeCraftReloaded.get().getGameManager().getGame(arena);
         if (game == null) {
-            sender.sendMessage(ChatColor.RED + "Any game found by: " + arena); // todo config
+            sender.sendMessage(ChatColor.RED + "Any game found by: " + arena.getName()); // todo config
             return;
         }
         game.join((Player) sender);

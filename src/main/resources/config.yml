@@ -20,7 +20,7 @@ solo:
       startAt: 10
 
     #
-    # Lobby scoreboard
+    # Lobby board
     #
     # Placeholders available:
     # %arena%     - arena
@@ -29,11 +29,11 @@ solo:
     # %max%       - max number of players
     # %countdown% - countdown current seconds
     #
-    scoreboard:
+    board:
 
       #
-      # If enabled, the scoreboard will be updated each amount of ticks specified and whenever placeholders inside of it changes.
-      # If disabled, the scoreboard will be updated only for the second occasion written above.
+      # If enabled, the board will be updated each amount of ticks specified and whenever placeholders inside of it changes.
+      # If disabled, the board will be updated only for the second occasion written above.
       #
       # Pay attention that if you have PlaceholderAPI placeholders, they will not be updated if update is disabled.
       #
