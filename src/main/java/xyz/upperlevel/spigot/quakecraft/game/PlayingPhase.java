@@ -2,7 +2,6 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,45 +19,44 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleEffect;
+import xyz.upperlevel.uppercore.scoreboard.Board;
 
+import java.time.Instant;
 import java.util.*;
 
+import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+
 @Data
-public class PlayPhase implements Phase, Listener {
+public class PlayingPhase implements Phase, Listener {
 
     private final Game game;
-    private final GamePhase parent;
+    private final MatchPhase parent;
 
-    public PlayPhase(GamePhase parent) {
+    private GameHotbar hotbar;
+
+    public PlayingPhase(MatchPhase parent) {
         this.parent = parent;
         this.game = parent.getGame();
-    }
 
-    private final BukkitRunnable scoreboardUpdater = new BukkitRunnable() {
-        @Override
-        public void run() {
-            parent.updateScoreboard();
-        }
-    };
+        hotbar = (GameHotbar) get().getHotbars().get("solo_quake_ingame_hotbar");
+    }
 
     @Override
     public void onEnable(Phase previous) {
-        Bukkit.getPluginManager().registerEvents(this, QuakeCraftReloaded.get());
+        Bukkit.getPluginManager().registerEvents(this, get());
         for (int i = 0; i < game.getPlayers().size(); i++) {
             game.getPlayers().get(i).teleport(game.getArena().getSpawns().get(i % game.getArena().getSpawns().size()));
         }
-        scoreboardUpdater.runTaskTimer(QuakeCraftReloaded.get(), 0, 20 * 3);
     }
 
     @Override
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
-        scoreboardUpdater.cancel();
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        if (!game.equals(QuakeCraftReloaded.get().getGameManager().getGame(e.getPlayer())))
+        if (!game.equals(get().getGameManager().getGame(e.getPlayer())))
             return;
         Player p = e.getPlayer();
 
@@ -88,14 +86,13 @@ public class PlayPhase implements Phase, Listener {
                     QuakePlayer shooter = QuakePlayerManager.get().getPlayer(p);
 
                     shooter.kills++;
-                    parent.getGamePlayer(p).kills++;
+                    parent.getParticipant(p).kills++;
 
 
                     //if (barrel != null && laser != null)
                     // todo FireworkUtil.detonate(e.getLocation())
 
                     game.broadcast(p.getName() + " shot " + hit.getName()); // todo kill message
-
                     break;
                 }
             }
@@ -109,11 +106,11 @@ public class PlayPhase implements Phase, Listener {
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
 
-        if (!game.equals(QuakeCraftReloaded.get().getGameManager().getGame(player)))
+        if (!game.equals(get().getGameManager().getGame(player)))
             return;
 
         QuakePlayerManager.get().getPlayer(player).deaths++;
-        parent.getGamePlayer(player).deaths++;
+        parent.getParticipant(player).deaths++;
 
         e.getEntity().spigot().respawn();
         e.setDeathMessage(null);

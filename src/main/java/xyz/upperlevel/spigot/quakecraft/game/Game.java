@@ -35,15 +35,15 @@ public class Game implements Listener {
     /**
      * Gets name of this arena.
      */
-    public String getName() {
+    public String getId() {
         return getArena().getName();
     }
 
     /**
      * Gets display name of this arena.
      */
-    public String getDisplayName() {
-        return getArena().getDisplayName();
+    public String getName() {
+        return getArena().getName();
     }
 
     /**

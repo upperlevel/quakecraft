@@ -72,7 +72,7 @@ public class GameManager {
         file.createNewFile();
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        cfg.set("games", games.stream().map(Game::getName).collect(Collectors.toList()));
+        cfg.set("games", games.stream().map(Game::getId).collect(Collectors.toList()));
         cfg.save(file);
     }
 }
