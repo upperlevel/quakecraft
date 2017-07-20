@@ -1,10 +1,7 @@
-package xyz.upperlevel.spigot.quakecraft.event;
+package xyz.upperlevel.spigot.quakecraft.events;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.spigot.quakecraft.game.Game;

@@ -3,17 +3,15 @@ package xyz.upperlevel.spigot.quakecraft.game;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 
 public class EndingPhase implements Phase, Listener {
 
     private final Game game;
-    private final MatchPhase parent;
+    private final GamePhase parent;
 
     private final Hotbar hotbar;
 
@@ -24,7 +22,7 @@ public class EndingPhase implements Phase, Listener {
         }
     };
 
-    public EndingPhase(MatchPhase parent) {
+    public EndingPhase(GamePhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
 

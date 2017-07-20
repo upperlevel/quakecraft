@@ -13,13 +13,11 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
-import xyz.upperlevel.spigot.quakecraft.event.GameJoinEvent;
-import xyz.upperlevel.spigot.quakecraft.event.GameQuitEvent;
+import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
+import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 

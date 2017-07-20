@@ -66,10 +66,10 @@ public class Arena {
         players.put("max", maxPlayers);
         data.put("players", players);
 
-        List<Map<String, Object>> spawnsDt = new ArrayList<>();
-        for (Location spawn : spawns)
-            spawnsDt.add(SerializationUtil.serialize(spawn));
-        data.put("spawns", spawnsDt);
+        List<Map<String, Object>> spawns = new ArrayList<>();
+        for (Location spawn : this.spawns)
+            spawns.add(SerializationUtil.serialize(spawn));
+        data.put("spawns", spawns);
         return data;
     }
 
@@ -83,7 +83,7 @@ public class Arena {
         arena.minPlayers = players.getInt("min");
         arena.maxPlayers = players.getInt("max");
 
-        arena.spawns = config.getList("spawns");
+        arena.spawns = config.getLocationList("spawns");
         return arena;
     }
 

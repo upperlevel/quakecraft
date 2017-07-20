@@ -11,17 +11,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleEffect;
-import xyz.upperlevel.uppercore.scoreboard.Board;
 
-import java.time.Instant;
 import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
@@ -30,15 +26,11 @@ import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 public class PlayingPhase implements Phase, Listener {
 
     private final Game game;
-    private final MatchPhase parent;
+    private final GamePhase parent;
 
-    private GameHotbar hotbar;
-
-    public PlayingPhase(MatchPhase parent) {
+    public PlayingPhase(GamePhase parent) {
         this.parent = parent;
         this.game = parent.getGame();
-
-        hotbar = (GameHotbar) get().getHotbars().get("solo_quake_ingame_hotbar");
     }
 
     @Override

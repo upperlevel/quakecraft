@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.event;
+package xyz.upperlevel.spigot.quakecraft.events;
 
 import lombok.Getter;
 import lombok.Setter;

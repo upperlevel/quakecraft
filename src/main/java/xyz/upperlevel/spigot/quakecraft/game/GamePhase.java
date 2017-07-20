@@ -17,7 +17,7 @@ import java.util.Map;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 
 @Getter
-public class MatchPhase extends PhaseManager implements Phase, Listener {
+public class GamePhase extends PhaseManager implements Phase, Listener {
 
     private final Game game;
 
@@ -28,7 +28,7 @@ public class MatchPhase extends PhaseManager implements Phase, Listener {
         return participants.get(player);
     }
 
-    public MatchPhase(Game game) {
+    public GamePhase(Game game) {
         this.game = game;
     }
 

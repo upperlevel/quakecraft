@@ -67,6 +67,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         } catch (IOException e) {
             System.err.println("ERR"); // todo error system
         }
+        gameManager.stop();
     }
 
     public GameManager getGameManager() {

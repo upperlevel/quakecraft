@@ -75,4 +75,9 @@ public class GameManager {
         cfg.set("games", games.stream().map(Game::getId).collect(Collectors.toList()));
         cfg.save(file);
     }
+
+    public void stop() {
+        for (Game game : games)
+            game.stop();
+    }
 }

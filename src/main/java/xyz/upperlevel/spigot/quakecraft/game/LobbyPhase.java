@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
-import xyz.upperlevel.spigot.quakecraft.event.GameJoinEvent;
+import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
 
