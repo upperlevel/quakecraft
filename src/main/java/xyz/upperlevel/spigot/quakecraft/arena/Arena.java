@@ -14,17 +14,17 @@ import java.util.Map;
 @Data
 public class Arena {
 
-    private final String name;
-    private String displayName;
+    private final String id;
+    private String name;
     private int minPlayers = -1, maxPlayers = -1;
     private Location lobby;
     private List<Location> spawns = new ArrayList<>();
 
     private boolean enabled;
 
-    public Arena(String name) {
-        this.name = name.toLowerCase();
-        displayName = name;
+    public Arena(String id) {
+        this.id = id.toLowerCase();
+        name = id;
     }
 
     public void addSpawn(Location spawn) {
@@ -37,7 +37,7 @@ public class Arena {
     }
 
     public boolean isReady() {
-        return displayName != null && minPlayers > 0 && maxPlayers > 0 && lobby != null && spawns.size() > 0;
+        return name != null && minPlayers > 0 && maxPlayers > 0 && lobby != null && spawns.size() > 0;
     }
 
     public Game getStartable() {
@@ -46,8 +46,8 @@ public class Arena {
 
     public String toInfo() {
         String o = "";
+        o += "§aId: " + id + "\n";
         o += "§aName: " + name + "\n";
-        o += "§aDisplay name: " + displayName + "\n";
         o += "§aMin players: " + minPlayers + "\n";
         o += "§aMax players: " + maxPlayers + "\n";
         o += "§aLobby: " + (lobby != null) + "\n";
@@ -57,8 +57,8 @@ public class Arena {
 
     public Map<String, Object> save() {
         Map<String, Object> data = new HashMap<>();
+        data.put("id", id);
         data.put("name", name);
-        data.put("display-name", displayName);
         data.put("lobby", SerializationUtil.serialize(lobby));
 
         Map<String, Object> players = new HashMap<>();
@@ -75,8 +75,8 @@ public class Arena {
 
     @SuppressWarnings("unchecked")
     public static Arena load(Config config) {
-        Arena arena = new Arena(config.getString("name"));
-        arena.displayName = config.getString("display-name");
+        Arena arena = new Arena(config.getString("id"));
+        arena.name = config.getString("name");
         arena.lobby = config.getLocation("lobby");
 
         Config players = config.getConfig("players");

@@ -27,7 +27,7 @@ public class ArenaManager {
 
     public void addArena(Arena arena) {
         arenas.add(arena);
-        arenasByName.put(arena.getName(), arena);
+        arenasByName.put(arena.getId(), arena);
     }
 
     public Arena getArena(String name) {
