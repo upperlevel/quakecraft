@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PurchasesGui<P extends Purchase> extends ChestGui {
-    private static List<PlaceholderValue<String>> buyingLores, boughtLores;
+    private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     private final int usableSlots[];
     private final PurchaseManager<P> purchaseManager;
     private Map<Integer, P> purchaseMap = new HashMap<>();
@@ -89,6 +89,21 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
             super.onClick(event);
     }
 
+    public void reloadSelection(QuakePlayer player, int slot, P purchase) {
+        P oldPurchase = purchaseManager.getSelected(player);
+        purchaseManager.setSelected(player, purchase);
+        if(oldPurchase == purchase)
+            return;
+        int oldSlot = purchaseMap.entrySet()
+                .stream()
+                .filter(e -> e.getValue() == oldPurchase)
+                .findAny()
+                .orElseThrow(() -> new IllegalStateException("Invalid old purchase selected: " + oldPurchase)).getKey();
+        Inventory inv = player.getPlayer().getOpenInventory().getTopInventory();
+        inv.setItem(slot, getIcon(purchase, player));
+        inv.setItem(oldSlot, getIcon(oldPurchase, player));
+    }
+
     public void onClick(Player player, int slot, P purchase) {
         QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
         Set<Purchase<?>> purchases = p.getPurchases();
@@ -96,19 +111,27 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
             Balance b = EconomyManager.get(player);
             if(b.take(purchase.getCost())) {
                 purchases.add(purchase);
-                player.getOpenInventory().getTopInventory().setItem(slot, getIcon(purchase, p));//Reload the item
+                p.getPurchases().add(purchase);
+                reloadSelection(p, slot, purchase);
             }
-        }
+        } else
+            reloadSelection(p, slot, purchase);
     }
 
-    protected ItemStack getIcon(P purchase, QuakePlayer p) {//Maybe we need to use the QuakePlayer :/
+    protected ItemStack getIcon(P purchase, QuakePlayer p) {
         ItemStack i = purchase.getIcon().toItemStack(p.getPlayer());
         ItemMeta meta = i.getItemMeta();
+        final P selected = purchaseManager.getSelected(p);
         final Player player = p.getPlayer();
-        if(p.getPurchases().contains(purchase))
-            meta.getLore().addAll(boughtLores.stream().map(v -> v.resolve(player)).collect(Collectors.toList()));
+        List<PlaceholderValue<String>> lores;
+        if(selected == purchase)
+            lores = selectedLores;
+        else if(p.getPurchases().contains(purchase))
+           lores = boughtLores;
         else
-            meta.getLore().addAll(buyingLores.stream().map(v -> v.resolve(player)).collect(Collectors.toList()));
+            lores = buyingLores;
+
+        meta.getLore().addAll(lores.stream().map(v -> v.resolve(player)).collect(Collectors.toList()));
         i.setItemMeta(meta);
         return i;
     }
@@ -128,7 +151,8 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
 
     @SuppressWarnings("unchecked")
     public static void load(Config config) {//TODO add %cost% local placehodler
-        buyingLores = ((Collection<Object>)config.getCollectionRequired("buying")).stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
-        boughtLores = ((Collection<Object>)config.getCollectionRequired("bought")).stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
+        buyingLores   = ((Collection<Object>)config.getCollectionRequired("buying"))  .stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
+        boughtLores   = ((Collection<Object>)config.getCollectionRequired("bought"))  .stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
+        selectedLores = ((Collection<Object>)config.getCollectionRequired("selected")).stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
     }
 }

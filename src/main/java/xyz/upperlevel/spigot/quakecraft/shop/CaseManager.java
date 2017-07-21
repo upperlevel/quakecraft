@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
@@ -25,6 +26,16 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
     @Override
     public String getConfigLoc() {
         return "gun/cases";
+    }
+
+    @Override
+    public void setSelected(QuakePlayer player, Case purchase) {
+        player.setSelectedCase(purchase);
+    }
+
+    @Override
+    public Case getSelected(QuakePlayer player) {
+        return player.getSelectedCase();
     }
 
     @Override

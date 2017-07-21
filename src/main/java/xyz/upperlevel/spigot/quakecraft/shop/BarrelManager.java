@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
 import org.bukkit.FireworkEffect;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
@@ -28,6 +29,16 @@ public class BarrelManager extends PurchaseManager<BarrelManager.Barrel> {
     @Override
     public String getConfigLoc() {
         return "gun/barrels";
+    }
+
+    @Override
+    public void setSelected(QuakePlayer player, Barrel purchase) {
+        player.setSelectedBarrel(purchase);
+    }
+
+    @Override
+    public Barrel getSelected(QuakePlayer player) {
+        return player.getSelectedBarrel();
     }
 
     @Override

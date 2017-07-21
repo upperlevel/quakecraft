@@ -7,8 +7,10 @@ import xyz.upperlevel.spigot.quakecraft.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
 import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchasesGui;
 import xyz.upperlevel.spigot.quakecraft.shop.ShopManager;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
+import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.GuiRegistry;
 import xyz.upperlevel.uppercore.gui.GuiSystem;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarRegistry;
@@ -60,6 +62,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         arenaManager.load();
         gameManager.load();
 
+        PurchasesGui.load(Config.wrap(getConfig().getConfigurationSection("purchase-gui")));
         shopManager.load();
     }
 

@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleType;
 import xyz.upperlevel.uppercore.config.Config;
@@ -30,6 +31,16 @@ public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
     @Override
     public String getConfigLoc() {
         return "gun/muzzles";
+    }
+
+    @Override
+    public void setSelected(QuakePlayer player, Muzzle purchase) {
+        player.setSelectedMuzzle(purchase);
+    }
+
+    @Override
+    public Muzzle getSelected(QuakePlayer player) {
+        return player.getSelectedMuzzle();
     }
 
     @Override

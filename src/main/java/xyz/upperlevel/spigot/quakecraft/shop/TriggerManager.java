@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
@@ -25,6 +26,16 @@ public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
     @Override
     public String getConfigLoc() {
         return "gun/triggers";
+    }
+
+    @Override
+    public void setSelected(QuakePlayer player, Trigger purchase) {
+        player.setSelectedTrigger(purchase);
+    }
+
+    @Override
+    public Trigger getSelected(QuakePlayer player) {
+        return player.getSelectedTrigger();
     }
 
     @Override

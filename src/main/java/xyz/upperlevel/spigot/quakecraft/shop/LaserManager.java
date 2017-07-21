@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
 import org.bukkit.Color;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
@@ -26,6 +27,16 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
     @Override
     public String getConfigLoc() {
         return "gun/lasers";
+    }
+
+    @Override
+    public void setSelected(QuakePlayer player, Laser purchase) {
+        player.setSelectedLaser(purchase);
+    }
+
+    @Override
+    public Laser getSelected(QuakePlayer player) {
+        return player.getSelectedLaser();
     }
 
     @Override

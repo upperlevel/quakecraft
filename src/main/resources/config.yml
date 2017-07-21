@@ -54,3 +54,11 @@ lobby:
   countdown: 10
 game:
   countdown: 10
+
+gui:
+  buying:
+  - "&a%cost%"
+  bought:
+  - "&aClick to select"
+  selected:
+  - "&fSELECTED"

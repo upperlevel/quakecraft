@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
 
 import java.io.File;
@@ -16,9 +17,15 @@ import java.util.stream.Collectors;
 public abstract class PurchaseManager<P extends Purchase> {
     private Map<String, P> purchases = new HashMap<>();
     private PurchasesGui<P> gui;
+    private P def;
 
     public void add(P item) {
         purchases.put(item.getId(), item);
+        if(item.isDef()) {
+            if(def != null)
+                QuakeCraftReloaded.get().getLogger().warning("Multiple default values in " + getPurchaseName());
+            def = item;
+        }
         if(gui != null)
             gui.setDirty();
     }
@@ -84,9 +91,17 @@ public abstract class PurchaseManager<P extends Purchase> {
         loadGui();
     }
 
+    public abstract void setSelected(QuakePlayer player, P purchase);
+
+    public abstract P getSelected(QuakePlayer player);
+
     public abstract String getPurchaseName();
 
     public P get(String name) {
         return purchases.get(name);
+    }
+
+    public P getDefault() {
+        return def;
     }
 }

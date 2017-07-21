@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
@@ -33,6 +34,16 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
     @Override
     public String getConfigLoc() {
         return "gun/guns";
+    }
+
+    @Override
+    public void setSelected(QuakePlayer player, Gun purchase) {
+        player.setSelectedGun(purchase);
+    }
+
+    @Override
+    public Gun getSelected(QuakePlayer player) {
+        return player.getSelectedGun();
     }
 
     @Override
