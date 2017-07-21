@@ -1,8 +1,8 @@
 package xyz.upperlevel.spigot.quakecraft.core.particle;
 
-import org.bukkit.configuration.ConfigurationSection;
 import xyz.upperlevel.spigot.quakecraft.core.particle.impl.BlockDustParticle;
 import xyz.upperlevel.spigot.quakecraft.core.particle.impl.SimpleParticle;
+import xyz.upperlevel.uppercore.config.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ public enum ParticleType {
         }
 
         @Override
-        public Particle create(Map<String, Object> data) {
+        public Particle create(Config data) {
             return new SimpleParticle(data);
         }
     },
@@ -27,14 +27,14 @@ public enum ParticleType {
         }
 
         @Override
-        public Particle create(Map<String, Object> data) {
+        public Particle create(Config data) {
             return new BlockDustParticle(data);
         }
     };
 
     public abstract Particle create();
 
-    public abstract Particle create(Map<String, Object> data);
+    public abstract Particle create(Config data);
 
     private static final Map<String, ParticleType> BY_NAME = new HashMap<>();
 

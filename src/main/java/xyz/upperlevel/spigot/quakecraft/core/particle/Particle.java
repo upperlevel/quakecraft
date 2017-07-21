@@ -2,9 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.core.particle;
 
 import lombok.Data;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.Map;
+import xyz.upperlevel.uppercore.config.Config;
 
 @Data
 public abstract class Particle {
@@ -25,36 +23,40 @@ public abstract class Particle {
         setRange(0.0);
     }
 
-    public Particle(ParticleType type, Map<String, Object> data) {
+    public Particle(ParticleType type, Config data) {
         this.type = type;
-
         setOffset(
-                (Float) data.get("offset.x"),
-                (Float) data.get("offset.y"),
-                (Float) data.get("offset.z")
+                data.getFloat("offset.x", 0.0f),
+                data.getFloat("offset.y", 0.0f),
+                data.getFloat("offset.z", 0.0f)
         );
-        setSpeed((Float) data.get("speed"));
-        setAmount((Integer) data.get("amount"));
-        setRange((Double) data.get("range"));
+        setSpeed(data.getFloat("speed", 0.0f));
+        setAmount(data.getInt("amount", 0));
+        setRange(data.getDouble("range", 0.0));
     }
 
-    public void setOffset(Float x, Float y, Float z) {
-        offsetX = x == null ? 0 : x;
-        offsetY = y == null ? 0 : y;
-        offsetZ = z == null ? 0 : z;
+    public void setOffset(float x, float y, float z) {
+        offsetX = x;
+        offsetY = y;
+        offsetZ = z;
     }
 
-    public void setSpeed(Float speed) {
-        this.speed = speed == null || speed <= 0 ? 0 : speed;
+    public void setSpeed(float speed) {
+        this.speed = speed <= 0 ? 0 : speed;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount == null || amount <= 0 ? 0 : amount;
+    public void setAmount(int amount) {
+        this.amount = amount <= 0 ? 0 : amount;
     }
 
-    public void setRange(Double range) {
-        this.range = Math.abs(range == null ? 0 : range);
+    public void setRange(double range) {
+        this.range = Math.abs(range);
     }
 
     public abstract void display(Location location);
+
+
+    public static Particle deserialize(Config data) {
+        return ParticleType.get(data.getStringRequired("type")).create(data);
+    }
 }

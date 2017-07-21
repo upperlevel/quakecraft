@@ -3,12 +3,10 @@ package xyz.upperlevel.spigot.quakecraft.core.particle.impl;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleEffect;
 import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleType;
-
-import java.util.Map;
+import xyz.upperlevel.uppercore.config.Config;
 
 @Getter
 public class BlockDustParticle extends Particle {
@@ -23,19 +21,19 @@ public class BlockDustParticle extends Particle {
         setBlockData((byte) 0);
     }
 
-    public BlockDustParticle(Map<String, Object> data) {
+    public BlockDustParticle(Config data) {
         super(ParticleType.BLOCK_DUST, data);
 
-        setBlockType(Material.getMaterial((String) data.get("block.type")));
-        setBlockData((Byte) data.get("block.data"));
+        setBlockType(data.getMaterialRequired("block.type"));
+        setBlockData(data.getByte("block.data"));
     }
 
     public void setBlockType(Material blockType) {
         this.blockType = blockType == null ? Material.WOOL : blockType;
     }
 
-    public void setBlockData(Byte blockData) {
-        this.blockData = blockData == null || blockData <= 0 ? 0 : blockData;
+    public void setBlockData(byte blockData) {
+        this.blockData = blockData;
     }
 
     @Override

@@ -1,5 +1,5 @@
 cactus:
-  display-name: 'Cactus Hat'
+  name: 'Cactus Hat'
   cost: 350
   icon:
     type: 'CACTUS'
@@ -11,7 +11,7 @@ cactus:
     type: 'CACTUS'
 
 melon:
-  display-name: 'Melon Hat'
+  name: 'Melon Hat'
   cost: 350
   icon:
     type: 'MELON'
@@ -23,7 +23,7 @@ melon:
     type: 'MELON'
 
 spaceman:
-  display-name: 'Spaceman Hat'
+  name: 'Spaceman Hat'
   cost: 700
   icon:
     type: 'GLASS'

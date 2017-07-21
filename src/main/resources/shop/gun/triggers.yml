@@ -1,6 +1,6 @@
 
 1-5-s:
-  display-name: '1.5s'
+  name: '1.5s'
   icon:
     type: 'STONE_BUTTON'
     amount: 15
@@ -9,7 +9,7 @@
   firing-speed: 1.5
 
 9-0-s:
-  display-name: '9.0s'
+  name: '9.0s'
   icon:
     type: 'STONE_BUTTON'
     amount: 64
@@ -18,7 +18,7 @@
   firing-speed: 9.0
 
 5-0-s:
-  display-name: '5.0s'
+  name: '5.0s'
   icon:
     type: 'STONE_BUTTON'
     amount: 50
@@ -27,7 +27,7 @@
   firing-speed: 5.0
 
 2-5-s:
-  display-name: '2.5s'
+  name: '2.5s'
   icon:
     type: 'STONE_BUTTON'
     amount: 25
@@ -36,7 +36,7 @@
   firing-speed: 2.5
 
 1-4-s:
-  display-name: '1.4s'
+  name: '1.4s'
   icon:
     type: 'STONE_BUTTON'
     amount: 14
@@ -45,7 +45,7 @@
   firing-speed: 1.4
 
 1-3-s:
-  display-name: '1.3s'
+  name: '1.3s'
   icon:
     type: 'STONE_BUTTON'
     amount: 13
@@ -54,7 +54,7 @@
   firing-speed: 1.3
 
 1-2-s:
-  display-name: '1.2s'
+  name: '1.2s'
   icon:
     type: 'STONE_BUTTON'
     amount: 12
@@ -63,7 +63,7 @@
   firing-speed: 1.2
 
 1-1-s:
-  display-name: '1.1s'
+  name: '1.1s'
   icon:
     type: 'STONE_BUTTON'
     amount: 11
@@ -72,7 +72,7 @@
   firing-speed: 1.1
 
 1-0-s:
-  display-name: '1.0s'
+  name: '1.0s'
   icon:
     type: 'STONE_BUTTON'
     amount: 10
@@ -81,7 +81,7 @@
   firing-speed: 1.0
 
 0-9-s:
-  display-name: '0.9s'
+  name: '0.9s'
   icon:
     type: 'STONE_BUTTON'
     amount: 9
@@ -90,7 +90,7 @@
   firing-speed: 0.9
 
 0-8-5-s:
-  display-name: '0.85s'
+  name: '0.85s'
   icon:
     type: 'STONE_BUTTON'
     amount: 8

@@ -1,6 +1,6 @@
 
 small:
-  display-name: 'Small Barrel'
+  name: 'Small Barrel'
   cost: 0
   default: true
   icon:
@@ -12,7 +12,7 @@ small:
   firework-type: 'BALL'
 
 large:
-  display-name: 'Large Barrel'
+  name: 'Large Barrel'
   cost: 9000
   icon:
     type: 'FIREBALL'
@@ -23,7 +23,7 @@ large:
   firework-type: 'LARGE_BALL'
 
 creeper:
-  display-name: 'Creeper Barrel'
+  name: 'Creeper Barrel'
   cost: 9000
   icon:
     type: 'SKULL_ITEM'
@@ -35,7 +35,7 @@ creeper:
   firework-type: 'CREEPER'
 
 burst:
-  display-name: 'Burst Barrel'
+  name: 'Burst Barrel'
   cost: 9000
   icon:
     type: 'FEATHER'
@@ -46,7 +46,7 @@ burst:
   firework-type: 'BURST'
 
 star:
-  display-name: 'Star Barrel'
+  name: 'Star Barrel'
   cost: 9000
   icon:
     type: 'GOLD_NUGGET'

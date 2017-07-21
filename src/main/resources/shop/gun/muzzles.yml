@@ -1,5 +1,5 @@
 none:
-  display-name: 'No Muzzle'
+  name: 'No Muzzle'
   cost: 0
   default: true
   icon:
@@ -9,11 +9,11 @@ none:
       - ''
       - '&7Cost: &7%cost%'
   particles:
-    - type: 'REDSTONE'
+    - type: 'SIMPLE'
       color: 'RED'
 
 clay:
-  display-name: 'Clay Muzzle'
+  name: 'Clay Muzzle'
   cost: 5000
   icon:
     type: 'CLAY'
@@ -27,7 +27,7 @@ clay:
         type: 'CLAY'
 
 wooden:
-  display-name: 'Wooden Muzzle'
+  name: 'Wooden Muzzle'
   cost: 5000
   icon:
     type: 'WOOD'
@@ -41,7 +41,7 @@ wooden:
         type: 'WOOD'
 
 golden:
-  display-name: 'Golden Muzzle'
+  name: 'Golden Muzzle'
   cost: 7500
   icon:
     type: 'GOLD_BLOCK'
@@ -55,7 +55,7 @@ golden:
         type: 'GOLD_BLOCK'
 
 redstone:
-  display-name: 'Redstone Muzzle'
+  name: 'Redstone Muzzle'
   cost: 7500
   icon:
     type: 'REDSTONE_BLOCK'
@@ -69,7 +69,7 @@ redstone:
         type: 'REDSTONE_BLOCK'
 
 iron:
-  display-name: 'Iron Muzzle'
+  name: 'Iron Muzzle'
   cost: 8200
   icon:
     type: 'IRON_BLOCK'
@@ -83,7 +83,7 @@ iron:
         type: 'IRON_BLOCK'
 
 ender-stone:
-  display-name: 'Ender Stone Muzzle'
+  name: 'Ender Stone Muzzle'
   cost: 8500
   icon:
     type: 'ENDER_STONE'
@@ -97,7 +97,7 @@ ender-stone:
         type: 'ENDER_STONE'
 
 diamond:
-  display-name: 'Diamond Muzzle'
+  name: 'Diamond Muzzle'
   cost: 9000
   icon:
     type: 'DIAMOND_BLOCK'
@@ -111,7 +111,7 @@ diamond:
         type: 'DIAMOND_BLOCK'
 
 quartz:
-  display-name: 'Quartz Muzzle'
+  name: 'Quartz Muzzle'
   cost: 15000
   icon:
     type: 'QUARTZ_ORE'
@@ -125,7 +125,7 @@ quartz:
         type: 'QUARTZ_ORE'
 
 emerald:
-  display-name: 'Emerald Muzzle'
+  name: 'Emerald Muzzle'
   cost: 25000
   icon:
     type: 'EMERALD_BLOCK'
@@ -139,7 +139,7 @@ emerald:
         type: 'EMERALD_BLOCK'
 
 lapis:
-  display-name: 'Lapis Muzzle'
+  name: 'Lapis Muzzle'
   cost: 25000
   icon:
     type: 'LAPIS_BLOCK'
@@ -153,7 +153,7 @@ lapis:
         type: 'LAPIS_BLOCK'
 
 obsidian:
-  display-name: 'Obsidian Muzzle'
+  name: 'Obsidian Muzzle'
   cost: 50000
   icon:
     type: 'OBSIDIAN'
@@ -167,7 +167,7 @@ obsidian:
         type: 'OBSIDIAN'
 
 sponge:
-  display-name: 'Sponge Muzzle'
+  name: 'Sponge Muzzle'
   cost: 50000
   icon:
     type: 'SPONGE'
@@ -181,7 +181,7 @@ sponge:
         type: 'SPONGE'
 
 sea-lantern:
-  display-name: 'Sea Lantern Muzzle'
+  name: 'Sea Lantern Muzzle'
   cost: 75000
   icon:
     type: 'SEA_LANTERN'
@@ -195,7 +195,7 @@ sea-lantern:
           type: 'SEA_LANTERN'
 
 command-block:
-  display-name: 'Command Block Muzzle'
+  name: 'Command Block Muzzle'
   cost: 100000
   icon:
     type: 'COMMAND'
@@ -209,7 +209,7 @@ command-block:
           type: 'COMMAND'
 
 prismarine:
-  display-name: 'Prismarine Muzzle'
+  name: 'Prismarine Muzzle'
   cost: 100000
   icon:
     type: 'PRISMARINE'
@@ -223,7 +223,7 @@ prismarine:
           type: 'PRISMARINE'
 
 melon:
-  display-name: 'Melon Muzzle'
+  name: 'Melon Muzzle'
   cost: 125000
   icon:
     type: 'MELON'
@@ -237,7 +237,7 @@ melon:
           type: 'MELON'
 
 pumpkin:
-  display-name: 'Pumpkin Muzzle'
+  name: 'Pumpkin Muzzle'
   cost: 100000
   icon:
     type: 'PUMPKIN'
@@ -251,7 +251,7 @@ pumpkin:
           type: 'PUMPKIN'
 
 soul-sand:
-  display-name: 'Soul Sand Muzzle'
+  name: 'Soul Sand Muzzle'
   cost: 500000
   icon:
     type: 'SOUL_SAND'

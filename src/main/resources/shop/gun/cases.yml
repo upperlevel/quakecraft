@@ -1,6 +1,6 @@
 
 wood:
-  display-name: 'Wooden Case'
+  name: 'Wooden Case'
   cost: 0
   default: true
   icon:
@@ -13,7 +13,7 @@ wood:
     type: 'WOOD_HOE'
 
 marbled:
-  display-name: 'Marbled Case'
+  name: 'Marbled Case'
   cost: 1000
   icon:
     type: 'STONE_HOE'
@@ -25,7 +25,7 @@ marbled:
     type: 'STONE_HOE'
 
 varnished-wood:
-  display-name: 'Varnished Wood Case'
+  name: 'Varnished Wood Case'
   cost: 1000
   icon:
     type: 'WOOD_HOE'
@@ -43,7 +43,7 @@ varnished-wood:
       level: 10
 
 polished-wood:
-  display-name: 'Polished Wood Case'
+  name: 'Polished Wood Case'
   cost: 1000
   icon:
     type: 'STONE_HOE'
@@ -61,7 +61,7 @@ polished-wood:
       level: 10
 
 reinforced:
-  display-name: 'Reinforced Case'
+  name: 'Reinforced Case'
   cost: 2500
   icon:
     type: 'IRON_HOE'
@@ -73,7 +73,7 @@ reinforced:
     type: 'IRON_HOE'
 
 plated:
-  display-name: 'Plated Case'
+  name: 'Plated Case'
   cost: 4000
   icon:
     type: 'GOLD_HOE'
@@ -85,7 +85,7 @@ plated:
     type: 'GOLD_HOE'
 
 bling:
-  display-name: 'Bling Case'
+  name: 'Bling Case'
   cost: 7000
   icon:
     type: 'DIAMOND_HOE'
@@ -97,7 +97,7 @@ bling:
     type: 'DIAMOND_HOE'
 
 polished-plated:
-  display-name: 'Polished Plated Case'
+  name: 'Polished Plated Case'
   cost: 14000
   icon:
     type: 'GOLD_HOE'
@@ -112,7 +112,7 @@ polished-plated:
       level: 10
 
 polished-bling-case:
-  display-name: 'Polished Bling Case'
+  name: 'Polished Bling Case'
   cost: 100000
   icon:
     type: 'DIAMOND_HOE'
@@ -130,7 +130,7 @@ polished-bling-case:
         level: 10
 
 polished-reinforced-case:
-  display-name: 'Polished Reinforced Case'
+  name: 'Polished Reinforced Case'
   cost: 200000
   icon:
     type: 'IRON_HOE'

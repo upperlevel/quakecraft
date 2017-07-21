@@ -1,6 +1,6 @@
 
 example:
-  display-name: 'The Example'
+  name: 'The Example'
   icon:
     type: 'IRON_HOE'
     lore:

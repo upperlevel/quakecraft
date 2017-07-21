@@ -51,4 +51,8 @@ public abstract class PurchaseManager<P extends Purchase> {
     public abstract P deserialize(String id, Config config);
 
     public abstract String getPurchaseName();
+
+    public P get(String name) {
+        return purchases.get(name);
+    }
 }

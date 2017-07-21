@@ -1,5 +1,5 @@
 yellow:
-  display-name: 'Yellow Laser'
+  name: 'Yellow Laser'
   cost: 0
   default: true
   icon:
@@ -12,7 +12,7 @@ yellow:
   firework-color: 'YELLOW'
 
 green:
-  display-name: 'Green Laser'
+  name: 'Green Laser'
   cost: 4000
   icon:
     type: 'INK_SACK'
@@ -24,7 +24,7 @@ green:
   firework-color: 'GREEN'
 
 white:
-  display-name: 'White Laser'
+  name: 'White Laser'
   cost: 4000
   icon:
     type: 'INK_SACK'
@@ -36,7 +36,7 @@ white:
   firework-color: 'WHITE'
 
 red:
-  display-name: 'Red Laser'
+  name: 'Red Laser'
   cost: 5000
   icon:
     type: 'INK_SACK'
@@ -48,7 +48,7 @@ red:
   firework-color: 'RED'
 
 blue:
-  display-name: 'Blue Laser'
+  name: 'Blue Laser'
   cost: 7000
   icon:
     type: 'INK_SACK'
@@ -60,7 +60,7 @@ blue:
   firework-color: 'BLUE'
 
 purple:
-  display-name: 'Purple Laser'
+  name: 'Purple Laser'
   cost: 8000
   icon:
     type: 'INK_SACK'
@@ -72,7 +72,7 @@ purple:
   firework-color: 'PURPLE'
 
 pink:
-  display-name: 'Pink Laser'
+  name: 'Pink Laser'
   cost: 8000
   icon:
     type: 'INK_SACK'
@@ -84,7 +84,7 @@ pink:
   firework-color: 'PINK'
 
 gold:
-  display-name: 'Gold Laser'
+  name: 'Gold Laser'
   cost: 50000
   icon:
     type: 'GOLD_INGOT'
@@ -95,7 +95,7 @@ gold:
   firework-color: 'OLIVA'
 
 emerald:
-  display-name: 'Emerald Laser'
+  name: 'Emerald Laser'
   cost: 50000
   icon:
     type: 'EMERALD'
@@ -106,7 +106,7 @@ emerald:
   firework-color: 'LIME'
 
 diamond:
-  display-name: 'Diamond Laser'
+  name: 'Diamond Laser'
   cost: 50000
   icon:
     type: 'DIAMOND'
@@ -117,7 +117,7 @@ diamond:
   firework-color: 'AQUA'
 
 gray:
-  display-name: 'Gray Laser'
+  name: 'Gray Laser'
   cost: 50000
   icon:
     type: 'INK_SACK'
@@ -129,7 +129,7 @@ gray:
   firework-color: 'GRAY'
 
 orange:
-  display-name: 'Orange Laser'
+  name: 'Orange Laser'
   cost: 100000
   icon:
     type: 'INK_SACK'
@@ -141,7 +141,7 @@ orange:
   firework-color: 'ORANGE'
 
 silver:
-  display-name: 'Silver Laser'
+  name: 'Silver Laser'
   cost: 250000
   icon:
     type: 'INK_SACK'
@@ -153,7 +153,7 @@ silver:
   firework-color: 'SILVER'
 
 black:
-  display-name: 'Orange Laser'
+  name: 'Orange Laser'
   cost: 500000
   icon:
     type: 'INK_SACK'
