@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public abstract class PurchaseManager<P extends Purchase> {
     private Map<String, P> purchases = new HashMap<>();
+    private PurchasesGui<P> gui;
 
     public void add(P item) {
         purchases.put(item.getId(), item);
@@ -49,6 +50,20 @@ public abstract class PurchaseManager<P extends Purchase> {
     }
 
     public abstract P deserialize(String id, Config config);
+
+    public void loadGui(Config config) {
+        gui = PurchasesGui.deserialize(QuakeCraftReloaded.get(), getPurchaseName(), config, this);
+        QuakeCraftReloaded.get().getGuis().register(gui.getId(), gui);
+    }
+
+    public void loadGui() {
+        File file = new File(
+                QuakeCraftReloaded.get().getDataFolder(),
+                "guis" + File.pathSeparator + getPurchaseName() + ".yml"
+        );
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        loadGui(Config.wrap(config));
+    }
 
     public abstract String getPurchaseName();
 
