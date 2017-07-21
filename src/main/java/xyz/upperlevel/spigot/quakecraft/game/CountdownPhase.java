@@ -13,6 +13,7 @@ import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
 import xyz.upperlevel.uppercore.scoreboard.Board;
+import xyz.upperlevel.uppercore.scoreboard.BoardView;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
 
 import static org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
@@ -66,21 +67,36 @@ public class CountdownPhase implements Phase, Listener {
             get().getLogger().info("Scoreboard not found: \"countdown_solo\"");
     }
 
+    private void clearTick(Player player) {
+        player.setLevel(0);
+    }
+
+    private void clearTick() {
+        for (Player p : game.getPlayers())
+            clearTick(p);
+    }
+
     private void clear(Player player) {
         //-------------------------hotbar
         HotbarSystem.view(player).removeHotbar(hotbar);
         //-------------------------scoreboard
-        ScoreboardSystem.view(player).clear();
+        BoardView view = ScoreboardSystem.view(player);
+        if (view != null)
+            view.clear();
+        clearTick(player);
     }
 
     private void clear() {
-        for (Player p : game.getPlayers())
+        for (Player p : game.getPlayers()) {
             clear(p);
+            clearTick(p);
+        }
     }
 
     private void tryStop() {
         if (game.getPlayers().size() < game.getMinPlayers()) {
             task.cancel();
+            clearTick();
             parent.setPhase(new WaitingPhase(parent));
         }
     }
@@ -121,9 +137,9 @@ public class CountdownPhase implements Phase, Listener {
     @EventHandler
     public void onGameQuit(GameQuitEvent e) {
         if (e.getGame().equals(game)) {
+            tryStop();
             clear(e.getPlayer());
             update();
-            tryStop();
         }
     }
 }

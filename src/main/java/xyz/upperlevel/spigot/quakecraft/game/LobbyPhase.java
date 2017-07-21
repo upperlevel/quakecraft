@@ -21,17 +21,13 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
     @Getter
     private final Game game;
 
-    private final Hotbar hotbar;
-
     public LobbyPhase(Game game) {
         this.game = game;
-        hotbar = get().getHotbars().get("solo_quake_lobby_hotbar");
     }
 
     private void setup(Player player) {
         player.teleport(game.getArena().getLobby());
         player.setGameMode(GameMode.ADVENTURE);
-        HotbarSystem.view(player).addHotbar(hotbar);
     }
 
     @Override
@@ -45,8 +41,6 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
     @Override
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
-        for (Player player : game.getPlayers())
-            HotbarSystem.view(player).removeHotbar(hotbar);
     }
 
     @EventHandler

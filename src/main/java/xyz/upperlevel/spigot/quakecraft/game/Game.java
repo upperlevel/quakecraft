@@ -11,13 +11,16 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 
@@ -26,7 +29,7 @@ public class Game implements Listener {
 
     private final Arena arena;
     private final PhaseManager phaseManager = new PhaseManager();
-    private final List<Player> players = new ArrayList<>();
+    private final Set<Player> players = new HashSet<>();
 
     private Player winner;
 
@@ -68,12 +71,15 @@ public class Game implements Listener {
         getPhaseManager().setPhase(null);
     }
 
-    public void join(Player player) {
-        players.add(player);
-        GameJoinEvent e = new GameJoinEvent(this, player);
-        Bukkit.getPluginManager().callEvent(e);
-        if (e.isCancelled())
-            players.remove(player);
+    public boolean join(Player player) {
+        if (players.add(player)) {
+            GameJoinEvent e = new GameJoinEvent(this, player);
+            Bukkit.getPluginManager().callEvent(e);
+            if (e.isCancelled())
+                players.remove(player);
+            return true;
+        }
+        return false;
     }
 
     public boolean isPlaying(Player player) {
@@ -98,15 +104,18 @@ public class Game implements Listener {
     // void damage -> kill
 
     @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        if (isPlaying(e.getPlayer()))
+            leave(e.getPlayer());
+    }
+
+    @EventHandler
     public void onDamage(EntityDamageEvent e) {
         e.setCancelled(true);
-
         if (!(e.getEntity() instanceof Player))
             return;
-
         if (!players.contains(e.getEntity()))
             return;
-
         if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
             ((Player) e.getEntity()).setHealth(0);
     }

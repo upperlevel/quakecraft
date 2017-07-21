@@ -17,7 +17,6 @@ public class QuakeCommand extends NodeCommand implements CommandExecutor {
         register(new ArenaListCommand());
         register(new SetLobbyCommand());
         register(new SetLimitsCommand());
-        register(new SaveArenaCommand());
         register(new AddSpawnCommand());
         register(new EnableArenaCommand());
         register(new DisableArenaCommand());

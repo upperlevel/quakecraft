@@ -16,6 +16,6 @@ public class ShopCommand extends Command {
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender) {
-        GuiSystem.open((Player)sender, QuakeCraftReloaded.get().getGuis().get("shop"));
+        GuiSystem.open((Player) sender, QuakeCraftReloaded.get().getGuis().get("shop"));
     }
 }

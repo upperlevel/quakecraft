@@ -14,11 +14,8 @@ public class GameHotbar extends Hotbar {
     private CustomItem gun;
     private CustomItem tracker;
 
-    public GameHotbar(Plugin plugin, String id) {
-        super(plugin, id);
-    }
-
-    public void deserialize(Config config) {
+    public GameHotbar(Plugin plugin, String id, Config config) {
+        super(plugin, id, config);
         // -----------------------gun
         if (config.has("gun")) {
             config = config.getConfig("gun");
@@ -33,13 +30,9 @@ public class GameHotbar extends Hotbar {
             setIcon(config.getIntRequired("slot"), new Icon(tracker));
         } else
             QuakeCraftReloaded.get().getLogger().warning("Item \"tracker\" not found in ingame hotbar");
-        // -----------------------defaults
-        super.deserialize(config);
     }
 
     public static GameHotbar deserialize(Plugin plugin, String id, Config config) {
-        GameHotbar res = new GameHotbar(plugin, id);
-        res.deserialize(config);
-        return res;
+        return new GameHotbar(plugin, id, config);
     }
 }

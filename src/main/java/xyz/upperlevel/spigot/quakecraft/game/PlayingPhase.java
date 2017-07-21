@@ -36,8 +36,9 @@ public class PlayingPhase implements Phase, Listener {
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
+        List<Player> pList = new ArrayList<>(game.getPlayers());
         for (int i = 0; i < game.getPlayers().size(); i++) {
-            game.getPlayers().get(i).teleport(game.getArena().getSpawns().get(i % game.getArena().getSpawns().size()));
+            pList.get(i).teleport(game.getArena().getSpawns().get(i % game.getArena().getSpawns().size()));
         }
     }
 
