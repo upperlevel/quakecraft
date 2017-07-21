@@ -19,6 +19,16 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
     }
 
     @Override
+    public String getGuiLoc() {
+        return "lasers";
+    }
+
+    @Override
+    public String getConfigLoc() {
+        return "gun/lasers";
+    }
+
+    @Override
     public String getPurchaseName() {
         return "laser";
     }

@@ -19,17 +19,29 @@ public abstract class PurchaseManager<P extends Purchase> {
 
     public void add(P item) {
         purchases.put(item.getId(), item);
+        if(gui != null)
+            gui.setDirty();
     }
 
-    public void load(Map<String, Config> config) {
+    public Map<String, P> getPurchases() {
+        return Collections.unmodifiableMap(purchases);
+    }
+
+    public abstract P deserialize(String id, Config config);
+
+    public abstract String getGuiLoc();
+
+    public abstract String getConfigLoc();
+
+    public void loadConfig(Map<String, Config> config) {
         for(Map.Entry<String, Config> entry : config.entrySet()) {
             add(deserialize(entry.getKey(), entry.getValue()));
         }
     }
 
-    public void load(File file) {
+    public void loadConfig(File file) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        load(config.getValues(true)
+        loadConfig(config.getValues(true)
                 .entrySet()
                 .stream()
                 .map(e -> {
@@ -45,11 +57,13 @@ public abstract class PurchaseManager<P extends Purchase> {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
-    public Map<String, P> getPurchases() {
-        return Collections.unmodifiableMap(purchases);
+    public void loadConfig() {
+        File file = new File(
+                QuakeCraftReloaded.get().getDataFolder(),
+                "shop" + File.pathSeparator + getConfigLoc()
+        );
     }
 
-    public abstract P deserialize(String id, Config config);
 
     public void loadGui(Config config) {
         gui = PurchasesGui.deserialize(QuakeCraftReloaded.get(), getPurchaseName(), config, this);
@@ -59,10 +73,15 @@ public abstract class PurchaseManager<P extends Purchase> {
     public void loadGui() {
         File file = new File(
                 QuakeCraftReloaded.get().getDataFolder(),
-                "guis" + File.pathSeparator + getPurchaseName() + ".yml"
+                "guis" + File.pathSeparator + getGuiLoc() + ".yml"
         );
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         loadGui(Config.wrap(config));
+    }
+
+    public void load() {
+        loadConfig();
+        loadGui();
     }
 
     public abstract String getPurchaseName();

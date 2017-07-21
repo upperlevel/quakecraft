@@ -26,6 +26,16 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
     }
 
     @Override
+    public String getGuiLoc() {
+        return "guns";
+    }
+
+    @Override
+    public String getConfigLoc() {
+        return "gun/guns";
+    }
+
+    @Override
     public String getPurchaseName() {
         return "gun";
     }

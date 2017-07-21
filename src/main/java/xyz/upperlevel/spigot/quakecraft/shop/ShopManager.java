@@ -12,4 +12,14 @@ public class ShopManager {
 
     private GunManager guns = new GunManager(this);
 
+    public void load() {
+        barrels.load();
+        cases.load();
+        lasers.load();
+        muzzles.load();
+        triggers.load();
+
+        guns.load();
+    }
+
 }

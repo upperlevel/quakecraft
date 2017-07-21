@@ -23,6 +23,16 @@ public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
     }
 
     @Override
+    public String getGuiLoc() {
+        return "muzzles";
+    }
+
+    @Override
+    public String getConfigLoc() {
+        return "gun/muzzles";
+    }
+
+    @Override
     public String getPurchaseName() {
         return "muzzle";
     }

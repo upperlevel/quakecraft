@@ -18,6 +18,16 @@ public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
     }
 
     @Override
+    public String getGuiLoc() {
+        return "triggers";
+    }
+
+    @Override
+    public String getConfigLoc() {
+        return "gun/triggers";
+    }
+
+    @Override
     public String getPurchaseName() {
         return "trigger";
     }

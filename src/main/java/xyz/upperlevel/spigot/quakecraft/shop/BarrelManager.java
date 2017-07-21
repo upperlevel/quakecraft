@@ -21,6 +21,16 @@ public class BarrelManager extends PurchaseManager<BarrelManager.Barrel> {
     }
 
     @Override
+    public String getGuiLoc() {
+        return "barrels";
+    }
+
+    @Override
+    public String getConfigLoc() {
+        return "gun/barrels";
+    }
+
+    @Override
     public String getPurchaseName() {
         return "barrel";
     }

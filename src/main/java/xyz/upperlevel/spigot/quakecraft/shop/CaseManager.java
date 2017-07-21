@@ -18,6 +18,16 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
     }
 
     @Override
+    public String getGuiLoc() {
+        return "cases";
+    }
+
+    @Override
+    public String getConfigLoc() {
+        return "gun/cases";
+    }
+
+    @Override
     public String getPurchaseName() {
         return "case";
     }

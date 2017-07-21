@@ -1,5 +1,6 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -26,6 +27,8 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
     private final int usableSlots[];
     private final PurchaseManager<P> purchaseManager;
     private Map<Integer, P> purchaseMap = new HashMap<>();
+    @Getter
+    private boolean dirty = true;
 
     public PurchasesGui(Plugin plugin, String id, int size, String title, PurchaseManager<P> manager, int[] usableSlots) {
         super(plugin, id, size, title);
@@ -63,10 +66,13 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
             int slot = usableSlots[i++];
             purchaseMap.put(slot, p);
         }
+        dirty = false;
     }
 
     @Override
     public Inventory create(Player player) {
+        if(dirty)
+            update();
         Inventory inv = super.create(player);
         QuakePlayer qp = QuakePlayerManager.get().getPlayer(player);
         for(Map.Entry<Integer, P> p  : purchaseMap.entrySet())
@@ -105,6 +111,10 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
             meta.getLore().addAll(buyingLores.stream().map(v -> v.resolve(player)).collect(Collectors.toList()));
         i.setItemMeta(meta);
         return i;
+    }
+
+    public void setDirty() {
+        dirty = true;
     }
 
     public static <P extends Purchase> PurchasesGui<P> deserialize(Plugin plugin, String id, Config config, PurchaseManager<P> purchaseManager) {
