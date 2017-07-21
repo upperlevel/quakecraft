@@ -13,7 +13,6 @@ public abstract class Purchase<T extends Purchase<T>> {
     private final CustomItem icon;
     private final boolean def;
 
-    @java.beans.ConstructorProperties({"manager", "id", "name", "cost", "icon", "def"})
     public Purchase(PurchaseManager<T> manager, String id, String name, float cost, CustomItem icon, boolean def) {
         this.manager = manager;
         this.id = id;

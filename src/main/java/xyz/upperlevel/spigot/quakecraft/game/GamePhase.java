@@ -2,13 +2,18 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Getter;
 import org.bukkit.GameMode;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
 import xyz.upperlevel.uppercore.scoreboard.Board;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +29,15 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     private final Map<Player, Participant> participants = new HashMap<>();
     private final List<Participant> ranking = new ArrayList<>();
 
-    public Participant getParticipant(Player player) {
-        return participants.get(player);
+    private static final GameBoard board;
+    static {
+        // custom load game scoreboard
+        File file = new File(get().getScoreboards().getFolder(), "ingame_solo.yml");
+        if (!file.exists()) {
+            throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
+        }
+        board = GameBoard.deserialize(get() , "ingame_solo", YamlConfiguration.loadConfiguration(file)::get);
+        get().getScoreboards().register(board);
     }
 
     public GamePhase(Game game) {
@@ -39,9 +51,13 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
         return participant;
     }
 
+    public Participant getParticipant(Player player) {
+        return participants.get(player);
+    }
+
     private void setup(Player player) {
         player.setGameMode(GameMode.ADVENTURE);
-        Board board = get().getScoreboards().get("solo_quake_ingame");
+        Board board = get().getScoreboards().get("ingame_solo");
         if (board != null)
             ScoreboardSystem.view(player).setBoard(board);
     }

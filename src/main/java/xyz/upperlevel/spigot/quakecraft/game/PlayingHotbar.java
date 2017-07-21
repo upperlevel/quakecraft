@@ -4,17 +4,21 @@ import lombok.Getter;
 import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.Icon;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
 
 @Getter
-public class GameHotbar extends Hotbar {
+public class PlayingHotbar extends Hotbar {
 
+    private int gunSlot = -1;
     private CustomItem gun;
+
+    private int trackerSlot = -1;
     private CustomItem tracker;
 
-    public GameHotbar(Plugin plugin, String id, Config config) {
+    public PlayingHotbar(Plugin plugin, String id, Config config) {
         super(plugin, id, config);
         // -----------------------gun
         if (config.has("gun")) {
@@ -22,7 +26,7 @@ public class GameHotbar extends Hotbar {
             gun = config.getCustomItemRequired("item");
             setIcon(config.getIntRequired("slot"), new Icon(gun));
         } else
-            QuakeCraftReloaded.get().getLogger().warning("Item \"gun\" not found in ingame hotbar");
+            throw new InvalidConfigurationException("The \"gun\" field cannot be found!");
         // -----------------------tracker
         if (config.has("tracker")) {
             config = config.getConfig("tracker");
@@ -32,7 +36,12 @@ public class GameHotbar extends Hotbar {
             QuakeCraftReloaded.get().getLogger().warning("Item \"tracker\" not found in ingame hotbar");
     }
 
-    public static GameHotbar deserialize(Plugin plugin, String id, Config config) {
-        return new GameHotbar(plugin, id, config);
+    public static PlayingHotbar deserialize(Plugin plugin, String id, Config config) {
+        try {
+            return new PlayingHotbar(plugin, id, config);
+        } catch (InvalidConfigurationException e) {
+            e.addLocalizer("in hotbar " + id);
+            throw e;
+        }
     }
 }

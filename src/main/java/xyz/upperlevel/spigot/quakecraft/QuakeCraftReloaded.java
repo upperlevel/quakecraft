@@ -57,7 +57,6 @@ public class QuakeCraftReloaded extends JavaPlugin {
         guis = GuiSystem.subscribe(this);
 
         try {
-
             hotbars = HotbarSystem.subscribe(this);
             hotbars.loadDefaultFolder();
 

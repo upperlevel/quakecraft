@@ -9,7 +9,7 @@ wood:
       - '&7Choose an appearance!'
       - ''
       - '&7Cost: &6%cost%'
-  display:
+  item:
     type: 'WOOD_HOE'
 
 marbled:
@@ -21,7 +21,7 @@ marbled:
       - '&7Choose an appearance!'
       - ''
       - '&7Cost: &6%cost%'
-  display:
+  item:
     type: 'STONE_HOE'
 
 varnished-wood:
@@ -35,7 +35,7 @@ varnished-wood:
       - '&7Cost: &6%cost%'
     enchantments:
       arrow damage: 10
-  display:
+  item:
     type: 'WOOD_HOE'
     enchantments:
       arrow damage: 10
@@ -51,7 +51,7 @@ polished-wood:
       - '&7Cost: &6%cost%'
     enchantments:
       arrow damage: 10
-  display:
+  item:
     type: 'STONE_HOE'
     enchantments:
       arrow damage: 10
@@ -65,7 +65,7 @@ reinforced:
       - '&7Choose an appearance!'
       - ''
       - '&7Cost: &6%cost%'
-  display:
+  item:
     type: 'IRON_HOE'
 
 plated:
@@ -77,7 +77,7 @@ plated:
       - '&7Choose an appearance!'
       - ''
       - '&7Cost: &6%cost%'
-  display:
+  item:
     type: 'GOLD_HOE'
 
 bling:
@@ -89,7 +89,7 @@ bling:
       - '&7Choose an appearance!'
       - ''
       - '&7Cost: &6%cost%'
-  display:
+  item:
     type: 'DIAMOND_HOE'
 
 polished-plated:
@@ -101,7 +101,7 @@ polished-plated:
       - '&7Choose an appearance!'
       - ''
       - '&7Cost: &6%cost%'
-  display:
+  item:
     type: 'GOLD_HOE'
     enchantments:
       arrow damage: 10
@@ -117,7 +117,7 @@ polished-bling-case:
       - '&7Cost: &6%cost%'
     enchantments:
       arrow damage: 10
-  display:
+  item:
     type: 'DIAMOND_HOE'
     enchantments:
       arrow damage: 10
@@ -133,7 +133,7 @@ polished-reinforced-case:
       - '&7Cost: &6%cost%'
     enchantments:
       arrow damage: 10
-  display:
+  item:
     type: 'IRON_HOE'
     enchantments:
       arrow damage: 10
