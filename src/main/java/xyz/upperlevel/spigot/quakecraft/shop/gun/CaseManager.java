@@ -1,9 +1,10 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
 
 public class CaseManager extends PurchaseManager<CaseManager.Case> {
@@ -40,7 +41,7 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
 
 
     @Getter
-    public class Case extends Purchase<Case>{
+    public class Case extends Purchase<Case> {
         private final CustomItem display;
 
         public Case(String id, String name, float cost, CustomItem icon, boolean def, CustomItem display) {

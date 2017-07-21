@@ -9,7 +9,7 @@ import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
 import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchasesGui;
-import xyz.upperlevel.spigot.quakecraft.shop.ShopManager;
+import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
@@ -21,7 +21,6 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardRegistry;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 
 @Getter
@@ -33,7 +32,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
     private ArenaManager arenaManager;
     private GameManager gameManager;
     private QuakePlayerManager playerManager;
-    private ShopManager shopManager;
+    private ShopCategory shop;
 
     // core
     private GuiRegistry guis;
@@ -47,7 +46,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         arenaManager = new ArenaManager();
         gameManager = new GameManager();
         playerManager = new QuakePlayerManager();
-        shopManager = new ShopManager();
+        shop = new ShopCategory();
 
         PlaceholderUtil.register(this, new QuakePlaceholders());
         ArgumentParserSystem.register(new ArenaArgumentParser());
@@ -67,7 +66,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
             gameManager.load();
 
             PurchasesGui.load(Config.wrap(getConfig()).getConfigRequired("purchase-gui"));
-            shopManager.load();
+            shop.load();
         } catch (InvalidConfigurationException e) {
             QuakeCraftReloaded.get().getLogger().severe(e.getConfigError());
             Bukkit.getPluginManager().disablePlugin(this);

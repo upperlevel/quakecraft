@@ -1,10 +1,11 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import org.bukkit.Color;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
 
 public class LaserManager extends PurchaseManager<LaserManager.Laser> {
@@ -41,7 +42,7 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
 
 
     @Getter
-    public class Laser extends Purchase<Laser>{
+    public class Laser extends Purchase<Laser> {
         private final Color fireworkColor;
 
         public Laser(String id, String name, float cost, CustomItem icon, boolean def, Color fireworkColor) {

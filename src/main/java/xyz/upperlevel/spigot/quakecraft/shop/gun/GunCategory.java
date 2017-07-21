@@ -1,13 +1,13 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.spigot.quakecraft.shop.Category;
 
 import java.util.logging.Logger;
 
 @Getter
-public class ShopManager {
+public class GunCategory extends Category{
     private BarrelManager barrels = new BarrelManager();
     private CaseManager cases = new CaseManager();
     private LaserManager lasers = new LaserManager();
@@ -18,7 +18,10 @@ public class ShopManager {
 
     public void load() {
         final Logger logger = QuakeCraftReloaded.get().getLogger();
-        logger.info("Init loading shop");
+        logger.info("Init loading guns");
+
+        loadGui();
+        logger.info("Loaded Gun GUI");
 
         barrels.load();
         logger.info("Loaded " + barrels.getPurchases().size() + " barrels");
@@ -33,8 +36,12 @@ public class ShopManager {
 
         guns.load();
         logger.info("Loaded " + guns.getPurchases().size() + " guns");
-        
-        logger.info("Shop loaded successfully!");
+
+        logger.info("Guns loaded successfully!");
     }
 
+    @Override
+    public String getGuiLoc() {
+        return "guns";
+    }
 }

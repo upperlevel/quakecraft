@@ -1,3 +1,8 @@
+none:
+  name: 'No Leggings'
+  default: true
+  icon: 'BARRIER'
+
 soldier:
   name: 'Soldier Pants'
   cost: 650

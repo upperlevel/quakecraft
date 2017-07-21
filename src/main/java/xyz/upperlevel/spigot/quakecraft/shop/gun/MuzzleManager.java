@@ -1,11 +1,11 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
-import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleType;
+import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
 
 
     @Getter
-    public class Muzzle extends Purchase<Muzzle>{
+    public class Muzzle extends Purchase<Muzzle> {
         private final List<Particle> particles;
 
         public Muzzle(String id, String name, float cost, CustomItem icon, boolean def, List<Particle> particles) {

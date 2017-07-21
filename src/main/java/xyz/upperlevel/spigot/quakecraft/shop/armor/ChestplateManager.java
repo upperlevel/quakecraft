@@ -50,7 +50,7 @@ public class ChestplateManager extends PurchaseManager<ChestplateManager.Chestpl
 
         protected Chestplate(String id, Config config) {
             super(ChestplateManager.this, id, config);
-            this.item = config.getCustomItemRequired("item");
+            this.item = config.getCustomItem("item");
         }
     }
 }

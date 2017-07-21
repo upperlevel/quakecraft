@@ -1,3 +1,8 @@
+none:
+  name: 'No Kit'
+  default: true
+  icon: 'BARRIER'
+
 soldier:
   name: 'Soldier Kit'
   cost: 650

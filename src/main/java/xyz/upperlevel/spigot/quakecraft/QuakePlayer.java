@@ -3,10 +3,8 @@ package xyz.upperlevel.spigot.quakecraft;
 import lombok.Data;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.shop.*;
-import xyz.upperlevel.spigot.quakecraft.shop.armor.BootManager;
-import xyz.upperlevel.spigot.quakecraft.shop.armor.ChestplateManager;
-import xyz.upperlevel.spigot.quakecraft.shop.armor.HatManager;
-import xyz.upperlevel.spigot.quakecraft.shop.armor.LeggingManager;
+import xyz.upperlevel.spigot.quakecraft.shop.armor.*;
+import xyz.upperlevel.spigot.quakecraft.shop.gun.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,14 +34,23 @@ public class QuakePlayer {
     public QuakePlayer(Player player) {
         this.player = player;
 
-        ShopManager shop = QuakeCraftReloaded.get().getShopManager();
+        ShopCategory shop = QuakeCraftReloaded.get().getShop();
 
-        selectedBarrel = shop.getBarrels().getDefault();
-        selectedCase = shop.getCases().getDefault();
-        selectedLaser = shop.getLasers().getDefault();
-        selectedMuzzle = shop.getMuzzles().getDefault();
-        selectedTrigger = shop.getTriggers().getDefault();
-        selectedGun = shop.getGuns().getDefault();
+        GunCategory guns = shop.getGuns();
+
+        selectedBarrel = guns.getBarrels().getDefault();
+        selectedCase = guns.getCases().getDefault();
+        selectedLaser = guns.getLasers().getDefault();
+        selectedMuzzle = guns.getMuzzles().getDefault();
+        selectedTrigger = guns.getTriggers().getDefault();
+        selectedGun = guns.getGuns().getDefault();
+
+        ArmorCategory armors = shop.getArmors();
+
+        selectedBoot = armors.getBoots().getDefault();
+        selectedLegging = armors.getLeggings().getDefault();
+        selectedChestplate = armors.getChestplates().getDefault();
+        selectedHat = armors.getHats().getDefault();
     }
 
     public void load() {

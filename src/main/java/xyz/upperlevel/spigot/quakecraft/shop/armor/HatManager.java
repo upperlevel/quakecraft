@@ -50,7 +50,7 @@ public class HatManager extends PurchaseManager<HatManager.Hat> {
 
         protected Hat(String id, Config config) {
             super(HatManager.this, id, config);
-            this.item = config.getCustomItemRequired("item");
+            this.item = config.getCustomItem("item");
         }
     }
 }

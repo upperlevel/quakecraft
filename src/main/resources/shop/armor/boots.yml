@@ -1,4 +1,9 @@
-ldier:
+none:
+  name: 'No Boots'
+  default: true
+  icon: 'BARRIER'
+
+soldier:
   name: 'Soldier Boots'
   cost: 650
   icon:

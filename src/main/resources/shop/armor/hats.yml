@@ -1,3 +1,8 @@
+none:
+  name: 'No Hats'
+  default: true
+  icon: 'BARRIER'
+
 cactus:
   name: 'Cactus Hat'
   cost: 350

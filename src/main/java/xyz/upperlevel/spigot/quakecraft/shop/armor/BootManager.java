@@ -50,7 +50,7 @@ public class BootManager extends PurchaseManager<BootManager.Boot> {
 
         protected Boot(String id, Config config) {
             super(BootManager.this, id, config);
-            this.item = config.getCustomItemRequired("item");
+            this.item = config.getCustomItem("item");
         }
     }
 }

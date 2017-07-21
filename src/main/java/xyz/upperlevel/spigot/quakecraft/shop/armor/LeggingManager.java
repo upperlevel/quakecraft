@@ -50,7 +50,7 @@ public class LeggingManager extends PurchaseManager<LeggingManager.Legging> {
 
         protected Legging(String id, Config config) {
             super(LeggingManager.this, id, config);
-            this.item = config.getCustomItemRequired("item");
+            this.item = config.getCustomItem("item");
         }
     }
 }

@@ -1,10 +1,11 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import org.bukkit.FireworkEffect;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
 
 import static xyz.upperlevel.uppercore.config.ConfigUtils.parseFireworkEffectType;
@@ -43,7 +44,7 @@ public class BarrelManager extends PurchaseManager<BarrelManager.Barrel> {
 
 
     @Getter
-    public class Barrel extends Purchase<Barrel>{
+    public class Barrel extends Purchase<Barrel> {
         private final FireworkEffect.Type fireworkType;
 
         public Barrel(String id, String name, float cost, CustomItem icon, boolean def, FireworkEffect.Type fireworkType) {

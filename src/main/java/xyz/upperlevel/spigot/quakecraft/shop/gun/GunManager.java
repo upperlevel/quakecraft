@@ -1,9 +1,11 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
+import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GunManager extends PurchaseManager<GunManager.Gun> {
 
-    private final ShopManager shop;
+    private final GunCategory parent;
 
     @Override
     public Gun deserialize(String id, Config config) {
@@ -48,7 +50,7 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
 
 
     @Getter
-    public class Gun extends Purchase<Gun>{
+    public class Gun extends Purchase<Gun> {
         private final BarrelManager.Barrel barrel;
         private final CaseManager.Case gcase;
         private final LaserManager.Laser laser;
@@ -81,11 +83,11 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
             String muzzleName = config.getStringRequired("muzzle");
             String triggerName = config.getStringRequired("trigger");
 
-            this.barrel = shop.getBarrels().get(barrelName);
-            this.gcase = shop.getCases().get(caseName);
-            this.laser = shop.getLasers().get(laserName);
-            this.muzzle = shop.getMuzzles().get(muzzleName);
-            this.trigger = shop.getTriggers().get(triggerName);
+            this.barrel = parent.getBarrels().get(barrelName);
+            this.gcase = parent.getCases().get(caseName);
+            this.laser = parent.getLasers().get(laserName);
+            this.muzzle = parent.getMuzzles().get(muzzleName);
+            this.trigger = parent.getTriggers().get(triggerName);
 
             if(barrel == null)
                 throw new InvalidConfigurationException("Cannot find barrel \"" + barrelName + "\"");
