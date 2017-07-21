@@ -20,20 +20,12 @@ public class QuakePlayer {
 
     private final Set<Purchase<?>> purchases = new HashSet<>();
 
-    @Setter
     private BarrelManager.Barrel selectedBarrel;
-    @Setter
     private CaseManager.Case selectedCase;
-    @Setter
     private LaserManager.Laser selectedLaser;
-    @Setter
     private MuzzleManager.Muzzle selectedMuzzle;
-    @Setter
     private TriggerManager.Trigger selectedTrigger;
-
-    @Setter
     private GunManager.Gun selectedGun;
-
 
     public QuakePlayer(Player player) {
         this.player = player;
@@ -45,7 +37,6 @@ public class QuakePlayer {
         selectedLaser = shop.getLasers().getDefault();
         selectedMuzzle = shop.getMuzzles().getDefault();
         selectedTrigger = shop.getTriggers().getDefault();
-
         selectedGun = shop.getGuns().getDefault();
     }
 
