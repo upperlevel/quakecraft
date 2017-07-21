@@ -15,11 +15,6 @@
 
     <repositories>
         <repository>
-            <id>sinndev-repo</id>
-            <url>http://repo.sinndev.com/content/groups/public/</url>
-        </repository>
-
-        <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
