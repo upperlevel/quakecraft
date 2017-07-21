@@ -23,9 +23,9 @@ public class BlockDustParticle extends Particle {
 
     public BlockDustParticle(Config data) {
         super(ParticleType.BLOCK_DUST, data);
-
-        setBlockType(data.getMaterialRequired("block.type"));
-        setBlockData(data.getByte("block.data"));
+        Config block = data.getConfigRequired("block");
+        setBlockType(block.getMaterialRequired("type"));
+        setBlockData(block.getByte("data", (byte)0));
     }
 
     public void setBlockType(Material blockType) {

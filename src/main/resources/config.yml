@@ -55,7 +55,7 @@ lobby:
 game:
   countdown: 10
 
-gui:
+purchase-gui:
   buying:
   - "&a%cost%"
   bought:

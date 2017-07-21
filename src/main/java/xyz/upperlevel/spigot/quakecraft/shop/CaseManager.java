@@ -10,12 +10,7 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
 
     @Override
     public Case deserialize(String id, Config config) {
-        try {
-            return new Case(id, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in case \"" + id + "\"");
-            throw e;
-        }
+        return new Case(id, config);
     }
 
     @Override

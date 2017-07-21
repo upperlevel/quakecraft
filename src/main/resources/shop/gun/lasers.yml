@@ -81,7 +81,7 @@ pink:
     - '&7Choose a firework color!'
     - ''
     - '&7Cost: &6%cost%'
-  firework-color: 'PINK'
+  firework-color: 'FUCHSIA'
 
 gold:
   name: 'Gold Laser'
@@ -92,7 +92,7 @@ gold:
     - '&7Choose a firework color!'
     - ''
     - '&7Cost: &6%cost%'
-  firework-color: 'OLIVA'
+  firework-color: 'OLIVE'
 
 emerald:
   name: 'Emerald Laser'

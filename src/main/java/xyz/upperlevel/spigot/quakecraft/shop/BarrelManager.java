@@ -13,12 +13,7 @@ public class BarrelManager extends PurchaseManager<BarrelManager.Barrel> {
 
     @Override
     public Barrel deserialize(String id, Config config) {
-        try {
-            return new Barrel(id, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in barrel \"" + id + "\"");
-            throw e;
-        }
+        return new Barrel(id, config);
     }
 
     @Override

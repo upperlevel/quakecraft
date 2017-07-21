@@ -189,10 +189,10 @@ sea-lantern:
       - '&7Choose a particle effect!'
       - ''
       - '&7Cost: &7%cost%'
-    particles:
-      - type: 'BLOCK_DUST'
-        block:
-          type: 'SEA_LANTERN'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'SEA_LANTERN'
 
 command-block:
   name: 'Command Block Muzzle'
@@ -203,10 +203,10 @@ command-block:
       - '&7Choose a particle effect!'
       - ''
       - '&7Cost: &7%cost%'
-    particles:
-      - type: 'BLOCK_DUST'
-        block:
-          type: 'COMMAND'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'COMMAND'
 
 prismarine:
   name: 'Prismarine Muzzle'
@@ -217,10 +217,10 @@ prismarine:
       - '&7Choose a particle effect!'
       - ''
       - '&7Cost: &7%cost%'
-    particles:
-      - type: 'BLOCK_DUST'
-        block:
-          type: 'PRISMARINE'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'PRISMARINE'
 
 melon:
   name: 'Melon Muzzle'
@@ -231,10 +231,10 @@ melon:
       - '&7Choose a particle effect!'
       - ''
       - '&7Cost: &7%cost%'
-    particles:
-      - type: 'BLOCK_DUST'
-        block:
-          type: 'MELON'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'MELON'
 
 pumpkin:
   name: 'Pumpkin Muzzle'
@@ -245,10 +245,10 @@ pumpkin:
       - '&7Choose a particle effect!'
       - ''
       - '&7Cost: &7%cost%'
-    particles:
-      - type: 'BLOCK_DUST'
-        block:
-          type: 'PUMPKIN'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'PUMPKIN'
 
 soul-sand:
   name: 'Soul Sand Muzzle'
@@ -259,7 +259,7 @@ soul-sand:
       - '&7Choose a particle effect!'
       - ''
       - '&7Cost: &7%cost%'
-    particles:
-      - type: 'BLOCK_DUST'
-        block:
-          type: 'SOUL_SAND'
+  particles:
+    - type: 'BLOCK_DUST'
+      block:
+        type: 'SOUL_SAND'

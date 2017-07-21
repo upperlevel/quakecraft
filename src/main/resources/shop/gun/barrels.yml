@@ -20,7 +20,7 @@ large:
     - '&7Choose a firework shape!'
     - ''
     - '&7Cost: &6%cost%'
-  firework-type: 'LARGE_BALL'
+  firework-type: 'BALL_LARGE'
 
 creeper:
   name: 'Creeper Barrel'

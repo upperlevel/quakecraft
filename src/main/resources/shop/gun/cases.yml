@@ -34,13 +34,11 @@ varnished-wood:
       - ''
       - '&7Cost: &6%cost%'
     enchantments:
-    - type: 'POWER'
-      level: 10
+      arrow damage: 10
   display:
     type: 'WOOD_HOE'
     enchantments:
-    - type: 'POWER'
-      level: 10
+      arrow damage: 10
 
 polished-wood:
   name: 'Polished Wood Case'
@@ -52,13 +50,11 @@ polished-wood:
       - ''
       - '&7Cost: &6%cost%'
     enchantments:
-    - type: 'POWER'
-      level: 10
+      arrow damage: 10
   display:
     type: 'STONE_HOE'
     enchantments:
-    - type: 'POWER'
-      level: 10
+      arrow damage: 10
 
 reinforced:
   name: 'Reinforced Case'
@@ -108,8 +104,7 @@ polished-plated:
   display:
     type: 'GOLD_HOE'
     enchantments:
-    - type: 'POWER'
-      level: 10
+      arrow damage: 10
 
 polished-bling-case:
   name: 'Polished Bling Case'
@@ -121,13 +116,11 @@ polished-bling-case:
       - ''
       - '&7Cost: &6%cost%'
     enchantments:
-      - type: 'POWER'
-        level: 10
+      arrow damage: 10
   display:
     type: 'DIAMOND_HOE'
     enchantments:
-      - type: 'POWER'
-        level: 10
+      arrow damage: 10
 
 polished-reinforced-case:
   name: 'Polished Reinforced Case'
@@ -139,10 +132,8 @@ polished-reinforced-case:
       - ''
       - '&7Cost: &6%cost%'
     enchantments:
-      - type: 'POWER'
-        level: 10
+      arrow damage: 10
   display:
     type: 'IRON_HOE'
     enchantments:
-      - type: 'POWER'
-        level: 10
+      arrow damage: 10

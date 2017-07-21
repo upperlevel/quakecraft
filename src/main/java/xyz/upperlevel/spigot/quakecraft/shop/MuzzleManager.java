@@ -15,12 +15,7 @@ public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
 
     @Override
     public Muzzle deserialize(String id, Config config) {
-        try {
-            return new Muzzle(id, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in muzzle \"" + id + "\"");
-            throw e;
-        }
+        return new Muzzle(id, config);
     }
 
     @Override

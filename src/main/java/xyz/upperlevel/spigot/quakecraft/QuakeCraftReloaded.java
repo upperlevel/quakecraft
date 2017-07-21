@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arguments.ArenaArgumentParser;
@@ -11,6 +12,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.PurchasesGui;
 import xyz.upperlevel.spigot.quakecraft.shop.ShopManager;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.GuiRegistry;
 import xyz.upperlevel.uppercore.gui.GuiSystem;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarRegistry;
@@ -19,6 +21,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardRegistry;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
 @Getter
@@ -53,17 +56,23 @@ public class QuakeCraftReloaded extends JavaPlugin {
 
         guis = GuiSystem.subscribe(this);
 
-        hotbars = HotbarSystem.subscribe(this);
-        hotbars.loadDefaultFolder();
+        try {
 
-        scoreboards = ScoreboardSystem.subscribe(this);
-        scoreboards.loadDefaultFolder();
+            hotbars = HotbarSystem.subscribe(this);
+            hotbars.loadDefaultFolder();
 
-        arenaManager.load();
-        gameManager.load();
+            scoreboards = ScoreboardSystem.subscribe(this);
+            scoreboards.loadDefaultFolder();
 
-        PurchasesGui.load(Config.wrap(getConfig().getConfigurationSection("purchase-gui")));
-        shopManager.load();
+            arenaManager.load();
+            gameManager.load();
+
+            PurchasesGui.load(Config.wrap(getConfig()).getConfigRequired("purchase-gui"));
+            shopManager.load();
+        } catch (InvalidConfigurationException e) {
+            QuakeCraftReloaded.get().getLogger().severe(e.getConfigError());
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override

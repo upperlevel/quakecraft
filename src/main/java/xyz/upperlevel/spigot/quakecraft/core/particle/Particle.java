@@ -3,6 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.core.particle;
 import lombok.Data;
 import org.bukkit.Location;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 
 @Data
 public abstract class Particle {
@@ -57,6 +58,10 @@ public abstract class Particle {
 
 
     public static Particle deserialize(Config data) {
-        return ParticleType.get(data.getStringRequired("type")).create(data);
+        String raw = data.getStringRequired("type");
+        ParticleType type = ParticleType.get(raw);
+        if(type == null)
+            throw new InvalidConfigurationException("Cannot find particle type \"" + raw + "\"");
+        return type.create(data);
     }
 }

@@ -1,13 +1,17 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import com.google.common.collect.Maps;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.gui.config.action.exceptions.IllegalParametersException;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,21 +46,31 @@ public abstract class PurchaseManager<P extends Purchase> {
 
     public void loadConfig(Map<String, Config> config) {
         for(Map.Entry<String, Config> entry : config.entrySet()) {
-            add(deserialize(entry.getKey(), entry.getValue()));
+            try {
+                add(deserialize(entry.getKey(), entry.getValue()));
+            } catch (InvalidConfigurationException e) {
+                e.addLocalizer("in " + getPurchaseName() + " '" + entry.getKey() + "'");
+                throw e;
+            }
         }
     }
 
     public void loadConfig(File file) {
+        if(!file.exists())
+            throw new InvalidParameterException("Cannot find file " + file);
+
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        loadConfig(config.getValues(true)
+        loadConfig(config.getValues(false)
                 .entrySet()
                 .stream()
                 .map(e -> {
                     Object o = e.getValue();
                     if(o instanceof Map)
                         return Maps.immutableEntry(e.getKey(), Config.wrap((Map)o));
+                    else if(o instanceof ConfigurationSection)
+                        return Maps.immutableEntry(e.getKey(), Config.wrap((ConfigurationSection) o));
                     else {
-                        QuakeCraftReloaded.get().getLogger().severe("Cannot parse " + getPurchaseName() + e.getKey() + ": expected map");
+                        QuakeCraftReloaded.get().getLogger().severe("Cannot parse " + getPurchaseName() + e.getKey() + ": expected map (found: " + o.getClass().getSimpleName() + ")");
                         return null;
                     }
                 })
@@ -67,8 +81,9 @@ public abstract class PurchaseManager<P extends Purchase> {
     public void loadConfig() {
         File file = new File(
                 QuakeCraftReloaded.get().getDataFolder(),
-                "shop" + File.pathSeparator + getConfigLoc()
+                "shop" + File.separator + getConfigLoc() + ".yml"
         );
+        loadConfig(file);
     }
 
 
@@ -80,7 +95,7 @@ public abstract class PurchaseManager<P extends Purchase> {
     public void loadGui() {
         File file = new File(
                 QuakeCraftReloaded.get().getDataFolder(),
-                "guis" + File.pathSeparator + getGuiLoc() + ".yml"
+                "guis" + File.separator + getGuiLoc() + ".yml"
         );
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         loadGui(Config.wrap(config));
@@ -89,6 +104,16 @@ public abstract class PurchaseManager<P extends Purchase> {
     public void load() {
         loadConfig();
         loadGui();
+    }
+
+    public boolean tryLoad() {
+        try {
+            load();
+        } catch (InvalidConfigurationException e) {
+            QuakeCraftReloaded.get().getLogger().severe(e.getErrorMessage("Error"));
+            return false;
+        }
+        return true;
     }
 
     public abstract void setSelected(QuakePlayer player, P purchase);

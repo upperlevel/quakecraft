@@ -18,12 +18,7 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
 
     @Override
     public Gun deserialize(String id, Config config) {
-        try {
-            return new Gun(id, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in gun \"" + id + "\"");
-            throw e;
-        }
+        return new Gun(id, config);
     }
 
     @Override

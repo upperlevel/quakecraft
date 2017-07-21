@@ -11,12 +11,7 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
 
     @Override
     public Laser deserialize(String id, Config config) {
-        try {
-            return new Laser(id, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in laser \"" + id + "\"");
-            throw e;
-        }
+        return new Laser(id, config);
     }
 
     @Override
@@ -56,7 +51,7 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
 
         protected Laser(String id, Config config) {
             super(LaserManager.this, id, config);
-            this.fireworkColor = config.getColorRequired("fireworkColor");
+            this.fireworkColor = config.getColorRequired("firework-color");
         }
     }
 }

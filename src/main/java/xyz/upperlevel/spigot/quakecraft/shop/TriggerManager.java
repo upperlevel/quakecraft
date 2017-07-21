@@ -10,12 +10,7 @@ public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
 
     @Override
     public Trigger deserialize(String id, Config config) {
-        try {
-            return new Trigger(id, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in trigger \"" + id + "\"");
-            throw e;
-        }
+        return new Trigger(id, config);
     }
 
     @Override
