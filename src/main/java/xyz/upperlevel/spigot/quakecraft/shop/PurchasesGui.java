@@ -108,7 +108,12 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
     }
 
     public static <P extends Purchase> PurchasesGui<P> deserialize(Plugin plugin, String id, Config config, PurchaseManager<P> purchaseManager) {
-        return new PurchasesGui<>(plugin, id, config, purchaseManager);
+        try {
+            return new PurchasesGui<>(plugin, id, config, purchaseManager);
+        } catch (InvalidConfigurationException e) {
+            e.addLocalizer("in gui " + id);
+            throw e;
+        }
     }
 
     @SuppressWarnings("unchecked")
