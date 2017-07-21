@@ -32,6 +32,7 @@ public class QuakePlayer {
     private LeggingManager.Legging selectedLegging;
     private ChestplateManager.Chestplate selectedChestplate;
     private HatManager.Hat selectedHat;
+    
     public QuakePlayer(Player player) {
         this.player = player;
 
