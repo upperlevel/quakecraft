@@ -6,6 +6,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class CaseManager extends PurchaseManager<CaseManager.Case> {
 
@@ -44,7 +45,7 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
     public class Case extends Purchase<Case> {
         private final CustomItem item;
 
-        public Case(String id, String name, float cost, CustomItem icon, boolean def, CustomItem item) {
+        public Case(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, CustomItem item) {
             super(CaseManager.this, id, name, cost, icon, def);
             this.item = item;
         }

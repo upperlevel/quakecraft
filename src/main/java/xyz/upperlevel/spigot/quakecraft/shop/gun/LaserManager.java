@@ -7,6 +7,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class LaserManager extends PurchaseManager<LaserManager.Laser> {
 
@@ -45,7 +46,7 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
     public class Laser extends Purchase<Laser> {
         private final Color fireworkColor;
 
-        public Laser(String id, String name, float cost, CustomItem icon, boolean def, Color fireworkColor) {
+        public Laser(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, Color fireworkColor) {
             super(LaserManager.this, id, name, cost, icon, def);
             this.fireworkColor = fireworkColor;
         }

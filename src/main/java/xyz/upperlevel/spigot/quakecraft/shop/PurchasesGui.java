@@ -13,9 +13,10 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.economy.Balance;
+import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
-import xyz.upperlevel.uppercore.gui.config.economy.Balance;
-import xyz.upperlevel.uppercore.gui.config.economy.EconomyManager;
+import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
@@ -26,7 +27,7 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
     private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     private final int usableSlots[];
     private final PurchaseManager<P> purchaseManager;
-    private Map<Integer, P> purchaseMap = new HashMap<>();
+    private Map<Integer, P> purchaseMap = new LinkedHashMap<>();
     @Getter
     private boolean dirty = true;
 
@@ -109,6 +110,10 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
         Set<Purchase<?>> purchases = p.getPurchases();
         if(!purchases.contains(purchase)) {
             Balance b = EconomyManager.get(player);
+            if(b == null) {
+                QuakeCraftReloaded.get().getLogger().severe("Economy not found!");
+                return;
+            }
             if(b.take(purchase.getCost())) {
                 purchases.add(purchase);
                 p.getPurchases().add(purchase);
@@ -119,19 +124,33 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
     }
 
     protected ItemStack getIcon(P purchase, QuakePlayer p) {
-        ItemStack i = purchase.getIcon().toItemStack(p.getPlayer());
+        final CustomItem icon = purchase.getIcon();
+        final Player player = p.getPlayer();
+        if(icon == null) {
+            QuakeCraftReloaded.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
+            return null;
+        }
+        ItemStack i = icon.toItemStack(player);
         ItemMeta meta = i.getItemMeta();
         final P selected = purchaseManager.getSelected(p);
-        final Player player = p.getPlayer();
         List<PlaceholderValue<String>> lores;
         if(selected == purchase)
             lores = selectedLores;
         else if(p.getPurchases().contains(purchase))
-           lores = boughtLores;
+            lores = boughtLores;
         else
             lores = buyingLores;
 
-        meta.getLore().addAll(lores.stream().map(v -> v.resolve(player)).collect(Collectors.toList()));
+        List<String> metaLore = meta.getLore();
+        if(metaLore == null) {
+            metaLore = new ArrayList<>();
+            meta.setLore(metaLore);
+        }
+        meta.getLore().addAll(
+                lores.stream()
+                        .map(v -> v.resolve(player))
+                        .collect(Collectors.toList())
+        );
         i.setItemMeta(meta);
         return i;
     }
@@ -154,5 +173,6 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
         buyingLores = config.getMessageListRequired("buying");
         boughtLores = config.getMessageListRequired("bought");
         selectedLores = config.getMessageListRequired("selected");
+        QuakeCraftReloaded.get().getLogger().info("PurchaseGui's config loaded!");
     }
 }

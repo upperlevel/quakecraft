@@ -7,6 +7,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import static xyz.upperlevel.uppercore.config.ConfigUtils.parseFireworkEffectType;
 
@@ -47,7 +48,7 @@ public class BarrelManager extends PurchaseManager<BarrelManager.Barrel> {
     public class Barrel extends Purchase<Barrel> {
         private final FireworkEffect.Type fireworkType;
 
-        public Barrel(String id, String name, float cost, CustomItem icon, boolean def, FireworkEffect.Type fireworkType) {
+        public Barrel(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, FireworkEffect.Type fireworkType) {
             super(BarrelManager.this, id, name, cost, icon, def);
             this.fireworkType = fireworkType;
         }

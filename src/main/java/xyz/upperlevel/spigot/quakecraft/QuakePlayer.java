@@ -6,6 +6,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.*;
 import xyz.upperlevel.spigot.quakecraft.shop.armor.*;
 import xyz.upperlevel.spigot.quakecraft.shop.gun.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,6 +52,20 @@ public class QuakePlayer {
         selectedLegging = armors.getLeggings().getDefault();
         selectedChestplate = armors.getChestplates().getDefault();
         selectedHat = armors.getHats().getDefault();
+
+        purchases.addAll(Arrays.asList(
+                selectedBarrel,
+                selectedCase,
+                selectedLaser,
+                selectedMuzzle,
+                selectedTrigger,
+                selectedGun,
+
+                selectedBoot,
+                selectedLegging,
+                selectedChestplate,
+                selectedHat
+        ));
     }
 
     public void load() {

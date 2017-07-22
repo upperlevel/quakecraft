@@ -6,6 +6,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class LeggingManager extends PurchaseManager<LeggingManager.Legging> {
 
@@ -43,7 +44,7 @@ public class LeggingManager extends PurchaseManager<LeggingManager.Legging> {
     public class Legging extends Purchase<Legging> {
         private final CustomItem item;
 
-        public Legging(String id, String name, float cost, CustomItem icon, boolean def, CustomItem item) {
+        public Legging(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, CustomItem item) {
             super(LeggingManager.this, id, name, cost, icon, def);
             this.item = item;
         }

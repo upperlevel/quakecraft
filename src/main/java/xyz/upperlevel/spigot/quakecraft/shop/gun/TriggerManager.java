@@ -6,6 +6,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
 
@@ -44,7 +45,7 @@ public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
     public class Trigger extends Purchase<Trigger> {
         private final double firingSpeed;
 
-        public Trigger(String id, String name, float cost, CustomItem icon, boolean def, double firingSpeed) {
+        public Trigger(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, double firingSpeed) {
             super(TriggerManager.this, id, name, cost, icon, def);
             this.firingSpeed = firingSpeed;
         }

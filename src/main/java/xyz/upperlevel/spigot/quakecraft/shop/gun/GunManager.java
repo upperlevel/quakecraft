@@ -9,6 +9,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +61,7 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
         private final List<CustomItem> links;
         private final List<Particle> particles;
 
-        public Gun(String id, String name, float cost, CustomItem icon, boolean def,
+        public Gun(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def,
                    BarrelManager.Barrel barrel, CaseManager.Case gcase, LaserManager.Laser laser,
                    MuzzleManager.Muzzle muzzle, TriggerManager.Trigger trigger,
                    List<CustomItem> links, List<Particle> particles) {

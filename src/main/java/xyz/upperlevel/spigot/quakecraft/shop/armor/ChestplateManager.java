@@ -6,6 +6,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class ChestplateManager extends PurchaseManager<ChestplateManager.Chestplate> {
 
@@ -43,7 +44,7 @@ public class ChestplateManager extends PurchaseManager<ChestplateManager.Chestpl
     public class Chestplate extends Purchase<Chestplate> {
         private final CustomItem item;
 
-        public Chestplate(String id, String name, float cost, CustomItem icon, boolean def, CustomItem item) {
+        public Chestplate(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, CustomItem item) {
             super(ChestplateManager.this, id, name, cost, icon, def);
             this.item = item;
         }

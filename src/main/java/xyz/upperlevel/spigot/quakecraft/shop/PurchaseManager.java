@@ -8,18 +8,19 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.gui.config.action.exceptions.IllegalParametersException;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
+
 public abstract class PurchaseManager<P extends Purchase> {
-    private Map<String, P> purchases = new HashMap<>();
+    private Map<String, P> purchases = new LinkedHashMap<>();
     private PurchasesGui<P> gui;
     private P def;
 
@@ -60,7 +61,7 @@ public abstract class PurchaseManager<P extends Purchase> {
             throw new InvalidParameterException("Cannot find file " + file);
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        loadConfig(config.getValues(false)
+        loadConfig((Map<String, Config>)config.getValues(false)
                 .entrySet()
                 .stream()
                 .map(e -> {
@@ -75,7 +76,7 @@ public abstract class PurchaseManager<P extends Purchase> {
                     }
                 })
                 .filter(Objects::nonNull)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+                .collect(toMap(LinkedHashMap::new)));
     }
 
     public void loadConfig() {
@@ -87,8 +88,8 @@ public abstract class PurchaseManager<P extends Purchase> {
     }
 
 
-    public void loadGui(Config config) {
-        gui = PurchasesGui.deserialize(QuakeCraftReloaded.get(), getPurchaseName(), config, this);
+    public void loadGui(Config config, String id) {
+        gui = PurchasesGui.deserialize(QuakeCraftReloaded.get(), id, config, this);
         QuakeCraftReloaded.get().getGuis().register(gui.getId(), gui);
     }
 
@@ -98,7 +99,7 @@ public abstract class PurchaseManager<P extends Purchase> {
                 "guis" + File.separator + getGuiLoc() + ".yml"
         );
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        loadGui(Config.wrap(config));
+        loadGui(Config.wrap(config), file.getName().replaceFirst("[.][^.]+$", ""));
     }
 
     public void load() {
