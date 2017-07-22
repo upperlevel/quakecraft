@@ -174,10 +174,10 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
     }
 
     @SuppressWarnings("unchecked")
-    public static void load(Config config) {//TODO add %cost% local placehodler
-        buyingLores = config.getMessageListRequired("buying");
-        boughtLores = config.getMessageListRequired("bought");
-        selectedLores = config.getMessageListRequired("selected");
+    public static void load(Config config) {
+        buyingLores = config.getMessageListRequired("buying", "cost");
+        boughtLores = config.getMessageListRequired("bought", "cost");
+        selectedLores = config.getMessageListRequired("selected", "cost");
         QuakeCraftReloaded.get().getLogger().info("PurchaseGui's config loaded!");
     }
 }

@@ -9,6 +9,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderSession;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
@@ -110,6 +111,16 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
                     .stream()
                     .map(Particle::deserialize)
                     .collect(Collectors.toList());
+        }
+
+        @Override
+        public void fillPlaceholderSession(PlaceholderSession session) {
+            super.fillPlaceholderSession(session);
+            session.set("barrel", () -> getBarrel().getId());
+            session.set("case", () -> getGcase().getId());
+            session.set("laser", () -> getLaser().getId());
+            session.set("muzzle", () -> getMuzzle().getId());
+            session.set("trigger", () -> getTrigger().getId());
         }
     }
 }

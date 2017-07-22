@@ -66,11 +66,16 @@ public class QuakeCraftReloaded extends JavaPlugin {
 
             arenaManager.load();
             gameManager.load();
-
-            PurchasesGui.load(Config.wrap(getConfig()).getConfigRequired("purchase-gui"));
+            try {
+                PurchasesGui.load(Config.wrap(getConfig()).getConfigRequired("purchase-gui"));
+            } catch (InvalidConfigurationException e) {
+                e.addLocalizer("while parsing purchase-gui");
+                throw e;
+            }
             shop.load();
         } catch (InvalidConfigurationException e) {
-            QuakeCraftReloaded.get().getLogger().severe(e.getConfigError());
+            //QuakeCraftReloaded.get().getLogger().severe(e.getErrorMessage("Error while enabling QuakeCraft"));
+            e.printStackTrace();
             setEnabled(false);
         }
     }
