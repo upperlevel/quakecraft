@@ -42,16 +42,16 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
 
     @Getter
     public class Case extends Purchase<Case> {
-        private final CustomItem display;
+        private final CustomItem item;
 
-        public Case(String id, String name, float cost, CustomItem icon, boolean def, CustomItem display) {
+        public Case(String id, String name, float cost, CustomItem icon, boolean def, CustomItem item) {
             super(CaseManager.this, id, name, cost, icon, def);
-            this.display = display;
+            this.item = item;
         }
 
         protected Case(String id, Config config) {
             super(CaseManager.this, id, config);
-            this.display = CustomItem.deserialize(config.getConfigRequired("display"));
+            this.item = CustomItem.deserialize(config.getConfigRequired("item"));
         }
     }
 }

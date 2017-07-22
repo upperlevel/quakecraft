@@ -151,8 +151,8 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
 
     @SuppressWarnings("unchecked")
     public static void load(Config config) {//TODO add %cost% local placehodler
-        buyingLores   = ((Collection<Object>)config.getCollectionRequired("buying"))  .stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
-        boughtLores   = ((Collection<Object>)config.getCollectionRequired("bought"))  .stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
-        selectedLores = ((Collection<Object>)config.getCollectionRequired("selected")).stream().map(o -> PlaceholderUtil.process(o.toString())).collect(Collectors.toList());
+        buyingLores = config.getMessageListRequired("buying");
+        boughtLores = config.getMessageListRequired("bought");
+        selectedLores = config.getMessageListRequired("selected");
     }
 }

@@ -43,6 +43,8 @@ public class QuakeCraftReloaded extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        saveDefaultConfig();
+
         arenaManager = new ArenaManager();
         gameManager = new GameManager();
         playerManager = new QuakePlayerManager();
@@ -69,7 +71,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
             shop.load();
         } catch (InvalidConfigurationException e) {
             QuakeCraftReloaded.get().getLogger().severe(e.getConfigError());
-            Bukkit.getPluginManager().disablePlugin(this);
+            setEnabled(false);
         }
     }
 

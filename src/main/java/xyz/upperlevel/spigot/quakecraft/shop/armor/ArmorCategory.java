@@ -23,7 +23,7 @@ public class ArmorCategory extends Category{
         hats.load();
         logger.info("Loaded " + hats.getPurchases().size() + " hats");
         chestplates.load();
-        logger.info("Loaded " + chestplates.getPurchases().size() + " chestplateschestplates");
+        logger.info("Loaded " + chestplates.getPurchases().size() + " chestplates");
         leggings.load();
         logger.info("Loaded " + leggings.getPurchases().size() + " leggings");
         boots.load();

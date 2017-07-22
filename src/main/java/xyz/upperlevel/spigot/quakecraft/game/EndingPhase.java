@@ -26,7 +26,7 @@ public class EndingPhase implements Phase, Listener {
         this.game = parent.getGame();
         this.parent = parent;
 
-        hotbar = get().getHotbars().get("solo_quake_ending_hotbar");
+        hotbar = get().getHotbars().get("ending_solo");
     }
 
     @Override

@@ -32,16 +32,20 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     private static final GameBoard board;
     static {
         // custom load game scoreboard
-        File file = new File(get().getScoreboards().getFolder(), "ingame_solo.yml");
+        File file = new File(get().getScoreboards().getFolder(), "game_solo.yml");
         if (!file.exists()) {
             throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
         }
-        board = GameBoard.deserialize(get() , "ingame_solo", YamlConfiguration.loadConfiguration(file)::get);
+        board = GameBoard.deserialize(get() , "game_solo", YamlConfiguration.loadConfiguration(file)::get);
         get().getScoreboards().register(board);
     }
 
     public GamePhase(Game game) {
         this.game = game;
+    }
+
+    public static GameBoard getBoard() {
+        return board;
     }
 
     private Participant register(Player player) {
@@ -57,9 +61,17 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     private void setup(Player player) {
         player.setGameMode(GameMode.ADVENTURE);
-        Board board = get().getScoreboards().get("ingame_solo");
         if (board != null)
             ScoreboardSystem.view(player).setBoard(board);
+    }
+
+    private void clear(Player player) {
+        ScoreboardSystem.view(player).clear();
+    }
+
+    private void clear() {
+        for (Player p : game.getPlayers())
+            clear(p);
     }
 
     private void update(Player player) {
@@ -68,6 +80,10 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     private void update() {
         ranking.sort((o1, o2) -> (o1.getKills() - o2.getKills()));
+    }
+
+    public Participant getWinner() {
+        return ranking.size() > 0 ? ranking.get(0) : null;
     }
 
     @Override
@@ -79,13 +95,8 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
         setPhase(new PlayingPhase(this));
     }
 
-    public Participant getWinner() {
-        return ranking.size() > 0 ? ranking.get(0) : null;
-    }
-
     @Override
     public void onDisable(Phase next) {
-        for (Player player : game.getPlayers())
-            ScoreboardSystem.view(player).clear();
+        clear();
     }
 }

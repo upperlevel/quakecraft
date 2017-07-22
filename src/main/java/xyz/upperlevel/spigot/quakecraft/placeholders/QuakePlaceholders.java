@@ -2,11 +2,13 @@ package xyz.upperlevel.spigot.quakecraft.placeholders;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.game.CountdownPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.spigot.quakecraft.game.WaitingPhase;
+import xyz.upperlevel.spigot.quakecraft.shop.gun.CaseManager;
 import xyz.upperlevel.uppercore.placeholder.Placeholder;
 
 import java.util.Locale;
@@ -23,41 +25,47 @@ public class QuakePlaceholders implements Placeholder {
 
     @Override
     public String resolve(Player player, String id) {
-        // ------------------------quake
+        // plugin
         PluginDescriptionFile desc = get().getDescription();
-        if (id.equals("name"))
-            return desc.getName();
-        if (id.equals("version"))
-            return desc.getVersion();
-        if (id.equals("description"))
-            return desc.getDescription();
-        // ------------------------game
+        switch (id) {
+            case "name":
+                return desc.getName();
+            case "version":
+                return desc.getVersion();
+            case "description":
+                return desc.getDescription();
+        }
+        // game
         Game game = get().getGameManager().getGame(player);
         if (game != null) {
-            if (id.equals("game_min_players"))
-                return valueOf(game.getMinPlayers());
-            if (id.equals("game_max_players"))
-                return valueOf(game.getMaxPlayers());
-            if (id.equals("game_id"))
-                return valueOf(game.getId());
-            if (id.equals("game_name"))
-                return valueOf(game.getName());
-            if (id.equals("game_players"))
-                return valueOf(game.getPlayers().size());
-            if (id.equals("game_winner"))
-                return game.getWinner() != null ? game.getWinner().getName() : null;
-            // ------------------------phases
+            switch (id) {
+                case "game_id":
+                    return game.getId();
+                case "game_name":
+                    return game.getName();
+                case "game_players":
+                    return valueOf(game.getPlayers().size());
+                case "game_min_players":
+                    return valueOf(game.getMinPlayers());
+                case "game_max_players":
+                    return valueOf(game.getMaxPlayers());
+            }
+        }
+        // phases
+        if (game != null) {
             Phase phase = game.getPhaseManager().getPhase();
-            // ------------------------lobby phase
+            // lobby phase
             if (phase instanceof LobbyPhase) {
-                switch (id) {
-                    case "lobby_countdown":
-                        phase = ((LobbyPhase) phase).getPhase();
-                        return phase instanceof CountdownPhase ? valueOf(((CountdownPhase) phase).getTimer()) : null;
+                // countdown phase
+                if (((LobbyPhase) phase).getPhase() instanceof CountdownPhase) {
+                    CountdownPhase countdown = (CountdownPhase) ((LobbyPhase) phase).getPhase();
+                    switch (id) {
+                        case "lobby_countdown":
+                            return valueOf(countdown.getTimer());
+                    }
                 }
             }
         }
-
         return null;
     }
 }
