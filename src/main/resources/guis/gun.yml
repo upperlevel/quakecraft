@@ -1,6 +1,6 @@
 title: 'Gun Menu'
 size: 54
-items:
+icons:
 - slot: 11
   item:
     type: 'fireball'

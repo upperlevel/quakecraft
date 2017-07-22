@@ -1,7 +1,8 @@
 none:
   name: 'No Boots'
   default: true
-  icon: 'BARRIER'
+  icon:
+    type: 'BARRIER'
 
 soldier:
   name: 'Soldier Boots'

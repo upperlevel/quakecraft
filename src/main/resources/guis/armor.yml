@@ -1,9 +1,9 @@
 title: 'Armor'
 size: 54
-items:
+icons:
 - slot: 19
   item:
-    type: 'leather hat'
+    type: 'leather helmet'
     name: '&aHats'
     lore:
     - '&7Select your hat!'
