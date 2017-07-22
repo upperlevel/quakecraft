@@ -4,6 +4,6 @@ lines:
   - '&fMap: &a%arena_name%'
   - '&fPlayers: &a%players%/%max_players%'
   - ''
-  - '&fStarting in &a%coutndown%s'
+  - '&fStarting in &a%countdown%s'
   - ''
   - '&ewww.upperlevel.xyz'
