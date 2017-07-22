@@ -5,15 +5,11 @@ import org.bukkit.GameMode;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
-import xyz.upperlevel.uppercore.scoreboard.Board;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,23 +25,17 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     private final Map<Player, Participant> participants = new HashMap<>();
     private final List<Participant> ranking = new ArrayList<>();
 
-    private static final GameBoard board;
-    static {
+    private final GameBoard board;
+
+    public GamePhase(Game game) {
+        this.game = game;
+
         // custom load game scoreboard
         File file = new File(get().getScoreboards().getFolder(), "game_solo.yml");
         if (!file.exists()) {
             throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
         }
-        board = GameBoard.deserialize(get() , "game_solo", YamlConfiguration.loadConfiguration(file)::get);
-        get().getScoreboards().register(board);
-    }
-
-    public GamePhase(Game game) {
-        this.game = game;
-    }
-
-    public static GameBoard getBoard() {
-        return board;
+        board = GameBoard.deserialize(this , YamlConfiguration.loadConfiguration(file)::get);
     }
 
     private Participant register(Player player) {
@@ -62,7 +52,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     private void setup(Player player) {
         player.setGameMode(GameMode.ADVENTURE);
         if (board != null)
-            ScoreboardSystem.view(player).setBoard(board);
+            ScoreboardSystem.view(player).setScoreboard(board);
     }
 
     private void clear(Player player) {

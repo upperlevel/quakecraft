@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,7 @@ import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.uppercore.gui.Icon;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
 
+import java.io.File;
 import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
@@ -33,27 +35,26 @@ public class PlayingPhase implements Phase, Listener {
     private final Game game;
     private final GamePhase parent;
 
+    private static final PlayingHotbar hotbar;
+
+    static {
+        File f = new File(get().getHotbars().getFolder(), "playing_solo.yml");
+        if (!f.exists())
+            throw new IllegalArgumentException("Cannot find file: \"" + f.getPath() + "\"");
+        hotbar = PlayingHotbar.deserialize(get(), "playing_solo", YamlConfiguration.loadConfiguration(f)::get);
+    }
+
     public PlayingPhase(GamePhase parent) {
         this.parent = parent;
         this.game = parent.getGame();
     }
 
     public void setup(Player player) {
-        HotbarSystem.view(player).setIcon(
-                get().getConfig().getInt("playing-hotbar.gun.slot"),
-                new Icon(get().getPlayerManager().getPlayer(player).getSelectedCase().getItem().toItemStack(player))
-        );
-        HotbarSystem.view(player).setIcon(
-                get().getConfig().getInt("playing-hotbar.tracker.slot"),
-                new Icon(new ItemStack(Material.WOOD)) // todo yeah, a tracker
-        );
+        HotbarSystem.view(player).addHotbar(hotbar);
     }
 
     public void clear(Player player) {
-        HotbarSystem.view(player).removeIcon(
-                get().getConfig().getInt("playing-hotbar.gun.slot"));
-        HotbarSystem.view(player).removeIcon(
-                get().getConfig().getInt("playing-hotbar.tracker.slot"));
+        HotbarSystem.view(player).removeHotbar(hotbar);
     }
 
     public void clear() {
@@ -93,6 +94,7 @@ public class PlayingPhase implements Phase, Listener {
     public void onLaserSpread(LaserSpreadEvent e) {
         e.getLocation().getWorld().spawnParticle(Particle.DRIP_LAVA, e.getLocation(), 25);
     }
+
 
     public static final double LASER_BLOCKS_PER_TICK = 5;
     public static final double LASER_BLOCKS_INTERVAL = 0.25;

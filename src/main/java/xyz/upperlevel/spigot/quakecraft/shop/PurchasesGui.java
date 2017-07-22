@@ -1,6 +1,8 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
+import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -11,13 +13,13 @@ import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
+import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.*;
@@ -48,7 +50,7 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
         super(plugin, id, config);
         this.purchaseManager = purchaseManager;
         this.usableSlots = config.getCollectionRequired("slots").stream().mapToInt(o -> {
-            if(o instanceof Number)
+            if (o instanceof Number)
                 return ((Number) o).intValue();
             else
                 throw new InvalidConfigurationException("Only numbers in the slots field!");
@@ -59,8 +61,8 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
         this.purchaseMap.clear();
         int i = 0;
         Collection<P> purchases = purchaseManager.getPurchases().values();
-        for(P p : purchases) {
-            if(i >= usableSlots.length) {
+        for (P p : purchases) {
+            if (i >= usableSlots.length) {
                 QuakeCraftReloaded.get().getLogger().severe("Cannot fill " + purchaseManager.getPurchaseName() + "'s inventory: too many items!");
                 return;
             }
@@ -72,11 +74,11 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
 
     @Override
     public Inventory create(Player player) {
-        if(dirty)
+        if (dirty)
             update();
         Inventory inv = super.create(player);
         QuakePlayer qp = QuakePlayerManager.get().getPlayer(player);
-        for(Map.Entry<Integer, P> p  : purchaseMap.entrySet())
+        for (Map.Entry<Integer, P> p : purchaseMap.entrySet())
             inv.setItem(p.getKey(), getIcon(p.getValue(), qp));
         return inv;
     }
@@ -84,7 +86,7 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
     @Override
     public void onClick(InventoryClickEvent event) {
         P p = purchaseMap.get(event.getSlot());
-        if(p != null)
+        if (p != null)
             onClick((Player) event.getWhoClicked(), event.getSlot(), p);
         else
             super.onClick(event);
@@ -93,66 +95,69 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
     public void reloadSelection(QuakePlayer player, int slot, P purchase) {
         P oldPurchase = purchaseManager.getSelected(player);
         purchaseManager.setSelected(player, purchase);
-        if(oldPurchase == purchase)
+        if (oldPurchase == purchase)
             return;
-        int oldSlot = purchaseMap.entrySet()
-                .stream()
-                .filter(e -> e.getValue() == oldPurchase)
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException("Invalid old purchase selected: " + oldPurchase)).getKey();
         Inventory inv = player.getPlayer().getOpenInventory().getTopInventory();
+        for (Map.Entry<Integer, P> entry : purchaseMap.entrySet()) {
+            if (entry.getValue() == oldPurchase) {
+                inv.setItem(entry.getKey(), getIcon(oldPurchase, player));
+            }
+        }
         inv.setItem(slot, getIcon(purchase, player));
-        inv.setItem(oldSlot, getIcon(oldPurchase, player));
     }
 
     public void onClick(Player player, int slot, P purchase) {
         QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
         Set<Purchase<?>> purchases = p.getPurchases();
-        if(!purchases.contains(purchase)) {
+        if (!purchases.contains(purchase)) {
             Balance b = EconomyManager.get(player);
-            if(b == null) {
+            if (b == null) {
                 QuakeCraftReloaded.get().getLogger().severe("Economy not found!");
                 return;
             }
-            if(b.take(purchase.getCost())) {
+            if (b.take(purchase.getCost())) {
                 purchases.add(purchase);
                 p.getPurchases().add(purchase);
                 reloadSelection(p, slot, purchase);
-            }
+            } else
+                PlayerUtil.playSound(player, Sound.BLOCK_ANVIL_BREAK);
         } else
             reloadSelection(p, slot, purchase);
     }
 
-    protected ItemStack getIcon(P purchase, QuakePlayer p) {
-        final CustomItem icon = purchase.getIcon();
-        final Player player = p.getPlayer();
-        if(icon == null) {
+    protected ItemStack getIcon(P purchase, QuakePlayer player) {
+        CustomItem icon = purchase.getIcon();
+        Player p = player.getPlayer();
+        if (icon == null) {
             QuakeCraftReloaded.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
             return null;
         }
-        ItemStack i = icon.toItemStack(player);
-        ItemMeta meta = i.getItemMeta();
-        final P selected = purchaseManager.getSelected(p);
+        ItemStack item = icon.resolve(p);
+        ItemMeta meta = item.getItemMeta();
+        P selected = purchaseManager.getSelected(player);
         List<PlaceholderValue<String>> lores;
-        if(selected == purchase)
+        // if the item wasn't enchanted with protection removes it
+        if (!icon.getEnchantments().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL))
+            meta.removeEnchant(Enchantment.PROTECTION_ENVIRONMENTAL);
+        // adds protection if selected
+        if (selected == purchase) {
             lores = selectedLores;
-        else if(p.getPurchases().contains(purchase))
+            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 0, true);
+        } else if (player.getPurchases().contains(purchase))
             lores = boughtLores;
         else
             lores = buyingLores;
-
         List<String> metaLore = meta.getLore();
-        if(metaLore == null) {
+        if (metaLore == null)
             metaLore = new ArrayList<>();
-            meta.setLore(metaLore);
-        }
-        meta.getLore().addAll(
+        metaLore.addAll(
                 lores.stream()
-                        .map(v -> v.resolve(player))
+                        .map(lore -> lore.resolve(p))
                         .collect(Collectors.toList())
         );
-        i.setItemMeta(meta);
-        return i;
+        meta.setLore(metaLore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     public void setDirty() {

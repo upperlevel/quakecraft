@@ -1,4 +1,19 @@
 gun:
   slot: 0
+  item:
+    name: '&7%gun%'
+    lore:
+    - '&7Case: &a%case%'
+    - '&7Laser: &a%laser%'
+    - '&7Barrel: &a%barrel%'
+    - '&7Muzzle: &a%muzzle%'
+    - '&7Trigger: &a%trigger%'
+    - ''
+    - '&eRight-click to shoot!'
+    - '&eLeft-click to dash forward!'
 tracker:
   slot: 1
+  item:
+    name: '&aTracking Device'
+    lore:
+    - '&7Points the closest enemy!'

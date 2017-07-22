@@ -42,6 +42,6 @@ public class GunCategory extends Category{
 
     @Override
     public String getGuiLoc() {
-        return "guns";
+        return "gun";
     }
 }

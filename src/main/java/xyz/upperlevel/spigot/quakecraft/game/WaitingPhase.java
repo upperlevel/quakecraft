@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -14,6 +15,8 @@ import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
 import xyz.upperlevel.uppercore.scoreboard.Board;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
+
+import java.io.File;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 
@@ -29,9 +32,14 @@ public class WaitingPhase implements Phase, Listener {
     public WaitingPhase(LobbyPhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
-
+        // hotbar
         hotbar = get().getHotbars().get("waiting_solo");
-        board = get().getScoreboards().get("waiting_solo");
+        // scoreboard
+        File f = new File(get().getScoreboards().getFolder(), "waiting_solo");
+        if (f.exists())
+            board = WaitingBoard.deserialize(this, YamlConfiguration.loadConfiguration(f)::get);
+        else
+            board = null;
     }
 
     private void setup(Player player) {
@@ -42,7 +50,7 @@ public class WaitingPhase implements Phase, Listener {
             get().getLogger().warning("Hotbar not found: \"waiting_solo\"");
         //-------------------------scoreboard
         if (board != null)
-            ScoreboardSystem.view(player).setBoard(board);
+            ScoreboardSystem.view(player).setScoreboard(board);
         else
             get().getLogger().warning("Scoreboard not found: \"waiting_solo\"");
     }

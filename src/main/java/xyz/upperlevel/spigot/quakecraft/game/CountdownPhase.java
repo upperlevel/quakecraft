@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -15,6 +16,8 @@ import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
 import xyz.upperlevel.uppercore.scoreboard.Board;
 import xyz.upperlevel.uppercore.scoreboard.BoardView;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
+
+import java.io.File;
 
 import static org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
@@ -50,8 +53,14 @@ public class CountdownPhase implements Phase, Listener {
         this.game = parent.getGame();
         this.parent = parent;
 
+        // hotbar
         hotbar = get().getHotbars().get("countdown_solo");
-        board = get().getScoreboards().get("countdown_solo");
+        // scoreboard
+        File f = new File(get().getScoreboards().getFolder(), "waiting_solo");
+        if (f.exists())
+            board = CountdownBoard.deserialize(this, YamlConfiguration.loadConfiguration(f)::get);
+        else
+            board = null;
     }
 
     private void setup(Player player) {
@@ -62,7 +71,7 @@ public class CountdownPhase implements Phase, Listener {
             get().getLogger().info("Hotbar not found: \"countdown_solo\"");
         //-------------------------scoreboard
         if (board != null)
-            ScoreboardSystem.view(player).setBoard(board);
+            ScoreboardSystem.view(player).setScoreboard(board);
         else
             get().getLogger().info("Scoreboard not found: \"countdown_solo\"");
     }

@@ -1,13 +1,11 @@
 title: '&e&lQUAKECRAFT'
-header:
+lines:
   - ''
-  - '&fTime left: %ingame_countdown%'
+  - '&fTime left: &a%countdown%'
   - ''
-
-ranking-line:
-  text: '&7%player_name%&a: %quake_kills%'
-  max: 10
-
-footer:
-  - ''
-  - 'www.upperlevel.xyz'
+  - index:
+    line: ''
+ranking:
+  line: '&7%player_name%&a: %quake_kills%'
+  start: 3
+  end: 12
