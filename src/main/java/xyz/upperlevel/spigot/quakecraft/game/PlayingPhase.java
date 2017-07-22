@@ -1,11 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
-import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,22 +10,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
-import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleEffect;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
+import xyz.upperlevel.uppercore.gui.Icon;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
-import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
 
-import java.io.File;
-import java.security.InvalidParameterException;
 import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
@@ -40,29 +33,27 @@ public class PlayingPhase implements Phase, Listener {
     private final Game game;
     private final GamePhase parent;
 
-    private PlayingHotbar hotbar;
-
-    private void loadHotbar() {
-        File file = new File("hotbars" + File.separator + "playing_solo");
-        if (file.exists()) {
-            hotbar = PlayingHotbar.deserialize(QuakeCraftReloaded.get(), "playing_solo", YamlConfiguration.loadConfiguration(file)::get);
-        } else
-            throw new InvalidParameterException("Cannot find file: \"" + file.getPath() + "\"");
-    }
-
     public PlayingPhase(GamePhase parent) {
         this.parent = parent;
         this.game = parent.getGame();
-
-        loadHotbar();
     }
 
     public void setup(Player player) {
-        HotbarSystem.view(player).addHotbar(hotbar);
+        HotbarSystem.view(player).setIcon(
+                get().getConfig().getInt("playing-hotbar.gun.slot"),
+                new Icon(get().getPlayerManager().getPlayer(player).getSelectedCase().getItem().toItemStack(player))
+        );
+        HotbarSystem.view(player).setIcon(
+                get().getConfig().getInt("playing-hotbar.tracker.slot"),
+                new Icon(new ItemStack(Material.WOOD)) // todo yeah, a tracker
+        );
     }
 
     public void clear(Player player) {
-        HotbarSystem.view(player).removeHotbar(hotbar);
+        HotbarSystem.view(player).removeIcon(
+                get().getConfig().getInt("playing-hotbar.gun.slot"));
+        HotbarSystem.view(player).removeIcon(
+                get().getConfig().getInt("playing-hotbar.tracker.slot"));
     }
 
     public void clear() {
@@ -100,8 +91,11 @@ public class PlayingPhase implements Phase, Listener {
 
     @EventHandler
     public void onLaserSpread(LaserSpreadEvent e) {
-        ParticleEffect.CRIT.display(0f, 0f, 0f, 0.5f, 3, e.getLocation(), 100.);
+        e.getLocation().getWorld().spawnParticle(Particle.DRIP_LAVA, e.getLocation(), 25);
     }
+
+    public static final double LASER_BLOCKS_PER_TICK = 5;
+    public static final double LASER_BLOCKS_INTERVAL = 0.25;
 
     private final Map<Player, Shot> shots = new HashMap<>();
 
@@ -109,12 +103,12 @@ public class PlayingPhase implements Phase, Listener {
         private final Player player;
         private final List<Vector> positions;
 
-        private int currPos;
+        private int positionIndex;
 
         public Shot(Player player) {
             this.player = player;
             this.positions = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection()).traverse(150, 0.25);
-            currPos = 0;
+            positionIndex = 0;
         }
 
         public void bang() {
@@ -123,44 +117,54 @@ public class PlayingPhase implements Phase, Listener {
 
         @Override
         public void run() {
-            Vector pos = positions.get(currPos++);
-            Location loc = pos.toLocation(player.getWorld());
-            // laser spread
-            {
-                LaserSpreadEvent e = new LaserSpreadEvent(PlayingPhase.this, loc, player);
-                Bukkit.getPluginManager().callEvent(e);
-                if (e.isCancelled()) {
-                    cancel();
-                    return;
+            for (double distance = 0; distance < LASER_BLOCKS_PER_TICK; distance += LASER_BLOCKS_INTERVAL) {
+                Vector pos = positions.get(positionIndex++);
+                Location loc = pos.toLocation(player.getWorld());
+                // laser spread
+                {
+                    LaserSpreadEvent e = new LaserSpreadEvent(PlayingPhase.this, loc, player);
+                    Bukkit.getPluginManager().callEvent(e);
+                    if (e.isCancelled()) {
+                        cancel();
+                        break;
+                    }
                 }
-            }
-            // laser hit
-            Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, 0.25, 0.25, 0.25); // todo choose radius
-            for (Entity entity : entities) {
-                if (entity instanceof Player && !entity.equals(player)) {
-                    Player hit = (Player) entity;
-                    {
-                        LaserHitEvent e = new LaserHitEvent(PlayingPhase.this, loc, player, hit);
-                        Bukkit.getPluginManager().callEvent(e);
-                        if (e.isCancelled()) {
-                            cancel();
-                            return;
+                // laser hit
+                Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, 0.25, 0.25, 0.25); // todo choose radius
+                for (Entity entity : entities) {
+                    if (entity instanceof Player && !entity.equals(player)) {
+                        Player hit = (Player) entity;
+                        {
+                            LaserHitEvent e = new LaserHitEvent(PlayingPhase.this, loc, player, hit);
+                            Bukkit.getPluginManager().callEvent(e);
+                            if (e.isCancelled()) {
+                                cancel();
+                                break;
+                            }
                         }
                     }
                 }
+                // laser hit block
+                if (loc.getBlock().getType().isSolid()) {
+                    cancel();
+                    break;
+                }
+                if (positionIndex == positions.size()) {
+                    cancel();
+                    break;
+                }
             }
-            if (currPos == positions.size())
-                cancel();
         }
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        if (!game.equals(get().getGameManager().getGame(e.getPlayer())))
+        Player p = e.getPlayer();
+        if (!game.equals(get().getGameManager().getGame(p)))
             return;
-        new Shot(e.getPlayer()).bang();
+        if (p.getInventory().getHeldItemSlot() == get().getConfig().getInt("playing-hotbar.gun.slot"))
+            new Shot(p).bang();
     }
-
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {

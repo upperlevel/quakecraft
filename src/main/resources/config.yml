@@ -55,10 +55,16 @@ lobby:
 game:
   countdown: 10
 
+playing-hotbar:
+  gun:
+    slot: 0
+  tracker:
+    slot: 1
+
 purchase-gui:
   buying:
-  - "&a%cost%"
+  - "&6%cost%"
   bought:
-  - "&aClick to select"
+  - "&eClick to select"
   selected:
-  - "&fSELECTED"
+  - "&aSELECTED"
