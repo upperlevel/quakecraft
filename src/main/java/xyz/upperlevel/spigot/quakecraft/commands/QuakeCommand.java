@@ -21,6 +21,7 @@ public class QuakeCommand extends NodeCommand implements CommandExecutor {
         register(new EnableArenaCommand());
         register(new DisableArenaCommand());
         register(new ShopCommand());
+        register(new SetupGuiCommand());
 
         setDescription("Main commands of QuakeReloaded plugin.");
         addAliases("quakecraft", "quakecraftreloaded");
