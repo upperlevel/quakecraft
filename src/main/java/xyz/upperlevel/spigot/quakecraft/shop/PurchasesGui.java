@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
+import xyz.upperlevel.spigot.quakecraft.core.EnchantGlow;
 import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
@@ -20,12 +21,13 @@ import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
 import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderSession;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PurchasesGui<P extends Purchase> extends ChestGui {
+public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
     private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     private final int usableSlots[];
     private final PurchaseManager<P> purchaseManager;
@@ -78,6 +80,10 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
             update();
         Inventory inv = super.create(player);
         QuakePlayer qp = QuakePlayerManager.get().getPlayer(player);
+        if(qp == null) {
+            QuakeCraftReloaded.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
+            return inv;
+        }
         for (Map.Entry<Integer, P> p : purchaseMap.entrySet())
             inv.setItem(p.getKey(), getIcon(p.getValue(), qp));
         return inv;
@@ -132,17 +138,21 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
             QuakeCraftReloaded.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
             return null;
         }
+        PlaceholderSession local = new PlaceholderSession()
+                .set("cost", purchase.getCost())
+                .set("purchase", purchase.getId());
         ItemStack item = icon.resolve(p);
         ItemMeta meta = item.getItemMeta();
         P selected = purchaseManager.getSelected(player);
-        List<PlaceholderValue<String>> lores;
+        meta.setDisplayName(purchase.getName().resolve(player.getPlayer()));
         // if the item wasn't enchanted with protection removes it
         if (!icon.getEnchantments().containsKey(Enchantment.PROTECTION_ENVIRONMENTAL))
             meta.removeEnchant(Enchantment.PROTECTION_ENVIRONMENTAL);
-        // adds protection if selected
+        // adds flow if selected and selects the right lore
+        List<PlaceholderValue<String>> lores;
         if (selected == purchase) {
             lores = selectedLores;
-            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 0, true);
+            EnchantGlow.addGlow(meta);
         } else if (player.getPurchases().contains(purchase))
             lores = boughtLores;
         else
@@ -152,7 +162,7 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
             metaLore = new ArrayList<>();
         metaLore.addAll(
                 lores.stream()
-                        .map(lore -> lore.resolve(p))
+                        .map(lore -> lore.resolve(p, local))
                         .collect(Collectors.toList())
         );
         meta.setLore(metaLore);
@@ -164,7 +174,7 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
         dirty = true;
     }
 
-    public static <P extends Purchase> PurchasesGui<P> deserialize(Plugin plugin, String id, Config config, PurchaseManager<P> purchaseManager) {
+    public static <P extends Purchase<P>> PurchasesGui<P> deserialize(Plugin plugin, String id, Config config, PurchaseManager<P> purchaseManager) {
         try {
             return new PurchasesGui<>(plugin, id, config, purchaseManager);
         } catch (InvalidConfigurationException e) {
@@ -175,9 +185,9 @@ public class PurchasesGui<P extends Purchase> extends ChestGui {
 
     @SuppressWarnings("unchecked")
     public static void load(Config config) {
-        buyingLores = config.getMessageListRequired("buying", "cost");
-        boughtLores = config.getMessageListRequired("bought", "cost");
-        selectedLores = config.getMessageListRequired("selected", "cost");
+        buyingLores = config.getMessageListRequired("buying");
+        boughtLores = config.getMessageListRequired("bought");
+        selectedLores = config.getMessageListRequired("selected");
         QuakeCraftReloaded.get().getLogger().info("PurchaseGui's config loaded!");
     }
 }

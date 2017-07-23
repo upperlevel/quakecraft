@@ -11,6 +11,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
 import xyz.upperlevel.uppercore.scoreboard.Board;
@@ -37,7 +38,7 @@ public class WaitingPhase implements Phase, Listener {
         // scoreboard
         File f = new File(get().getScoreboards().getFolder(), "waiting_solo");
         if (f.exists())
-            board = WaitingBoard.deserialize(this, YamlConfiguration.loadConfiguration(f)::get);
+            board = WaitingBoard.deserialize(this, Config.wrap(YamlConfiguration.loadConfiguration(f)));
         else
             board = null;
     }

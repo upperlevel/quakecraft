@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
+import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
         if (!file.exists()) {
             throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
         }
-        board = GameBoard.deserialize(this , YamlConfiguration.loadConfiguration(file)::get);
+        board = GameBoard.deserialize(this , Config.wrap(YamlConfiguration.loadConfiguration(file)));
     }
 
     private Participant register(Player player) {

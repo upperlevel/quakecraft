@@ -3,8 +3,6 @@ lines:
   - ''
   - '&fTime left: &a%countdown%'
   - ''
-  - index:
-    line: ''
 ranking:
   line: '&7%player_name%&a: %quake_kills%'
   start: 3

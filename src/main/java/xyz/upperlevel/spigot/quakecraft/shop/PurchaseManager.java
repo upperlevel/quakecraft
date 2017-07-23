@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
 
-public abstract class PurchaseManager<P extends Purchase> {
+public abstract class PurchaseManager<P extends Purchase<P>> {
     private Map<String, P> purchases = new LinkedHashMap<>();
     private PurchasesGui<P> gui;
     private P def;

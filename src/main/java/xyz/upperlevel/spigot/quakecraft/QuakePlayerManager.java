@@ -34,6 +34,10 @@ public class QuakePlayerManager implements Listener {
         return players.remove(player.getPlayer());
     }
 
+    public void registerAll() {
+        Bukkit.getOnlinePlayers().forEach(p -> register(new QuakePlayer(p)));
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         register(new QuakePlayer(e.getPlayer()));

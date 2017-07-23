@@ -78,6 +78,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
             e.printStackTrace();
             setEnabled(false);
         }
+        playerManager.registerAll();
     }
 
     @Override
