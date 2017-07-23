@@ -61,3 +61,10 @@ icons:
   click:
     actions:
     - open-gui: 'guns'
+- slot: 48
+  item:
+    type: 'arrow'
+    name: '&aGo Back'
+  click:
+    actions:
+    - 'gui-back'

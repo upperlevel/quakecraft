@@ -21,7 +21,7 @@ public class EnchantGlow extends Enchantment {
             EnchantGlow glow = new EnchantGlow();
             Enchantment.registerEnchantment(glow);
         } catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 

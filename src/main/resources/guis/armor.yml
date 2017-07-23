@@ -37,3 +37,10 @@ icons:
   click:
     actions:
     - open-gui: 'boots'
+- slot: 48
+  item:
+    type: 'arrow'
+    name: '&aGo Back'
+  click:
+    actions:
+    - 'gui-back'

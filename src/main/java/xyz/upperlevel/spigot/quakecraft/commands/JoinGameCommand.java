@@ -34,7 +34,7 @@ public class JoinGameCommand extends Command {
         }
         game = QuakeCraftReloaded.get().getGameManager().getGame(arena);
         if (game == null) {
-            sender.sendMessage(ChatColor.RED + "Any game found by: " + arena.getName()); // todo config
+            sender.sendMessage(ChatColor.RED + "Cannot find game: '" + arena.getName() + "'"); // todo config
             return;
         }
         game.join((Player) sender);
