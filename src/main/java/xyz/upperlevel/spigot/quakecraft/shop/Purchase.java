@@ -2,9 +2,8 @@ package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.Placeholder;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderSession;
+import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 @Getter
@@ -15,7 +14,7 @@ public abstract class Purchase<T extends Purchase<T>> {
     private final float cost;
     private final CustomItem icon;
     private final boolean def;
-    private PlaceholderSession localPlaceholders;
+    private PlaceholderRegistry placeholders;
 
     public Purchase(PurchaseManager<T> manager, String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def) {
         this.manager = manager;
@@ -27,7 +26,7 @@ public abstract class Purchase<T extends Purchase<T>> {
 
         if (icon.getDisplayName() == null) {
             icon.setDisplayName(name);
-            icon.getLocalPlaceholders().putAll(localPlaceholders.getPlaceholders());
+            icon.setPlaceholders(placeholders);
         }
     }
 
@@ -37,12 +36,12 @@ public abstract class Purchase<T extends Purchase<T>> {
         this.cost = config.getFloat("cost", 0.0f);
         this.name = config.getMessageRequired("name");
         this.def = config.getBool("default", false);
-        this.localPlaceholders = new PlaceholderSession();
-        fillPlaceholderSession(localPlaceholders);
-        this.icon = config.getCustomItemRequired("icon", localPlaceholders);
+        this.placeholders = PlaceholderRegistry.create();
+        fillPlaceholderSession(placeholders);
+        this.icon = config.getCustomItemRequired("icon", placeholders);
     }
 
-    protected void fillPlaceholderSession(PlaceholderSession session) {
+    protected void fillPlaceholderSession(PlaceholderRegistry session) {
         session.set("cost", cost);
         session.set("name", name);
     }

@@ -9,9 +9,9 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.Icon;
-import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.gui.config.itemstack.ItemResolver;
+import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.itemstack.ItemResolver;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;

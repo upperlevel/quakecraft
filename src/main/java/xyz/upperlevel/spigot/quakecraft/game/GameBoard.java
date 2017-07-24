@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.Getter;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderSession;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.scoreboard.Board;
 import xyz.upperlevel.uppercore.scoreboard.BoardView;

@@ -2,11 +2,8 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderSession;
 import xyz.upperlevel.uppercore.scoreboard.Board;
 import xyz.upperlevel.uppercore.scoreboard.BoardView;
-
-import static java.lang.String.valueOf;
 
 public class CountdownBoard extends Board {
     private final CountdownPhase phase;

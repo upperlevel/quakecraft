@@ -20,8 +20,8 @@ import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
-import xyz.upperlevel.uppercore.gui.config.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderSession;
+import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.*;
@@ -138,7 +138,7 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
             QuakeCraftReloaded.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
             return null;
         }
-        PlaceholderSession local = new PlaceholderSession()
+        PlaceholderRegistry local = PlaceholderRegistry.create()
                 .set("cost", purchase.getCost())
                 .set("purchase", purchase.getId());
         ItemStack item = icon.resolve(p);
