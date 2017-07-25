@@ -7,6 +7,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 1.5
+  default: true
 
 9-0-s:
   name: '9.0s'
@@ -16,6 +17,7 @@
     lore:
      - '&7Choose a firing speed!'
   firing-speed: 9.0
+  cost: 10000
 
 5-0-s:
   name: '5.0s'
@@ -25,6 +27,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 5.0
+  cost: 5000
 
 2-5-s:
   name: '2.5s'
@@ -34,6 +37,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 2.5
+  cost: 5000
 
 1-4-s:
   name: '1.4s'
@@ -43,6 +47,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 1.4
+  cost: 1800
 
 1-3-s:
   name: '1.3s'
@@ -52,6 +57,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 1.3
+  cost: 3500
 
 1-2-s:
   name: '1.2s'
@@ -61,6 +67,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 1.2
+  cost: 8500
 
 1-1-s:
   name: '1.1s'
@@ -70,6 +77,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 1.1
+  cost: 17000
 
 1-0-s:
   name: '1.0s'
@@ -79,6 +87,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 1.0
+  cost: 100000
 
 0-9-s:
   name: '0.9s'
@@ -88,6 +97,7 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 0.9
+  cost: 300000
 
 0-8-5-s:
   name: '0.85s'
@@ -97,3 +107,4 @@
     lore:
       - '&7Choose a firing speed!'
   firing-speed: 0.85
+  cost: 2000000
