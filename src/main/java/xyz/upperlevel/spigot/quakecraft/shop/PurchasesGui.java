@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -34,6 +35,9 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
     private Map<Integer, P> purchaseMap = new LinkedHashMap<>();
     @Getter
     private boolean dirty = true;
+    @Getter
+    @Setter
+    private boolean enchantSelected = true;
 
     public PurchasesGui(Plugin plugin, String id, int size, String title, PurchaseManager<P> manager, int[] usableSlots) {
         super(plugin, id, size, title);
@@ -152,7 +156,8 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
         List<PlaceholderValue<String>> lores;
         if (selected == purchase) {
             lores = selectedLores;
-            EnchantGlow.addGlow(meta);
+            if(enchantSelected)
+                EnchantGlow.addGlow(meta);
         } else if (player.getPurchases().contains(purchase))
             lores = boughtLores;
         else

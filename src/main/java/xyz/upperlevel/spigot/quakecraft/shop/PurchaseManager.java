@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import com.google.common.collect.Maps;
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,6 +22,7 @@ import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
 
 public abstract class PurchaseManager<P extends Purchase<P>> {
     private Map<String, P> purchases = new LinkedHashMap<>();
+    @Getter
     private PurchasesGui<P> gui;
     private P def;
 

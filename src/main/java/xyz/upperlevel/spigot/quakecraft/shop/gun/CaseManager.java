@@ -10,6 +10,10 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class CaseManager extends PurchaseManager<CaseManager.Case> {
 
+    public CaseManager() {
+        getGui().setEnchantSelected(false);
+    }
+
     @Override
     public Case deserialize(String id, Config config) {
         return new Case(id, config);
