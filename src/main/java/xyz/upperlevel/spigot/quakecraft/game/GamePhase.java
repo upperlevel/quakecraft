@@ -8,15 +8,13 @@ import org.bukkit.event.Listener;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
+import xyz.upperlevel.uppercore.board.BoardManager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.uppercore.Uppercore.boards;
 
 @Getter
 public class GamePhase extends PhaseManager implements Phase, Listener {
@@ -31,8 +29,8 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     public GamePhase(Game game) {
         this.game = game;
 
-        // custom load game scoreboard
-        File file = new File(get().getScoreboards().getFolder(), "game_solo.yml");
+        // custom load game board
+        File file = new File(get().getBoards().getFolder(), "game_solo.yml");
         if (!file.exists()) {
             throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
         }
@@ -50,14 +48,18 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
         return participants.get(player);
     }
 
+    public Collection<Participant> getParticipants() {
+        return participants.values();
+    }
+
     private void setup(Player player) {
         player.setGameMode(GameMode.ADVENTURE);
         if (board != null)
-            ScoreboardSystem.view(player).setScoreboard(board);
+            boards().view(player).setBoard(board);
     }
 
     private void clear(Player player) {
-        ScoreboardSystem.view(player).clear();
+        boards().view(player).clear();
     }
 
     private void clear() {
@@ -66,7 +68,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     }
 
     private void update(Player player) {
-        ScoreboardSystem.view(player).update();
+        boards().view(player).render();
     }
 
     private void update() {

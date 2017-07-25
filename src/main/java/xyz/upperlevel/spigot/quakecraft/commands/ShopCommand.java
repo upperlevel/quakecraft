@@ -6,7 +6,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 import xyz.upperlevel.uppercore.command.Sender;
-import xyz.upperlevel.uppercore.gui.GuiSystem;
+import xyz.upperlevel.uppercore.gui.GuiManager;
 
 public class ShopCommand extends Command {
     public ShopCommand() {
@@ -16,6 +16,6 @@ public class ShopCommand extends Command {
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender) {
-        GuiSystem.open((Player) sender, QuakeCraftReloaded.get().getGuis().get("shop"));
+        GuiManager.open((Player) sender, QuakeCraftReloaded.get().getGuis().get("shop"));
     }
 }

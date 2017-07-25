@@ -8,19 +8,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
-import xyz.upperlevel.uppercore.scoreboard.Board;
-import xyz.upperlevel.uppercore.scoreboard.BoardView;
-import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
+import xyz.upperlevel.uppercore.Uppercore;
+import xyz.upperlevel.uppercore.board.Board;
+import xyz.upperlevel.uppercore.board.BoardManager;
+import xyz.upperlevel.uppercore.board.BoardView;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.hotbar.HotbarManager;
 
 import java.io.File;
 
 import static org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.uppercore.Uppercore.boards;
+import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class CountdownPhase implements Phase, Listener {
@@ -28,8 +32,8 @@ public class CountdownPhase implements Phase, Listener {
     private final Game game;
     private final LobbyPhase parent;
 
-    private final Hotbar hotbar;
-    private final Board board;
+    private Hotbar hotbar;
+    private CountdownBoard board;
 
     private int timer;
     private final BukkitRunnable task = new BukkitRunnable() {
@@ -38,7 +42,7 @@ public class CountdownPhase implements Phase, Listener {
             for (Player player : game.getPlayers()) {
                 player.setLevel(timer);
                 player.playSound(player.getLocation(), ENTITY_EXPERIENCE_ORB_PICKUP, 0, 100f);
-                ScoreboardSystem.view(player).update();
+                boards().view(player).render();
             }
             if (timer > 0)
                 timer--;
@@ -52,28 +56,34 @@ public class CountdownPhase implements Phase, Listener {
     public CountdownPhase(LobbyPhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
-
-        // hotbar
-        hotbar = get().getHotbars().get("countdown_solo");
-        // scoreboard
-        File f = new File(get().getScoreboards().getFolder(), "waiting_solo");
-        if (f.exists())
-            board = CountdownBoard.deserialize(this, YamlConfiguration.loadConfiguration(f)::get);
-        else
-            board = null;
+        // HOTBAR
+        {
+            File file = new File(get().getHotbars().getFolder(), "countdown_solo.yml");
+            if (file.exists())
+                hotbar = Hotbar.deserialize(get(), YamlConfiguration.loadConfiguration(file)::get);
+            else {
+                QuakeCraftReloaded.get().getLogger().severe("Could not find file: \"" + file + "\"");
+            }
+        }
+        // BOARD
+        {
+            File file = new File(get().getBoards().getFolder(), "countdown_solo.yml");
+            if (file.exists())
+                board = CountdownBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
+            else {
+                QuakeCraftReloaded.get().getLogger().severe("Could not find file: \"" + file + "\"");
+            }
+        }
     }
 
     private void setup(Player player) {
-        //-------------------------hotbar
+        // HOTBAR
         if (hotbar != null)
-            HotbarSystem.view(player).addHotbar(hotbar);
-        else
-            get().getLogger().info("Hotbar not found: \"countdown_solo\"");
-        //-------------------------scoreboard
+            hotbars().view(player).addHotbar(hotbar);
+
+        // BOARD
         if (board != null)
-            ScoreboardSystem.view(player).setScoreboard(board);
-        else
-            get().getLogger().info("Scoreboard not found: \"countdown_solo\"");
+            boards().view(player).setBoard(board);
     }
 
     private void clearTick(Player player) {
@@ -86,10 +96,8 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     private void clear(Player player) {
-        //-------------------------hotbar
-        HotbarSystem.view(player).removeHotbar(hotbar);
-        //-------------------------scoreboard
-        BoardView view = ScoreboardSystem.view(player);
+        hotbars().view(player).removeHotbar(hotbar);
+        BoardView view = boards().view(player);
         if (view != null)
             view.clear();
         clearTick(player);
@@ -111,7 +119,7 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     private void update(Player player) {
-        ScoreboardSystem.view(player).update();
+        boards().view(player).render();
     }
 
     private void update() {

@@ -97,7 +97,7 @@ public class ScoreboardHandler {
     }
 
     /**
-     * Opens this scoreboard to the given player.
+     * Opens this board to the given player.
      */
     public void open(Player player) {
         player.setScoreboard(handle);

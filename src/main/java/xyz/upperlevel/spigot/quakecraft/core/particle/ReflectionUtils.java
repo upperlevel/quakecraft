@@ -368,7 +368,7 @@ public final class ReflectionUtils {
         CRAFTBUKKIT_POTION(CRAFTBUKKIT, "potion"),
         CRAFTBUKKIT_PROJECTILES(CRAFTBUKKIT, "projectiles"),
         CRAFTBUKKIT_SCHEDULER(CRAFTBUKKIT, "scheduler"),
-        CRAFTBUKKIT_SCOREBOARD(CRAFTBUKKIT, "scoreboard"),
+        CRAFTBUKKIT_SCOREBOARD(CRAFTBUKKIT, "board"),
         CRAFTBUKKIT_UPDATER(CRAFTBUKKIT, "updater"),
         CRAFTBUKKIT_UTIL(CRAFTBUKKIT, "util");
 

@@ -12,10 +12,10 @@ import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
-import xyz.upperlevel.uppercore.scoreboard.Board;
-import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.hotbar.HotbarManager;
+import xyz.upperlevel.uppercore.board.Board;
+import xyz.upperlevel.uppercore.board.BoardManager;
 
 import java.io.File;
 
@@ -35,32 +35,30 @@ public class WaitingPhase implements Phase, Listener {
         this.parent = parent;
         // hotbar
         hotbar = get().getHotbars().get("waiting_solo");
-        // scoreboard
-        File f = new File(get().getScoreboards().getFolder(), "waiting_solo");
+        // board
+        File f = new File(get().getBoards().getFolder(), "waiting_solo.yml");
         if (f.exists())
             board = WaitingBoard.deserialize(this, Config.wrap(YamlConfiguration.loadConfiguration(f)));
-        else
+        else {
             board = null;
+            QuakeCraftReloaded.get().getLogger().info("Scoreboard not found: \"" + f.getPath() + "\"");
+        }
     }
 
     private void setup(Player player) {
         //-------------------------hotbar
         if (hotbar != null)
-            HotbarSystem.view(player).addHotbar(hotbar);
-        else
-            get().getLogger().warning("Hotbar not found: \"waiting_solo\"");
-        //-------------------------scoreboard
+            HotbarManager.view(player).addHotbar(hotbar);
+        //-------------------------board
         if (board != null)
-            ScoreboardSystem.view(player).setScoreboard(board);
-        else
-            get().getLogger().warning("Scoreboard not found: \"waiting_solo\"");
+            BoardManager.view(player).setScoreboard(board);
     }
 
     private void clear(Player player) {
         //-------------------------hotbar
-        HotbarSystem.view(player).removeHotbar(hotbar);
-        //-------------------------scoreboard
-        ScoreboardSystem.view(player).clear();
+        HotbarManager.view(player).removeHotbar(hotbar);
+        //-------------------------board
+        BoardManager.view(player).clear();
     }
 
     private void clear() {
@@ -74,7 +72,7 @@ public class WaitingPhase implements Phase, Listener {
     }
 
     private void update(Player player) {
-        ScoreboardSystem.view(player).update();
+        BoardManager.view(player).update();
     }
 
     private void update() {

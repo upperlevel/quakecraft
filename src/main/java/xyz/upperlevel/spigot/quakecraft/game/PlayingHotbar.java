@@ -10,8 +10,8 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.Icon;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.itemstack.ItemResolver;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
@@ -75,8 +75,8 @@ public class PlayingHotbar extends Hotbar {
         }
     }
 
-    public PlayingHotbar(Plugin plugin, String id, Config config) {
-        super(plugin, id, config);
+    public PlayingHotbar(Plugin plugin, Config config) {
+        super(plugin, config);
         Config sub;
         sub = config.getConfigRequired("gun");
         setIcon(sub.getIntRequired("slot"), new Icon(Gun.deserialize(sub.getConfigRequired("item"))));
@@ -87,7 +87,7 @@ public class PlayingHotbar extends Hotbar {
 
     public static PlayingHotbar deserialize(Plugin plugin, String id, Config config) {
         try {
-            return new PlayingHotbar(plugin, id, config);
+            return new PlayingHotbar(plugin, config);
         } catch (InvalidConfigurationException e) {
             e.addLocalizer("in hotbar " + id);
             throw e;

@@ -1,4 +1,5 @@
 title: '&e&lQUAKECRAFT'
+update-interval: 10
 lines:
   - ''
   - '&fTime left: &a%countdown%'

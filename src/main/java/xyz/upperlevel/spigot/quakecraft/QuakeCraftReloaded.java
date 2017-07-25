@@ -1,7 +1,6 @@
 package xyz.upperlevel.spigot.quakecraft;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arguments.ArenaArgumentParser;
@@ -13,13 +12,13 @@ import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.gui.GuiManager;
 import xyz.upperlevel.uppercore.gui.GuiRegistry;
-import xyz.upperlevel.uppercore.gui.GuiSystem;
-import xyz.upperlevel.uppercore.gui.hotbar.HotbarRegistry;
-import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
+import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
+import xyz.upperlevel.uppercore.hotbar.HotbarManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
-import xyz.upperlevel.uppercore.scoreboard.ScoreboardRegistry;
-import xyz.upperlevel.uppercore.scoreboard.ScoreboardSystem;
+import xyz.upperlevel.uppercore.board.BoardRegistry;
+import xyz.upperlevel.uppercore.board.BoardManager;
 
 import java.io.IOException;
 
@@ -35,9 +34,9 @@ public class QuakeCraftReloaded extends JavaPlugin {
     private ShopCategory shop;
 
     // core
+    private BoardRegistry boards;
     private GuiRegistry guis;
     private HotbarRegistry hotbars;
-    private ScoreboardRegistry scoreboards;
 
     @Override
     public void onEnable() {
@@ -55,14 +54,10 @@ public class QuakeCraftReloaded extends JavaPlugin {
 
         new QuakeCommand().subscribe();
 
-        guis = GuiSystem.subscribe(this);
-
         try {
-            hotbars = HotbarSystem.subscribe(this);
-            hotbars.loadDefaultFolder();
-
-            scoreboards = ScoreboardSystem.subscribe(this);
-            scoreboards.loadDefaultFolder();
+            guis = new GuiRegistry(this);
+            hotbars = new HotbarRegistry(this);
+            boards =  new BoardRegistry(this);
 
             arenaManager.load();
             gameManager.load();

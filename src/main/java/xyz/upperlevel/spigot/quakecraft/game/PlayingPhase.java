@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
@@ -21,13 +20,13 @@ import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
-import xyz.upperlevel.uppercore.gui.Icon;
-import xyz.upperlevel.uppercore.gui.hotbar.HotbarSystem;
+import xyz.upperlevel.uppercore.hotbar.HotbarManager;
 
 import java.io.File;
 import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
@@ -50,11 +49,11 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     public void setup(Player player) {
-        HotbarSystem.view(player).addHotbar(hotbar);
+        hotbars().view(player).addHotbar(hotbar);
     }
 
     public void clear(Player player) {
-        HotbarSystem.view(player).removeHotbar(hotbar);
+        hotbars().view(player).removeHotbar(hotbar);
     }
 
     public void clear() {

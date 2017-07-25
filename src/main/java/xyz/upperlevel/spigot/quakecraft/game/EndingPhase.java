@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
-import xyz.upperlevel.uppercore.gui.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 
@@ -12,8 +12,6 @@ public class EndingPhase implements Phase, Listener {
 
     private final Game game;
     private final GamePhase parent;
-
-    private final Hotbar hotbar;
 
     private final BukkitRunnable task = new BukkitRunnable() {
         @Override
@@ -25,8 +23,6 @@ public class EndingPhase implements Phase, Listener {
     public EndingPhase(GamePhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
-
-        hotbar = get().getHotbars().get("ending_solo");
     }
 
     @Override
