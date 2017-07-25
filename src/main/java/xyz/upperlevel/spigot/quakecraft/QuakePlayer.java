@@ -31,6 +31,8 @@ public class QuakePlayer {
     private LeggingManager.Legging selectedLegging;
     private ChestplateManager.Chestplate selectedChestplate;
     private HatManager.Hat selectedHat;
+
+    private KillSoundManager.KillSound selectedKillSound;
     
     public QuakePlayer(Player player) {
         this.player = player;
@@ -53,6 +55,8 @@ public class QuakePlayer {
         selectedChestplate = armors.getChestplates().getDefault();
         selectedHat = armors.getHats().getDefault();
 
+        selectedKillSound = shop.getKillSounds().getDefault();
+
         purchases.addAll(Arrays.asList(
                 selectedBarrel,
                 selectedCase,
@@ -64,7 +68,9 @@ public class QuakePlayer {
                 selectedBoot,
                 selectedLegging,
                 selectedChestplate,
-                selectedHat
+                selectedHat,
+
+                selectedKillSound
         ));
     }
 

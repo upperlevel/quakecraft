@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 public class ShopCategory extends Category{
     private GunCategory guns = new GunCategory();
     private ArmorCategory armors = new ArmorCategory();
+    private KillSoundManager killSounds = new KillSoundManager();
 
     public void load() {
         final Logger logger = QuakeCraftReloaded.get().getLogger();
@@ -22,6 +23,7 @@ public class ShopCategory extends Category{
 
         guns.load();
         armors.load();
+        killSounds.load();
 
         logger.info("Shop loaded successfully");
     }

@@ -1,0 +1,137 @@
+blaze-death:
+  name: 'Blaze Death'
+  default: true
+  icon:
+    type: 'BLAZE_ROD'
+    lore:
+    - '&Play Blaze Death sound'
+    - 'effect on kill!'
+
+horse-death:
+  name: 'Horse Death'
+  cost: 2000
+  icon:
+    type: 'SADDLE'
+    lore:
+    - '&Play Horse Death sound'
+    - 'effect on kill!'
+  item:
+    type: 'SADDLE'
+
+bat-death:
+  name: 'Bat Death'
+  cost: 2000
+  icon:
+    type: 'FEATHER'
+    lore:
+    - '&Play Bat Death sound'
+    - 'effect on kill!'
+
+enderman-death:
+  name: 'Enderman Death'
+  cost: 2000
+  icon:
+    type: 'ENDER_PEARL'
+    lore:
+    - '&Play Enderman Death sound'
+    - 'effect on kill!'
+
+golem-death:
+  name: 'Golem Death'
+  cost: 2000
+  icon:
+    type: 'IRON_BLOCK'
+    lore:
+    - '&Play Golem Death sound'
+    - 'effect on kill!'
+
+pig-death:
+  name: 'Pig Death'
+  cost: 2000
+  icon:
+    type: 'PORK'
+    lore:
+    - '&Play Pig Death sound'
+    - 'effect on kill!'
+
+cow-hurt:
+  name: 'Cow Hurt'
+  cost: 4000
+  icon:
+    type: 'LEATHER'
+    lore:
+    - '&Play Cow Hurt sound'
+    - 'effect on kill!'
+
+cow-hurt:
+  name: 'Creeper Death'
+  cost: 4000
+  icon:
+    type: 'SULPHUR'
+    lore:
+    - '&Play Creeper Death sound'
+    - 'effect on kill!'
+
+
+anvil-land:
+  name: 'Creeper Death'
+  cost: 4000
+  icon:
+    type: 'ANVIL'
+    lore:
+    - '&Play Anvil Land sound'
+    - 'effect on kill!'
+
+ghast-death:
+  name: 'Ghast Death'
+  cost: 5000
+  icon:
+    type: 'GHAST_TEAR'
+    lore:
+    - '&Play Ghast Death sound'
+    - 'effect on kill!'
+
+ghast-death:
+  name: 'Dragon Growl'
+  cost: 5000
+  icon:
+    type: 'DRAGON_EGG'
+    lore:
+    - '&Play Dragon Growl sound'
+    - 'effect on kill!'
+
+villager-mhm:
+  name: 'Villager MHM'
+  cost: 5000
+  icon:
+    type: 'EMERALD'
+    lore:
+    - '&Play Villager MHM sound'
+    - 'effect on kill!'
+
+wither:
+  name: 'Wither'
+  cost: 5000
+  icon:
+    type: 'ENDER_PORTAL_FRAME'
+    lore:
+    - '&Play Wither sound'
+    - 'effect on kill!'
+
+level-up:
+  name: 'Level Up'
+  cost: 10000
+  icon:
+    type: 'EXP_BOTTLE'
+    lore:
+    - '&Play Level Up sound'
+    - 'effect on kill!'
+
+zombie-destroy:
+  name: 'Zombie Destroy'
+  cost: 20000
+  icon:
+    type: 'ROTTEN_FLESH'
+    lore:
+    - '&Play Zombie Destroy sound'
+    - 'effect on kill!'
