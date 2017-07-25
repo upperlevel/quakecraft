@@ -5,11 +5,16 @@ import org.bukkit.Color;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class LaserManager extends PurchaseManager<LaserManager.Laser> {
+
+    public LaserManager(PurchaseRegistry registry) {
+        super(registry);
+    }
 
     @Override
     public Laser deserialize(String id, Config config) {
@@ -45,11 +50,6 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
     @Getter
     public class Laser extends Purchase<Laser> {
         private final Color fireworkColor;
-
-        public Laser(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, Color fireworkColor) {
-            super(LaserManager.this, id, name, cost, icon, def);
-            this.fireworkColor = fireworkColor;
-        }
 
         protected Laser(String id, Config config) {
             super(LaserManager.this, id, config);

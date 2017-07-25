@@ -13,6 +13,10 @@ import java.util.Map;
 
 public class KillSoundManager extends PurchaseManager<KillSoundManager.KillSound> {
 
+    public KillSoundManager(PurchaseRegistry registry) {
+        super(registry);
+    }
+
     @Override
     public KillSound deserialize(String id, Config config) {
         return new KillSound(id, config);
@@ -48,13 +52,6 @@ public class KillSoundManager extends PurchaseManager<KillSoundManager.KillSound
         private final Sound sound;
         @Getter
         private final float pitch, volume;
-
-        public KillSound(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, Sound sound, float pitch, float volume) {
-            super(KillSoundManager.this, id, name, cost, icon, def);
-            this.sound = sound;
-            this.pitch = pitch;
-            this.volume = volume;
-        }
 
         public KillSound(String id, Config config) {
             super(KillSoundManager.this, id, config);

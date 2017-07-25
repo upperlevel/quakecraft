@@ -6,6 +6,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
@@ -15,10 +16,14 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class GunManager extends PurchaseManager<GunManager.Gun> {
 
     private final GunCategory parent;
+
+    public GunManager(PurchaseRegistry registry, GunCategory parent) {
+        super(registry);
+        this.parent = parent;
+    }
 
     @Override
     public Gun deserialize(String id, Config config) {
@@ -61,20 +66,6 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
 
         private final List<CustomItem> links;
         private final List<Particle> particles;
-
-        public Gun(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def,
-                   BarrelManager.Barrel barrel, CaseManager.Case gcase, LaserManager.Laser laser,
-                   MuzzleManager.Muzzle muzzle, TriggerManager.Trigger trigger,
-                   List<CustomItem> links, List<Particle> particles) {
-            super(GunManager.this, id, name, cost, icon, def);
-            this.barrel = barrel;
-            this.gcase = gcase;
-            this.laser = laser;
-            this.muzzle = muzzle;
-            this.trigger = trigger;
-            this.links = links;
-            this.particles = particles;
-        }
 
         protected Gun(String id, Config config) {
             super(GunManager.this, id, config);

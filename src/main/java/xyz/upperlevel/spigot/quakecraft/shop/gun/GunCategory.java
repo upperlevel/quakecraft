@@ -3,18 +3,30 @@ package xyz.upperlevel.spigot.quakecraft.shop.gun;
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.shop.Category;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 
 import java.util.logging.Logger;
 
 @Getter
 public class GunCategory extends Category{
-    private BarrelManager barrels = new BarrelManager();
-    private CaseManager cases = new CaseManager();
-    private LaserManager lasers = new LaserManager();
-    private MuzzleManager muzzles = new MuzzleManager();
-    private TriggerManager triggers = new TriggerManager();
+    private BarrelManager barrels;
+    private CaseManager cases;
+    private LaserManager lasers;
+    private MuzzleManager muzzles;
+    private TriggerManager triggers;
 
-    private GunManager guns = new GunManager(this);
+    private GunManager guns;
+
+    public GunCategory(PurchaseRegistry registry) {
+        super(registry);
+
+        barrels = new BarrelManager(registry);
+        cases = new CaseManager(registry);
+        lasers = new LaserManager(registry);
+        muzzles = new MuzzleManager(registry);
+        triggers = new TriggerManager(registry);
+        guns = new GunManager(registry, this);
+    }
 
     public void load() {
         final Logger logger = QuakeCraftReloaded.get().getLogger();

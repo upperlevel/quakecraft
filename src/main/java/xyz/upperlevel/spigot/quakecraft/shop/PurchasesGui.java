@@ -16,6 +16,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.EnchantGlow;
 import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
+import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.economy.Balance;
@@ -120,6 +121,10 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
         QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
         Set<Purchase<?>> purchases = p.getPurchases();
         if (!purchases.contains(purchase)) {
+            //Require test
+            if(purchase.getRequires().stream().anyMatch(r -> !r.test(p)))
+                return;
+
             Balance b = EconomyManager.get(player);
             if (b == null) {
                 QuakeCraftReloaded.get().getLogger().severe("Economy not found!");
@@ -170,6 +175,31 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
                         .map(lore -> lore.resolve(p, local))
                         .collect(Collectors.toList())
         );
+
+        // Add requires
+        List<String> requiresLores = new ArrayList<>();
+        List<Require> requires = purchase.getRequires();
+        for(Require require : requires) {
+            String req = require.getRequires(player);
+            boolean pass = require.test(player);
+            String pre = pass ? Require.DONE : Require.MISSING;
+            String description = require.description();
+            if(description != null)//If there's no description nor progress the require is displayed as a one-line require
+                requiresLores.add("");
+            requiresLores.add(" " + pre + " " + req);
+
+            if(description != null) {
+                requiresLores.add("   " + description);
+                if (!pass) {
+                    String progress = require.getProgress();
+                    if (progress != null)
+                        requiresLores.add("   " + progress);
+                }
+            }
+        }
+        metaLore.addAll(requiresLores);
+
+
         meta.setLore(metaLore);
         item.setItemMeta(meta);
         return item;

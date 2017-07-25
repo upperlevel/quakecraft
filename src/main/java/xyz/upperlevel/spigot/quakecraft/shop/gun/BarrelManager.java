@@ -5,6 +5,7 @@ import org.bukkit.FireworkEffect;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
@@ -12,6 +13,10 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import static xyz.upperlevel.uppercore.config.ConfigUtils.parseFireworkEffectType;
 
 public class BarrelManager extends PurchaseManager<BarrelManager.Barrel> {
+
+    public BarrelManager(PurchaseRegistry registry) {
+        super(registry);
+    }
 
     @Override
     public Barrel deserialize(String id, Config config) {
@@ -47,11 +52,6 @@ public class BarrelManager extends PurchaseManager<BarrelManager.Barrel> {
     @Getter
     public class Barrel extends Purchase<Barrel> {
         private final FireworkEffect.Type fireworkType;
-
-        public Barrel(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, FireworkEffect.Type fireworkType) {
-            super(BarrelManager.this, id, name, cost, icon, def);
-            this.fireworkType = fireworkType;
-        }
 
         protected Barrel(String id, Config config) {
             super(BarrelManager.this, id, config);

@@ -4,11 +4,16 @@ import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class HatManager extends PurchaseManager<HatManager.Hat> {
+
+    public HatManager(PurchaseRegistry registry) {
+        super(registry);
+    }
 
     @Override
     public Hat deserialize(String id, Config config) {
@@ -43,11 +48,6 @@ public class HatManager extends PurchaseManager<HatManager.Hat> {
     @Getter
     public class Hat extends Purchase<Hat> {
         private final CustomItem item;
-
-        public Hat(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, CustomItem item) {
-            super(HatManager.this, id, name, cost, icon, def);
-            this.item = item;
-        }
 
         protected Hat(String id, Config config) {
             super(HatManager.this, id, config);

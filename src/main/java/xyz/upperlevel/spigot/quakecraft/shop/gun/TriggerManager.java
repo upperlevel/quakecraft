@@ -4,11 +4,16 @@ import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
+
+    public TriggerManager(PurchaseRegistry registry) {
+        super(registry);
+    }
 
     @Override
     public Trigger deserialize(String id, Config config) {
@@ -44,11 +49,6 @@ public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
     @Getter
     public class Trigger extends Purchase<Trigger> {
         private final double firingSpeed;
-
-        public Trigger(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, double firingSpeed) {
-            super(TriggerManager.this, id, name, cost, icon, def);
-            this.firingSpeed = firingSpeed;
-        }
 
         protected Trigger(String id, Config config) {
             super(TriggerManager.this, id, config);

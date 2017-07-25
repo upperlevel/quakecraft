@@ -5,6 +5,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
@@ -13,6 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
+
+    public MuzzleManager(PurchaseRegistry registry) {
+        super(registry);
+    }
 
     @Override
     public Muzzle deserialize(String id, Config config) {
@@ -49,10 +54,6 @@ public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
     public class Muzzle extends Purchase<Muzzle> {
         private final List<Particle> particles;
 
-        public Muzzle(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, List<Particle> particles) {
-            super(MuzzleManager.this, id, name, cost, icon, def);
-            this.particles = particles;
-        }
 
         protected Muzzle(String id, Config config) {
             super(MuzzleManager.this, id, config);

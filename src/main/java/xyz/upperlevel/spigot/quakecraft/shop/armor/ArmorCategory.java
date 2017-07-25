@@ -3,15 +3,25 @@ package xyz.upperlevel.spigot.quakecraft.shop.armor;
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.shop.Category;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 
 import java.util.logging.Logger;
 
 @Getter
 public class ArmorCategory extends Category{
-    private HatManager hats = new HatManager();
-    private ChestplateManager chestplates = new ChestplateManager();
-    private LeggingManager leggings = new LeggingManager();
-    private BootManager boots = new BootManager();
+    private HatManager hats;
+    private ChestplateManager chestplates;
+    private LeggingManager leggings;
+    private BootManager boots;
+
+    public ArmorCategory(PurchaseRegistry registry) {
+        super(registry);
+
+        hats = new HatManager(registry);
+        chestplates = new ChestplateManager(registry);
+        leggings = new LeggingManager(registry);
+        boots = new BootManager(registry);
+    }
 
     public void load() {
         final Logger logger = QuakeCraftReloaded.get().getLogger();

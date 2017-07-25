@@ -4,13 +4,15 @@ import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class CaseManager extends PurchaseManager<CaseManager.Case> {
 
-    public CaseManager() {
+    public CaseManager(PurchaseRegistry registry) {
+        super(registry);
         getGui().setEnchantSelected(false);
     }
 
@@ -48,11 +50,6 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
     @Getter
     public class Case extends Purchase<Case> {
         private final CustomItem item;
-
-        public Case(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, CustomItem item) {
-            super(CaseManager.this, id, name, cost, icon, def);
-            this.item = item;
-        }
 
         protected Case(String id, Config config) {
             super(CaseManager.this, id, config);

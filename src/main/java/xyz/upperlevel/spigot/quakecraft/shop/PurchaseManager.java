@@ -12,19 +12,26 @@ import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
 
 public abstract class PurchaseManager<P extends Purchase<P>> {
+    @Getter
+    private final PurchaseRegistry registry;
     private Map<String, P> purchases = new LinkedHashMap<>();
     @Getter
     private PurchasesGui<P> gui;
     private P def;
+
+    public PurchaseManager(PurchaseRegistry registry) {
+        this.registry = registry;
+        if(registry != null)
+            registry.register(this);
+    }
 
     public void add(P item) {
         purchases.put(item.getId(), item);

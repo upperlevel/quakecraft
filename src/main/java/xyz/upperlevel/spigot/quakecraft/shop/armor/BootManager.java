@@ -4,11 +4,16 @@ import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 public class BootManager extends PurchaseManager<BootManager.Boot> {
+
+    public BootManager(PurchaseRegistry registry) {
+        super(registry);
+    }
 
     @Override
     public Boot deserialize(String id, Config config) {
@@ -43,11 +48,6 @@ public class BootManager extends PurchaseManager<BootManager.Boot> {
     @Getter
     public class Boot extends Purchase<BootManager.Boot> {
         private final CustomItem item;
-
-        public Boot(String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, CustomItem item) {
-            super(BootManager.this, id, name, cost, icon, def);
-            this.item = item;
-        }
 
         protected Boot(String id, Config config) {
             super(BootManager.this, id, config);

@@ -8,10 +8,19 @@ import xyz.upperlevel.spigot.quakecraft.shop.gun.GunCategory;
 import java.util.logging.Logger;
 
 @Getter
-public class ShopCategory extends Category{
-    private GunCategory guns = new GunCategory();
-    private ArmorCategory armors = new ArmorCategory();
-    private KillSoundManager killSounds = new KillSoundManager();
+public class ShopCategory extends Category {
+
+    private GunCategory guns;
+    private ArmorCategory armors;
+    private KillSoundManager killSounds;
+
+    public ShopCategory() {
+        super(new PurchaseRegistry());
+
+        guns = new GunCategory(registry);
+        armors = new ArmorCategory(registry);
+        killSounds = new KillSoundManager(registry);
+    }
 
     public void load() {
         final Logger logger = QuakeCraftReloaded.get().getLogger();
