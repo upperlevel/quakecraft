@@ -12,10 +12,7 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.GuiId;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
 
@@ -28,8 +25,6 @@ public abstract class UnitCategory extends Category {
     protected void loadGui(File file) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         loadGui(QuakeCraftReloaded.get(), file.getName().replaceFirst("[.][^.]+$", ""), Config.wrap(config));
-        QuakeCraftReloaded.get().getGuis().load(file);
-        gui = QuakeCraftReloaded.get().getGuis().get(getGuiLoc()).get();
     }
 
     private void loadGui(QuakeCraftReloaded plugin, String id, Config config) {

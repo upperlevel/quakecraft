@@ -10,9 +10,7 @@ soldier:
   icon:
     type: 'LEATHER_CHESTPLATE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
 
@@ -23,9 +21,7 @@ elite:
     type: 'LEATHER_CHESTPLATE'
     color: 'NAVY'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'NAVY'
@@ -37,9 +33,7 @@ majestic:
     type: 'LEATHER_CHESTPLATE'
     color: 'YELLOW'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'YELLOW'
@@ -51,9 +45,7 @@ commander:
     type: 'LEATHER_CHESTPLATE'
     color: 'BLACK'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'BLACK'
@@ -65,9 +57,7 @@ marine:
     type: 'LEATHER_CHESTPLATE'
     color: 'OLIVE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'OLIVE'
@@ -79,9 +69,7 @@ swat:
     type: 'LEATHER_CHESTPLATE'
     color: 'GRAY'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'GRAY'
@@ -93,9 +81,7 @@ spec-ops:
     type: 'LEATHER_CHESTPLATE'
     color: 'RED'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'RED'
@@ -107,9 +93,7 @@ invader:
     type: 'LEATHER_CHESTPLATE'
     color: 'ORANGE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'ORANGE'
@@ -121,9 +105,7 @@ revenge:
     type: 'LEATHER_CHESTPLATE'
     color: 'PURPLE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'PURPLE'
@@ -135,9 +117,7 @@ space:
     type: 'LEATHER_CHESTPLATE'
     color: 'AQUA'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'AQUA'
@@ -149,9 +129,7 @@ slime:
     type: 'LEATHER_CHESTPLATE'
     color: 'LIME'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'LIME'
@@ -163,9 +141,7 @@ snow:
     type: 'LEATHER_CHESTPLATE'
     color: 'WHITE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'WHITE'
@@ -177,9 +153,7 @@ fashionista:
     type: 'LEATHER_CHESTPLATE'
     color: 'FUCHSIA'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'FUCHSIA'
@@ -190,9 +164,7 @@ medieval:
   icon:
     type: 'CHAINMAIL_CHESTPLATE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'CHAINMAIL_CHESTPLATE'
 
@@ -202,9 +174,7 @@ budder:
   icon:
     type: 'GOLD_CHESTPLATE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'GOLD_CHESTPLATE'
 
@@ -214,9 +184,7 @@ sweg:
   icon:
     type: 'DIAMOND_CHESTPLATE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'DIAMOND_CHESTPLATE'
 
@@ -227,9 +195,7 @@ disco:
     type: 'LEATHER_CHESTPLATE'
     color: 'MAROON'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_CHESTPLATE'
     color: 'MAROON'

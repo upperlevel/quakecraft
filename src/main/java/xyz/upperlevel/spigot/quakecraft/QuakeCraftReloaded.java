@@ -63,6 +63,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
             //QuakeCraftReloaded.get().getLogger().severe(e.getErrorMessage("Error while enabling QuakeCraft"));
             e.printStackTrace();
             setEnabled(false);
+            return;
         }
 
         PlaceholderUtil.register(this, new QuakePlaceholders());

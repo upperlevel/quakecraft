@@ -6,9 +6,7 @@ yellow:
     type: 'INK_SACK'
     data: 11
     lore:
-      - '&7Choose a firework color!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose a firework color!'
   firework-color: 'YELLOW'
 
 green:
@@ -19,8 +17,6 @@ green:
     data: 2
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'GREEN'
 
 white:
@@ -31,8 +27,6 @@ white:
     data: 15
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'WHITE'
 
 red:
@@ -43,8 +37,6 @@ red:
     data: 1
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'RED'
 
 blue:
@@ -55,8 +47,6 @@ blue:
     data: 4
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'BLUE'
 
 purple:
@@ -67,8 +57,6 @@ purple:
     data: 5
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'PURPLE'
 
 pink:
@@ -79,8 +67,6 @@ pink:
     data: 9
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'FUCHSIA'
 
 gold:
@@ -90,8 +76,6 @@ gold:
     type: 'GOLD_INGOT'
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'OLIVE'
 
 emerald:
@@ -101,8 +85,6 @@ emerald:
     type: 'EMERALD'
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'LIME'
 
 diamond:
@@ -112,8 +94,6 @@ diamond:
     type: 'DIAMOND'
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'AQUA'
 
 gray:
@@ -124,8 +104,6 @@ gray:
     data: 8
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'GRAY'
 
 orange:
@@ -136,8 +114,6 @@ orange:
     data: 14
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'ORANGE'
 
 silver:
@@ -148,8 +124,6 @@ silver:
     data: 7
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'SILVER'
 
 black:
@@ -159,6 +133,4 @@ black:
     type: 'INK_SACK'
     lore:
     - '&7Choose a firework color!'
-    - ''
-    - '&7Cost: &6%cost%'
   firework-color: 'BLACK'

@@ -10,9 +10,7 @@ soldier:
   icon:
     type: 'LEATHER_BOOTS'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
 
@@ -23,9 +21,7 @@ elite:
     type: 'LEATHER_BOOTS'
     color: 'NAVY'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'NAVY'
@@ -37,9 +33,7 @@ majestic:
     type: 'LEATHER_BOOTS'
     color: 'YELLOW'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'YELLOW'
@@ -51,9 +45,7 @@ commander:
     type: 'LEATHER_BOOTS'
     color: 'BLACK'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'BLACK'
@@ -65,9 +57,7 @@ marine:
     type: 'LEATHER_BOOTS'
     color: 'OLIVE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'OLIVE'
@@ -79,9 +69,7 @@ swat:
     type: 'LEATHER_BOOTS'
     color: 'GRAY'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'GRAY'
@@ -93,9 +81,7 @@ spec-ops:
     type: 'LEATHER_BOOTS'
     color: 'RED'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'RED'
@@ -107,9 +93,7 @@ invader:
     type: 'LEATHER_BOOTS'
     color: 'ORANGE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'ORANGE'
@@ -121,9 +105,7 @@ revenge:
     type: 'LEATHER_BOOTS'
     color: 'PURPLE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'PURPLE'
@@ -135,9 +117,7 @@ space:
     type: 'LEATHER_BOOTS'
     color: 'AQUA'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'AQUA'
@@ -149,9 +129,7 @@ slime:
     type: 'LEATHER_BOOTS'
     color: 'LIME'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'LIME'
@@ -163,9 +141,7 @@ snow:
     type: 'LEATHER_BOOTS'
     color: 'WHITE'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'WHITE'
@@ -177,9 +153,7 @@ fashionista:
     type: 'LEATHER_BOOTS'
     color: 'FUCHSIA'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'FUCHSIA'
@@ -190,9 +164,7 @@ medieval:
   icon:
     type: 'CHAINMAIL_BOOTS'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'CHAINMAIL_BOOTS'
 
@@ -202,9 +174,7 @@ budder:
   icon:
     type: 'GOLD_BOOTS'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'GOLD_BOOTS'
 
@@ -214,9 +184,7 @@ sweg:
   icon:
     type: 'DIAMOND_BOOTS'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'DIAMOND_BOOTS'
 
@@ -227,9 +195,7 @@ disco:
     type: 'LEATHER_BOOTS'
     color: 'MAROON'
     lore:
-      - '&7Cosmetic armor'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Cosmetic armor'
   item:
     type: 'LEATHER_BOOTS'
     color: 'MAROON'

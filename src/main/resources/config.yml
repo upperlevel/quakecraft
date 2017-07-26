@@ -63,8 +63,11 @@ playing-hotbar:
 
 purchase-gui:
   buying:
-  - "&6%cost%"
+  - ''
+  - "&7Cost:&6%cost%"
   bought:
+  - ''
   - "&eClick to select"
   selected:
+  - ''
   - "&aSELECTED"

@@ -2,14 +2,9 @@ package xyz.upperlevel.spigot.quakecraft.shop.dash;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.multi.MultiPurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
-
-import static xyz.upperlevel.spigot.quakecraft.shop.dash.DashCategory.GOT;
-import static xyz.upperlevel.spigot.quakecraft.shop.dash.DashCategory.MISSING;
 
 public class DashPowerManager extends MultiPurchaseManager<DashPowerManager.DashPower> {
 
@@ -42,18 +37,13 @@ public class DashPowerManager extends MultiPurchaseManager<DashPowerManager.Dash
         return "dash power";
     }
 
-    public class DashPower extends Purchase<DashPower> {
+    public class DashPower extends BaseDashUpgrade<DashPower> {
         @Getter
         private final float power;
 
         public DashPower(String id, Config config) {
             super(DashPowerManager.this, id, config);
             power = config.getFloatRequired("power");
-        }
-
-        @Override
-        public CustomItem getIcon(QuakePlayer player) {
-            return isSelected(player) ? GOT : MISSING;
         }
 
         @Override

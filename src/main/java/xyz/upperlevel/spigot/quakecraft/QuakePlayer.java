@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.shop.KillSoundManager;
 import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.spigot.quakecraft.shop.armor.*;
+import xyz.upperlevel.spigot.quakecraft.shop.dash.DashCategory;
 import xyz.upperlevel.spigot.quakecraft.shop.dash.DashCooldownManager;
 import xyz.upperlevel.spigot.quakecraft.shop.dash.DashPowerManager;
 import xyz.upperlevel.spigot.quakecraft.shop.gun.*;
@@ -64,6 +65,11 @@ public class QuakePlayer {
 
         selectedKillSound = shop.getKillSounds().getDefault();
 
+        DashCategory dash = shop.getDashes();
+
+        selectedDashPower = dash.getPower().getDefault();
+        selectedDashCooldown = dash.getCooldown().getDefault();
+
         purchases.addAll(Arrays.asList(
                 selectedBarrel,
                 selectedCase,
@@ -77,7 +83,10 @@ public class QuakePlayer {
                 selectedChestplate,
                 selectedHat,
 
-                selectedKillSound
+                selectedKillSound,
+
+                selectedDashPower,
+                selectedDashCooldown
         ));
     }
 

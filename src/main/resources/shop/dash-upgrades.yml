@@ -45,20 +45,20 @@ cooldown:
     name: 'Dash Cooldown I'
     default: true
     lore:
-    - '&Cooldown: &a4.0s'
+    - '&7Cooldown: &a4.0s'
     cooldown: 4.0
 
   cooldown-II:
     name: 'Dash Cooldown II'
     lore:
-    - '&Cooldown: &a3.5s'
+    - '&7Cooldown: &a3.5s'
     cooldown: 3.5
     cost: 10000
 
   cooldown-III:
     name: 'Dash Cooldown III'
     lore:
-    - '&Cooldown: &a3.0s'
+    - '&7Cooldown: &a3.0s'
     cooldown: 3.0
     cost: 50000
     requires:
@@ -67,7 +67,7 @@ cooldown:
   cooldown-IV:
     name: 'Dash Cooldown IV'
     lore:
-    - '&Cooldown: &a2.5s'
+    - '&7Cooldown: &a2.5s'
     cooldown: 2.5
     cost: 150000
     requires:
@@ -75,7 +75,8 @@ cooldown:
 
   cooldown-V:
     name: 'Dash Cooldown V'
-    - '&Cooldown: &a2.0s'
+    lore:
+    - '&7Cooldown: &a2.0s'
     cooldown: 2.0
     cost: 500000
     requires:

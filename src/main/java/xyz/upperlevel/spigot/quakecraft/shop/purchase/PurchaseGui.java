@@ -28,11 +28,13 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static xyz.upperlevel.uppercore.Uppercore.guis;
+
 public class PurchaseGui extends ChestGui {
     private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     @Getter
     private List<PurchaseAdapter> adapters = new ArrayList<>();
-    private Map<Integer, SimplePurchase<?>> purchaseMap = new LinkedHashMap<>();
+    private Map<Integer, Purchase<?>> purchaseMap = new LinkedHashMap<>();
     @Getter
     private boolean dirty = true;
     @Getter
@@ -62,7 +64,7 @@ public class PurchaseGui extends ChestGui {
             Collection<SimplePurchase<?>> purchases = (Collection<SimplePurchase<?>>) adapter.manager.getPurchases().values();
             int[] slots = adapter.slots;
             int i = 0;
-            for (SimplePurchase<?> p : purchases) {
+            for (Purchase<?> p : purchases) {
                 int slot = slots[i++];
                 if (slot < 0) {
                     QuakeCraftReloaded.get().getLogger().severe("Cannot fill " + adapter.manager.getPurchaseName() + "'s inventory: too many items!");
@@ -84,21 +86,25 @@ public class PurchaseGui extends ChestGui {
             QuakeCraftReloaded.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
         }
-        for (Map.Entry<Integer, SimplePurchase<?>> p : purchaseMap.entrySet())
-            inv.setItem(p.getKey(), getIcon(p.getValue(), qp, p.getValue().isSelected(qp)));
+        printPurchases(inv, qp);
         return inv;
+    }
+
+    public void printPurchases(Inventory inv, QuakePlayer player) {
+        for (Map.Entry<Integer, Purchase<?>> p : purchaseMap.entrySet())
+            inv.setItem(p.getKey(), getIcon(p.getValue(), player, p.getValue().isSelected(player)));
     }
 
     @Override
     public void onClick(InventoryClickEvent event) {
-        SimplePurchase<?> p = purchaseMap.get(event.getSlot());
+        Purchase<?> p = purchaseMap.get(event.getSlot());
         if (p != null)
             onClick((Player) event.getWhoClicked(), event.getSlot(), p);
         else
             super.onClick(event);
     }
 
-    public void onClick(Player player, int slot, SimplePurchase<?> purchase) {
+    public void onClick(Player player, int slot, Purchase<?> purchase) {
         QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
         Set<Purchase<?>> purchases = p.getPurchases();
         if (!purchases.contains(purchase)) {
@@ -199,27 +205,16 @@ public class PurchaseGui extends ChestGui {
             return buyingLores;
     }
 
-    public Map<Integer, SimplePurchase<?>> getPurchaseMap() {
+    public Map<Integer, Purchase<?>> getPurchaseMap() {
         return Collections.unmodifiableMap(purchaseMap);
     }
 
     @SuppressWarnings("unchecked")
-    protected void reloadSelection(QuakePlayer player, int slot, SimplePurchase<?> sel) {
-        PurchaseManager manager = sel.getManager();
-        Purchase oldPurchase = manager.getSelected(player);
-        manager.setSelected(player, sel);
-        if (oldPurchase == sel)
-            return;
-        Inventory inv = player.getPlayer().getOpenInventory().getTopInventory();
-        int oldSelIndex = getPurchaseMap()
-                .entrySet()
-                .stream()
-                .filter(e -> e.getValue() == oldPurchase)
-                .findAny().orElseThrow(() -> new IllegalStateException("No old selection?"))
-                .getKey();
-
-        inv.setItem(oldSelIndex, getIcon(oldPurchase, player, false));
-        inv.setItem(slot, getIcon(sel, player, true));
+    protected void reloadSelection(QuakePlayer player, int slot, Purchase<?> sel) {
+        if(!sel.isSelected(player)) {
+            ((PurchaseManager)sel.getManager()).setSelected(player, sel);
+            printPurchases(player.getPlayer().getOpenInventory().getTopInventory(), player);
+        }
     }
 
     public void add(PurchaseManager<?> manager, int[] slots) {

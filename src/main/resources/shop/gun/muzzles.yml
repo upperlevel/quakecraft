@@ -5,9 +5,7 @@ none:
   icon:
     type: 'GLASS'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
     - type: 'SIMPLE'
       color: 'RED'
@@ -18,13 +16,11 @@ clay:
   icon:
     type: 'CLAY'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'CLAY'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'CLAY'
 
 wooden:
   name: 'Wooden Muzzle'
@@ -32,13 +28,11 @@ wooden:
   icon:
     type: 'WOOD'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'WOOD'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'WOOD'
 
 golden:
   name: 'Golden Muzzle'
@@ -46,13 +40,11 @@ golden:
   icon:
     type: 'GOLD_BLOCK'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'GOLD_BLOCK'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'GOLD_BLOCK'
 
 redstone:
   name: 'Redstone Muzzle'
@@ -60,13 +52,11 @@ redstone:
   icon:
     type: 'REDSTONE_BLOCK'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'REDSTONE_BLOCK'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'REDSTONE_BLOCK'
 
 iron:
   name: 'Iron Muzzle'
@@ -74,13 +64,11 @@ iron:
   icon:
     type: 'IRON_BLOCK'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'IRON_BLOCK'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'IRON_BLOCK'
 
 ender-stone:
   name: 'Ender Stone Muzzle'
@@ -88,13 +76,11 @@ ender-stone:
   icon:
     type: 'ENDER_STONE'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'ENDER_STONE'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'ENDER_STONE'
 
 diamond:
   name: 'Diamond Muzzle'
@@ -102,13 +88,11 @@ diamond:
   icon:
     type: 'DIAMOND_BLOCK'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'DIAMOND_BLOCK'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'DIAMOND_BLOCK'
 
 quartz:
   name: 'Quartz Muzzle'
@@ -116,13 +100,11 @@ quartz:
   icon:
     type: 'QUARTZ_ORE'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'QUARTZ_ORE'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'QUARTZ_ORE'
 
 emerald:
   name: 'Emerald Muzzle'
@@ -130,13 +112,11 @@ emerald:
   icon:
     type: 'EMERALD_BLOCK'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'EMERALD_BLOCK'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'EMERALD_BLOCK'
 
 lapis:
   name: 'Lapis Muzzle'
@@ -144,13 +124,11 @@ lapis:
   icon:
     type: 'LAPIS_BLOCK'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'LAPIS_BLOCK'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'LAPIS_BLOCK'
 
 obsidian:
   name: 'Obsidian Muzzle'
@@ -158,13 +136,11 @@ obsidian:
   icon:
     type: 'OBSIDIAN'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'OBSIDIAN'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'OBSIDIAN'
 
 sponge:
   name: 'Sponge Muzzle'
@@ -172,13 +148,11 @@ sponge:
   icon:
     type: 'SPONGE'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'SPONGE'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'SPONGE'
 
 sea-lantern:
   name: 'Sea Lantern Muzzle'
@@ -186,13 +160,11 @@ sea-lantern:
   icon:
     type: 'SEA_LANTERN'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'SEA_LANTERN'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'SEA_LANTERN'
 
 command-block:
   name: 'Command Block Muzzle'
@@ -200,13 +172,11 @@ command-block:
   icon:
     type: 'COMMAND'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'COMMAND'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'COMMAND'
 
 prismarine:
   name: 'Prismarine Muzzle'
@@ -214,13 +184,11 @@ prismarine:
   icon:
     type: 'PRISMARINE'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'PRISMARINE'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'PRISMARINE'
 
 melon:
   name: 'Melon Muzzle'
@@ -228,13 +196,11 @@ melon:
   icon:
     type: 'MELON'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'MELON'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'MELON'
 
 pumpkin:
   name: 'Pumpkin Muzzle'
@@ -242,13 +208,11 @@ pumpkin:
   icon:
     type: 'PUMPKIN'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'PUMPKIN'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'PUMPKIN'
 
 soul-sand:
   name: 'Soul Sand Muzzle'
@@ -256,10 +220,8 @@ soul-sand:
   icon:
     type: 'SOUL_SAND'
     lore:
-      - '&7Choose a particle effect!'
-      - ''
-      - '&7Cost: &7%cost%'
+    - '&7Choose a particle effect!'
   particles:
-    - type: 'BLOCK_DUST'
-      block:
-        type: 'SOUL_SAND'
+  - type: 'BLOCK_DUST'
+    block:
+      type: 'SOUL_SAND'

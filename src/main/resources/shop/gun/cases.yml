@@ -1,4 +1,3 @@
-
 wood:
   name: 'Wooden Case'
   cost: 0
@@ -6,9 +5,7 @@ wood:
   icon:
     type: 'WOOD_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
   item:
     type: 'WOOD_HOE'
 
@@ -18,9 +15,7 @@ marbled:
   icon:
     type: 'STONE_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
   item:
     type: 'STONE_HOE'
 
@@ -30,9 +25,7 @@ varnished-wood:
   icon:
     type: 'WOOD_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
     enchantments:
       arrow damage: 10
   item:
@@ -46,9 +39,7 @@ polished-wood:
   icon:
     type: 'STONE_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
     enchantments:
       arrow damage: 10
   item:
@@ -62,9 +53,7 @@ reinforced:
   icon:
     type: 'IRON_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
   item:
     type: 'IRON_HOE'
 
@@ -74,9 +63,7 @@ plated:
   icon:
     type: 'GOLD_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
   item:
     type: 'GOLD_HOE'
 
@@ -86,9 +73,7 @@ bling:
   icon:
     type: 'DIAMOND_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
   item:
     type: 'DIAMOND_HOE'
 
@@ -98,9 +83,7 @@ polished-plated:
   icon:
     type: 'GOLD_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
   item:
     type: 'GOLD_HOE'
     enchantments:
@@ -112,9 +95,7 @@ polished-bling-case:
   icon:
     type: 'DIAMOND_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
     enchantments:
       arrow damage: 10
   item:
@@ -128,9 +109,7 @@ polished-reinforced-case:
   icon:
     type: 'IRON_HOE'
     lore:
-      - '&7Choose an appearance!'
-      - ''
-      - '&7Cost: &6%cost%'
+    - '&7Choose an appearance!'
     enchantments:
       arrow damage: 10
   item:

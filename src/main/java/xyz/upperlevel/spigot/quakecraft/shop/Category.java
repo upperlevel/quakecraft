@@ -17,8 +17,7 @@ public abstract class Category {
     protected Gui gui;
 
     protected void loadGui(File file) {
-        get().getGuis().load(file);
-        gui = get().getGuis().get(getGuiLoc()).get();
+        gui = get().getGuis().loadFile(file).get();
     }
 
     public void loadGui() {

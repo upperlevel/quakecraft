@@ -5,7 +5,7 @@
     type: 'STONE_BUTTON'
     amount: 15
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 1.5
   default: true
 
@@ -25,7 +25,7 @@
     type: 'STONE_BUTTON'
     amount: 50
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 5.0
   cost: 5000
 
@@ -35,7 +35,7 @@
     type: 'STONE_BUTTON'
     amount: 25
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 2.5
   cost: 5000
 
@@ -45,7 +45,7 @@
     type: 'STONE_BUTTON'
     amount: 14
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 1.4
   cost: 1800
 
@@ -55,7 +55,7 @@
     type: 'STONE_BUTTON'
     amount: 13
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 1.3
   cost: 3500
 
@@ -65,7 +65,7 @@
     type: 'STONE_BUTTON'
     amount: 12
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 1.2
   cost: 8500
 
@@ -75,7 +75,7 @@
     type: 'STONE_BUTTON'
     amount: 11
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 1.1
   cost: 17000
 
@@ -85,7 +85,7 @@
     type: 'STONE_BUTTON'
     amount: 10
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 1.0
   cost: 100000
 
@@ -95,7 +95,7 @@
     type: 'STONE_BUTTON'
     amount: 9
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 0.9
   cost: 300000
 
@@ -105,6 +105,6 @@
     type: 'STONE_BUTTON'
     amount: 8
     lore:
-      - '&7Choose a firing speed!'
+    - '&7Choose a firing speed!'
   firing-speed: 0.85
   cost: 2000000

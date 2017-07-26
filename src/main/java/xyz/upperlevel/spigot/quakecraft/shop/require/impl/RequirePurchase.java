@@ -45,7 +45,8 @@ public class RequirePurchase implements Require {
             PurchaseManager manager = parent.getManager();
             if (requiredId.indexOf(':') < 0) {
                 required = manager.get(requiredId);
-                throw new IllegalArgumentException("Cannot find purchase '" + requiredId + "'");
+                if(required == null)
+                    throw new IllegalArgumentException("Cannot find purchase '" + requiredId + "'");
             } else
                 required = manager.getRegistry().getPurchase(requiredId);
         }
