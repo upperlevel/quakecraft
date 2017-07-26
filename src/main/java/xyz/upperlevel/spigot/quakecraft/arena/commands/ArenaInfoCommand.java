@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;

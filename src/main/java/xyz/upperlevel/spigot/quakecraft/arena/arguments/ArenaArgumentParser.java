@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.arguments;
+package xyz.upperlevel.spigot.quakecraft.arena.arguments;
 
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;

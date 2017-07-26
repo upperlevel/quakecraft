@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
@@ -9,9 +9,9 @@ import xyz.upperlevel.uppercore.command.Executor;
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
 
-public class SetLimitsCommand extends Command {
+public class ArenaSetLimitsCommand extends Command {
 
-    public SetLimitsCommand() {
+    public ArenaSetLimitsCommand() {
         super("setlimits");
         setDescription("Sets arena min and max players count.");
     }

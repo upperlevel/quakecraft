@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -7,9 +7,9 @@ import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 
-public class DeleteArenaCommand extends Command {
+public class ArenaDeleteCommand extends Command {
 
-    public DeleteArenaCommand() {
+    public ArenaDeleteCommand() {
         super("delete");
         setDescription("Deletes an arena.");
     }

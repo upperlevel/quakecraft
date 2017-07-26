@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
@@ -10,10 +10,10 @@ import xyz.upperlevel.uppercore.command.Executor;
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
 
-public class DisableArenaCommand extends Command {
+public class ArenaDisableCommand extends Command {
 
-    public DisableArenaCommand() {
-        super("disableArena");
+    public ArenaDisableCommand() {
+        super("disable");
         setDescription("Disables an arena.");
     }
 

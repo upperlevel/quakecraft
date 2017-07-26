@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import net.wesjd.anvilgui.AnvilGUI.ClickHandler;
 import org.bukkit.DyeColor;
@@ -23,8 +23,8 @@ import static xyz.upperlevel.uppercore.Uppercore.guis;
 import static xyz.upperlevel.uppercore.gui.InputFilters.filterInt;
 import static xyz.upperlevel.uppercore.gui.InputFilters.plain;
 
-public class SetupGuiCommand extends Command {
-    public SetupGuiCommand() {
+public class ArenaSetupGuiCommand extends Command {
+    public ArenaSetupGuiCommand() {
         super("setupgui");
         setDescription("Setups the arena with a simple GUI interface.");
     }

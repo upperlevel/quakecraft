@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
@@ -8,9 +8,9 @@ import xyz.upperlevel.uppercore.command.Executor;
 
 import static org.bukkit.ChatColor.*;
 
-public class SetNameCommand extends Command {
+public class ArenaSetNameCommand extends Command {
 
-    public SetNameCommand() {
+    public ArenaSetNameCommand() {
         super("setname");
         setDescription("Sets arena display name.");
     }

@@ -3,7 +3,7 @@ package xyz.upperlevel.spigot.quakecraft;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
-import xyz.upperlevel.spigot.quakecraft.arguments.ArenaArgumentParser;
+import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
 import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;

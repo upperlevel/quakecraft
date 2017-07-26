@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -9,16 +9,17 @@ import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 import xyz.upperlevel.uppercore.command.Sender;
 
-public class SetLobbyCommand extends Command {
 
-    public SetLobbyCommand() {
-        super("setlobby");
-        setDescription("Sets arena lobby.");
+public class ArenaAddSpawnCommand extends Command {
+
+    public ArenaAddSpawnCommand() {
+        super("addspawn");
+        setDescription("Adds arena spawn.");
     }
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
-        arena.setLobby(((Player) sender).getLocation());
-        sender.sendMessage(ChatColor.GREEN + "Lobby sets successfully!");
+        arena.addSpawn(((Player) sender).getLocation());
+        sender.sendMessage(ChatColor.GREEN + "Spawn added.");
     }
 }
