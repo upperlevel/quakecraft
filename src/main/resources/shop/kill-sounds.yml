@@ -6,6 +6,7 @@ blaze-death:
     lore:
     - '&7Play Blaze Death sound'
     - 'effect on kill!'
+  sound: ENTITY_BLAZE_DEATH
 
 horse-death:
   name: 'Horse Death'
@@ -15,8 +16,7 @@ horse-death:
     lore:
     - '&7Play Horse Death sound'
     - 'effect on kill!'
-  item:
-    type: 'SADDLE'
+  sound: ENTITY_HORSE_DEATH
 
 bat-death:
   name: 'Bat Death'
@@ -26,6 +26,7 @@ bat-death:
     lore:
     - '&7Play Bat Death sound'
     - 'effect on kill!'
+  sound: ENTITY_BAT_DEATH
 
 enderman-death:
   name: 'Enderman Death'
@@ -35,6 +36,7 @@ enderman-death:
     lore:
     - '&7Play Enderman Death sound'
     - 'effect on kill!'
+  sound: ENTITY_ENDERMEN_DEATH
 
 golem-death:
   name: 'Golem Death'
@@ -44,6 +46,7 @@ golem-death:
     lore:
     - '&7Play Golem Death sound'
     - 'effect on kill!'
+  sound: ENTITY_IRONGOLEM_DEATH
 
 pig-death:
   name: 'Pig Death'
@@ -53,6 +56,7 @@ pig-death:
     lore:
     - '&7Play Pig Death sound'
     - 'effect on kill!'
+  sound: ENTITY_PIG_DEATH
 
 cow-hurt:
   name: 'Cow Hurt'
@@ -62,8 +66,9 @@ cow-hurt:
     lore:
     - '&7Play Cow Hurt sound'
     - 'effect on kill!'
+  sound: ENTITY_COW_HURT
 
-cow-hurt:
+creeper-death:
   name: 'Creeper Death'
   cost: 4000
   icon:
@@ -71,7 +76,7 @@ cow-hurt:
     lore:
     - '&7Play Creeper Death sound'
     - 'effect on kill!'
-
+  sound: ENTITY_CREEPER_DEATH
 
 anvil-land:
   name: 'Creeper Death'
@@ -81,6 +86,7 @@ anvil-land:
     lore:
     - '&7Play Anvil Land sound'
     - 'effect on kill!'
+  sound: BLOCK_ANVIL_LAND
 
 ghast-death:
   name: 'Ghast Death'
@@ -90,8 +96,9 @@ ghast-death:
     lore:
     - '&7Play Ghast Death sound'
     - 'effect on kill!'
+  sound: ENTITY_GHAST_DEATH
 
-ghast-death:
+dragon-growl:
   name: 'Dragon Growl'
   cost: 5000
   icon:
@@ -99,6 +106,7 @@ ghast-death:
     lore:
     - '&Play Dragon Growl sound'
     - 'effect on kill!'
+  sound: ENTITY_ENDERDRAGON_GROWL
 
 villager-mhm:
   name: 'Villager MHM'
@@ -108,6 +116,7 @@ villager-mhm:
     lore:
     - '&7Play Villager MHM sound'
     - 'effect on kill!'
+  sound: ENTITY_VILLAGER_AMBIENT
 
 wither:
   name: 'Wither'
@@ -117,6 +126,7 @@ wither:
     lore:
     - '&Play Wither sound'
     - 'effect on kill!'
+  sound: ENTITY_WITHER_DEATH
 
 level-up:
   name: 'Level Up'
@@ -126,6 +136,7 @@ level-up:
     lore:
     - '&7Play Level Up sound'
     - 'effect on kill!'
+  sound: ENTITY_PLAYER_LEVELUP
 
 zombie-destroy:
   name: 'Zombie Destroy'
@@ -135,3 +146,4 @@ zombie-destroy:
     lore:
     - '&7Play Zombie Destroy sound'
     - 'effect on kill!'
+  sound: ENTITY_ZOMBIE_ATTACK_DOOR_WOOD

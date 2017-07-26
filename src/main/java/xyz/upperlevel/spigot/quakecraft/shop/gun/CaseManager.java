@@ -12,6 +12,11 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
     public CaseManager(PurchaseRegistry registry) {
         super(registry);
+    }
+
+    @Override
+    public void load() {
+        super.load();
         getGui().setEnchantSelected(false);
     }
 

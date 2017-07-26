@@ -85,7 +85,7 @@ public class PurchasesGui<P extends SimplePurchase<P>> extends ChestGui {
             update();
         Inventory inv = super.create(player);
         QuakePlayer qp = QuakePlayerManager.get().getPlayer(player);
-        if(qp == null) {
+        if (qp == null) {
             QuakeCraftReloaded.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
         }
@@ -119,10 +119,10 @@ public class PurchasesGui<P extends SimplePurchase<P>> extends ChestGui {
 
     public void onClick(Player player, int slot, P purchase) {
         QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
-        Set<SimplePurchase<?>> purchases = p.getPurchases();
+        Set<Purchase<?>> purchases = p.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test
-            if(purchase.getRequires().stream().anyMatch(r -> !r.test(p)))
+            if (purchase.getRequires().stream().anyMatch(r -> !r.test(p)))
                 return;
 
             Balance b = EconomyManager.get(player);
@@ -161,7 +161,7 @@ public class PurchasesGui<P extends SimplePurchase<P>> extends ChestGui {
         List<PlaceholderValue<String>> lores;
         if (selected == purchase) {
             lores = selectedLores;
-            if(enchantSelected)
+            if (enchantSelected)
                 EnchantGlow.addGlow(meta);
         } else if (player.getPurchases().contains(purchase))
             lores = boughtLores;
@@ -179,16 +179,16 @@ public class PurchasesGui<P extends SimplePurchase<P>> extends ChestGui {
         // Add requires
         List<String> requiresLores = new ArrayList<>();
         List<Require> requires = purchase.getRequires();
-        for(Require require : requires) {
+        for (Require require : requires) {
             String req = require.getRequires(player);
             boolean pass = require.test(player);
             String pre = pass ? Require.DONE : Require.MISSING;
             String description = require.description();
-            if(description != null)//If there's no description nor progress the require is displayed as a one-line require
+            if (description != null)//If there's no description nor progress the require is displayed as a one-line require
                 requiresLores.add("");
             requiresLores.add(" " + pre + " " + req);
 
-            if(description != null) {
+            if (description != null) {
                 requiresLores.add("   " + description);
                 if (!pass) {
                     String progress = require.getProgress();
@@ -211,7 +211,7 @@ public class PurchasesGui<P extends SimplePurchase<P>> extends ChestGui {
 
     public static PurchaseGui deserialize(Plugin plugin, String id, Config config, PurchaseManager purchaseManager) {
         try {
-            return new PurchaseGui(plugin, config, purchaseManager);
+            return PurchaseGui.deserialize(plugin, id, config, purchaseManager);
         } catch (InvalidConfigurationException e) {
             e.addLocalizer("in gui " + id);
             throw e;

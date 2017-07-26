@@ -100,7 +100,7 @@ public class PurchaseGui extends ChestGui {
 
     public void onClick(Player player, int slot, SimplePurchase<?> purchase) {
         QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
-        Set<SimplePurchase<?>> purchases = p.getPurchases();
+        Set<Purchase<?>> purchases = p.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test
             if(purchase.getRequires().stream().anyMatch(r -> !r.test(p)))
@@ -121,8 +121,8 @@ public class PurchaseGui extends ChestGui {
             reloadSelection(p, slot, purchase);
     }
 
-    protected ItemStack getIcon(SimplePurchase<?> purchase, QuakePlayer player, boolean selected) {
-        CustomItem icon = purchase.getIcon();
+    protected ItemStack getIcon(Purchase<?> purchase, QuakePlayer player, boolean selected) {
+        CustomItem icon = purchase.getIcon(player);
         Player p = player.getPlayer();
         if (icon == null) {
             QuakeCraftReloaded.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
@@ -137,7 +137,7 @@ public class PurchaseGui extends ChestGui {
         return item;
     }
 
-    public void processMeta(QuakePlayer player, SimplePurchase<?> purchase, ItemMeta meta, boolean selected) {
+    public void processMeta(QuakePlayer player, Purchase<?> purchase, ItemMeta meta, boolean selected) {
         Player p = player.getPlayer();
         meta.setDisplayName(purchase.getName().resolve(p));
 
@@ -162,7 +162,7 @@ public class PurchaseGui extends ChestGui {
         meta.setLore(metaLore);
     }
 
-    public List<String> processRequires(SimplePurchase<?> purchase, QuakePlayer player) {
+    public List<String> processRequires(Purchase<?> purchase, QuakePlayer player) {
         List<String> lore = new ArrayList<>();
         List<Require> requires = purchase.getRequires();
         for(Require require : requires) {
@@ -190,7 +190,7 @@ public class PurchaseGui extends ChestGui {
         EnchantGlow.addGlow(meta);
     }
 
-    protected List<PlaceholderValue<String>> getLore(QuakePlayer player, SimplePurchase purchase, boolean selected) {
+    protected List<PlaceholderValue<String>> getLore(QuakePlayer player, Purchase purchase, boolean selected) {
         if (selected)
             return selectedLores;
         else if (player.getPurchases().contains(purchase))
@@ -206,7 +206,7 @@ public class PurchaseGui extends ChestGui {
     @SuppressWarnings("unchecked")
     protected void reloadSelection(QuakePlayer player, int slot, SimplePurchase<?> sel) {
         PurchaseManager manager = sel.getManager();
-        SimplePurchase oldPurchase = manager.getSelected(player);
+        Purchase oldPurchase = manager.getSelected(player);
         manager.setSelected(player, sel);
         if (oldPurchase == sel)
             return;
