@@ -6,7 +6,10 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 import xyz.upperlevel.uppercore.command.Sender;
-import xyz.upperlevel.uppercore.gui.GuiManager;
+import xyz.upperlevel.uppercore.gui.GuiId;
+
+import static org.bukkit.ChatColor.RED;
+import static xyz.upperlevel.uppercore.Uppercore.guis;
 
 public class ShopCommand extends Command {
     public ShopCommand() {
@@ -16,6 +19,11 @@ public class ShopCommand extends Command {
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender) {
-        GuiManager.open((Player) sender, QuakeCraftReloaded.get().getGuis().get("shop"));
+        GuiId gui =  QuakeCraftReloaded.get().getGuis().get("shop");
+        if (gui == null) {
+            sender.sendMessage(RED + "Cannot find shop gui.");
+            return;
+        }
+        guis().open((Player) sender, gui.get());
     }
 }

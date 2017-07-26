@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.uppercore.gui.Gui;
+import xyz.upperlevel.uppercore.gui.GuiId;
 
 import java.io.File;
+
+import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 
 @RequiredArgsConstructor
 public abstract class Category {
@@ -22,7 +25,7 @@ public abstract class Category {
 
     public void loadGui() {
         File guiFile = new File(
-                QuakeCraftReloaded.get().getDataFolder(),
+                get().getDataFolder(),
                 "guis" + File.separator + getGuiLoc() + ".yml"
         );
         loadGui(guiFile);

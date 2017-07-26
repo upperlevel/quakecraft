@@ -11,6 +11,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.hotbar.HotbarManager;
@@ -20,45 +21,54 @@ import xyz.upperlevel.uppercore.board.BoardManager;
 import java.io.File;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.uppercore.Uppercore.boards;
+import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class WaitingPhase implements Phase, Listener {
-
     private final Game game;
     private final LobbyPhase parent;
 
-    private final Hotbar hotbar;
-    private final Board board;
+    private Hotbar hotbar;
+    private Board board;
 
     public WaitingPhase(LobbyPhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
-        // hotbar
-        hotbar = get().getHotbars().get("waiting_solo");
-        // board
-        File f = new File(get().getBoards().getFolder(), "waiting_solo.yml");
-        if (f.exists())
-            board = WaitingBoard.deserialize(this, Config.wrap(YamlConfiguration.loadConfiguration(f)));
-        else {
-            board = null;
-            QuakeCraftReloaded.get().getLogger().info("Scoreboard not found: \"" + f.getPath() + "\"");
+        // HOTBAR
+        {
+            File file = new File(get().getHotbars().getFolder(), "waiting_solo.yml");
+            if (file.exists())
+                hotbar = Hotbar.deserialize(get(), YamlConfiguration.loadConfiguration(file)::get);
+            else {
+                QuakeCraftReloaded.get().getLogger().severe("Could not find file: \"" + file + "\"");
+            }
+        }
+        // BOARD
+        {
+            File file = new File(get().getBoards().getFolder(), "waiting_solo.yml");
+            if (file.exists())
+                board = WaitingBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
+            else {
+                QuakeCraftReloaded.get().getLogger().severe("Could not find file: \"" + file + "\"");
+            }
         }
     }
 
     private void setup(Player player) {
         //-------------------------hotbar
         if (hotbar != null)
-            HotbarManager.view(player).addHotbar(hotbar);
+            hotbars().view(player).addHotbar(hotbar);
         //-------------------------board
         if (board != null)
-            BoardManager.view(player).setScoreboard(board);
+            boards().view(player).setBoard(board);
     }
 
     private void clear(Player player) {
         //-------------------------hotbar
-        HotbarManager.view(player).removeHotbar(hotbar);
+        hotbars().view(player).removeHotbar(hotbar);
         //-------------------------board
-        BoardManager.view(player).clear();
+        boards().view(player).clear();
     }
 
     private void clear() {
@@ -72,7 +82,7 @@ public class WaitingPhase implements Phase, Listener {
     }
 
     private void update(Player player) {
-        BoardManager.view(player).update();
+        boards().view(player).render();
     }
 
     private void update() {

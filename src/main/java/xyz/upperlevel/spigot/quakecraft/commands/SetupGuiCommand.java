@@ -19,6 +19,7 @@ import java.util.function.BiConsumer;
 import static org.bukkit.ChatColor.AQUA;
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
+import static xyz.upperlevel.uppercore.Uppercore.guis;
 import static xyz.upperlevel.uppercore.gui.InputFilters.filterInt;
 import static xyz.upperlevel.uppercore.gui.InputFilters.plain;
 
@@ -35,7 +36,7 @@ public class SetupGuiCommand extends Command {
             AnvilGui gui = new AnvilGui();
             gui.setMessage("Arena name");
             gui.setListener(arenaFilter(this::execute));
-            GuiSystem.open(((Player)sender), gui);
+            guis().open(((Player)sender), gui);
         } else execute((Player)sender, arena);
 
     }
@@ -50,7 +51,7 @@ public class SetupGuiCommand extends Command {
                                 arena.isEnabled() ? "Disable" : "Enable"),
                         p -> {
                             arena.setEnabled(!arena.isEnabled());
-                            GuiSystem.reprint(p);
+                            guis().reprint(p);
                         }
                 )
                 .add(
@@ -64,9 +65,9 @@ public class SetupGuiCommand extends Command {
                             gui.setMessage("Arena name");
                             gui.setListener(plain((pl, n) -> {
                                 arena.setName(n);
-                                GuiSystem.back(p);
+                                guis().back(p);
                             }));
-                            GuiSystem.open(p, gui);
+                            guis().open(p, gui);
                         }
                 )
                 .add(
@@ -81,11 +82,11 @@ public class SetupGuiCommand extends Command {
                             gui.setListener(filterInt(
                                     (pl, i) -> {
                                         arena.setMinPlayers(i);
-                                        GuiSystem.back(pl);
+                                        guis().back(pl);
                                     },
                                     i -> i >= 2
                             ));
-                            GuiSystem.open(p, gui);
+                            guis().open(p, gui);
                         }
                 )
                 .add(
@@ -100,11 +101,11 @@ public class SetupGuiCommand extends Command {
                             gui.setListener(filterInt(
                                     (pl, i) -> {
                                         arena.setMaxPlayers(i);
-                                        GuiSystem.back(pl);
+                                        guis().back(pl);
                                     },
                                     i -> i >= 2
                             ));
-                            GuiSystem.open(p, gui);
+                            guis().open(p, gui);
                         }
                 )
                 .add(
@@ -116,19 +117,19 @@ public class SetupGuiCommand extends Command {
                         p -> {
                             Gui gui = editSpawnsGui(arena);
                             if(gui != null)
-                                GuiSystem.open(p, gui);
+                                guis().open(p, gui);
                             else
                                 player.sendMessage(RED + "Too many spawns for a gui, use command-based editing instead");
                         }
                 ).build();
-        GuiSystem.open(player, g);
+        guis().open(player, g);
     }
 
     public Gui editSpawnsGui(Arena arena) {//TODO page-based displaying
         List<Location> locs = arena.getSpawns();
         if(locs.size() > (GuiSize.DOUBLE.size() - 2))
             return null;
-        ChestGui gui = new ChestGui(null, null, GuiSize.min(locs.size() + 2), arena.getId() + "'s Spawns");
+        ChestGui gui = new ChestGui(GuiSize.min(locs.size() + 2), arena.getId() + "'s Spawns");
 
         boolean sameWorld = true;
         if(locs.size() > 0){
@@ -153,7 +154,7 @@ public class SetupGuiCommand extends Command {
                                     "Spawn " + i,
                                     String.valueOf(AQUA) + world + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ()
                             ),
-                            p -> GuiSystem.change(p, editSpawnGui(locs, index, pl -> GuiSystem.change(pl, editSpawnsGui(arena))))
+                            p -> guis().change(p, editSpawnGui(locs, index, pl -> guis().change(pl, editSpawnsGui(arena))))
                     )
             );
             i++;
@@ -164,7 +165,7 @@ public class SetupGuiCommand extends Command {
                         GuiUtil.wool(DyeColor.GREEN, "Add"),
                         p -> {
                             locs.add(p.getLocation());
-                            GuiSystem.change(p, editSpawnsGui(arena));
+                            guis().change(p, editSpawnsGui(arena));
                         }
                 )
         );
@@ -182,7 +183,7 @@ public class SetupGuiCommand extends Command {
                                 "Teleport",
                                 AQUA + "To " + loc.getWorld().getName() + ":" + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ()),
                         p -> {
-                            GuiSystem.close(p);
+                            guis().close(p);
                             p.sendMessage(AQUA + "Teleporting...");
                             p.teleport(loc);
                         }
@@ -194,7 +195,7 @@ public class SetupGuiCommand extends Command {
                         ),
                         p -> {//TODO add confirm
                             list.set(index, p.getLocation());
-                            GuiSystem.change(p, editSpawnGui(list, index, previous));
+                            guis().change(p, editSpawnGui(list, index, previous));
                         }
                 )
                 .add(
