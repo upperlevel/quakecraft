@@ -10,6 +10,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardView;
+import xyz.upperlevel.uppercore.placeholder.SimplePlaceholderRegistry;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,9 +60,15 @@ public class GameBoard extends Board {
 
         @Override
         public List<String> render(Player player, PlaceholderRegistry session) {
-            return phase.getRanking().stream()
-                    .map(p -> text.resolve(player, session))
+            List<String> result = phase.getRanking().stream()
+                    .map(participant -> text.resolve(player, PlaceholderRegistry.create()
+                            .set("player_name", participant.getName())
+                            .set("kills", participant.getKills())))
                     .collect(Collectors.toList());
+            if (size >= 0)
+                return result.subList(0, Math.min(size, result.size()));
+            else
+                return result;
         }
     }
 }
