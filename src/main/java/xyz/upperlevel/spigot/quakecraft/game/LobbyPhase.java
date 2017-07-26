@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
+import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
@@ -24,6 +25,8 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
     }
 
     private void setup(Player player) {
+        PlayerUtil.clearInventory(player);
+        PlayerUtil.restore(player);
         player.teleport(game.getArena().getLobby());
         player.setGameMode(GameMode.ADVENTURE);
     }

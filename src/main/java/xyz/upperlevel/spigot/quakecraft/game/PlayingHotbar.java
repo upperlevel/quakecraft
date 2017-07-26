@@ -12,6 +12,7 @@ import xyz.upperlevel.uppercore.gui.Icon;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.itemstack.ItemResolver;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
@@ -34,6 +35,12 @@ public class PlayingHotbar extends Hotbar {
             CustomItem item = quake.getSelectedCase().getItem();
             item.setDisplayName(name);
             item.setLore(lore);
+            item.setPlaceholders(PlaceholderRegistry.create()
+                    .set("case", quake.getSelectedCase().getName().resolve(player))
+                    .set("laser", quake.getSelectedLaser().getName().resolve(player))
+                    .set("barrel", quake.getSelectedBarrel().getName().resolve(player))
+                    .set("muzzle", quake.getSelectedMuzzle().getName().resolve(player))
+                    .set("trigger", quake.getSelectedTrigger().getName().resolve(player)));
             return item.resolve(player);
         }
 

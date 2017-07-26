@@ -1,7 +1,7 @@
 gun:
   slot: 0
   item:
-    name: '&7%gun%'
+    name: '&7Railgun'
     lore:
     - '&7Case: &a%case%'
     - '&7Laser: &a%laser%'

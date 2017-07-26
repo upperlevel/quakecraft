@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
+import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.Uppercore;
@@ -77,6 +78,8 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     private void setup(Player player) {
+        PlayerUtil.clearInventory(player);
+        PlayerUtil.restore(player);
         // HOTBAR
         if (hotbar != null)
             hotbars().view(player).addHotbar(hotbar);

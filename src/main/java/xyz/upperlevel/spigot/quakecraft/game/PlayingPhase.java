@@ -16,6 +16,7 @@ import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
+import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
@@ -94,7 +95,6 @@ public class PlayingPhase implements Phase, Listener {
         e.getLocation().getWorld().spawnParticle(Particle.DRIP_LAVA, e.getLocation(), 25);
     }
 
-
     public static final double LASER_BLOCKS_PER_TICK = 5;
     public static final double LASER_BLOCKS_INTERVAL = 0.25;
 
@@ -169,15 +169,8 @@ public class PlayingPhase implements Phase, Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        Player player = e.getEntity();
-
-        if (!game.equals(get().getGameManager().getGame(player)))
-            return;
-
-        QuakePlayerManager.get().getPlayer(player).deaths++;
-        parent.getParticipant(player).deaths++;
-
-        e.getEntity().spigot().respawn();
+        QuakePlayerManager.get().getPlayer(e.getEntity()).deaths++;
+        parent.getParticipant(e.getEntity()).deaths++;
         e.setDeathMessage(null);
     }
 

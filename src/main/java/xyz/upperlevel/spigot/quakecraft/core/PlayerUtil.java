@@ -15,6 +15,12 @@ public final class PlayerUtil {
         player.saveData();
     }
 
+    public static void restore(Player player) {
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+    }
+
     public static void playSound(Player player, Sound sound) {
         player.playSound(player.getLocation(), sound, 0f, 100f);
     }

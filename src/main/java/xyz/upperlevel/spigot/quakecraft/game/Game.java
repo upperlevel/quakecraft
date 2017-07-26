@@ -9,11 +9,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
+import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 
@@ -98,29 +102,30 @@ public class Game implements Listener {
         players.forEach(player -> player.sendMessage(msg));
     }
 
-    // --- EVENTS
-
-    // no damage
-    // void damage -> kill
-
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        if (isPlaying(e.getPlayer()))
+        if (players.contains(e.getPlayer()))
             leave(e.getPlayer());
     }
 
+    // PLAYER HEALTH
+
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        e.setCancelled(true);
-        if (!(e.getEntity() instanceof Player))
-            return;
-        if (!players.contains(e.getEntity()))
-            return;
-        if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
-            ((Player) e.getEntity()).setHealth(0);
+        if (e.getEntity() instanceof Player && players.contains(e.getEntity())) {
+            e.setCancelled(true);
+            if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
+                ((Player) e.getEntity()).setHealth(0);
+        }
     }
 
-    // no pickup/drop items
+    @EventHandler
+    public void onFood(FoodLevelChangeEvent e) {
+        if (e.getEntity() instanceof Player && players.contains(e.getEntity()))
+            e.setCancelled(true);
+    }
+
+    // ITEM INTERACT
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
@@ -134,7 +139,14 @@ public class Game implements Listener {
             e.setCancelled(true);
     }
 
-    // an arena cannot be destroyed
+    // WORLD INTERACT
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        if (players.contains(e.getPlayer())) {
+            e.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
@@ -147,6 +159,14 @@ public class Game implements Listener {
         if (players.contains(e.getPlayer())) {
             e.setCancelled(true);
             e.setBuild(false);
+        }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+        if (players.contains(e.getEntity())) {
+            e.setKeepInventory(true);
+            e.getEntity().spigot().respawn();
         }
     }
 }
