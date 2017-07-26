@@ -3,17 +3,15 @@ package xyz.upperlevel.spigot.quakecraft.shop.gun;
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
+public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
 
     public MuzzleManager(PurchaseRegistry registry) {
         super(registry);
@@ -51,7 +49,7 @@ public class MuzzleManager extends PurchaseManager<MuzzleManager.Muzzle> {
 
 
     @Getter
-    public class Muzzle extends Purchase<Muzzle> {
+    public class Muzzle extends SimplePurchase<Muzzle> {
         private final List<Particle> particles;
 
 

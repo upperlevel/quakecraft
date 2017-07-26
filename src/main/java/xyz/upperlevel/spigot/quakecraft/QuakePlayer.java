@@ -2,9 +2,13 @@ package xyz.upperlevel.spigot.quakecraft;
 
 import lombok.Data;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.shop.*;
+import xyz.upperlevel.spigot.quakecraft.shop.KillSoundManager;
+import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.spigot.quakecraft.shop.armor.*;
+import xyz.upperlevel.spigot.quakecraft.shop.dash.DashCooldownManager;
+import xyz.upperlevel.spigot.quakecraft.shop.dash.DashPowerManager;
 import xyz.upperlevel.spigot.quakecraft.shop.gun.*;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,6 +37,9 @@ public class QuakePlayer {
     private HatManager.Hat selectedHat;
 
     private KillSoundManager.KillSound selectedKillSound;
+
+    private DashPowerManager.DashPower selectedDashPower;
+    private DashCooldownManager.DashCooldown selectedDashCooldown;
     
     public QuakePlayer(Player player) {
         this.player = player;

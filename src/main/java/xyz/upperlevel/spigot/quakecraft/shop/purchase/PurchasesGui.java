@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.purchase;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +29,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
+public class PurchasesGui<P extends SimplePurchase<P>> extends ChestGui {
     private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     private final int usableSlots[];
     private final PurchaseManager<P> purchaseManager;
@@ -40,21 +40,21 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
     @Setter
     private boolean enchantSelected = true;
 
-    public PurchasesGui(Plugin plugin, String id, int size, String title, PurchaseManager<P> manager, int[] usableSlots) {
-        super(plugin, id, size, title);
+    public PurchasesGui(int size, String title, PurchaseManager<P> manager, int[] usableSlots) {
+        super(size, title);
         this.purchaseManager = manager;
         this.usableSlots = usableSlots;
     }
 
-    public PurchasesGui(Plugin plugin, String id, InventoryType type, String title, PurchaseManager<P> manager, int[] usableSlots) {
-        super(plugin, id, type, title);
+    public PurchasesGui(InventoryType type, String title, PurchaseManager<P> manager, int[] usableSlots) {
+        super(type, title);
         this.purchaseManager = manager;
         this.usableSlots = usableSlots;
     }
 
     @SuppressWarnings("unchecked")
-    protected PurchasesGui(Plugin plugin, String id, Config config, PurchaseManager<P> purchaseManager) {
-        super(plugin, id, config);
+    protected PurchasesGui(Plugin plugin, Config config, PurchaseManager<P> purchaseManager) {
+        super(plugin, config);
         this.purchaseManager = purchaseManager;
         this.usableSlots = config.getCollectionRequired("slots").stream().mapToInt(o -> {
             if (o instanceof Number)
@@ -119,7 +119,7 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
 
     public void onClick(Player player, int slot, P purchase) {
         QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
-        Set<Purchase<?>> purchases = p.getPurchases();
+        Set<SimplePurchase<?>> purchases = p.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test
             if(purchase.getRequires().stream().anyMatch(r -> !r.test(p)))
@@ -209,9 +209,9 @@ public class PurchasesGui<P extends Purchase<P>> extends ChestGui {
         dirty = true;
     }
 
-    public static <P extends Purchase<P>> PurchasesGui<P> deserialize(Plugin plugin, String id, Config config, PurchaseManager<P> purchaseManager) {
+    public static PurchaseGui deserialize(Plugin plugin, String id, Config config, PurchaseManager purchaseManager) {
         try {
-            return new PurchasesGui<>(plugin, id, config, purchaseManager);
+            return new PurchaseGui(plugin, config, purchaseManager);
         } catch (InvalidConfigurationException e) {
             e.addLocalizer("in gui " + id);
             throw e;

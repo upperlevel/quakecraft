@@ -1,22 +1,20 @@
 package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GunManager extends PurchaseManager<GunManager.Gun> {
+public class GunManager extends SinglePurchaseManager<GunManager.Gun> {
 
     private final GunCategory parent;
 
@@ -57,7 +55,7 @@ public class GunManager extends PurchaseManager<GunManager.Gun> {
 
 
     @Getter
-    public class Gun extends Purchase<Gun> {
+    public class Gun extends SimplePurchase<Gun> {
         private final BarrelManager.Barrel barrel;
         private final CaseManager.Case gcase;
         private final LaserManager.Laser laser;

@@ -1,6 +1,6 @@
 package xyz.upperlevel.spigot.quakecraft.shop.require;
 
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.require.impl.RequirePermission;
 import xyz.upperlevel.spigot.quakecraft.shop.require.impl.RequirePurchase;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
@@ -18,7 +18,7 @@ public class RequireSystem {
         registerDefaultFactory();
     }
 
-    public static Require load(Purchase parent, Map.Entry<String, Object> require) {
+    public static Require load(Purchase<?> parent, Map.Entry<String, Object> require) {
         RequireFactory factory = factories.get(require.getKey());
         if (factory == null)
             throw new InvalidConfigurationException("Cannot find require: '" + require.getKey() + "'!");
@@ -27,7 +27,7 @@ public class RequireSystem {
 
 
     @SuppressWarnings("unchecked")
-    public static List<Require> loadAll(Purchase parent, Object cnf) {
+    public static List<Require> loadAll(Purchase<?> parent, Object cnf) {
         if (cnf == null) return Collections.emptyList();
         if (!(cnf instanceof List))
             throw new InvalidConfigurationException("Cannot cast " + cnf.getClass().getSimpleName() + " to Require List!");
@@ -51,6 +51,6 @@ public class RequireSystem {
     }
 
     interface RequireFactory {
-        Require create(Purchase parent, Object parameter);
+        Require create(Purchase<?> parent, Object parameter);
     }
 }

@@ -1,6 +1,7 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.purchase;
 
 import lombok.Getter;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
 import xyz.upperlevel.spigot.quakecraft.shop.require.RequireSystem;
 import xyz.upperlevel.uppercore.config.Config;
@@ -16,24 +17,16 @@ public abstract class Purchase<T extends Purchase<T>> {
     private final String id;
     private final PlaceholderValue<String> name;
     private final float cost;
-    private final CustomItem icon;
     private final boolean def;
     private PlaceholderRegistry placeholders;
     private List<Require> requires;
 
-    public Purchase(PurchaseManager<T> manager, String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, List<Require> requires) {
+    public Purchase(PurchaseManager<T> manager, String id, PlaceholderValue<String> name, float cost, boolean def, List<Require> requires) {
         this.manager = manager;
         this.id = id;
         this.name = name;
         this.cost = cost;
-        this.icon = icon;
         this.def = def;
-
-        if (icon.getDisplayName() == null) {
-            icon.setDisplayName(name);
-            icon.setPlaceholders(placeholders);
-        }
-
         this.requires = requires;
     }
 
@@ -45,12 +38,17 @@ public abstract class Purchase<T extends Purchase<T>> {
         this.def = config.getBool("default", false);
         this.placeholders = PlaceholderRegistry.create();
         fillPlaceholderSession(placeholders);
-        this.icon = config.getCustomItemRequired("icon", placeholders);
         this.requires = RequireSystem.loadAll(this, config.get("requires"));
     }
+
+    public abstract CustomItem getIcon(QuakePlayer player);
 
     protected void fillPlaceholderSession(PlaceholderRegistry session) {
         session.set("cost", cost);
         session.set("name", name);
+    }
+
+    public boolean isSelected(QuakePlayer player) {
+        return manager.getSelected(player) == this;
     }
 }

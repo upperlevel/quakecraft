@@ -3,14 +3,12 @@ package xyz.upperlevel.spigot.quakecraft.shop.gun;
 import lombok.Getter;
 import org.bukkit.Color;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-public class LaserManager extends PurchaseManager<LaserManager.Laser> {
+public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
 
     public LaserManager(PurchaseRegistry registry) {
         super(registry);
@@ -48,7 +46,7 @@ public class LaserManager extends PurchaseManager<LaserManager.Laser> {
 
 
     @Getter
-    public class Laser extends Purchase<Laser> {
+    public class Laser extends SimplePurchase<Laser> {
         private final Color fireworkColor;
 
         protected Laser(String id, Config config) {

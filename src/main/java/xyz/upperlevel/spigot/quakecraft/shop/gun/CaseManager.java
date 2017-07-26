@@ -2,14 +2,13 @@ package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-public class CaseManager extends PurchaseManager<CaseManager.Case> {
+public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
     public CaseManager(PurchaseRegistry registry) {
         super(registry);
@@ -48,7 +47,7 @@ public class CaseManager extends PurchaseManager<CaseManager.Case> {
 
 
     @Getter
-    public class Case extends Purchase<Case> {
+    public class Case extends SimplePurchase<Case> {
         private final CustomItem item;
 
         protected Case(String id, Config config) {

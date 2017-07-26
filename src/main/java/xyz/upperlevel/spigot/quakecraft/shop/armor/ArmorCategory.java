@@ -3,12 +3,12 @@ package xyz.upperlevel.spigot.quakecraft.shop.armor;
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.shop.Category;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 
 import java.util.logging.Logger;
 
 @Getter
-public class ArmorCategory extends Category{
+public class ArmorCategory extends Category {
     private HatManager hats;
     private ChestplateManager chestplates;
     private LeggingManager leggings;

@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.purchase;
 
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 
@@ -17,14 +17,14 @@ public class PurchaseRegistry {
         return managersById.get(id);
     }
 
-    public Purchase getPurchase(String fullId) {
+    public Purchase<?> getPurchase(String fullId) {
         String[] parts = fullId.split(":");
         if(parts.length != 2)
             throw new IllegalArgumentException("Cannot parse '" + fullId + "' as a Purchase full id!");
         PurchaseManager manager = getManager(parts[0]);
         if(manager == null)
             throw new IllegalArgumentException("Cannot find manager '" + parts[0] + "' in '" + fullId + "'!");
-        Purchase p = manager.get(parts[1]);
+        Purchase<?> p = manager.get(parts[1]);
         if(p == null)
             throw new IllegalArgumentException("Cannot find purchase '" + parts[1] + "' in manager '" + parts[0] + "'!");
         return p;

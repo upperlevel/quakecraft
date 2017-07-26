@@ -3,7 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.shop.gun;
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.shop.Category;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 
 import java.util.logging.Logger;
 

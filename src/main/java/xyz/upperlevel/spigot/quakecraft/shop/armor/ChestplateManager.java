@@ -2,14 +2,13 @@ package xyz.upperlevel.spigot.quakecraft.shop.armor;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-public class ChestplateManager extends PurchaseManager<ChestplateManager.Chestplate> {
+public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.Chestplate> {
 
     public ChestplateManager(PurchaseRegistry registry) {
         super(registry);
@@ -46,7 +45,7 @@ public class ChestplateManager extends PurchaseManager<ChestplateManager.Chestpl
     }
 
     @Getter
-    public class Chestplate extends Purchase<Chestplate> {
+    public class Chestplate extends SimplePurchase<Chestplate> {
         private final CustomItem item;
 
         protected Chestplate(String id, Config config) {

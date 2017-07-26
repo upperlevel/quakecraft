@@ -1,8 +1,8 @@
 package xyz.upperlevel.spigot.quakecraft.shop.require.impl;
 
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
 
 public class RequirePurchase implements Require {
@@ -10,7 +10,7 @@ public class RequirePurchase implements Require {
     private String requiredId;
     private Purchase<?> required;//Lazy initialization to avoid initialization errors
 
-    public RequirePurchase(Purchase parent, Object par) {
+    public RequirePurchase(Purchase<?> parent, Object par) {
         this.parent = parent;
         this.requiredId = String.valueOf(par);
     }

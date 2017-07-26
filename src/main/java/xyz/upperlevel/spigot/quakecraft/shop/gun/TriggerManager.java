@@ -2,14 +2,12 @@ package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
+public class TriggerManager extends SinglePurchaseManager<TriggerManager.Trigger> {
 
     public TriggerManager(PurchaseRegistry registry) {
         super(registry);
@@ -47,7 +45,7 @@ public class TriggerManager extends PurchaseManager<TriggerManager.Trigger> {
 
 
     @Getter
-    public class Trigger extends Purchase<Trigger> {
+    public class Trigger extends SimplePurchase<Trigger> {
         private final double firingSpeed;
 
         protected Trigger(String id, Config config) {

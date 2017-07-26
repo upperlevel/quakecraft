@@ -2,14 +2,13 @@ package xyz.upperlevel.spigot.quakecraft.shop.armor;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-public class BootManager extends PurchaseManager<BootManager.Boot> {
+public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
 
     public BootManager(PurchaseRegistry registry) {
         super(registry);
@@ -46,7 +45,7 @@ public class BootManager extends PurchaseManager<BootManager.Boot> {
     }
 
     @Getter
-    public class Boot extends Purchase<BootManager.Boot> {
+    public class Boot extends SimplePurchase<Boot> {
         private final CustomItem item;
 
         protected Boot(String id, Config config) {

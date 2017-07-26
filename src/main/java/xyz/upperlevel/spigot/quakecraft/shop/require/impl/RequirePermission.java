@@ -1,13 +1,13 @@
 package xyz.upperlevel.spigot.quakecraft.shop.require.impl;
 
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
 
 public class RequirePermission implements Require {
     private String permission;
 
-    public RequirePermission(Purchase parent, Object par) {
+    public RequirePermission(Purchase<?> parent, Object par) {
         this.permission = String.valueOf(par);
     }
 

@@ -1,0 +1,18 @@
+title: 'Dash Upgrades'
+size: 54
+icons:
+- slot: 48
+  item:
+    type: 'arrow'
+    name: '&aGo Back'
+  click:
+    actions:
+    - 'gui-back'
+
+power-slots: [
+  11, 12, 13, 14, 15,
+]
+
+cooldown-slots: [
+  29, 30, 31, 32, 33
+]

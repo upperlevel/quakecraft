@@ -3,7 +3,9 @@ package xyz.upperlevel.spigot.quakecraft.shop;
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.shop.armor.ArmorCategory;
+import xyz.upperlevel.spigot.quakecraft.shop.dash.DashCategory;
 import xyz.upperlevel.spigot.quakecraft.shop.gun.GunCategory;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 
 import java.util.logging.Logger;
 
@@ -14,12 +16,15 @@ public class ShopCategory extends Category {
     private ArmorCategory armors;
     private KillSoundManager killSounds;
 
+    private DashCategory dashes;
+
     public ShopCategory() {
         super(new PurchaseRegistry());
 
         guns = new GunCategory(registry);
         armors = new ArmorCategory(registry);
         killSounds = new KillSoundManager(registry);
+        dashes = new DashCategory(registry);
     }
 
     public void load() {
@@ -33,6 +38,7 @@ public class ShopCategory extends Category {
         guns.load();
         armors.load();
         killSounds.load();
+        dashes.load();
 
         logger.info("Shop loaded successfully");
     }

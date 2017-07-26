@@ -4,7 +4,7 @@ blaze-death:
   icon:
     type: 'BLAZE_ROD'
     lore:
-    - '&Play Blaze Death sound'
+    - '&7Play Blaze Death sound'
     - 'effect on kill!'
 
 horse-death:
@@ -13,7 +13,7 @@ horse-death:
   icon:
     type: 'SADDLE'
     lore:
-    - '&Play Horse Death sound'
+    - '&7Play Horse Death sound'
     - 'effect on kill!'
   item:
     type: 'SADDLE'
@@ -24,7 +24,7 @@ bat-death:
   icon:
     type: 'FEATHER'
     lore:
-    - '&Play Bat Death sound'
+    - '&7Play Bat Death sound'
     - 'effect on kill!'
 
 enderman-death:
@@ -33,7 +33,7 @@ enderman-death:
   icon:
     type: 'ENDER_PEARL'
     lore:
-    - '&Play Enderman Death sound'
+    - '&7Play Enderman Death sound'
     - 'effect on kill!'
 
 golem-death:
@@ -42,7 +42,7 @@ golem-death:
   icon:
     type: 'IRON_BLOCK'
     lore:
-    - '&Play Golem Death sound'
+    - '&7Play Golem Death sound'
     - 'effect on kill!'
 
 pig-death:
@@ -51,7 +51,7 @@ pig-death:
   icon:
     type: 'PORK'
     lore:
-    - '&Play Pig Death sound'
+    - '&7Play Pig Death sound'
     - 'effect on kill!'
 
 cow-hurt:
@@ -60,7 +60,7 @@ cow-hurt:
   icon:
     type: 'LEATHER'
     lore:
-    - '&Play Cow Hurt sound'
+    - '&7Play Cow Hurt sound'
     - 'effect on kill!'
 
 cow-hurt:
@@ -69,7 +69,7 @@ cow-hurt:
   icon:
     type: 'SULPHUR'
     lore:
-    - '&Play Creeper Death sound'
+    - '&7Play Creeper Death sound'
     - 'effect on kill!'
 
 
@@ -79,7 +79,7 @@ anvil-land:
   icon:
     type: 'ANVIL'
     lore:
-    - '&Play Anvil Land sound'
+    - '&7Play Anvil Land sound'
     - 'effect on kill!'
 
 ghast-death:
@@ -88,7 +88,7 @@ ghast-death:
   icon:
     type: 'GHAST_TEAR'
     lore:
-    - '&Play Ghast Death sound'
+    - '&7Play Ghast Death sound'
     - 'effect on kill!'
 
 ghast-death:
@@ -106,7 +106,7 @@ villager-mhm:
   icon:
     type: 'EMERALD'
     lore:
-    - '&Play Villager MHM sound'
+    - '&7Play Villager MHM sound'
     - 'effect on kill!'
 
 wither:
@@ -124,7 +124,7 @@ level-up:
   icon:
     type: 'EXP_BOTTLE'
     lore:
-    - '&Play Level Up sound'
+    - '&7Play Level Up sound'
     - 'effect on kill!'
 
 zombie-destroy:
@@ -133,5 +133,5 @@ zombie-destroy:
   icon:
     type: 'ROTTEN_FLESH'
     lore:
-    - '&Play Zombie Destroy sound'
+    - '&7Play Zombie Destroy sound'
     - 'effect on kill!'

@@ -4,14 +4,15 @@ import lombok.Getter;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
-import xyz.upperlevel.uppercore.util.CSound;
+import xyz.upperlevel.uppercore.sound.CompatibleSound;
 
 import java.util.Map;
 
-public class KillSoundManager extends PurchaseManager<KillSoundManager.KillSound> {
+public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.KillSound> {
 
     public KillSoundManager(PurchaseRegistry registry) {
         super(registry);
@@ -47,7 +48,7 @@ public class KillSoundManager extends PurchaseManager<KillSoundManager.KillSound
         return "kill sound";
     }
 
-    public class KillSound extends Purchase<KillSound> {
+    public class KillSound extends SimplePurchase<KillSound> {
         @Getter
         private final Sound sound;
         @Getter
@@ -69,7 +70,7 @@ public class KillSoundManager extends PurchaseManager<KillSoundManager.KillSound
                 this.pitch = s.getFloat("pitch", -1.0f);
                 this.volume = s.getFloat("volume", -1.0f);
             } else {
-                this.sound = CSound.get(obj.toString());
+                this.sound = CompatibleSound.get(obj.toString());
                 this.pitch = -1.0f;
                 this.volume = -1.0f;
             }

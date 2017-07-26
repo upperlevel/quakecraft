@@ -2,14 +2,13 @@ package xyz.upperlevel.spigot.quakecraft.shop.armor;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-public class LeggingManager extends PurchaseManager<LeggingManager.Legging> {
+public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging> {
 
     public LeggingManager(PurchaseRegistry registry) {
         super(registry);
@@ -46,7 +45,7 @@ public class LeggingManager extends PurchaseManager<LeggingManager.Legging> {
     }
 
     @Getter
-    public class Legging extends Purchase<Legging> {
+    public class Legging extends SimplePurchase<Legging> {
         private final CustomItem item;
 
         protected Legging(String id, Config config) {

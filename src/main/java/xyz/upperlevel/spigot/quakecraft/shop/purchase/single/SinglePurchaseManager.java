@@ -1,54 +1,31 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.purchase.single;
 
 import com.google.common.collect.Maps;
-import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseGui;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseManager;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.gui.GuiId;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
 
-public abstract class PurchaseManager<P extends Purchase<P>> {
-    @Getter
-    private final PurchaseRegistry registry;
-    private Map<String, P> purchases = new LinkedHashMap<>();
-    @Getter
-    private PurchasesGui<P> gui;
-    private P def;
-
-    public PurchaseManager(PurchaseRegistry registry) {
-        this.registry = registry;
-        if(registry != null)
-            registry.register(this);
+public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends PurchaseManager<P> {
+    public SinglePurchaseManager(PurchaseRegistry registry) {
+        super(registry);
     }
-
-    public void add(P item) {
-        purchases.put(item.getId(), item);
-        if(item.isDef()) {
-            if(def != null)
-                QuakeCraftReloaded.get().getLogger().warning("Multiple default values in " + getPurchaseName());
-            def = item;
-        }
-        if(gui != null)
-            gui.setDirty();
-    }
-
-    public Map<String, P> getPurchases() {
-        return Collections.unmodifiableMap(purchases);
-    }
-
-    public abstract P deserialize(String id, Config config);
 
     public abstract String getGuiLoc();
 
@@ -97,46 +74,26 @@ public abstract class PurchaseManager<P extends Purchase<P>> {
     }
 
 
-    public void loadGui(Config config, String id) {
-        gui = PurchasesGui.deserialize(QuakeCraftReloaded.get(), id, config, this);
-        QuakeCraftReloaded.get().getGuis().register(gui.getId(), gui);
+    public void loadGui(Plugin plugin, String id, Config config) {
+        PurchaseGui gui = PurchaseGui.deserialize(QuakeCraftReloaded.get(), id, config, this);
+        setGui(gui);
+        QuakeCraftReloaded.get().getGuis().register(new GuiId(plugin, id, gui));
     }
 
-    public void loadGui() {
+    public void loadGui(Plugin plugin) {
+        String guiLoc = getGuiLoc();
+        if(guiLoc == null)
+            return;
         File file = new File(
                 QuakeCraftReloaded.get().getDataFolder(),
-                "guis" + File.separator + getGuiLoc() + ".yml"
+                "guis" + File.separator + guiLoc + ".yml"
         );
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        loadGui(Config.wrap(config), file.getName().replaceFirst("[.][^.]+$", ""));
+        loadGui(plugin, file.getName().replaceFirst("[.][^.]+$", ""), Config.wrap(config));
     }
 
     public void load() {
         loadConfig();
-        loadGui();
-    }
-
-    public boolean tryLoad() {
-        try {
-            load();
-        } catch (InvalidConfigurationException e) {
-            QuakeCraftReloaded.get().getLogger().severe(e.getErrorMessage("Error"));
-            return false;
-        }
-        return true;
-    }
-
-    public abstract void setSelected(QuakePlayer player, P purchase);
-
-    public abstract P getSelected(QuakePlayer player);
-
-    public abstract String getPurchaseName();
-
-    public P get(String name) {
-        return purchases.get(name);
-    }
-
-    public P getDefault() {
-        return def;
+        loadGui(QuakeCraftReloaded.get());
     }
 }

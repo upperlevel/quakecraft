@@ -2,14 +2,13 @@ package xyz.upperlevel.spigot.quakecraft.shop.armor;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-public class HatManager extends PurchaseManager<HatManager.Hat> {
+public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
     public HatManager(PurchaseRegistry registry) {
         super(registry);
@@ -46,7 +45,7 @@ public class HatManager extends PurchaseManager<HatManager.Hat> {
     }
 
     @Getter
-    public class Hat extends Purchase<Hat> {
+    public class Hat extends SimplePurchase<Hat> {
         private final CustomItem item;
 
         protected Hat(String id, Config config) {
