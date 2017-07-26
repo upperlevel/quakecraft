@@ -74,7 +74,7 @@ public class ArenaSetupGuiCommand extends Command {
                         () -> GuiUtil.itemStack(
                                 Material.STONE_SLAB2,
                                 "Min players",
-                                AQUA + String.valueOf(arena.getMinPlayers())
+                                AQUA + (arena.getMinPlayers() > 0 ? String.valueOf(arena.getMinPlayers()) : "")
                         ),
                         p -> {
                             AnvilGui gui = new AnvilGui();
@@ -93,7 +93,7 @@ public class ArenaSetupGuiCommand extends Command {
                         () -> GuiUtil.itemStack(
                                 Material.RED_SANDSTONE,
                                 "Max players",
-                                AQUA + String.valueOf(arena.getMaxPlayers())
+                                AQUA + (arena.getMaxPlayers() > 0 ? String.valueOf(arena.getMaxPlayers()) : "")
                         ),
                         p -> {
                             AnvilGui gui = new AnvilGui();
