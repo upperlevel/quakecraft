@@ -12,6 +12,7 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.gui.*;
 import xyz.upperlevel.uppercore.gui.link.Link;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -129,7 +130,7 @@ public class ArenaSetupGuiCommand extends Command {
         List<Location> locs = arena.getSpawns();
         if(locs.size() > (GuiSize.DOUBLE.size() - 2))
             return null;
-        ChestGui gui = new ChestGui(GuiSize.min(locs.size() + 2), arena.getId() + "'s Spawns");
+        ChestGui gui = new ChestGui(GuiSize.min(locs.size() + 2), PlaceholderValue.fake(arena.getId() + "'s Spawns"));
 
         boolean sameWorld = true;
         if(locs.size() > 0){

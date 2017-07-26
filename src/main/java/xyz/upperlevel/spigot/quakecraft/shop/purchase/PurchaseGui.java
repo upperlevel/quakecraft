@@ -3,6 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.shop.purchase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,6 +23,8 @@ import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
+import xyz.upperlevel.uppercore.gui.GuiAction;
+import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
@@ -41,11 +44,11 @@ public class PurchaseGui extends ChestGui {
     @Setter
     private boolean enchantSelected = true;
 
-    public PurchaseGui(int size, String title) {
+    public PurchaseGui(int size, PlaceholderValue<String> title) {
         super(size, title);
     }
 
-    public PurchaseGui(InventoryType type, String title) {
+    public PurchaseGui(InventoryType type, PlaceholderValue<String> title) {
         super(type, title);
     }
 
@@ -117,14 +120,23 @@ public class PurchaseGui extends ChestGui {
                 QuakeCraftReloaded.get().getLogger().severe("Economy not found!");
                 return;
             }
-            if (b.take(purchase.getCost())) {
-                purchases.add(purchase);
-                p.getPurchases().add(purchase);
-                reloadSelection(p, slot, purchase);
-            } else
-                PlayerUtil.playSound(player, Sound.BLOCK_ANVIL_BREAK);
+            if (b.has(purchase.getCost())) {
+                QuakeCraftReloaded.get().openConfirmPurchase(
+                        player,
+                        purchase,
+                        ((Link) n -> onPurchaseSucceed(p, purchase)).and(GuiAction.back()),
+                        GuiAction.back()
+                );
+            } else {
+                PlayerUtil.playSound(player, Sound.BLOCK_ANVIL_BREAK);//TODO 1.8 compatibility
+                player.sendMessage(ChatColor.RED + "You don't have enough money");
+            }
         } else
             reloadSelection(p, slot, purchase);
+    }
+
+    public void onPurchaseSucceed(QuakePlayer player, Purchase purchase) {
+        player.getPurchases().add(purchase);
     }
 
     protected ItemStack getIcon(Purchase<?> purchase, QuakePlayer player, boolean selected) {
