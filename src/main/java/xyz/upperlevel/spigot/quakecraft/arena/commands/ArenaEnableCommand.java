@@ -7,11 +7,13 @@ import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
-
-import static org.bukkit.ChatColor.GREEN;
-import static org.bukkit.ChatColor.RED;
+import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.message.MessageManager;
 
 public class ArenaEnableCommand extends Command {
+    private static Message NOT_READY;
+    private static Message ALREADY_ENABLED;
+    private static Message SUCCESS;
 
     public ArenaEnableCommand() {
         super("enable");
@@ -21,14 +23,21 @@ public class ArenaEnableCommand extends Command {
     @Executor
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
         if (!arena.isReady()) {
-            sender.sendMessage(RED + "The arena \"" + arena.getId() + "\" is not ready.");
+            NOT_READY.send(sender, "arena", arena.getId());
             return;
         }
         if (QuakeCraftReloaded.get().getGameManager().getGame(arena) != null) {
-            sender.sendMessage(RED + "The arena \"" + arena.getId() + "\" has already been enabled.");
+            ALREADY_ENABLED.send(sender, "arena", arena.getId());
             return;
         }
         QuakeCraftReloaded.get().getGameManager().addGame(new Game(arena));
-        sender.sendMessage(GREEN + "Arena \"" + arena.getId() + "\" enabled successfully.");
+        SUCCESS.send(sender, "arena", arena.getId());
+    }
+
+    public static void loadConfig() {
+        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.enable");
+        NOT_READY = manager.get("arena-not-ready");
+        ALREADY_ENABLED = manager.get("arena-already-enabled");
+        SUCCESS = manager.get("success");
     }
 }

@@ -18,8 +18,22 @@ public class ArenaCommand extends NodeCommand {
         register(new ArenaSetLobbyCommand());
         register(new ArenaSetNameCommand());
         register(new ArenaSetupGuiCommand());
+        register(new SetKillsToWinCommand());
 
         setDescription("Commands for arena editing.");
         addAlias("map");
+    }
+
+    public static void loadConfig() {
+        ArenaAddSpawnCommand.loadConfig();
+        ArenaCreateCommand.loadConfig();
+        ArenaDeleteCommand.loadConfig();
+        ArenaDisableCommand.loadConfig();
+        ArenaEnableCommand.loadConfig();
+        ArenaListCommand.loadConfig();
+        ArenaSetLimitsCommand.loadConfig();
+        ArenaSetLobbyCommand.loadConfig();
+        ArenaSetNameCommand.loadConfig();
+        SetKillsToWinCommand.loadConfig();
     }
 }

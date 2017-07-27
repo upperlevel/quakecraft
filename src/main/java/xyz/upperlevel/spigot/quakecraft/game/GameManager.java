@@ -32,8 +32,8 @@ public class GameManager {
     }
 
     public Game removeGame(Arena arena) {
-        Game game;
-        if ((game = gamesByArena.remove(arena)) != null) {
+        Game game = gamesByArena.remove(arena);
+        if(game != null) {
             games.remove(game);
             game.stop();
         }

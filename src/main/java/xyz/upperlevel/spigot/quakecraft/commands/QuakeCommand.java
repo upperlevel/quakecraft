@@ -17,4 +17,10 @@ public class QuakeCommand extends NodeCommand implements CommandExecutor {
         setDescription("Main commands of QuakeReloaded plugin.");
         addAliases("quakecraft", "quakecraftreloaded");
     }
+
+    public static void loadConfig() {
+        JoinGameCommand.loadConfig();
+        LeaveGameCommand.loadConfig();
+        ArenaCommand.loadConfig();
+    }
 }

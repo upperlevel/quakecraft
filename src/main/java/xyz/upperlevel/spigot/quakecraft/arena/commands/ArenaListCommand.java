@@ -5,12 +5,18 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.message.MessageManager;
 
-import java.util.StringJoiner;
-
-import static org.bukkit.ChatColor.*;
+import java.util.Collection;
 
 public class ArenaListCommand extends Command {
+    private static Message HEADER;
+    private static Message LINE_ENABLED;
+    private static Message LINE_DISABLED;
+    private static Message LINE_UNREADY;
+    private static Message FOOTER;
+    private static Message EMPTY;
 
     public ArenaListCommand() {
         super("list");
@@ -19,12 +25,33 @@ public class ArenaListCommand extends Command {
 
     @Executor
     public void run(CommandSender sender) {
-        StringJoiner list = new StringJoiner(GRAY + ", ");
-        for (Arena arena : QuakeCraftReloaded.get().getArenaManager().getArenas())
-            list.add((QuakeCraftReloaded.get().getGameManager().getGame(arena) != null ? GREEN : RED) + "" + (arena.isReady() ? "" : STRIKETHROUGH) + arena.getId());
-        if (list.length() > 0)
-            sender.sendMessage(GOLD + "List of all arenas created: " + list.toString());
-        else
-            sender.sendMessage(RED + "No arena found.");
+        Collection<Arena> list = QuakeCraftReloaded.get().getArenaManager().getArenas();
+
+        if (list.size() > 0) {
+            HEADER.send(sender, "arenas", String.valueOf(list.size()));
+            for(Arena arena : list) {
+                Message message;
+                if(QuakeCraftReloaded.get().getGameManager().getGame(arena) != null)
+                    message = LINE_ENABLED;
+                else if(arena.isReady())
+                    message = LINE_DISABLED;
+                else
+                    message = LINE_UNREADY;
+                message.send(sender, "arena", arena.getId());
+            }
+            FOOTER.send(sender);
+        } else
+            EMPTY.send(sender);
+    }
+
+    public static void loadConfig() {
+        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.list");
+        HEADER = manager.get("header");
+        MessageManager line = manager.getSection("line");
+        LINE_ENABLED = line.get("enabled");
+        LINE_DISABLED = line.get("disabled");
+        LINE_UNREADY = line.get("not-ready");
+        FOOTER = manager.get("footer");
+        EMPTY = manager.get("no-arena-found");
     }
 }

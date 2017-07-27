@@ -6,11 +6,12 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
-
-import static org.bukkit.ChatColor.GREEN;
-import static org.bukkit.ChatColor.RED;
+import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.message.MessageManager;
 
 public class ArenaDisableCommand extends Command {
+    private static Message ALREADY_DISABLED;
+    private static Message SUCCESS;
 
     public ArenaDisableCommand() {
         super("disable");
@@ -19,11 +20,16 @@ public class ArenaDisableCommand extends Command {
 
     @Executor
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
-        if (QuakeCraftReloaded.get().getGameManager().getGame(arena) == null) {
-            sender.sendMessage(RED + "The arena \"" + arena.getId() + "\" has already been disabled.");
+        if (QuakeCraftReloaded.get().getGameManager().removeGame(arena) == null) {
+            ALREADY_DISABLED.send(sender, "arena", arena.getId());
             return;
         }
-        QuakeCraftReloaded.get().getGameManager().removeGame(arena);
-        sender.sendMessage(GREEN + "The arena \"" + arena.getId() + "\" disabled successfully.");
+        SUCCESS.send(sender, "arena", arena.getId());
+    }
+
+    public static void loadConfig() {
+        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.disable");
+        ALREADY_DISABLED = manager.get("arena-already-disabled");
+        SUCCESS = manager.get("success");
     }
 }

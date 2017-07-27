@@ -6,11 +6,13 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
-
-import static org.bukkit.ChatColor.GREEN;
-import static org.bukkit.ChatColor.RED;
+import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.message.MessageManager;
 
 public class ArenaCreateCommand extends Command {
+    private static Message NAME_ALREADY_PRESENT;
+    private static Message INVALID_NAME;
+    private static Message SUCCESS;
 
     public ArenaCreateCommand() {
         super("create");
@@ -20,14 +22,21 @@ public class ArenaCreateCommand extends Command {
     @Executor
     public void run(CommandSender sender, @Argument("arena") String arenaId) {
         if (QuakeCraftReloaded.get().getArenaManager().getArena(arenaId) != null) {
-            sender.sendMessage(RED + "An arena with this name already exist.");
+            NAME_ALREADY_PRESENT.send(sender, "arena", arenaId);
             return;
         }
         if (!Arena.isValidName(arenaId)) {
-            sender.sendMessage(RED + "Arena name insert is invalid. It must contains only alphabetic or digit characters.");
+            INVALID_NAME.send(sender, "arena", arenaId);
             return;
         }
         QuakeCraftReloaded.get().getArenaManager().addArena(new Arena(arenaId));
-        sender.sendMessage(GREEN + "Arena created successfully, setup it!");
+        SUCCESS.send(sender, "arena", arenaId);
+    }
+
+    public static void loadConfig() {
+        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.create");
+        NAME_ALREADY_PRESENT = manager.get("name-already-present");
+        INVALID_NAME = manager.get("invalid-name");
+        SUCCESS = manager.get("success");
     }
 }

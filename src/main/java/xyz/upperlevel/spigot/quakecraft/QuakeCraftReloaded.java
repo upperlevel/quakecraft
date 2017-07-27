@@ -18,6 +18,7 @@ import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.GuiRegistry;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
+import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.board.BoardRegistry;
 
@@ -41,12 +42,16 @@ public class QuakeCraftReloaded extends JavaPlugin {
     private GuiRegistry guis;
     private HotbarRegistry hotbars;
 
+    private MessageManager messages;
+
     // confirm gui
     private ConfirmPurchaseGui.Options defConfirmOptions;
 
     @Override
     public void onEnable() {
         instance = this;
+
+        messages = MessageManager.load(this);
 
         saveDefaultConfig();
 
@@ -56,6 +61,9 @@ public class QuakeCraftReloaded extends JavaPlugin {
         gameManager = new GameManager();
 
         try {
+            //Load command messages
+            QuakeCommand.loadConfig();
+
             guis = new GuiRegistry(this);
             hotbars = new HotbarRegistry(this);
             boards =  new BoardRegistry(this);

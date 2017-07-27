@@ -1,0 +1,50 @@
+commands:
+  join:
+    already-playing:
+    - '&cYou are already playing! &6Use this command to quit the current game:\n'
+    - '&6/quake leave'
+    no-game-found: "&cCannot find game: '%game%'"
+    success: "&aThe game '%game%' has been joined successfully!"
+  leave:
+    not-playing: "&cYou are not in any arena"
+    success: "&aYou left the arena '%arena%'"
+  shop:
+    no-shop: "&cCannot find shop gui!"
+
+  arena:
+    add-spawn:
+      success: "&aSpawn added"
+    create:
+      name-already-present: "&cAn arena with this name already exist"
+      invalid-name: "&cInvalid name, it must only contain alphabetic or digit characters"
+      success: "&aArena created successfully, setup it!"
+    delete:
+      arena-not-found: "&cCannot find any arena named '%arena%'"
+      success: "&aArena deleted successfully!"
+    disable:
+      arena-already-disabled: "&cThe arena '%arena%' has already been disabled"
+      success: "&aArena '%arena%' disabled successfully!"
+    enable:
+      arena-not-ready: "&cThe arena '%arena%' isn't ready"
+      arena-already-enabled: "&cThe arena '%arena%' has already been enabled"
+      success: "&aArena '%arena%' enabled successfully!"
+    info:
+    list:
+      header: "&a--Found %arenas% arenas!--"
+      line:
+        enabled: "&b- %arena%"
+        disabled: "&c- %arena%"
+        not-ready: "&c- &m%arena%"
+      footer: [] #Empy list
+      no-arena-found: "&cNo arena found!"
+    set-limits:
+      min-more-max: "&cMax players limit cannot be higher than min players one"
+      success: "&aLimits set successfully"
+    set-lobby:
+      success: "&aLobby set successfully"
+    set-name:
+      success: "&aName set to '%name%' for arena '%arena%'"
+    set-kills-to-win:
+      negative-kills: "&c"
+      success: "&aKills to win set to '%kills%'' for arena '%arena%'"
+

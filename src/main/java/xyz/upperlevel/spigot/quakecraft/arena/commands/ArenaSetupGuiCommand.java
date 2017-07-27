@@ -179,6 +179,26 @@ public class ArenaSetupGuiCommand extends Command {
                                 lobbyLoc == null ? (RED + "Not set") : (AQUA + format(lobbyLoc, true))
                         ),
                         p -> {
+                            AnvilGui gui = new AnvilGui();
+                            gui.setMessage("kills");
+                            gui.setListener(filterInt(
+                                    (pl, i) -> {
+                                        arena.setKillsToWin(i);
+                                        pl.sendMessage(GREEN + "Arena's kills to win: '" + i + "'!");
+                                        guis().back(pl);
+                                    },
+                                    i -> i >= 2
+                            ));
+                            guis().open(p, gui);
+                        }
+                )
+                .add(
+                        () -> GuiUtil.itemStack(
+                                Material.GOLD_SWORD,
+                                "Kills to win",
+                                AQUA + (arena.getKillsToWin() > 0 ? String.valueOf(arena.getKillsToWin()) : (RED + "Not set"))
+                        ),
+                        p -> {
                             if(lobbyLoc == null) {
                                 arena.setLobby(p.getLocation());
                                 p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
