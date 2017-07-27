@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.shop;
+package xyz.upperlevel.spigot.quakecraft.shop.purchase;
 
 import com.google.common.primitives.Ints;
 import org.bukkit.ChatColor;
@@ -42,7 +42,7 @@ public class ConfirmPurchaseGui extends ChestGui {
         setIcon(options.confirmSlots, Icon.of(confirmItem, this::onBuy));
         setIcon(options.cancelSlots, Icon.of(cancelItem, onCancel));
 
-        placeholders.set("cost", purchase.getCost());
+        placeholders.set("cost", purchase.getCostFormatted());
         placeholders.set("item_id", purchase.getId());
     }
 

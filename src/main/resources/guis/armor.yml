@@ -52,3 +52,7 @@ icons:
   click:
     actions:
     - 'gui-back'
+- slot: 49
+  item:
+    type: 'emerald'
+    name: '&7Coins: &6%vault_eco_balance%'

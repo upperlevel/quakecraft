@@ -5,6 +5,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
 import xyz.upperlevel.spigot.quakecraft.shop.require.RequireSystem;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
@@ -44,8 +45,12 @@ public abstract class Purchase<T extends Purchase<T>> {
     public abstract CustomItem getIcon(QuakePlayer player);
 
     protected void fillPlaceholderSession(PlaceholderRegistry session) {
-        session.set("cost", cost);
+        session.set("cost", getCostFormatted());
         session.set("name", name);
+    }
+
+    public String getCostFormatted() {
+        return EconomyManager.format(cost);
     }
 
     public boolean isSelected(QuakePlayer player) {
