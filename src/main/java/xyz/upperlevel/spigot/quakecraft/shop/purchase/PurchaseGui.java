@@ -3,6 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.shop.purchase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,11 +13,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.EnchantGlow;
 import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
+import xyz.upperlevel.spigot.quakecraft.shop.event.PurchaseBuyEvent;
+import xyz.upperlevel.spigot.quakecraft.shop.event.PurchaseSelectEvent;
 import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
@@ -135,8 +139,20 @@ public class PurchaseGui extends ChestGui {
             reloadSelection(p, slot, purchase);
     }
 
+    @SuppressWarnings("unchecked")
     public void onPurchaseSucceed(QuakePlayer player, Purchase purchase) {
-        player.getPurchases().add(purchase);
+        PluginManager eventManager = Bukkit.getPluginManager();
+
+        PurchaseBuyEvent buyEvent = new PurchaseBuyEvent(player, purchase);
+        eventManager.callEvent(buyEvent);
+        if(!buyEvent.isCancelled()) {
+            player.getPurchases().add(purchase);
+
+            PurchaseManager purchaseManager = purchase.getManager();
+            PurchaseSelectEvent event = new PurchaseSelectEvent(player, purchaseManager.getSelected(player), purchase);
+            if(!event.isCancelled())
+                purchaseManager.setSelected(player, event.getPurchase());
+        }
     }
 
     protected ItemStack getIcon(Purchase<?> purchase, QuakePlayer player, boolean selected) {
@@ -223,9 +239,15 @@ public class PurchaseGui extends ChestGui {
 
     @SuppressWarnings("unchecked")
     protected void reloadSelection(QuakePlayer player, int slot, Purchase<?> sel) {
-        if(!sel.isSelected(player)) {
-            ((PurchaseManager)sel.getManager()).setSelected(player, sel);
-            printPurchases(player.getPlayer().getOpenInventory().getTopInventory(), player);
+        PurchaseManager purchaseManager = sel.getManager();
+        Purchase<?> old = purchaseManager.getSelected(player);
+        if(old != sel) {
+            PurchaseSelectEvent event = new PurchaseSelectEvent(player, old, sel);
+            Bukkit.getPluginManager().callEvent(event);
+            if(!event.isCancelled()) {
+                purchaseManager.setSelected(player, event.getPurchase());
+                printPurchases(player.getPlayer().getOpenInventory().getTopInventory(), player);
+            }
         }
     }
 

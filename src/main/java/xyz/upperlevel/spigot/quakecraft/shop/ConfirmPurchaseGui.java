@@ -20,7 +20,6 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class ConfirmPurchaseGui extends ChestGui {
     private Purchase<?> purchase;
@@ -49,10 +48,15 @@ public class ConfirmPurchaseGui extends ChestGui {
 
     @Override
     public Inventory create(Player player) {
-        placeholders.set("item_name", purchase.getName().resolve(player));
+        String purchaseName = purchase.getName().resolve(player);
+
+        placeholders.set("item_name", purchaseName);
         Inventory inv = super.create(player);
 
-        inv.setItem(itemSlot, purchase.getIcon(QuakeCraftReloaded.get().getPlayerManager().getPlayer(player)).resolve(player));
+        CustomItem item = purchase.getIcon(QuakeCraftReloaded.get().getPlayerManager().getPlayer(player));
+        item.setDisplayName(PlaceholderValue.fake(purchaseName));
+
+        inv.setItem(itemSlot, item.resolve(player));
 
         return inv;
     }
@@ -111,7 +115,7 @@ public class ConfirmPurchaseGui extends ChestGui {
                 confirmItem = confirm.getCustomItemRequired("item");
             }
             {
-                Config cancel = config.getConfig("confirm");
+                Config cancel = config.getConfig("cancel");
                 if(cancel.has("slot"))
                     cancelSlots = new int[]{cancel.getIntRequired("slot")};
                 else if(cancel.has("slots"))
