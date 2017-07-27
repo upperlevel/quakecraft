@@ -7,10 +7,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ArenaManager {
 
@@ -38,6 +35,10 @@ public class ArenaManager {
         Arena arena = arenasById.remove(id.toLowerCase());
         arenas.remove(arena);
         return arena;
+    }
+
+    public Map<String, Arena> getArenasById() {
+        return Collections.unmodifiableMap(arenasById);
     }
 
     public void load() {
