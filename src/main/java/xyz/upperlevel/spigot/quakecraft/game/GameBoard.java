@@ -2,20 +2,15 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import lombok.Getter;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.board.Board;
-import xyz.upperlevel.uppercore.board.BoardView;
-import xyz.upperlevel.uppercore.placeholder.SimplePlaceholderRegistry;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.bukkit.ChatColor.GREEN;
 
 @Getter
 public class GameBoard extends Board {
@@ -59,7 +54,7 @@ public class GameBoard extends Board {
         }
 
         @Override
-        public List<String> render(Player player, PlaceholderRegistry session) {
+        public List<String> render(Player player, PlaceholderRegistry placeholders) {
             List<String> result = phase.getRanking().stream()
                     .map(participant -> text.resolve(player, PlaceholderRegistry.create()
                             .set("player_name", participant.getName())

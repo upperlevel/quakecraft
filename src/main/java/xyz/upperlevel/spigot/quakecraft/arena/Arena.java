@@ -17,6 +17,7 @@ public class Arena {
     private final String id;
     private String name;
     private int minPlayers = -1, maxPlayers = -1;
+    private int killsToWin;
     private Location lobby;
     private List<Location> spawns = new ArrayList<>();
 
@@ -37,7 +38,7 @@ public class Arena {
     }
 
     public boolean isReady() {
-        return name != null && minPlayers > 0 && maxPlayers > 0 && lobby != null && spawns.size() > 0;
+        return name != null && minPlayers > 0 && maxPlayers > 0 && lobby != null && spawns.size() > 0 && killsToWin > 1;
     }
 
     public Game getStartable() {

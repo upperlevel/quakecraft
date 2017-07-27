@@ -21,7 +21,7 @@ public class ArenaListCommand extends Command {
     public void run(CommandSender sender) {
         StringJoiner list = new StringJoiner(GRAY + ", ");
         for (Arena arena : QuakeCraftReloaded.get().getArenaManager().getArenas())
-            list.add((QuakeCraftReloaded.get().getGameManager().getGame(arena) != null ? GREEN : RED) + "" + (arena.isReady() ? "" : STRIKETHROUGH) + arena.getName());
+            list.add((QuakeCraftReloaded.get().getGameManager().getGame(arena) != null ? GREEN : RED) + "" + (arena.isReady() ? "" : STRIKETHROUGH) + arena.getId());
         if (list.length() > 0)
             sender.sendMessage(GOLD + "List of all arenas created: " + list.toString());
         else

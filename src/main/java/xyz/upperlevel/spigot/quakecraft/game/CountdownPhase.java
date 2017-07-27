@@ -59,7 +59,7 @@ public class CountdownPhase implements Phase, Listener {
         this.parent = parent;
         // HOTBAR
         {
-            File file = new File(get().getHotbars().getFolder(), "countdown_solo.yml");
+            File file = new File(get().getHotbars().getFolder(), "countdown-solo.yml");
             if (file.exists())
                 hotbar = Hotbar.deserialize(get(), YamlConfiguration.loadConfiguration(file)::get);
             else {
@@ -68,7 +68,7 @@ public class CountdownPhase implements Phase, Listener {
         }
         // BOARD
         {
-            File file = new File(get().getBoards().getFolder(), "countdown_solo.yml");
+            File file = new File(get().getBoards().getFolder(), "countdown-solo.yml");
             if (file.exists())
                 board = CountdownBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
             else {

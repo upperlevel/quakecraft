@@ -1,0 +1,10 @@
+title: '&e&lQUAKECRAFT'
+update-interval: 10
+header:
+  - ''
+ranking:
+  text: '&7%player_name%: &a%kills%'
+  size: 12
+footer:
+  - ''
+  - '&ewww.upperlevel.xyz'

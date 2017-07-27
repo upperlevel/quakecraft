@@ -15,11 +15,11 @@ public class ArenaDeleteCommand extends Command {
     }
 
     @Executor
-    public void run(CommandSender sender, @Argument("arena") String arenaName) {
-        if (QuakeCraftReloaded.get().getArenaManager().removeArena(arenaName) == null) {
-            sender.sendMessage(ChatColor.RED + "The arena \"" + arenaName + "\" does not exist.");
+    public void run(CommandSender sender, @Argument("arena") String arenaId) {
+        if (QuakeCraftReloaded.get().getArenaManager().removeArena(arenaId) == null) {
+            sender.sendMessage(ChatColor.RED + "The arena \"" + arenaId + "\" does not exist.");
             return;
         }
-        sender.sendMessage(ChatColor.GREEN + "The arena \"" + arenaName + "\" has been deleted successfully.");
+        sender.sendMessage(ChatColor.GREEN + "The arena \"" + arenaId + "\" has been deleted successfully.");
     }
 }

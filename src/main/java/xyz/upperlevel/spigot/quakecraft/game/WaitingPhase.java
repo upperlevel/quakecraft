@@ -38,7 +38,7 @@ public class WaitingPhase implements Phase, Listener {
         this.parent = parent;
         // HOTBAR
         {
-            File file = new File(get().getHotbars().getFolder(), "waiting_solo.yml");
+            File file = new File(get().getHotbars().getFolder(), "waiting-solo.yml");
             if (file.exists())
                 hotbar = Hotbar.deserialize(get(), YamlConfiguration.loadConfiguration(file)::get);
             else {
@@ -47,7 +47,7 @@ public class WaitingPhase implements Phase, Listener {
         }
         // BOARD
         {
-            File file = new File(get().getBoards().getFolder(), "waiting_solo.yml");
+            File file = new File(get().getBoards().getFolder(), "waiting-solo.yml");
             if (file.exists())
                 board = WaitingBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
             else {

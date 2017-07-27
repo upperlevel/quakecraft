@@ -161,12 +161,4 @@ public class Game implements Listener {
             e.setBuild(false);
         }
     }
-
-    @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
-        if (players.contains(e.getEntity())) {
-            e.setKeepInventory(true);
-            e.getEntity().spigot().respawn();
-        }
-    }
 }

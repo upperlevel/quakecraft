@@ -19,28 +19,17 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 
 @Getter
 public class GamePhase extends PhaseManager implements Phase, Listener {
-
     private final Game game;
-
     private final Map<Player, Participant> participants = new HashMap<>();
     private final List<Participant> ranking = new ArrayList<>();
 
-    private final GameBoard board;
-
     public GamePhase(Game game) {
         this.game = game;
-
-        // custom load game board
-        File file = new File(get().getBoards().getFolder(), "game_solo.yml");
-        if (!file.exists()) {
-            throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
-        }
-        board = GameBoard.deserialize(this , Config.wrap(YamlConfiguration.loadConfiguration(file)));
     }
 
     private Participant register(Player player) {
         Participant participant = new Participant(player);
-        participants.put(player, new Participant(player));
+        participants.put(player, participant);
         ranking.add(participant);
         return participant;
     }
@@ -55,8 +44,6 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     private void setup(Player player) {
         player.setGameMode(GameMode.ADVENTURE);
-        if (board != null)
-            boards().view(player).setBoard(board);
     }
 
     private void clear(Player player) {
@@ -70,10 +57,6 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     private void update(Player player) {
         boards().view(player).render();
-    }
-
-    private void update() {
-        ranking.sort((o1, o2) -> (o1.getKills() - o2.getKills()));
     }
 
     public Participant getWinner() {

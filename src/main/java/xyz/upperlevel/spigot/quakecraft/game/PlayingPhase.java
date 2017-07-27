@@ -1,7 +1,9 @@
 package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -9,59 +11,84 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
-import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.events.*;
-import xyz.upperlevel.uppercore.hotbar.HotbarManager;
+import xyz.upperlevel.uppercore.task.Timer;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static org.bukkit.ChatColor.RED;
-import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
-    public static final int SECONDS_TO_TICKS = 20;
 
     private final Game game;
     private final GamePhase parent;
 
-    private static final PlayingHotbar hotbar;
+    private final PlayingHotbar hotbar;
+    private final PlayingBoard board;
 
-    private Set<Player> dashing = new HashSet<>();
-    private float defDashPower = 2f;
+    private final Timer timer = new Timer(get(), 10 * 60 * 20, 20) {
+        @Override
+        public void tick() {
+            for (Player player : game.getPlayers())
+                boards().view(player).render();
+        }
 
-    static {
-        File f = new File(get().getHotbars().getFolder(), "playing_solo.yml");
-        if (!f.exists())
-            throw new IllegalArgumentException("Cannot find file: \"" + f.getPath() + "\"");
-        hotbar = PlayingHotbar.deserialize(get(), "playing_solo", YamlConfiguration.loadConfiguration(f)::get);
-    }
+        @Override
+        public void end() {
+            parent.setPhase(new EndingPhase(parent));
+        }
+    };
 
     public PlayingPhase(GamePhase parent) {
         this.parent = parent;
         this.game = parent.getGame();
+        // HOTBAR
+        {
+            File file = new File(get().getHotbars().getFolder(), "playing-solo.yml");
+            if (!file.exists())
+                throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
+            hotbar = PlayingHotbar.deserialize(get(), "playing-solo", YamlConfiguration.loadConfiguration(file)::get);
+        }
+        // BOARD
+        {
+            File file = new File(get().getBoards().getFolder(), "playing-solo.yml");
+            if (!file.exists())
+                throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
+            board = PlayingBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
+        }
     }
 
     public void setup(Player player) {
         hotbars().view(player).addHotbar(hotbar);
+        boards().view(player).setBoard(board);
+    }
+
+    public void update() {
+        for (Player player : game.getPlayers())
+            boards().view(player).render();
+    }
+
+    public void updateRanking() {
+        parent.getRanking().sort((prev, next) -> (next.getKills() - prev.getKills()));
     }
 
     public void clear(Player player) {
-        hotbars().view(player).removeHotbar(hotbar);
+        hotbars()
+                .view(player).removeHotbar(hotbar);
+        boards()
+                .view(player).clear();
     }
 
     public void clear() {
@@ -78,6 +105,7 @@ public class PlayingPhase implements Phase, Listener {
             setup(p);
             p.teleport(game.getArena().getSpawns().get(i % game.getArena().getSpawns().size()));
         }
+        timer.start();
     }
 
     @Override
@@ -88,18 +116,38 @@ public class PlayingPhase implements Phase, Listener {
 
     @EventHandler
     public void onGameQuit(GameQuitEvent e) {
-        clear(e.getPlayer());
+        if (game.equals(e.getGame())) {
+            clear(e.getPlayer());
+        }
+    }
+
+    private void kill(Player hit, Player shooter) {
+        List<Location> spawns = game.getArena().getSpawns();
+        hit.teleport(spawns.get(new Random().nextInt(spawns.size())));
+
+        parent.getParticipant(hit).deaths++;
+        parent.getParticipant(shooter).kills++;
+
+        updateRanking();
+        update();
+
+        if (parent.getParticipant(shooter).kills >= game.getArena().getKillsToWin())
+            parent.setPhase(new EndingPhase(parent));
     }
 
     @EventHandler
     public void onLaserHit(LaserHitEvent e) {
-        e.getHit().setHealth(0);
-        game.broadcast(e.getShooter().getName() + " shot " + e.getHit().getName()); // todo kill message
+        if (equals(e.getPhase())) {
+            kill(e.getHit(), e.getShooter());
+            game.broadcast(e.getShooter().getName() + " shot " + e.getHit().getName()); // todo kill message
+        }
     }
 
     @EventHandler
     public void onLaserSpread(LaserSpreadEvent e) {
-        e.getLocation().getWorld().spawnParticle(Particle.DRIP_LAVA, e.getLocation(), 25);
+        if (equals(e.getPhase())) {
+            e.getLocation().getWorld().spawnParticle(Particle.DRIP_LAVA, e.getLocation(), 25);
+        }
     }
 
     public static final double LASER_BLOCKS_PER_TICK = 5;
@@ -142,10 +190,10 @@ public class PlayingPhase implements Phase, Listener {
                 for (Entity entity : entities) {
                     if (entity instanceof Player && !entity.equals(player)) {
                         Player hit = (Player) entity;
-                        {
+                        if (game.isPlaying(hit)) {
                             LaserHitEvent e = new LaserHitEvent(PlayingPhase.this, loc, player, hit);
                             Bukkit.getPluginManager().callEvent(e);
-                            if (e.isCancelled()) {
+                            if (!e.isCancelled()) {
                                 cancel();
                                 break;
                             }
@@ -171,16 +219,20 @@ public class PlayingPhase implements Phase, Listener {
         if (!game.equals(get().getGameManager().getGame(p)))
             return;
         if (p.getInventory().getHeldItemSlot() == get().getConfig().getInt("playing-hotbar.gun.slot")) {//TODO parse before game :(
-            if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
+            if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
                 new Shot(p).bang();
-            else if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+            else if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
                 dash(p);
             }
         }
     }
 
+    private final Set<Player> dashing = new HashSet<>();
+    private static final float defDashPower = 2f;
+    private static final int SECONDS_TO_TICKS = 20;
+
     private void dash(Player p) {
-        if(dashing.contains(p)) {
+        if (dashing.contains(p)) {
             p.sendMessage(RED + "Dash cooling down");
             return;
         }
@@ -191,32 +243,21 @@ public class PlayingPhase implements Phase, Listener {
 
         PlayerDashEvent event = new PlayerDashEvent(player, power, cooldown);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled())
+        if (event.isCancelled())
             return;
         power = event.getPower();
         cooldown = event.getCooldown();
-
-       p.setVelocity(p.getLocation().getDirection().multiply(power * defDashPower));
+        p.setVelocity(p.getLocation().getDirection().multiply(power * defDashPower));
         dashing.add(p);
+
         new BukkitRunnable() {
+
             @Override
             public void run() {
                 Bukkit.getPluginManager().callEvent(new PlayerDashCooldownEnd(player));
                 dashing.remove(p);
             }
-        }.runTaskLater(get(), (int)cooldown*SECONDS_TO_TICKS);
-    }
 
-    @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
-        QuakePlayerManager.get().getPlayer(e.getEntity()).deaths++;
-        parent.getParticipant(e.getEntity()).deaths++;
-        e.setDeathMessage(null);
-    }
-
-    @EventHandler
-    public void onRespawn(PlayerRespawnEvent e) {
-        List<Location> spawns = game.getArena().getSpawns();
-        e.setRespawnLocation(spawns.get(new Random().nextInt(spawns.size())));
+        }.runTaskLater(get(), (int) cooldown * SECONDS_TO_TICKS);
     }
 }

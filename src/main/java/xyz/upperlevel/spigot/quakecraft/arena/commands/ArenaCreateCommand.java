@@ -18,16 +18,16 @@ public class ArenaCreateCommand extends Command {
     }
 
     @Executor
-    public void run(CommandSender sender, @Argument("arena") String arenaName) {
-        if (QuakeCraftReloaded.get().getArenaManager().getArena(arenaName) != null) {
+    public void run(CommandSender sender, @Argument("arena") String arenaId) {
+        if (QuakeCraftReloaded.get().getArenaManager().getArena(arenaId) != null) {
             sender.sendMessage(RED + "An arena with this name already exist.");
             return;
         }
-        if (!Arena.isValidName(arenaName)) {
+        if (!Arena.isValidName(arenaId)) {
             sender.sendMessage(RED + "Arena name insert is invalid. It must contains only alphabetic or digit characters.");
             return;
         }
-        QuakeCraftReloaded.get().getArenaManager().addArena(new Arena(arenaName));
+        QuakeCraftReloaded.get().getArenaManager().addArena(new Arena(arenaId));
         sender.sendMessage(GREEN + "Arena created successfully, setup it!");
     }
 }

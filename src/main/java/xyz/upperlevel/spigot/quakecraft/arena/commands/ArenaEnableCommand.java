@@ -21,14 +21,14 @@ public class ArenaEnableCommand extends Command {
     @Executor
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
         if (!arena.isReady()) {
-            sender.sendMessage(RED + "The arena \"" + arena.getName() + "\" is not ready.");
+            sender.sendMessage(RED + "The arena \"" + arena.getId() + "\" is not ready.");
             return;
         }
         if (QuakeCraftReloaded.get().getGameManager().getGame(arena) != null) {
-            sender.sendMessage(RED + "The arena \"" + arena.getName() + "\" has already been enabled.");
+            sender.sendMessage(RED + "The arena \"" + arena.getId() + "\" has already been enabled.");
             return;
         }
         QuakeCraftReloaded.get().getGameManager().addGame(new Game(arena));
-        sender.sendMessage(GREEN + "Arena \"" + arena.getName() + "\" enabled successfully.");
+        sender.sendMessage(GREEN + "Arena \"" + arena.getId() + "\" enabled successfully.");
     }
 }
