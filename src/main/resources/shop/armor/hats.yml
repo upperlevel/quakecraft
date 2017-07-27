@@ -91,6 +91,8 @@ majestic:
     type: 'GOLD_HELMET'
     lore:
     - '&7Collect all the hats!'
+    flags:
+    - hide attributes
   item:
     type: 'GOLD_HELMET'
 
@@ -281,6 +283,8 @@ disco:
     type: 'LEATHER_HELMET'
     lore:
     - '&7Collect all the hats!'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_HELMET'
 
@@ -291,5 +295,7 @@ quakzeodia:
     type: 'CHAINMAIL_HELMET'
     lore:
     - '&7Collect all the hats!'
+    flags:
+    - hide attributes
   item:
     type: 'CHAINMAIL_HELMET'

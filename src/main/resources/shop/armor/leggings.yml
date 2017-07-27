@@ -11,6 +11,8 @@ soldier:
     type: 'LEATHER_LEGGINGS'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
 
@@ -19,12 +21,14 @@ elite:
   cost: 2250
   icon:
     type: 'LEATHER_LEGGINGS'
-    color: 'NAVY'
+    color: 'BLUE'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
-    color: 'NAVY'
+    color: 'BLUE'
 
 majestic:
   name: 'Majestic Pants'
@@ -34,6 +38,8 @@ majestic:
     color: 'YELLOW'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'YELLOW'
@@ -46,6 +52,8 @@ commander:
     color: 'BLACK'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'BLACK'
@@ -55,12 +63,14 @@ marine:
   cost: 2250
   icon:
     type: 'LEATHER_LEGGINGS'
-    color: 'OLIVE'
+    color: 'GREEN'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
-    color: 'OLIVE'
+    color: 'GREEN'
 
 swat:
   name: 'SWAT Pants'
@@ -70,6 +80,8 @@ swat:
     color: 'GRAY'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'GRAY'
@@ -82,6 +94,8 @@ spec-ops:
     color: 'RED'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'RED'
@@ -94,6 +108,8 @@ invader:
     color: 'ORANGE'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'ORANGE'
@@ -106,6 +122,8 @@ revenge:
     color: 'PURPLE'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'PURPLE'
@@ -118,6 +136,8 @@ space:
     color: 'AQUA'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'AQUA'
@@ -130,6 +150,8 @@ slime:
     color: 'LIME'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'LIME'
@@ -142,6 +164,8 @@ snow:
     color: 'WHITE'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'WHITE'
@@ -154,6 +178,8 @@ fashionista:
     color: 'FUCHSIA'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'FUCHSIA'
@@ -165,6 +191,8 @@ medieval:
     type: 'CHAINMAIL_LEGGINGS'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'CHAINMAIL_LEGGINGS'
 
@@ -175,6 +203,8 @@ budder:
     type: 'GOLD_LEGGINGS'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'GOLD_LEGGINGS'
 
@@ -185,6 +215,8 @@ sweg:
     type: 'DIAMOND_LEGGINGS'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'DIAMOND_LEGGINGS'
 
@@ -196,6 +228,8 @@ disco:
     color: 'MAROON'
     lore:
     - '&7Cosmetic armor'
+    flags:
+    - hide attributes
   item:
     type: 'LEATHER_LEGGINGS'
     color: 'MAROON'

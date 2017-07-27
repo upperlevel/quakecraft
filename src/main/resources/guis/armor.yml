@@ -7,6 +7,8 @@ icons:
     name: '&aHats'
     lore:
     - '&7Select your hat!'
+    flags:
+    - hide attributes
   click:
     actions:
     - open-gui: 'hats'
@@ -16,6 +18,8 @@ icons:
     name: '&aKits'
     lore:
     - "&7Select your kit!"
+    flags:
+    - hide attributes
   click:
     actions:
     - open-gui: 'kits'
@@ -25,6 +29,8 @@ icons:
     name: '&aLeggings'
     lore:
     - '&7Select your leggings!'
+    flags:
+    - hide attributes
   click:
     actions:
     - open-gui: 'leggings'
@@ -34,6 +40,8 @@ icons:
     name: '&aBoots'
     lore:
     - '&7Select your boots!'
+    flags:
+    - hide attributes
   click:
     actions:
     - open-gui: 'boots'

@@ -6,6 +6,8 @@ wood:
     type: 'WOOD_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
   item:
     type: 'WOOD_HOE'
 
@@ -16,6 +18,8 @@ marbled:
     type: 'STONE_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
   item:
     type: 'STONE_HOE'
 
@@ -26,6 +30,8 @@ varnished-wood:
     type: 'WOOD_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
     enchantments:
       arrow damage: 10
   item:
@@ -40,6 +46,8 @@ polished-wood:
     type: 'STONE_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
     enchantments:
       arrow damage: 10
   item:
@@ -54,6 +62,8 @@ reinforced:
     type: 'IRON_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
   item:
     type: 'IRON_HOE'
 
@@ -64,6 +74,8 @@ plated:
     type: 'GOLD_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
   item:
     type: 'GOLD_HOE'
 
@@ -74,6 +86,8 @@ bling:
     type: 'DIAMOND_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
   item:
     type: 'DIAMOND_HOE'
 
@@ -84,6 +98,8 @@ polished-plated:
     type: 'GOLD_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
   item:
     type: 'GOLD_HOE'
     enchantments:
@@ -96,6 +112,8 @@ polished-bling-case:
     type: 'DIAMOND_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
     enchantments:
       arrow damage: 10
   item:
@@ -110,6 +128,8 @@ polished-reinforced-case:
     type: 'IRON_HOE'
     lore:
     - '&7Choose an appearance!'
+    flags:
+    - hide attributes
     enchantments:
       arrow damage: 10
   item:

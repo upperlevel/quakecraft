@@ -18,6 +18,8 @@ icons:
     lore:
     - "&7Select your railgun's"
     - '&7appearance!'
+    flags:
+    - hide attributes
   click:
     actions:
     - open-gui: 'cases'
@@ -58,6 +60,8 @@ icons:
     - '&7See all the railguns you can use.'
     - ''
     - '&eShow all presets!'
+    flags:
+    - hide attributes
   click:
     actions:
     - open-gui: 'guns'
