@@ -16,7 +16,7 @@ public class ArenaManager {
 
     @Getter
     private List<Arena> arenas = new ArrayList<>();
-    private final Map<String, Arena> arenasByName = new HashMap<>();
+    private final Map<String, Arena> arenasById = new HashMap<>();
 
     @Getter
     private final File file;
@@ -27,15 +27,15 @@ public class ArenaManager {
 
     public void addArena(Arena arena) {
         arenas.add(arena);
-        arenasByName.put(arena.getId(), arena);
+        arenasById.put(arena.getId(), arena);
     }
 
-    public Arena getArena(String name) {
-        return arenasByName.get(name.toLowerCase());
+    public Arena getArena(String id) {
+        return arenasById.get(id.toLowerCase());
     }
 
-    public Arena removeArena(String name) {
-        Arena arena = arenasByName.remove(name.toLowerCase());
+    public Arena removeArena(String id) {
+        Arena arena = arenasById.remove(id.toLowerCase());
         arenas.remove(arena);
         return arena;
     }

@@ -1,27 +1,26 @@
 package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import net.wesjd.anvilgui.AnvilGUI.ClickHandler;
-import org.bukkit.DyeColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
+import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.gui.*;
 import xyz.upperlevel.uppercore.gui.link.Link;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import static org.bukkit.ChatColor.AQUA;
-import static org.bukkit.ChatColor.GREEN;
-import static org.bukkit.ChatColor.RED;
+import static org.bukkit.ChatColor.*;
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 import static xyz.upperlevel.uppercore.gui.InputFilters.filterInt;
+import static xyz.upperlevel.uppercore.gui.InputFilters.filterPlayer;
 import static xyz.upperlevel.uppercore.gui.InputFilters.plain;
 
 public class ArenaSetupGuiCommand extends Command {
@@ -32,27 +31,74 @@ public class ArenaSetupGuiCommand extends Command {
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender, @Optional @Argument("arena") Arena arena) {
+        Player player = (Player) sender;
         sender.sendMessage(GREEN + "Opening GUI.");
-        if(arena == null) {
-            AnvilGui gui = new AnvilGui();
-            gui.setMessage("Arena name");
-            gui.setListener(arenaFilter(this::execute));
-            guis().open(((Player)sender), gui);
-        } else execute((Player)sender, arena);
-
+        Gui gui = arena == null ? selectArena(player) : editArena(player, arena, GuiAction.close());
+        if(gui != null)
+            guis().open(player, gui);
     }
 
-    public void execute(Player player, Arena arena) {
-        //enabled, name, min_player, max_player, spawn,
-        Gui g = ChestGui.builder(9)
+    public Gui selectArena(Player player) {//TODO page-based displaying
+        List<Arena> arenas = QuakeCraftReloaded.get().getArenaManager().getArenas();
+        if(arenas.size() > (GuiSize.DOUBLE.size() - 2)) {
+            player.sendMessage(RED + "Too many arenas! specify the arena name in the command!");
+            return null;
+        }
+        ChestGui gui = new ChestGui(GuiSize.min(arenas.size() + 2), PlaceholderValue.fake("Select arena"));
+        int i = 0;
+        for(Arena arena : arenas) {
+            gui.setIcon(
+                    i,
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.MONSTER_EGG,
+                                    arena.getId(),
+                                    GRAY + "Id: " + AQUA + arena.getId(),
+                                    GRAY + "Name:" + AQUA + arena.getName(),
+                                    GRAY + "Spawns: " + AQUA + arena.getSpawns().size()
+
+                            ),
+                            p -> guis().change(p, editArena(p, arena, pr -> guis().change(pr, selectArena(pr))))
+                    )
+            );
+            i++;
+        }
+        gui.setIcon(
+                gui.getSize()  - 2,
+                Icon.of(
+                        GuiUtil.wool(DyeColor.GREEN, "Add"),
+                        p -> {
+                            AnvilGui anvil = new AnvilGui();
+                            anvil.setMessage("Arena Id");
+                            anvil.setListener(nonArenaFilter(
+                                    (pl, id) -> {
+                                        Arena arena = new Arena(id);
+                                        QuakeCraftReloaded.get().getArenaManager().addArena(arena);
+                                        p.sendMessage(GREEN + "Spawn added to arena!");
+                                        guis().change(pl, editArena(pl, arena, pr -> guis().change(pr, selectArena(pr))));
+                                    }
+                            ));
+                            guis().open(p, anvil);
+                        }
+                )
+        );
+        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, "Back"), GuiAction.back()));
+        return gui;
+    }
+
+    public Gui editArena(Player player, Arena arena, Link previous) {//TODO: OMG kill me I want the fucking classes!
+        //enabled, name, min_player, max_player, spawn, lobby
+        Location lobbyLoc = arena.getLobby();
+        return ChestGui.builder(9)
                 .title(arena.getId() + "'s setup")
                 .add(
                         () -> GuiUtil.wool(
                                 arena.isEnabled() ? DyeColor.GREEN : DyeColor.RED,
                                 arena.isEnabled() ? "Disable" : "Enable"),
                         p -> {
-                            arena.setEnabled(!arena.isEnabled());
-                            guis().reprint(p);
+                            boolean changed = arena.isEnabled() ? disable(player, arena) : enable(player, arena);
+                            if(changed)
+                                guis().reprint(p);
                         }
                 )
                 .add(
@@ -67,6 +113,7 @@ public class ArenaSetupGuiCommand extends Command {
                             gui.setListener(plain((pl, n) -> {
                                 arena.setName(n);
                                 guis().back(p);
+                                pl.sendMessage(GREEN + "New arena name: '" + n + "'!");
                             }));
                             guis().open(p, gui);
                         }
@@ -75,7 +122,7 @@ public class ArenaSetupGuiCommand extends Command {
                         () -> GuiUtil.itemStack(
                                 Material.STONE_SLAB2,
                                 "Min players",
-                                AQUA + (arena.getMinPlayers() > 0 ? String.valueOf(arena.getMinPlayers()) : "")
+                                AQUA + (arena.getMinPlayers() > 0 ? String.valueOf(arena.getMinPlayers()) : (RED + "Not set"))
                         ),
                         p -> {
                             AnvilGui gui = new AnvilGui();
@@ -83,6 +130,7 @@ public class ArenaSetupGuiCommand extends Command {
                             gui.setListener(filterInt(
                                     (pl, i) -> {
                                         arena.setMinPlayers(i);
+                                        pl.sendMessage(GREEN + "Arena's min players: '" + i + "'!");
                                         guis().back(pl);
                                     },
                                     i -> i >= 2
@@ -94,14 +142,15 @@ public class ArenaSetupGuiCommand extends Command {
                         () -> GuiUtil.itemStack(
                                 Material.RED_SANDSTONE,
                                 "Max players",
-                                AQUA + (arena.getMaxPlayers() > 0 ? String.valueOf(arena.getMaxPlayers()) : "")
+                                AQUA + (arena.getMaxPlayers() > 0 ? String.valueOf(arena.getMaxPlayers()) : (RED + "Not set"))
                         ),
                         p -> {
                             AnvilGui gui = new AnvilGui();
-                            gui.setMessage("Man players");
+                            gui.setMessage("Max players");
                             gui.setListener(filterInt(
                                     (pl, i) -> {
                                         arena.setMaxPlayers(i);
+                                        pl.sendMessage(GREEN + "Arena's max players: '" + i + "'!");
                                         guis().back(pl);
                                     },
                                     i -> i >= 2
@@ -117,13 +166,46 @@ public class ArenaSetupGuiCommand extends Command {
                         ),
                         p -> {
                             Gui gui = editSpawnsGui(arena);
-                            if(gui != null)
+                            if (gui != null)
                                 guis().open(p, gui);
                             else
                                 player.sendMessage(RED + "Too many spawns for a gui, use command-based editing instead");
                         }
-                ).build();
-        guis().open(player, g);
+                )
+                .add(
+                        () -> GuiUtil.itemStack(
+                                Material.WATCH,
+                                "Lobby",
+                                lobbyLoc == null ? (RED + "Not set") : (AQUA + format(lobbyLoc, true))
+                        ),
+                        p -> {
+                            if(lobbyLoc == null) {
+                                arena.setLobby(p.getLocation());
+                                p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
+                                guis().change(player, editArena(player, arena, previous));
+                            } else
+                                guis().change(player, editLobby(arena, editArena(player, arena, previous)));
+                        }
+                )
+                .set(
+                        7,
+                        GuiUtil.itemStack(Material.BARRIER, "Remove"),
+                        p -> {//TODO add confirm
+                            if(arena.isEnabled()) {
+                                player.sendMessage(RED + "Disable the arena before removing it!");
+                                return;
+                            }
+                            QuakeCraftReloaded.get().getArenaManager().removeArena(arena.getId());
+                            p.sendMessage(GREEN + "Arena '" + arena.getId() + "' removed!");
+                            previous.run(player);
+                        }
+                )
+                .set(
+                        8,
+                        GuiUtil.itemStack(Material.ARROW, "Back"),
+                        previous
+                )
+                .build();
     }
 
     public Gui editSpawnsGui(Arena arena) {//TODO page-based displaying
@@ -145,15 +227,14 @@ public class ArenaSetupGuiCommand extends Command {
 
         int i = 0;
         for(Location loc : locs) {
-            String world = sameWorld ? "" : (loc.getWorld().getName() + ':');
             final int index = i;
             gui.setIcon(
                     i,
                     Icon.of(
                             GuiUtil.itemStack(
                                     Material.MONSTER_EGG,
-                                    "Spawn " + i,
-                                    String.valueOf(AQUA) + world + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ()
+                                    "Spawn " + (i + 1),
+                                    String.valueOf(AQUA) + format(loc, !sameWorld)
                             ),
                             p -> guis().change(p, editSpawnGui(locs, index, pl -> guis().change(pl, editSpawnsGui(arena))))
                     )
@@ -166,7 +247,8 @@ public class ArenaSetupGuiCommand extends Command {
                         GuiUtil.wool(DyeColor.GREEN, "Add"),
                         p -> {
                             locs.add(p.getLocation());
-                            guis().change(p, editSpawnsGui(arena));
+                            p.sendMessage(GREEN + "Spawn added to arena!");
+                            guis().change(p, editSpawnsGui(arena));//Reload page
                         }
                 )
         );
@@ -182,7 +264,7 @@ public class ArenaSetupGuiCommand extends Command {
                         GuiUtil.itemStack(
                                 Material.SADDLE,
                                 "Teleport",
-                                AQUA + "To " + loc.getWorld().getName() + ":" + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ()),
+                                AQUA + "To " + format(loc, true)),
                         p -> {
                             guis().close(p);
                             p.sendMessage(AQUA + "Teleporting...");
@@ -196,6 +278,7 @@ public class ArenaSetupGuiCommand extends Command {
                         ),
                         p -> {//TODO add confirm
                             list.set(index, p.getLocation());
+                            p.sendMessage(GREEN + "Spawn " + (index + 1) + " new position: " + format(p.getLocation(), true) + "!");
                             guis().change(p, editSpawnGui(list, index, previous));
                         }
                 )
@@ -203,6 +286,7 @@ public class ArenaSetupGuiCommand extends Command {
                         GuiUtil.itemStack(Material.BARRIER, "Remove"),
                         p -> {//TODO add confirm
                             list.remove(index);
+                            p.sendMessage(GREEN + "Spawn " + (index + 1) + " removed!");
                             previous.run(p);
                         }
                 )
@@ -214,13 +298,66 @@ public class ArenaSetupGuiCommand extends Command {
                 .build();
     }
 
+    public Gui editLobby(Arena arena, Link previous) {//TODO rethink GUI system
+        Location loc = arena.getLobby();
+        return ChestGui.builder(9)
+                .title("Lobby editor")
+                .add(
+                        GuiUtil.itemStack(
+                                Material.SADDLE,
+                                "Teleport",
+                                AQUA + "To " + format(loc, true)),
+                        p -> {
+                            guis().close(p);
+                            p.sendMessage(AQUA + "Teleporting...");
+                            p.teleport(loc);
+                        }
+                )
+                .add(
+                        GuiUtil.itemStack(
+                                Material.STICK,
+                                "Edit"
+                        ),
+                        p -> {//TODO add confirm
+                            arena.setLobby(p.getLocation());
+                            p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
+                            guis().change(p, editLobby(arena, previous));
+                        }
+                )
+                .set(
+                        8,
+                        GuiUtil.itemStack(Material.ARROW, "Back"),
+                        previous
+                )
+                .build();
+    }
 
-    public static ClickHandler arenaFilter(BiConsumer<Player, Arena> listener) {
-        return (player, name) -> {
-            Arena arena = QuakeCraftReloaded.get().getArenaManager().getArena(name);
-            if (arena == null)
-                return "Invalid arena";
-            listener.accept(player, arena);
+    private boolean enable(Player player, Arena arena) {
+        if (!arena.isReady()) {
+            player.sendMessage(RED + "The arena \"" + arena.getName() + "\" is not ready.");
+            return false;
+        }
+        QuakeCraftReloaded.get().getGameManager().addGame(new Game(arena));
+        player.sendMessage(GREEN + "Arena \"" + arena.getName() + "\" enabled successfully.");
+        return true;
+    }
+
+    private boolean disable(Player player, Arena arena) {
+        QuakeCraftReloaded.get().getGameManager().removeGame(arena);
+        player.sendMessage(GREEN + "The arena \"" + arena.getName() + "\" disabled successfully.");
+        return true;
+    }
+
+    private String format(Location loc, boolean world) {
+        return (world ? (loc.getWorld().getName() + ":") : "") + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ();
+    }
+
+    public static ClickHandler nonArenaFilter(BiConsumer<Player, String> listener) {
+        return (player, id) -> {
+            Arena arena = QuakeCraftReloaded.get().getArenaManager().getArena(id);
+            if (arena != null)
+                return "Already taken";
+            listener.accept(player, id);
             return null;
         };
     }

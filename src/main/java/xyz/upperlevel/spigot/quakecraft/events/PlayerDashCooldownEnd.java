@@ -1,24 +1,17 @@
-package xyz.upperlevel.spigot.quakecraft.shop.event;
+package xyz.upperlevel.spigot.quakecraft.events;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 
-@Getter
 @RequiredArgsConstructor
-public class PurchaseBuyEvent extends Event implements Cancellable {
+public class PlayerDashCooldownEnd extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    @Getter
     private final QuakePlayer player;
-    private final Purchase<?> purchase;
-
-    @Setter
-    private boolean cancelled = false;
 
     @Override
     public HandlerList getHandlers() {

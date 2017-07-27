@@ -8,34 +8,41 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayerManager;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
-import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
+import xyz.upperlevel.spigot.quakecraft.events.*;
 import xyz.upperlevel.uppercore.hotbar.HotbarManager;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
+import static org.bukkit.ChatColor.RED;
+import static org.bukkit.plugin.java.JavaPlugin.getPlugin;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
+    public static final int SECONDS_TO_TICKS = 20;
 
     private final Game game;
     private final GamePhase parent;
 
     private static final PlayingHotbar hotbar;
+
+    private Set<Player> dashing = new HashSet<>();
+    private float defDashPower = 2f;
 
     static {
         File f = new File(get().getHotbars().getFolder(), "playing_solo.yml");
@@ -163,8 +170,41 @@ public class PlayingPhase implements Phase, Listener {
         Player p = e.getPlayer();
         if (!game.equals(get().getGameManager().getGame(p)))
             return;
-        if (p.getInventory().getHeldItemSlot() == get().getConfig().getInt("playing-hotbar.gun.slot"))
-            new Shot(p).bang();
+        if (p.getInventory().getHeldItemSlot() == get().getConfig().getInt("playing-hotbar.gun.slot")) {//TODO parse before game :(
+            if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
+                new Shot(p).bang();
+            else if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                dash(p);
+            }
+        }
+    }
+
+    private void dash(Player p) {
+        if(dashing.contains(p)) {
+            p.sendMessage(RED + "Dash cooling down");
+            return;
+        }
+
+        QuakePlayer player = get().getPlayerManager().getPlayer(p);
+        float power = player.getSelectedDashPower().getPower();
+        float cooldown = player.getSelectedDashCooldown().getCooldown();
+
+        PlayerDashEvent event = new PlayerDashEvent(player, power, cooldown);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled())
+            return;
+        power = event.getPower();
+        cooldown = event.getCooldown();
+
+       p.setVelocity(p.getLocation().getDirection().multiply(power * defDashPower));
+        dashing.add(p);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Bukkit.getPluginManager().callEvent(new PlayerDashCooldownEnd(player));
+                dashing.remove(p);
+            }
+        }.runTaskLater(get(), (int)cooldown*SECONDS_TO_TICKS);
     }
 
     @EventHandler

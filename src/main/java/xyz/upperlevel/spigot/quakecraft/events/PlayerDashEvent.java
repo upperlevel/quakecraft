@@ -1,24 +1,30 @@
-package xyz.upperlevel.spigot.quakecraft.shop.event;
+package xyz.upperlevel.spigot.quakecraft.events;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 
 @Getter
-@RequiredArgsConstructor
-public class PurchaseBuyEvent extends Event implements Cancellable {
+public class PlayerDashEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final QuakePlayer player;
-    private final Purchase<?> purchase;
+    @Setter
+    private float power;
+    @Setter
+    private float cooldown;
 
     @Setter
-    private boolean cancelled = false;
+    private boolean cancelled;
+
+    public PlayerDashEvent(QuakePlayer player, float power, float cooldown) {
+        this.player = player;
+        this.power = power;
+        this.cooldown = cooldown;
+    }
 
     @Override
     public HandlerList getHandlers() {
@@ -29,3 +35,4 @@ public class PurchaseBuyEvent extends Event implements Cancellable {
         return handlers;
     }
 }
+
