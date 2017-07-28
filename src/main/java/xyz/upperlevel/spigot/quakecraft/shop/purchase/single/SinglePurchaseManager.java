@@ -88,6 +88,8 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
                 QuakeCraftReloaded.get().getDataFolder(),
                 "guis" + File.separator + guiLoc + ".yml"
         );
+        if(!file.exists())
+            throw new InvalidParameterException("Cannot find file " + file);
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         loadGui(plugin, file.getName().replaceFirst("[.][^.]+$", ""), Config.wrap(config));
     }

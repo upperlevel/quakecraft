@@ -21,6 +21,7 @@ import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.board.BoardRegistry;
+import xyz.upperlevel.uppercore.util.CrashUtil;
 
 import java.io.IOException;
 
@@ -51,16 +52,16 @@ public class QuakeCraftReloaded extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        messages = MessageManager.load(this);
-
-        saveDefaultConfig();
-
-        Config config = Config.wrap(getConfig());
-
-        arenaManager = new ArenaManager();
-        gameManager = new GameManager();
-
         try {
+            messages = MessageManager.load(this);
+
+            saveDefaultConfig();
+
+            Config config = Config.wrap(getConfig());
+
+            arenaManager = new ArenaManager();
+            gameManager = new GameManager();
+
             //Load command messages
             QuakeCommand.loadConfig();
 
@@ -80,20 +81,18 @@ public class QuakeCraftReloaded extends JavaPlugin {
             shop.load();
 
             defConfirmOptions = ConfirmPurchaseGui.load();
-        } catch (InvalidConfigurationException e) {
-            //QuakeCraftReloaded.get().getLogger().severe(e.getErrorMessage("Error while enabling QuakeCraft"));
-            e.printStackTrace();
+
+            PlaceholderUtil.register(this, new QuakePlaceholders());
+            ArgumentParserSystem.register(new ArenaArgumentParser());
+
+            new QuakeCommand().subscribe();
+
+            playerManager = new QuakePlayerManager();
+            playerManager.registerAll();
+        } catch (Throwable t) {
+            CrashUtil.saveCrash(this, t);
             setEnabled(false);
-            return;
         }
-
-        PlaceholderUtil.register(this, new QuakePlaceholders());
-        ArgumentParserSystem.register(new ArenaArgumentParser());
-
-        new QuakeCommand().subscribe();
-
-        playerManager = new QuakePlayerManager();
-        playerManager.registerAll();
     }
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {

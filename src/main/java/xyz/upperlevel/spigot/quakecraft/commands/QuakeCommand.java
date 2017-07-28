@@ -3,6 +3,9 @@ package xyz.upperlevel.spigot.quakecraft.commands;
 import org.bukkit.command.CommandExecutor;
 import xyz.upperlevel.spigot.quakecraft.arena.commands.*;
 import xyz.upperlevel.uppercore.command.NodeCommand;
+import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+
+import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
 public class QuakeCommand extends NodeCommand implements CommandExecutor {
 
@@ -19,8 +22,13 @@ public class QuakeCommand extends NodeCommand implements CommandExecutor {
     }
 
     public static void loadConfig() {
-        JoinGameCommand.loadConfig();
-        LeaveGameCommand.loadConfig();
-        ArenaCommand.loadConfig();
+        try {
+            loadSafe("join", JoinGameCommand::loadConfig);
+            loadSafe("leave", LeaveGameCommand::loadConfig);
+            loadSafe("arena", ArenaCommand::loadConfig);
+        } catch (InvalidConfigurationException e) {
+            e.addLocalizer("in commands messages");
+            throw e;
+        }
     }
 }

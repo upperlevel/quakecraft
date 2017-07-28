@@ -2,6 +2,8 @@ package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import xyz.upperlevel.uppercore.command.NodeCommand;
 
+import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
+
 public class ArenaCommand extends NodeCommand {
 
     public ArenaCommand() {
@@ -25,16 +27,16 @@ public class ArenaCommand extends NodeCommand {
     }
 
     public static void loadConfig() {
-        ArenaAddSpawnCommand.loadConfig();
-        ArenaCreateCommand.loadConfig();
-        ArenaDeleteCommand.loadConfig();
-        ArenaDisableCommand.loadConfig();
-        ArenaEnableCommand.loadConfig();
-        ArenaListCommand.loadConfig();
-        ArenaInfoCommand.loadConfig();
-        ArenaSetLimitsCommand.loadConfig();
-        ArenaSetLobbyCommand.loadConfig();
-        ArenaSetNameCommand.loadConfig();
-        SetKillsToWinCommand.loadConfig();
+        loadSafe("add-spawn", ArenaAddSpawnCommand::loadConfig);
+        loadSafe("create", ArenaCreateCommand::loadConfig);
+        loadSafe("delete", ArenaDeleteCommand::loadConfig);
+        loadSafe("disable", ArenaDisableCommand::loadConfig);
+        loadSafe("enable", ArenaEnableCommand::loadConfig);
+        loadSafe("list", ArenaListCommand::loadConfig);
+        loadSafe("info", ArenaInfoCommand::loadConfig);
+        loadSafe("set-limits", ArenaSetLimitsCommand::loadConfig);
+        loadSafe("set-lobby", ArenaSetLobbyCommand::loadConfig);
+        loadSafe("set-name", ArenaSetNameCommand::loadConfig);
+        loadSafe("set-kills-to-win", SetKillsToWinCommand::loadConfig);
     }
 }
