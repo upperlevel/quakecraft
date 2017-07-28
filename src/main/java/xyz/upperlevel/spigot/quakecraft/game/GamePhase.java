@@ -2,19 +2,14 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Getter;
 import org.bukkit.GameMode;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
-import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
-import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.board.BoardManager;
+import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
 
-import java.io.File;
 import java.util.*;
 
-import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 
 @Getter

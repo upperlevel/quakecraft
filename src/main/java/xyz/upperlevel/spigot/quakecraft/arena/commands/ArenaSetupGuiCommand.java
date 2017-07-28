@@ -179,6 +179,22 @@ public class ArenaSetupGuiCommand extends Command {
                                 lobbyLoc == null ? (RED + "Not set") : (AQUA + format(lobbyLoc, true))
                         ),
                         p -> {
+                            if(lobbyLoc == null) {
+                                arena.setLobby(p.getLocation());
+                                p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
+                                guis().change(player, editArena(player, arena, previous));
+                            } else
+                                guis().change(player, editLobby(arena, editArena(player, arena, previous)));
+                        }
+
+                )
+                .add(
+                        () -> GuiUtil.itemStack(
+                                Material.GOLD_SWORD,
+                                "Kills to win",
+                                AQUA + (arena.getKillsToWin() > 0 ? String.valueOf(arena.getKillsToWin()) : (RED + "Not set"))
+                        ),
+                        p -> {
                             AnvilGui gui = new AnvilGui();
                             gui.setMessage("kills");
                             gui.setListener(filterInt(
@@ -190,21 +206,6 @@ public class ArenaSetupGuiCommand extends Command {
                                     i -> i >= 2
                             ));
                             guis().open(p, gui);
-                        }
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.GOLD_SWORD,
-                                "Kills to win",
-                                AQUA + (arena.getKillsToWin() > 0 ? String.valueOf(arena.getKillsToWin()) : (RED + "Not set"))
-                        ),
-                        p -> {
-                            if(lobbyLoc == null) {
-                                arena.setLobby(p.getLocation());
-                                p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
-                                guis().change(player, editArena(player, arena, previous));
-                            } else
-                                guis().change(player, editLobby(arena, editArena(player, arena, previous)));
                         }
                 )
                 .set(

@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.spigot.quakecraft.game.play;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
