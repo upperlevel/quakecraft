@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.Icon;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.itemstack.ItemResolver;

@@ -2,7 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 
 public class EndingHotbar extends Hotbar {

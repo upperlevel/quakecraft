@@ -3,7 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.core.particle;
 import lombok.Data;
 import org.bukkit.Location;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 
 @Data
 public abstract class Particle {

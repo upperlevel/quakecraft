@@ -3,7 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.commands;
 import org.bukkit.command.CommandExecutor;
 import xyz.upperlevel.spigot.quakecraft.arena.commands.*;
 import xyz.upperlevel.uppercore.command.NodeCommand;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 
 import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 

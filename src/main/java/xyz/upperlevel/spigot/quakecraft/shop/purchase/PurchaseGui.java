@@ -23,7 +23,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.event.PurchaseBuyEvent;
 import xyz.upperlevel.spigot.quakecraft.shop.event.PurchaseSelectEvent;
 import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
@@ -34,8 +34,6 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static xyz.upperlevel.uppercore.Uppercore.guis;
 
 public class PurchaseGui extends ChestGui {
     private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;

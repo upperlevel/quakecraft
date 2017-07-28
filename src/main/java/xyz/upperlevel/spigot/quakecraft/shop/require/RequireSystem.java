@@ -3,7 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.shop.require;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.require.impl.RequirePermission;
 import xyz.upperlevel.spigot.quakecraft.shop.require.impl.RequirePurchase;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 
 import java.util.Collections;
 import java.util.HashMap;

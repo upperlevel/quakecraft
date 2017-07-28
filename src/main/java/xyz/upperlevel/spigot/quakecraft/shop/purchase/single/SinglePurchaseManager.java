@@ -11,7 +11,7 @@ import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.GuiId;
 
 import java.io.File;

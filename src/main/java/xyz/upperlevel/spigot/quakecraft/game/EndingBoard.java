@@ -1,7 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.game;
 
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 
 public class EndingBoard extends GameBoard {
     public EndingBoard(EndingPhase phase, Config config) {

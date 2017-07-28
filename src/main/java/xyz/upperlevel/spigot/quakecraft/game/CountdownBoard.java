@@ -1,7 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.game;
 
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.board.Board;
 
 import static java.lang.String.valueOf;
