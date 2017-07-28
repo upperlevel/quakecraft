@@ -35,7 +35,7 @@ public class LeaveGameCommand extends Command {
             return;
         }
         game.leave((Player) sender);
-        SUCCESS.send((Player) sender, "arena", game.getArena().getId());
+        SUCCESS.send((Player) sender, game.getPlaceholders());
     }
 
     public static void loadConfig() {

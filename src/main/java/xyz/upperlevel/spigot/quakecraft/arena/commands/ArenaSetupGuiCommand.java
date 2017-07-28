@@ -374,6 +374,8 @@ public class ArenaSetupGuiCommand extends Command {
 
     public static ClickHandler nonArenaFilter(BiConsumer<Player, String> listener) {
         return (player, id) -> {
+            if(!Arena.isValidName(id))
+                return "Invalid id";
             Arena arena = QuakeCraftReloaded.get().getArenaManager().getArena(id);
             if (arena != null)
                 return "Already taken";

@@ -22,7 +22,7 @@ public class ArenaSetLobbyCommand extends Command {
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
         arena.setLobby(((Player) sender).getLocation());
-        SUCCESS.send((Player) sender);
+        SUCCESS.send((Player) sender, arena.getPlaceholders());
     }
 
     public static void loadConfig() {

@@ -29,8 +29,9 @@ public class ArenaCreateCommand extends Command {
             INVALID_NAME.send(sender, "arena", arenaId);
             return;
         }
-        QuakeCraftReloaded.get().getArenaManager().addArena(new Arena(arenaId));
-        SUCCESS.send(sender, "arena", arenaId);
+        Arena arena = new Arena(arenaId);
+        QuakeCraftReloaded.get().getArenaManager().addArena(arena);
+        SUCCESS.send(sender, arena.getPlaceholders());
     }
 
     public static void loadConfig() {

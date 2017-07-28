@@ -7,7 +7,7 @@ commands:
     success: "&aThe game '%game%' has been joined successfully!"
   leave:
     not-playing: "&cYou are not in any arena"
-    success: "&aYou left the arena '%arena%'"
+    success: "&aYou left the game '%game%'"
   shop:
     no-shop: "&cCannot find shop gui!"
 
@@ -15,8 +15,8 @@ commands:
     add-spawn:
       success: "&aSpawn added"
     create:
-      name-already-present: "&cAn arena with this name already exist"
-      invalid-name: "&cInvalid name, it must only contain alphabetic or digit characters"
+      name-already-present: "&cAn arena with this id already exist"
+      invalid-name: "&cInvalid id, it must only contain alphabetic or digit characters"
       success: "&aArena created successfully, setup it!"
     delete:
       arena-not-found: "&cCannot find any arena named '%arena%'"
@@ -29,6 +29,14 @@ commands:
       arena-already-enabled: "&cThe arena '%arena%' has already been enabled"
       success: "&aArena '%arena%' enabled successfully!"
     info:
+      format:
+      - "&aId: %arena%"
+      - "&aName: %arena_name%"
+      - "&aMin players: %arena_min_players%"
+      - "&aMax players: %arena_max_players%"
+      - "&aLobby: %arena_lobby%"
+      - "&aSpawns: %arena_spawns%"
+      - "&aKills to win: %arena_kills_to_win%"
     list:
       header: "&a--Found %arenas% arenas!--"
       line:
@@ -38,13 +46,13 @@ commands:
       footer: [] #Empy list
       no-arena-found: "&cNo arena found!"
     set-limits:
-      min-more-max: "&cMax players limit cannot be higher than min players one"
+      min-more-max: "&cMax players limit cannot be higher than min players one (%max% > %min%)"
       success: "&aLimits set successfully"
     set-lobby:
       success: "&aLobby set successfully"
     set-name:
-      success: "&aName set to '%name%' for arena '%arena%'"
+      success: "&aName set to '%arena_name%' for arena '%arena%'"
     set-kills-to-win:
-      negative-kills: "&c"
-      success: "&aKills to win set to '%kills%'' for arena '%arena%'"
+      negative-kills: "&cInvalid value %kills%"
+      success: "&aKills to win set to '%arena_kills_to_win%' for arena '%arena%'"
 

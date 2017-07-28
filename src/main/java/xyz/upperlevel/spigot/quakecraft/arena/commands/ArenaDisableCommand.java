@@ -21,10 +21,10 @@ public class ArenaDisableCommand extends Command {
     @Executor
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
         if (QuakeCraftReloaded.get().getGameManager().removeGame(arena) == null) {
-            ALREADY_DISABLED.send(sender, "arena", arena.getId());
+            ALREADY_DISABLED.send(sender, arena.getPlaceholders());
             return;
         }
-        SUCCESS.send(sender, "arena", arena.getId());
+        SUCCESS.send(sender, arena.getPlaceholders());
     }
 
     public static void loadConfig() {

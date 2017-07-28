@@ -37,7 +37,7 @@ public class ArenaListCommand extends Command {
                     message = LINE_DISABLED;
                 else
                     message = LINE_UNREADY;
-                message.send(sender, "arena", arena.getId());
+                message.send(sender, arena.getPlaceholders());
             }
             FOOTER.send(sender);
         } else

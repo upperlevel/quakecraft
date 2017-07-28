@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,7 @@ import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
 import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +37,25 @@ public class Game implements Listener {
     private final PhaseManager phaseManager = new PhaseManager();
     private final Set<Player> players = new HashSet<>();
 
+    @Getter
+    private final PlaceholderRegistry placeholders;
+
     private Player winner;
+
+    public Game(Arena arena) {
+        this.arena = arena;
+        this.placeholders = PlaceholderRegistry.create();
+        fillPlaceholders(placeholders);
+    }
+
+    public void fillPlaceholders(PlaceholderRegistry reg) {
+        reg.set("game", arena::getId);
+        reg.set("game_name", arena::getName);
+        reg.set("game_min_players", () -> String.valueOf(getMinPlayers()));
+        reg.set("game_max_players", () -> String.valueOf(getMinPlayers()));
+        reg.set("game_players", () -> String.valueOf(players.size()));
+        reg.set("game_winner", () -> getWinner() != null ? getWinner().getName() : "");
+    }
 
     /**
      * Gets name of this arena.

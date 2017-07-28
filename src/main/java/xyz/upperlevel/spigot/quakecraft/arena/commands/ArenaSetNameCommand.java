@@ -21,7 +21,7 @@ public class ArenaSetNameCommand extends Command {
     public void run(CommandSender sender, @Argument("arena") Arena arena, @Argument("name") String[] name) {
         String result = String.join(" ", name);
         arena.setName(result);
-        SUCCESS.send(sender, "arena", arena.getId(), "name", arena.getName());
+        SUCCESS.send(sender, arena.getPlaceholders());
     }
 
     public static void loadConfig() {

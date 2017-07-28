@@ -31,6 +31,7 @@ public class ArenaCommand extends NodeCommand {
         ArenaDisableCommand.loadConfig();
         ArenaEnableCommand.loadConfig();
         ArenaListCommand.loadConfig();
+        ArenaInfoCommand.loadConfig();
         ArenaSetLimitsCommand.loadConfig();
         ArenaSetLobbyCommand.loadConfig();
         ArenaSetNameCommand.loadConfig();

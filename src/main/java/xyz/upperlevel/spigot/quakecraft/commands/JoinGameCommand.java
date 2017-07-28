@@ -24,10 +24,10 @@ public class JoinGameCommand extends Command {
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
-        Game game = QuakeCraftReloaded.get().getGameManager().getGame((Player) sender);
         Player player = (Player) sender;
+        Game game = QuakeCraftReloaded.get().getGameManager().getGame(player);
         if (game != null) {
-            ALREADY_PLAYING.send(player);
+            ALREADY_PLAYING.send(player, game.getPlaceholders());
             return;
         }
         game = QuakeCraftReloaded.get().getGameManager().getGame(arena);
@@ -36,7 +36,7 @@ public class JoinGameCommand extends Command {
             return;
         }
         game.join(player);
-        SUCCESS.send(player, "game", game.getArena().getName());
+        SUCCESS.send(player, game.getPlaceholders());
     }
 
     public static void loadConfig() {
