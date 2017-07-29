@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,22 +14,19 @@ import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.uppercore.Uppercore;
-import xyz.upperlevel.uppercore.board.Board;
-import xyz.upperlevel.uppercore.board.BoardManager;
 import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.hotbar.HotbarManager;
+import xyz.upperlevel.uppercore.sound.CompatibleSound;
 
 import java.io.File;
 
-import static org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class CountdownPhase implements Phase, Listener {
+    public static Sound ORB_PICKUP = CompatibleSound.getRaw("ENTITY_EXPERIENCE_ORB_PICKUP");
 
     private final Game game;
     private final LobbyPhase parent;
@@ -42,7 +40,7 @@ public class CountdownPhase implements Phase, Listener {
         public void run() {
             for (Player player : game.getPlayers()) {
                 player.setLevel(timer);
-                player.playSound(player.getLocation(), ENTITY_EXPERIENCE_ORB_PICKUP, 0, 100f);
+                player.playSound(player.getLocation(), ORB_PICKUP, 0, 100f);
                 boards().view(player).render();
             }
             if (timer > 0)

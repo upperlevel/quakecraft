@@ -8,8 +8,8 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.events.PlayerDashCooldownEnd;
 import xyz.upperlevel.spigot.quakecraft.events.PlayerDashEvent;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.bukkit.ChatColor.RED;
 
@@ -17,9 +17,12 @@ public class Dash {
     public static final int MILLIS_IN_TICK = 50;
 
     private static final float defDashPower = 2f;//TODO: config
-    private static final Set<Player> dashing = new HashSet<>();
+    private static final Map<Player, Dash> dashing = new HashMap<>();
 
     private final QuakePlayer player;
+
+    private long startTime;
+    private long endTime;
 
     public Dash(QuakePlayer player) {
         this.player = player;
@@ -38,8 +41,12 @@ public class Dash {
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
 
+        dashing.put(player.getPlayer(), this);
         scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownMillis/MILLIS_IN_TICK);
         player.getPlayer().setVelocity(player.getPlayer().getLocation().getDirection().multiply(power * defDashPower));
+
+        startTime = System.currentTimeMillis();
+        endTime = startTime + cooldownMillis;
     }
 
     public void cooldownEnd() {
@@ -48,8 +55,9 @@ public class Dash {
     }
 
     public static void dash(Player p) {
-        if (dashing.add(p)) {
-            p.sendMessage(RED + "Dash cooling down");
+        Dash dash = dashing.get(p);
+        if (dash != null) {
+            p.sendMessage(RED + "Dash cooling down: " + ((dash.endTime - System.currentTimeMillis())/1000) + "s remaining");
             return;
         }
 

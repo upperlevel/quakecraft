@@ -2,6 +2,9 @@ package xyz.upperlevel.spigot.quakecraft.core.particle;
 
 import lombok.Data;
 import org.bukkit.Location;
+import xyz.upperlevel.spigot.quakecraft.core.Phase;
+import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 
@@ -10,10 +13,9 @@ public abstract class Particle {
 
     private final ParticleType type;
 
-    private float offsetX, offsetY, offsetZ;
-    private float speed;
-    private int amount;
-    private double range;
+    protected float offsetX, offsetY, offsetZ;
+    protected float speed;
+    protected int amount;
 
     public Particle(ParticleType type) {
         this.type = type;
@@ -21,7 +23,6 @@ public abstract class Particle {
         setOffset(0f,0f,0f);
         setSpeed(0f);
         setAmount(0);
-        setRange(0.0);
     }
 
     public Particle(ParticleType type, Config data) {
@@ -32,8 +33,7 @@ public abstract class Particle {
                 data.getFloat("offset.z", 0.0f)
         );
         setSpeed(data.getFloat("speed", 0.0f));
-        setAmount(data.getInt("amount", 0));
-        setRange(data.getDouble("range", 0.0));
+        setAmount(data.getInt("amount", 10));
     }
 
     public void setOffset(float x, float y, float z) {
@@ -50,11 +50,7 @@ public abstract class Particle {
         this.amount = amount <= 0 ? 0 : amount;
     }
 
-    public void setRange(double range) {
-        this.range = Math.abs(range);
-    }
-
-    public abstract void display(Location location);
+    public abstract void display(Location location, Game phase);
 
 
     public static Particle deserialize(Config data) {

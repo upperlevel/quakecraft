@@ -53,9 +53,8 @@ public class RayTrace {
     public boolean intersects(Vector min, Vector max, double blocksAway, double accuracy) {
         List<Vector> positions = traverse(blocksAway, accuracy);
         for (Vector position : positions) {
-            if (intersects(position, min, max)) {
+            if (intersects(position, min, max))
                 return true;
-            }
         }
         return false;
     }
@@ -64,7 +63,7 @@ public class RayTrace {
     public Vector positionOfIntersection(BoundingBox boundingBox, double blocksAway, double accuracy) {
         List<Vector> positions = traverse(blocksAway, accuracy);
         for (Vector position : positions) {
-            if (intersects(position, boundingBox.min, boundingBox.max)) {
+            if (boundingBox.isInside(position)) {
                 return position;
             }
         }
@@ -75,7 +74,7 @@ public class RayTrace {
     public boolean intersects(BoundingBox boundingBox, double blocksAway, double accuracy) {
         List<Vector> positions = traverse(blocksAway, accuracy);
         for (Vector position : positions) {
-            if (intersects(position, boundingBox.min, boundingBox.max)) {
+            if(boundingBox.isInside(position)) {
                 return true;
             }
         }

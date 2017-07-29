@@ -31,11 +31,13 @@ import xyz.upperlevel.uppercore.gui.GuiAction;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.sound.CompatibleSound;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PurchaseGui extends ChestGui {
+    private static Sound ANVIL_BREAK = CompatibleSound.getRaw("BLOCK_ANVIL_BREAK");
     private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     @Getter
     private List<PurchaseAdapter> adapters = new ArrayList<>();
@@ -130,7 +132,7 @@ public class PurchaseGui extends ChestGui {
                         GuiAction.back()
                 );
             } else {
-                PlayerUtil.playSound(player, Sound.BLOCK_ANVIL_BREAK);//TODO 1.8 compatibility
+                PlayerUtil.playSound(player, ANVIL_BREAK);
                 player.sendMessage(ChatColor.RED + "You don't have enough money");
             }
         } else

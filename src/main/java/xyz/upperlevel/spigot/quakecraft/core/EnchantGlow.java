@@ -45,12 +45,12 @@ public class EnchantGlow extends Enchantment {
         return EnchantmentTarget.ALL;
     }
 
-    @Override
+    //@Override Compatibility
     public boolean isTreasure() {
         return false;
     }
 
-    @Override
+    //@Override Compatibility
     public boolean isCursed() {
         return false;
     }

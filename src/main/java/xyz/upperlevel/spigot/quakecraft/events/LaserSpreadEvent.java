@@ -7,8 +7,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
+
+import java.util.List;
 
 /**
  * Event called when the laser is travelling along its trajectory.
@@ -24,11 +27,14 @@ public class LaserSpreadEvent extends Event implements Cancellable {
     private final Location location;
     private final Player shooter;
 
-    public LaserSpreadEvent(PlayingPhase phase, Location location, Player shooter) {
+    private List<Particle> particles;
+
+    public LaserSpreadEvent(PlayingPhase phase, Location location, Player shooter, List<Particle> particles) {
         this.phase = phase;
         this.game = phase.getGame();
         this.location = location;
         this.shooter = shooter;
+        this.particles = particles;
     }
 
     private boolean cancelled;
