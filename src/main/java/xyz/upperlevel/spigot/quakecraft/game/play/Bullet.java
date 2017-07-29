@@ -65,6 +65,7 @@ public class Bullet {
 
         shootTime = System.currentTimeMillis();
         notifier = scheduler.runTaskTimer(QuakeCraftReloaded.get(), this::updatePlayer, EXP_UPDATE_EVERY, EXP_UPDATE_EVERY);
+        player.setExp(1f);
         scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownMillis/MILLIS_IN_TICK);
     }
 
@@ -110,13 +111,14 @@ public class Bullet {
     }
 
     public void updatePlayer() {
-        float perc = (System.currentTimeMillis() - shootTime) / (float) cooldownMillis;
-        player.setExp(perc > 1f ? 1f : perc);
+        float perc = 1f - ((System.currentTimeMillis() - shootTime) / (float) cooldownMillis);
+        player.setExp(perc < 0f ? 0f : perc);
     }
 
     public void cooldownEnd() {
         notifier.cancel();
         cooldowns.remove(player);
+        player.setExp(0f);
     }
 
     public static boolean shoot(PlayingPhase phase, Player player) {
