@@ -87,7 +87,7 @@ public class Bullet {
             // TODO: what if we search backwards? players -> chunk -> Bounding box?
             forEveryPlayerAround(player, loc, 0.25, hit -> {
                 if (phase.getGame().isPlaying(hit)) {
-                    LaserHitEvent e = new LaserHitEvent(phase, loc, player, hit);
+                    LaserHitEvent e = new LaserHitEvent(phase, loc, qp, player, hit);
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
                         cancelSpreader();

@@ -13,6 +13,8 @@ example:
     flags:
     - hide attributes
 
+  default: true
+
   barrel: 'burst'
   case: 'reinforced'
   laser: 'red'

@@ -40,6 +40,8 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
                 throw e;
             }
         }
+        if(getDefault() == null)
+            throw new InvalidConfigurationException("No default value for " + getPurchaseName());
     }
 
     public void loadConfig(File file) {

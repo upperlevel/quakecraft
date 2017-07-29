@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.shop;
 
 import lombok.Getter;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
@@ -67,14 +68,17 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
 
             if (s != null) {
                 this.sound = s.getSoundRequired("type");
-                this.pitch = s.getFloat("pitch", -1.0f);
-                this.volume = s.getFloat("volume", -1.0f);
+                this.pitch = s.getFloat("pitch", 1.0f);
+                this.volume = s.getFloat("volume", 1.0f);
             } else {
                 this.sound = CompatibleSound.get(obj.toString());
-                this.pitch = -1.0f;
-                this.volume = -1.0f;
+                this.pitch = 1.0f;
+                this.volume = 1.0f;
             }
         }
 
+        public void play(Location loc) {
+            loc.getWorld().playSound(loc, sound, volume, pitch);
+        }
     }
 }

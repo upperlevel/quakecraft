@@ -1,6 +1,8 @@
 package xyz.upperlevel.spigot.quakecraft.shop.armor;
 
 import lombok.Getter;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
@@ -50,7 +52,7 @@ public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
 
         protected Boot(String id, Config config) {
             super(BootManager.this, id, config);
-            this.item = config.getCustomItem("item");
+            this.item = config.getCustomItem("item", CustomItem.AIR);
         }
     }
 }

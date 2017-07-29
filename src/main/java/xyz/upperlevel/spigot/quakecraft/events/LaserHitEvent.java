@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
 
 @Getter
@@ -18,6 +19,7 @@ public class LaserHitEvent extends Event implements Cancellable {
 
     private final PlayingPhase phase;
     private final Location location;
+    private final QuakePlayer qShooter;
     private final Player shooter, hit;
 
     @Setter

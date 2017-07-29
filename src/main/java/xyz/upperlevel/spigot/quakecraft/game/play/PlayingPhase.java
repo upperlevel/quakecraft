@@ -1,8 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.game.play;
 
 import lombok.Data;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +9,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.core.NmsUtil;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
@@ -73,6 +77,14 @@ public class PlayingPhase implements Phase, Listener {
     public void setup(Player player) {
         hotbars().view(player).addHotbar(hotbar);
         boards().view(player).setBoard(board);
+        QuakePlayer qp = QuakeCraftReloaded.get().getPlayerManager().getPlayer(player);
+        PlayerInventory inventory = player.getInventory();
+        inventory.setArmorContents(new ItemStack[]{
+                qp.getSelectedBoot().getItem().resolve(player),
+                qp.getSelectedLegging().getItem().resolve(player),
+                qp.getSelectedChestplate().getItem().resolve(player),
+                qp.getSelectedHat().getItem().resolve(player)
+        });
     }
 
     public void update() {
@@ -85,10 +97,8 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     public void clear(Player player) {
-        hotbars()
-                .view(player).removeHotbar(hotbar);
-        boards()
-                .view(player).clear();
+        hotbars().view(player).removeHotbar(hotbar);
+        boards().view(player).clear();
     }
 
     public void clear() {
@@ -135,10 +145,25 @@ public class PlayingPhase implements Phase, Listener {
             parent.setPhase(new EndingPhase(parent));
     }
 
+    public void explodeBarrel(Location location, QuakePlayer p) {
+        FireworkEffect.Type type = p.getSelectedBarrel().getFireworkType();
+        Color color = p.getSelectedLaser().getFireworkColor();
+
+        NmsUtil.instantFirework(
+                location,
+                FireworkEffect.builder()
+                .with(type)
+                .withColor(color)
+                .build()
+        );
+    }
+
     @EventHandler
     public void onLaserHit(LaserHitEvent e) {
         if (equals(e.getPhase())) {
             kill(e.getHit(), e.getShooter());
+            e.getQShooter().getSelectedKillSound().play(e.getLocation());
+            explodeBarrel(e.getLocation(), e.getQShooter());
             game.broadcast(e.getShooter().getName() + " shot " + e.getHit().getName()); // todo kill message
         }
     }
@@ -149,7 +174,6 @@ public class PlayingPhase implements Phase, Listener {
             Location loc = e.getLocation();
             for(Particle p : e.getParticles())
                 p.display(loc, getGame());
-            //e.getLocation().getWorld().spawnParticle(Particle.DRIP_LAVA, e.getLocation(), 25);
         }
     }
 

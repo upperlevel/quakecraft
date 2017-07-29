@@ -50,7 +50,8 @@ public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging
 
         protected Legging(String id, Config config) {
             super(LeggingManager.this, id, config);
-            this.item = config.getCustomItem("item");
+            this.item = config.getCustomItem("item", CustomItem.AIR);
+
         }
     }
 }

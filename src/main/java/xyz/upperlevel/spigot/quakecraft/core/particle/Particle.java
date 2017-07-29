@@ -28,11 +28,11 @@ public abstract class Particle {
     public Particle(ParticleType type, Config data) {
         this.type = type;
         setOffset(
-                data.getFloat("offset.x", 0.0f),
-                data.getFloat("offset.y", 0.0f),
-                data.getFloat("offset.z", 0.0f)
+                data.getFloat("offset.x", 0f),
+                data.getFloat("offset.y", 0f),
+                data.getFloat("offset.z", 0f)
         );
-        setSpeed(data.getFloat("speed", 0.0f));
+        setSpeed(data.getFloat("speed", 0.05f));
         setAmount(data.getInt("amount", 10));
     }
 
