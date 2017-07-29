@@ -58,6 +58,13 @@ public abstract class Particle {
         ParticleType type = ParticleType.get(raw);
         if(type == null)
             throw new InvalidConfigurationException("Cannot find particle type \"" + raw + "\"");
-        return type.create(data);
+        try {
+            return type.create(data);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidConfigurationException("Cannot load particle \"" + type + "\": ");
+        } catch (InvalidConfigurationException e) {
+            e.addLocalizer("in particle");
+            throw e;
+        }
     }
 }

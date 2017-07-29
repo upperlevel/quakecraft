@@ -1,26 +1,25 @@
 package xyz.upperlevel.spigot.quakecraft.core.particle.impl;
 
 import lombok.Getter;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.material.MaterialData;
-import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
-import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleEffect;
 import xyz.upperlevel.spigot.quakecraft.core.particle.ParticleType;
 import xyz.upperlevel.spigot.quakecraft.core.particle.data.ParticleBlockData;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+
+import static xyz.upperlevel.spigot.quakecraft.core.particle.ParticleEffect.BLOCK_DUST;
 
 @Getter
-public class BlockDustParticle extends Particle {
+public class BlockDustParticle extends EffectParticle {
 
     private Material blockType;
     private byte blockData;
     private ParticleBlockData data;
 
     public BlockDustParticle() {
-        super(ParticleType.BLOCK_DUST);
+        super(ParticleType.BLOCK_DUST, BLOCK_DUST);
 
         setBlockType(Material.WOOL);
         setBlockData((byte) 0);
@@ -28,10 +27,14 @@ public class BlockDustParticle extends Particle {
     }
 
     public BlockDustParticle(Config data) {
-        super(ParticleType.BLOCK_DUST, data);
+        super(ParticleType.BLOCK_DUST, data, BLOCK_DUST);
         Config block = data.getConfigRequired("block");
-        setBlockType(block.getMaterialRequired("type"));
+        Material type = block.getMaterialRequired("type");
+        if(!type.isBlock())
+            throw new InvalidConfigurationException("Particle must be a block!", "in particle '" + ParticleType.BLOCK_DUST.name() + "'");
+        setBlockType(type);
         setBlockData(block.getByte("data", (byte)0));
+        bake();
     }
 
     public void setBlockType(Material blockType) {
@@ -42,13 +45,13 @@ public class BlockDustParticle extends Particle {
         this.blockData = blockData;
     }
 
-    private void bake() {
+    public void bake() {
         data = new ParticleBlockData(blockType, blockData);
     }
 
     @Override
     public void display(Location location, Game game) {
-        ParticleEffect.BLOCK_DUST.display(
+        BLOCK_DUST.display(
                 data,
                 getOffsetX(),
                 getOffsetY(),

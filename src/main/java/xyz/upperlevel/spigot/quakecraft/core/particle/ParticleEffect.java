@@ -14,10 +14,7 @@ import xyz.upperlevel.spigot.quakecraft.core.particle.exceptions.ParticleDataExc
 import xyz.upperlevel.spigot.quakecraft.core.particle.exceptions.ParticleVersionException;
 import xyz.upperlevel.uppercore.util.NmsVersion;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
@@ -392,12 +389,12 @@ public enum ParticleEffect {
     private final String name;
     private final int id;
     private final int requiredVersion;
-    private final List<ParticleProperty> properties;
+    private final EnumSet<ParticleProperty> properties;
 
     // Initialize map for quick name and id lookup
     static {
         for (ParticleEffect effect : values()) {
-            NAME_MAP.put(effect.name, effect);
+            NAME_MAP.put(effect.name.toLowerCase(), effect);
             ID_MAP.put(effect.id, effect);
         }
     }
@@ -414,7 +411,8 @@ public enum ParticleEffect {
         this.name = name;
         this.id = id;
         this.requiredVersion = requiredVersion;
-        this.properties = Arrays.asList(properties);
+        this.properties = EnumSet.noneOf(ParticleProperty.class);
+        this.properties.addAll(Arrays.asList(properties));
     }
 
     /**
@@ -469,13 +467,7 @@ public enum ParticleEffect {
      * @return The particle effect
      */
     public static ParticleEffect fromName(String name) {
-        for (Entry<String, ParticleEffect> entry : NAME_MAP.entrySet()) {
-            if (!entry.getKey().equalsIgnoreCase(name)) {
-                continue;
-            }
-            return entry.getValue();
-        }
-        return null;
+        return NAME_MAP.get(name.toLowerCase());
     }
 
     /**
@@ -485,13 +477,7 @@ public enum ParticleEffect {
      * @return The particle effect
      */
     public static ParticleEffect fromId(int id) {
-        for (Entry<Integer, ParticleEffect> entry : ID_MAP.entrySet()) {
-            if (entry.getKey() != id) {
-                continue;
-            }
-            return entry.getValue();
-        }
-        return null;
+        return ID_MAP.get(id);
     }
 
     /**
@@ -532,17 +518,6 @@ public enum ParticleEffect {
      */
     private static boolean isDataCorrect(ParticleEffect effect, ParticleData data) {
         return ((effect == BLOCK_CRACK || effect == BLOCK_DUST) && data instanceof ParticleBlockData) || (effect == ITEM_CRACK && data instanceof ParticleItemData);
-    }
-
-    /**
-     * Determine if the color type for a particle effect is correct
-     *
-     * @param effect Particle effect
-     * @param color Particle color
-     * @return Whether the color type is correct or not
-     */
-    private static boolean isColorCorrect(ParticleEffect effect, ParticleColor color) {
-        return ((effect == SPELL_MOB || effect == SPELL_MOB_AMBIENT || effect == REDSTONE || effect == NOTE) && color != null);
     }
 
     /**
@@ -773,9 +748,6 @@ public enum ParticleEffect {
         if (!hasProperty(ParticleProperty.COLORABLE)) {
             throw new ParticleColorException("This particle effect is not colorable");
         }
-        if (!isColorCorrect(this, color)) {
-            throw new ParticleColorException("The particle color type is incorrect");
-        }
         new ParticlePacket(this, color, range > 256).sendTo(center, range);
     }
 
@@ -796,9 +768,6 @@ public enum ParticleEffect {
         }
         if (!hasProperty(ParticleProperty.COLORABLE)) {
             throw new ParticleColorException("This particle effect is not colorable");
-        }
-        if (!isColorCorrect(this, color)) {
-            throw new ParticleColorException("The particle color type is incorrect");
         }
         new ParticlePacket(this, color, true).sendTo(center, players);
     }

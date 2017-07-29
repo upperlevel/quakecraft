@@ -23,6 +23,6 @@ public class ParticleBlockData extends ParticleData {
     public ParticleBlockData(Material material, byte data) throws IllegalArgumentException {
         super(material, data);
         if (!material.isBlock())
-            throw new IllegalArgumentException("The material is not a block");
+            throw new IllegalArgumentException("The material + '" + material.name() + "' is not a block");
     }
 }

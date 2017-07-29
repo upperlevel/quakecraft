@@ -1,14 +1,11 @@
 package xyz.upperlevel.spigot.quakecraft.core;
 
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import xyz.upperlevel.spigot.quakecraft.core.math.BoundingBox;
-import xyz.upperlevel.uppercore.util.NmsVersion;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -68,9 +65,8 @@ public final class PlayerUtil {
 
         for (int chX = chMinX; chX < chMaxX; chX++) {
             for (int chZ = chMinZ; chZ < chMaxZ; chZ++) {
-                Chunk chunk = world.getChunkAt(chX, chZ);
-                if (chunk.isLoaded()) {
-                    for (Entity t : chunk.getEntities()) {
+                if (world.isChunkLoaded(chX, chZ)) {
+                    for (Entity t : world.getChunkAt(chX, chZ).getEntities()) {
                         if (t instanceof Player && viewer != t) {
                             Location l = t.getLocation();
                             if (l.getX() >= minX &&

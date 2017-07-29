@@ -194,13 +194,13 @@ melon:
   name: 'Melon Muzzle'
   cost: 125000
   icon:
-    type: 'MELON'
+    type: 'MELON_BLOCK'
     lore:
     - '&7Choose a particle effect!'
   particles:
   - type: 'BLOCK_DUST'
     block:
-      type: 'MELON'
+      type: 'MELON_BLOCK'
 
 pumpkin:
   name: 'Pumpkin Muzzle'

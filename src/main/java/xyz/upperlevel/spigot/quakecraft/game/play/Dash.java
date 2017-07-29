@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.game.play;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
@@ -57,7 +58,7 @@ public class Dash {
     public static void dash(Player p) {
         Dash dash = dashing.get(p);
         if (dash != null) {
-            p.sendMessage(RED + "Dash cooling down: " + ((dash.endTime - System.currentTimeMillis())/1000) + "s remaining");
+            p.sendMessage(RED + "Dash cooling down: " + (int)Math.ceil((dash.endTime - System.currentTimeMillis())/1000f) + "s remaining");
             return;
         }
 

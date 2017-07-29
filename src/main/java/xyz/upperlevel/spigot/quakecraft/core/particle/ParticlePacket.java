@@ -11,8 +11,10 @@ import xyz.upperlevel.spigot.quakecraft.core.particle.exceptions.PacketSendingEx
 import xyz.upperlevel.spigot.quakecraft.core.particle.exceptions.VersionIncompatibleException;
 import xyz.upperlevel.uppercore.util.NmsVersion;
 
+import javax.management.ReflectionException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Consumer;
@@ -27,12 +29,12 @@ import java.util.stream.Stream;
  * @since 1.5
  */
 public class ParticlePacket {
-    private static Class<?> enumParticle;
-    private static Constructor<?> packetConstructor;
+    private static Class<?> particlePacketClass;
+    private static PacketCreator packetCreator;
     private static Method getHandle;
     private static Field playerConnection;
     private static Method sendPacket;
-    private static boolean initialized;
+
     private final ParticleEffect effect;
     private float offsetX;
     private final float offsetY;
@@ -42,6 +44,22 @@ public class ParticlePacket {
     private final boolean longDistance;
     private final ParticleData data;
     private Object packet;
+
+    static {
+        try {
+            particlePacketClass = ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass(NmsVersion.MINOR < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
+            if (NmsVersion.MINOR < 8)
+                packetCreator = oldPacketConstructor();
+            else
+                packetCreator = newPacketConstructor();
+
+            getHandle = ReflectionUtils.getMethod("CraftPlayer", ReflectionUtils.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
+            playerConnection = ReflectionUtils.getField("EntityPlayer", ReflectionUtils.PackageType.MINECRAFT_SERVER, false, "playerConnection");
+            sendPacket = ReflectionUtils.getMethod(playerConnection.getType(), "sendPacket", ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass("Packet"));
+        } catch (Exception exception) {
+            throw new VersionIncompatibleException("Your current bukkit version seems to be incompatible with this library", exception);
+        }
+    }
 
     /**
      * Construct a new particle packet
@@ -58,7 +76,6 @@ public class ParticlePacket {
      * @see #initialize()
      */
     public ParticlePacket(ParticleEffect effect, float offsetX, float offsetY, float offsetZ, float speed, int amount, boolean longDistance, ParticleData data) throws IllegalArgumentException {
-        initialize();//TODO maybe it's better to move this
         if (speed < 0) {
             throw new IllegalArgumentException("The speed is lower than 0");
         }
@@ -103,75 +120,17 @@ public class ParticlePacket {
     }
 
     /**
-     * Initializes {@link #packetConstructor}, {@link #getHandle}, {@link #playerConnection} and {@link #sendPacket} and sets {@link #initialized} to <code>true</code> if it succeeds
-     * <p>
-     * <b>Note:</b> These fields only have to be initialized once, so it will return if {@link #initialized} is already set to <code>true</code>
-     *
-     * @throws VersionIncompatibleException if your bukkit version is not supported by this library
-     */
-    public static void initialize() throws VersionIncompatibleException {
-        if (initialized)
-            return;
-        try {
-            if (NmsVersion.MINOR > 7) {
-                enumParticle = ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
-            }
-            Class<?> packetClass = ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass(NmsVersion.MINOR < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
-            packetConstructor = ReflectionUtils.getConstructor(packetClass);
-            getHandle = ReflectionUtils.getMethod("CraftPlayer", ReflectionUtils.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
-            playerConnection = ReflectionUtils.getField("EntityPlayer", ReflectionUtils.PackageType.MINECRAFT_SERVER, false, "playerConnection");
-            sendPacket = ReflectionUtils.getMethod(playerConnection.getType(), "sendPacket", ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass("Packet"));
-        } catch (Exception exception) {
-            throw new VersionIncompatibleException("Your current bukkit version seems to be incompatible with this library", exception);
-        }
-        initialized = true;
-    }
-
-    /**
-     * Determine if {@link #packetConstructor}, {@link #getHandle}, {@link #playerConnection} and {@link #sendPacket} are initialized
-     *
-     * @return Whether these fields are initialized or not
-     * @see #initialize()
-     */
-    public static boolean isInitialized() {
-        return initialized;
-    }
-
-    /**
      * Initializes {@link #packet} with all set values
      *
      * @param center Center location of the effect
      * @throws PacketInstantiationException If instantion fails due to an unknown error
      */
     private void initializePacket(Location center) throws PacketInstantiationException {
-        //TODO please cache the reflections
         if (packet != null) {
             return;
         }
         try {
-            packet = packetConstructor.newInstance();
-            if (NmsVersion.MINOR < 8) {
-                String name = effect.getName();
-                if (data != null) {
-                    name += data.getPacketDataString();
-                }
-                ReflectionUtils.setValue(packet, true, "a", name);
-            } else {
-                ReflectionUtils.setValue(packet, true, "a", enumParticle.getEnumConstants()[effect.getId()]);
-                ReflectionUtils.setValue(packet, true, "j", longDistance);
-                if (data != null) {
-                    int[] packetData = data.getPacketData();
-                    ReflectionUtils.setValue(packet, true, "k", effect == ParticleEffect.ITEM_CRACK ? packetData : new int[] { packetData[0] | (packetData[1] << 12) });
-                }
-            }
-            ReflectionUtils.setValue(packet, true, "b", (float) center.getX());
-            ReflectionUtils.setValue(packet, true, "c", (float) center.getY());
-            ReflectionUtils.setValue(packet, true, "d", (float) center.getZ());
-            ReflectionUtils.setValue(packet, true, "e", offsetX);
-            ReflectionUtils.setValue(packet, true, "f", offsetY);
-            ReflectionUtils.setValue(packet, true, "g", offsetZ);
-            ReflectionUtils.setValue(packet, true, "h", speed);
-            ReflectionUtils.setValue(packet, true, "i", amount);
+            packet = packetCreator.create(effect, data, longDistance, (float)center.getX(), (float)center.getY(), (float)center.getZ(), offsetX, offsetY, offsetZ, speed, amount);
         } catch (Exception exception) {
             throw new PacketInstantiationException("Packet instantiation failed", exception);
         }
@@ -259,5 +218,91 @@ public class ParticlePacket {
                 }
             }
         }
+    }
+
+    /*
+            Class<?> packetClass = ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass(NmsVersion.MINOR < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
+            Constructor packetConstructor = ReflectionUtils.getConstructor(packetClass);
+            packet = packetConstructor.newInstance();
+            if (NmsVersion.MINOR < 8) {
+                String name = effect.getName();
+                if (data != null) {
+                    name += data.getPacketDataString();
+                }
+                ReflectionUtils.setValue(packet, true, "a", name);
+            } else {
+                ReflectionUtils.setValue(packet, true, "a", ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass("EnumParticle").getEnumConstants()[effect.getId()]);
+                ReflectionUtils.setValue(packet, true, "j", longDistance);
+                if (data != null) {
+                    int[] packetData = data.getPacketData();
+                    ReflectionUtils.setValue(packet, true, "k", effect == ParticleEffect.ITEM_CRACK ? packetData : new int[] { packetData[0] | (packetData[1] << 12) });
+                }
+            }
+            ReflectionUtils.setValue(packet, true, "b", (float) center.getX());
+            ReflectionUtils.setValue(packet, true, "c", (float) center.getY());
+            ReflectionUtils.setValue(packet, true, "d", (float) center.getZ());
+            ReflectionUtils.setValue(packet, true, "e", offsetX);
+            ReflectionUtils.setValue(packet, true, "f", offsetY);
+            ReflectionUtils.setValue(packet, true, "g", offsetZ);
+            ReflectionUtils.setValue(packet, true, "h", speed);
+            ReflectionUtils.setValue(packet, true, "i", amount);
+     */
+
+    private interface PacketCreator {
+        Object create(ParticleEffect effect, ParticleData data, boolean longDistance, float posX, float posY, float posZ, float offsetX, float offsetY, float offsetZ, float speed, int amount) throws Exception;
+    }
+
+    private static PacketCreator oldPacketConstructor() throws NoSuchMethodException {
+        final Constructor<?> constructor = particlePacketClass.getConstructor(
+                String.class,
+                Float.TYPE, Float.TYPE, Float.TYPE,
+                Float.TYPE, Float.TYPE, Float.TYPE,
+                Float.TYPE,
+                Integer.TYPE
+        );
+        return (effect, data, longDistance, posX, posY, posZ, offsetX, offsetY, offsetZ, speed, amount) -> {
+            String name = effect.getName();
+            if(data != null)
+                name += data.getPacketDataString();
+            return constructor.newInstance(
+                    name,
+                    posX, posY, posZ,
+                    offsetX, offsetY, offsetZ,
+                    speed,
+                    amount
+            );
+        };
+    }
+
+    private static PacketCreator newPacketConstructor() throws NoSuchMethodException, ClassNotFoundException {
+        Class<?> enumParticle = ReflectionUtils.PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
+        Object[] particleValues = enumParticle.getEnumConstants();
+        final Constructor<?> constructor = particlePacketClass.getConstructor(
+                enumParticle,
+                Boolean.TYPE,
+                Float.TYPE, Float.TYPE, Float.TYPE,
+                Float.TYPE, Float.TYPE, Float.TYPE,
+                Float.TYPE,
+                Integer.TYPE,
+                int[].class
+        );
+        return (effect, data, longDistance, posX, posY, posZ, offsetX, offsetY, offsetZ, speed, amount) -> {
+            int[] rawData;
+            if (data != null) {
+                int[] packetData = data.getPacketData();
+                rawData = effect == ParticleEffect.ITEM_CRACK ? packetData : new int[] { packetData[0] | (packetData[1] << 12) };
+            } else rawData = null;
+
+
+            return constructor.newInstance(
+                    particleValues[effect.getId()],
+                    longDistance,
+                    posX, posY, posZ,
+                    offsetX, offsetY, offsetZ,
+                    speed,
+                    amount,
+                    rawData
+            );
+        };
     }
 }
