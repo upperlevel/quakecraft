@@ -256,10 +256,11 @@ public class PurchaseGui extends ChestGui {
     }
 
     @SuppressWarnings("unchecked")
-    public static void load(Config config) {
-        buyingLores = config.getMessageListRequired("buying");
-        boughtLores = config.getMessageListRequired("bought");
-        selectedLores = config.getMessageListRequired("selected");
+    public static void loadConfig() {
+        Config config = QuakeCraftReloaded.get().getCustomConfig().getConfigRequired("purchase-gui");
+        buyingLores = config.getMessageStrListRequired("buying");
+        boughtLores = config.getMessageStrListRequired("bought");
+        selectedLores = config.getMessageStrListRequired("selected");
         QuakeCraftReloaded.get().getLogger().info("PurchaseGui's config loaded!");
     }
 

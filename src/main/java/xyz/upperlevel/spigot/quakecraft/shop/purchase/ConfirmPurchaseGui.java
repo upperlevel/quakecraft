@@ -94,7 +94,7 @@ public class ConfirmPurchaseGui extends ChestGui {
         private CustomItem cancelItem;
 
         public Options(Config config) {
-            this.title = config.getMessageRequired("title");
+            this.title = config.getMessageStrRequired("title");
             this.size = config.getInt("size", -1);
             if(size < 0) {
                 type = config.getEnum("type", InventoryType.class);

@@ -35,7 +35,7 @@ public abstract class Purchase<T extends Purchase<T>> {
         this.manager = manager;
         this.id = id;
         this.cost = config.getFloat("cost", 0.0f);
-        this.name = config.getMessageRequired("name");
+        this.name = config.getMessageStrRequired("name");
         this.def = config.getBool("default", false);
         this.placeholders = PlaceholderRegistry.create();
         fillPlaceholderSession(placeholders);

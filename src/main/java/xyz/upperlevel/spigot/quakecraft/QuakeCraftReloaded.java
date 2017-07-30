@@ -8,6 +8,7 @@ import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
+import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
 import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.ConfirmPurchaseGui;
@@ -48,6 +49,8 @@ public class QuakeCraftReloaded extends JavaPlugin {
 
     private MessageManager messages;
 
+    private Config customConfig;
+
     // confirm gui
     private ConfirmPurchaseGui.Options defConfirmOptions;
 
@@ -56,17 +59,12 @@ public class QuakeCraftReloaded extends JavaPlugin {
         instance = this;
 
         try {
-            messages = MessageManager.load(this);
-
             saveDefaultConfig();
-
-            Config config = Config.wrap(getConfig());
-
-            arenaManager = new ArenaManager();
-            gameManager = new GameManager();
 
             //Load command messages
             loadConfig();
+            arenaManager = new ArenaManager();
+            gameManager = new GameManager();
 
             guis = new GuiRegistry(this);
             hotbars = new HotbarRegistry(this);
@@ -74,12 +72,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
 
             arenaManager.load();
             gameManager.load();
-            try {
-                PurchaseGui.load(config.getConfigRequired("purchase-gui"));
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("while parsing purchase-gui");
-                throw e;
-            }
+
             shop = new ShopCategory();
             shop.load();
 
@@ -99,8 +92,13 @@ public class QuakeCraftReloaded extends JavaPlugin {
     }
 
     public void loadConfig() {
+        customConfig = Config.wrap(getConfig());
+        messages = MessageManager.load(this);
+
         loadSafe("commands", QuakeCommand::loadConfig);
         loadSafe("killstreak", KillStreak::loadConfig);
+        loadSafe("dash", Dash::loadConfig);
+        loadSafe("purchase-gui", PurchaseGui::loadConfig);
     }
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {

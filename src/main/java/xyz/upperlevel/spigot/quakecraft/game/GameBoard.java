@@ -19,9 +19,9 @@ public class GameBoard extends Board {
     public GameBoard(GamePhase phase, Config config) {
         super(config);
         this.phase = phase;
-        add(new TextArea(config.getMessageList("header")));
+        add(new TextArea(config.getMessageStrList("header")));
         add(new Ranking(config.getConfigRequired("ranking")));
-        add(new TextArea(config.getMessageList("footer")));
+        add(new TextArea(config.getMessageStrList("footer")));
     }
 
     public static GameBoard deserialize(GamePhase phase, Config config) {
@@ -42,7 +42,7 @@ public class GameBoard extends Board {
         public Ranking(Config config) {
             try {
                 size = config.getInt("size", -1);
-                text = config.getMessageRequired("text");
+                text = config.getMessageStrRequired("text");
             } catch (InvalidConfigurationException e) {
                 e.addLocalizer("in ranking");
                 throw e;

@@ -1,4 +1,6 @@
 game:
+  dash:
+    cooldown: "&cDash cooling down! %remaining_secs%s remaining!"
   multi-stab:
     double: "&6DOUBLE KILL"
     triple: "&9TRIPLE KILL"

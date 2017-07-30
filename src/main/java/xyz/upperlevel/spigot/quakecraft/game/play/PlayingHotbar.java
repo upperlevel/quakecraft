@@ -25,8 +25,8 @@ public class PlayingHotbar extends Hotbar {
         private final List<PlaceholderValue<String>> lore;
 
         public Gun(Config config) {
-            name = config.getMessageRequired("name");
-            lore = config.getMessageList("lore");
+            name = config.getMessageStrRequired("name");
+            lore = config.getMessageStrList("lore");
         }
 
         @Override
@@ -60,8 +60,8 @@ public class PlayingHotbar extends Hotbar {
         private final List<PlaceholderValue<String>> lore;
 
         public Tracker(Config config) {
-            name = config.getMessage("name");
-            lore = config.getMessageList("lore");
+            name = config.getMessageStr("name");
+            lore = config.getMessageStrList("lore");
         }
 
         @Override

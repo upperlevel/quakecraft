@@ -61,6 +61,9 @@ playing-hotbar:
   tracker:
     slot: 1
 
+dash:
+  base-power: 1.5
+
 purchase-gui:
   buying:
   - ''

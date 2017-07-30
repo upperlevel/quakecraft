@@ -21,7 +21,7 @@ public class BaseDashUpgrade<P extends BaseDashUpgrade<P>> extends Purchase<P> {
     public BaseDashUpgrade(PurchaseManager<P> manager, String id, Config config) {
         super(manager, id, config);
         item = new CustomItem(new ItemStack(Material.STAINED_GLASS_PANE));
-        item.setLore(config.getMessageList("lore", Collections.emptyList()));
+        item.setLore(config.getMessageStrList("lore", Collections.emptyList()));
     }
 
     @Override
