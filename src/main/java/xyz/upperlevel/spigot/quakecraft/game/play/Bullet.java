@@ -2,7 +2,6 @@ package xyz.upperlevel.spigot.quakecraft.game.play;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -11,13 +10,10 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
-import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
+import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import static xyz.upperlevel.spigot.quakecraft.core.PlayerUtil.forEveryPlayerAround;
 
@@ -35,6 +31,7 @@ public class Bullet {
     private final Player player;
     private final QuakePlayer qp;
     private final List<Vector> positions;
+    private int positionIndex;
     private BukkitTask laserSpreader;
 
     private List<Particle> particles;
@@ -43,7 +40,7 @@ public class Bullet {
     private long shootTime = -1;
     private BukkitTask notifier;
 
-    private int positionIndex;
+    private List<Player> killed = new ArrayList<>();
 
     public Bullet(PlayingPhase phase, Player player) {
         this.phase = phase;
@@ -78,35 +75,36 @@ public class Bullet {
                 LaserSpreadEvent e = new LaserSpreadEvent(phase, loc, player, particles);
                 Bukkit.getPluginManager().callEvent(e);
                 if (e.isCancelled()) {
-                    cancelSpreader();
+                    stopLaser();
                     break;
                 }
             }
             // laser hit
             // todo choose radius
             // TODO: what if we search backwards? players -> chunk -> Bounding box?
+
             forEveryPlayerAround(player, loc, 0.25, hit -> {
                 if (phase.getGame().isPlaying(hit)) {
-                    LaserHitEvent e = new LaserHitEvent(phase, loc, qp, player, hit);
+                    LaserStabEvent e = new LaserStabEvent(phase, loc, qp, player, hit);
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
-                        cancelSpreader();
+                        killed.add(player);
                     }
                 }
             });
             // laser hit block
             if (loc.getBlock().getType().isSolid()) {
-                cancelSpreader();
+                stopLaser();
                 break;
             }
             if (positionIndex == positions.size()) {
-                cancelSpreader();
+                stopLaser();
                 break;
             }
         }
     }
 
-    public void cancelSpreader() {
+    public void stopLaser() {
         laserSpreader.cancel();
     }
 

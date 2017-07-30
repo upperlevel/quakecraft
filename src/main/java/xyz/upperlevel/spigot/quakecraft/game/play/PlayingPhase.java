@@ -18,16 +18,20 @@ import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
+import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
+import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.task.Timer;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
@@ -35,6 +39,10 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
+    private static Message DOUBLE_KILL;
+    private static Message TRIPLE_KILL;
+    private static Message MULTI_KILL;
+
 
     private final Game game;
     private final GamePhase parent;
@@ -159,12 +167,28 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     @EventHandler
-    public void onLaserHit(LaserHitEvent e) {
+    public void onLaserStab(LaserStabEvent e) {
         if (equals(e.getPhase())) {
             kill(e.getHit(), e.getShooter());
             e.getQShooter().getSelectedKillSound().play(e.getLocation());
             explodeBarrel(e.getLocation(), e.getQShooter());
             game.broadcast(e.getShooter().getName() + " shot " + e.getHit().getName()); // todo kill message
+        }
+    }
+
+    @EventHandler
+    public void onLaserHit(LaserHitEvent e) {
+        int victims = e.getVictims().size();
+        if(victims > 1) {
+            Set<Player> receivers = e.getPhase().getGame().getPlayers();
+            String name = e.getShooter().getPlayer().getDisplayName();
+            if(victims == 2) {
+                DOUBLE_KILL.broadcast(receivers, "killer_name", name);
+            } else if(victims == 3) {
+                TRIPLE_KILL.broadcast(receivers, "killer_name", name);
+            } else {
+                MULTI_KILL.broadcast(receivers, "killer_name", name, "kills", String.valueOf(e.getVictims().size()));
+            }
         }
     }
 
@@ -176,7 +200,6 @@ public class PlayingPhase implements Phase, Listener {
                 p.display(loc, getGame());
         }
     }
-
 
 
     @EventHandler
@@ -192,5 +215,10 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
-
+    public static void loadConfig() {
+        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("game.multi-stab");
+        DOUBLE_KILL = manager.get("double");
+        TRIPLE_KILL = manager.get("triple");
+        MULTI_KILL = manager.get("multi");
+    }
 }

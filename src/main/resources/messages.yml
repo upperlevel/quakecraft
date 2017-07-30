@@ -1,3 +1,10 @@
+game:
+  multi-stab:
+    double: "&b%player_name% &6DOUBLE KILL"
+    triple: "&b%player_name% &9TRIPLE KILL"
+    multi: "&b%player_name% &4>>&c&lMULTI KILL&r&4<<"
+lobby:
+
 commands:
   join:
     already-playing:
@@ -55,4 +62,3 @@ commands:
     set-kills-to-win:
       negative-kills: "&cInvalid value %kills%"
       success: "&aKills to win set to '%arena_kills_to_win%' for arena '%arena%'"
-
