@@ -7,6 +7,8 @@ import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
+import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
+import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
 import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.ConfirmPurchaseGui;
 import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
@@ -26,6 +28,7 @@ import xyz.upperlevel.uppercore.util.CrashUtil;
 import java.io.IOException;
 
 import static xyz.upperlevel.uppercore.Uppercore.guis;
+import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
 @Getter
 public class QuakeCraftReloaded extends JavaPlugin {
@@ -63,7 +66,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
             gameManager = new GameManager();
 
             //Load command messages
-            QuakeCommand.loadConfig();
+            loadConfig();
 
             guis = new GuiRegistry(this);
             hotbars = new HotbarRegistry(this);
@@ -93,6 +96,11 @@ public class QuakeCraftReloaded extends JavaPlugin {
             CrashUtil.saveCrash(this, t);
             setEnabled(false);
         }
+    }
+
+    public void loadConfig() {
+        loadSafe("commands", QuakeCommand::loadConfig);
+        loadSafe("killstreak", KillStreak::loadConfig);
     }
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {

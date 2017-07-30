@@ -23,6 +23,7 @@ import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
+import xyz.upperlevel.spigot.quakecraft.game.Participant;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.task.Timer;
@@ -139,17 +140,17 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
-    private void kill(Player hit, Player shooter) {
+    private void kill(Participant hit, Participant shooter) {
         List<Location> spawns = game.getArena().getSpawns();
-        hit.teleport(spawns.get(new Random().nextInt(spawns.size())));
+        hit.getPlayer().teleport(spawns.get(new Random().nextInt(spawns.size())));
 
-        parent.getParticipant(hit).deaths++;
-        parent.getParticipant(shooter).kills++;
+        hit.onDeath();
+        shooter.onKill();
 
         updateRanking();
         update();
 
-        if (parent.getParticipant(shooter).kills >= game.getArena().getKillsToWin())
+        if (shooter.kills >= game.getArena().getKillsToWin())
             parent.setPhase(new EndingPhase(parent));
     }
 
@@ -166,13 +167,20 @@ public class PlayingPhase implements Phase, Listener {
         );
     }
 
+    public void checkKillStreak(Participant p) {
+
+    }
+
     @EventHandler
     public void onLaserStab(LaserStabEvent e) {
         if (equals(e.getPhase())) {
-            kill(e.getHit(), e.getShooter());
+            Participant hit = parent.getParticipant(e.getHit());
+            Participant shooter = parent.getParticipant(e.getShooter());
+            kill(hit, shooter);
             e.getQShooter().getSelectedKillSound().play(e.getLocation());
             explodeBarrel(e.getLocation(), e.getQShooter());
             game.broadcast(e.getShooter().getName() + " shot " + e.getHit().getName()); // todo kill message
+            checkKillStreak(shooter);
         }
     }
 

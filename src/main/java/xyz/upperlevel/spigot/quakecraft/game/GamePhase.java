@@ -23,7 +23,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     }
 
     private Participant register(Player player) {
-        Participant participant = new Participant(player);
+        Participant participant = new Participant(this, player);
         participants.put(player, participant);
         ranking.add(participant);
         return participant;
