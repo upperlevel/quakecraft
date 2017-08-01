@@ -7,9 +7,10 @@ import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
-import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
+import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
+import xyz.upperlevel.spigot.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.ConfirmPurchaseGui;
 import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
@@ -17,7 +18,6 @@ import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseGui;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.GuiRegistry;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
@@ -80,6 +80,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
 
             PlaceholderUtil.register(this, new QuakePlaceholders());
             ArgumentParserSystem.register(new ArenaArgumentParser());
+            ArgumentParserSystem.register(new PowerupEffectArgumentParser());
 
             new QuakeCommand().subscribe();
 
@@ -99,6 +100,8 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("killstreak", KillStreak::loadConfig);
         loadSafe("dash", Dash::loadConfig);
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
+
+        PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
     }
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {

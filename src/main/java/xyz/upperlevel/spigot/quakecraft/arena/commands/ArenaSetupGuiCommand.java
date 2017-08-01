@@ -6,18 +6,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
+import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
+import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.gui.*;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 import static org.bukkit.ChatColor.*;
+import static xyz.upperlevel.spigot.quakecraft.core.LocUtil.format;
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 import static xyz.upperlevel.uppercore.gui.InputFilters.filterInt;
 import static xyz.upperlevel.uppercore.gui.InputFilters.filterPlayer;
@@ -89,7 +92,7 @@ public class ArenaSetupGuiCommand extends Command {
     public Gui editArena(Player player, Arena arena, Link previous) {//TODO: OMG kill me I want the fucking classes!
         //enabled, name, min_player, max_player, spawn, lobby
         Location lobbyLoc = arena.getLobby();
-        return ChestGui.builder(9)
+        return ChestGui.builder(18)
                 .title(arena.getId() + "'s setup")
                 .add(
                         () -> GuiUtil.wool(
@@ -208,8 +211,22 @@ public class ArenaSetupGuiCommand extends Command {
                             guis().open(p, gui);
                         }
                 )
+                .add(
+                        () -> GuiUtil.itemStack(
+                                Material.TRAPPED_CHEST,
+                                "Powerups",
+                                AQUA + String.valueOf(arena.getPowerups().size()) + " Powerups"
+                        ),
+                        p -> {
+                            Gui gui = editItemBoxesGui(arena);
+                            if (gui != null)
+                                guis().open(p, gui);
+                            else
+                                player.sendMessage(RED + "Too many Powerups for a gui, use command-based editing instead");
+                        }
+                )
                 .set(
-                        7,
+                        16,
                         GuiUtil.itemStack(Material.BARRIER, "Remove"),
                         p -> {//TODO add confirm
                             if(arena.isEnabled()) {
@@ -222,7 +239,7 @@ public class ArenaSetupGuiCommand extends Command {
                         }
                 )
                 .set(
-                        8,
+                        17,
                         GuiUtil.itemStack(Material.ARROW, "Back"),
                         previous
                 )
@@ -353,6 +370,152 @@ public class ArenaSetupGuiCommand extends Command {
                 .build();
     }
 
+    public Gui editItemBoxesGui(Arena arena) {//TODO page-based displaying
+        List<Powerup> boxes = arena.getPowerups();
+        if(boxes.size() > (GuiSize.DOUBLE.size() - 2))
+            return null;
+        ChestGui gui = new ChestGui(GuiSize.min(boxes.size() + 2), PlaceholderValue.fake(arena.getId() + "'s Powerups"));
+
+        boolean sameWorld = true;
+        if(boxes.size() > 0){
+            World w = boxes.get(0).getLocation().getWorld();
+            for(int i = boxes.size() - 1; i >= 1; i--) {
+                if(w != boxes.get(i).getLocation().getWorld()) {
+                    sameWorld = false;
+                    break;
+                }
+            }
+        }
+
+        int i = 0;
+        for(Powerup box : boxes) {
+            final int index = i;
+            gui.setIcon(
+                    i,
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.MONSTER_EGG,
+                                    "Powerup " + (i + 1),
+                                    AQUA + "loc: " + format(box.getLocation(), !sameWorld),
+                                    AQUA + "type: " + box.getEffect().getId(),
+                                    AQUA + "respawn: " + box.getRespawnTicks()
+                            ),
+                            p -> guis().change(p, editItemBoxGui(boxes, index, pl -> guis().change(pl, editItemBoxesGui(arena))))
+                    )
+            );
+            i++;
+        }
+        gui.setIcon(
+                gui.getSize()  - 2,
+                Icon.of(
+                        GuiUtil.wool(DyeColor.GREEN, "Add"),
+                        p -> {
+                            boxes.add(new Powerup(arena, p.getLocation(), PowerupEffectManager.getDef(), 300));
+                            p.sendMessage(GREEN + "Powerup added to arena!");
+                            guis().change(p, editItemBoxesGui(arena));//Reload page
+                        }
+                )
+        );
+        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, "Back"), GuiAction.back()));
+        return gui;
+    }
+
+    public Gui editItemBoxGui(List<Powerup> boxes, int index, Link previous) {//TODO rethink GUI system
+        Powerup box = boxes.get(index);
+        return ChestGui.builder(9)
+                .title("Spawn editor")
+                .add(
+                        GuiUtil.itemStack(
+                                Material.SADDLE,
+                                "Teleport",
+                                AQUA + "To " + format(box.getLocation(), true)),
+                        p -> {
+                            guis().close(p);
+                            p.sendMessage(AQUA + "Teleporting...");
+                            p.teleport(box.getLocation());
+                        }
+                )
+                .add(
+                        GuiUtil.itemStack(
+                                Material.STICK,
+                                "Edit"
+                        ),
+                        p -> {//TODO add confirm
+                            box.setLocation(p.getLocation());
+                            p.sendMessage(GREEN + "Powerup " + (index + 1) + " new position: " + format(p.getLocation(), true) + "!");
+                            guis().change(p, editItemBoxGui(boxes, index, previous));
+                        }
+                )
+                .add(
+                        GuiUtil.itemStack(
+                                Material.MONSTER_EGG,
+                                "Effect type",
+                                AQUA + box.getEffect().getId()
+                        ),
+                        p -> guis().change(p, editItemBoxEffectGui(box, pl -> guis().change(pl, editItemBoxGui(boxes, index, previous))))
+                )
+                .add(
+                        GuiUtil.itemStack(
+                                Material.WATCH,
+                                "Respawn ticks",
+                                String.valueOf(AQUA) + box.getRespawnTicks() + " ticks"
+                        ),
+                        p -> {
+                            AnvilGui gui = new AnvilGui();
+                            gui.setMessage("ticks");
+                            gui.setListener(filterInt(
+                                    (pl, in) -> {
+                                        box.setRespawnTicks(in);
+                                        guis().change(pl, editItemBoxGui(boxes, index, previous));
+                                    },
+                                    i -> i > 0
+                            ));
+                            guis().change(p, gui);
+                        }
+                )
+                .add(
+                        GuiUtil.itemStack(Material.BARRIER, "Remove"),
+                        p -> {//TODO add confirm
+                            boxes.remove(index);
+                            p.sendMessage(GREEN + "Powerup " + (index + 1) + " removed!");
+                            previous.run(p);
+                        }
+                )
+                .set(
+                        8,
+                        GuiUtil.itemStack(Material.ARROW, "Back"),
+                        previous
+                )
+                .build();
+    }
+
+    public Gui editItemBoxEffectGui(Powerup box, Link previous) {//TODO rethink GUI system
+        Collection<PowerupEffect> effects = PowerupEffectManager.get();
+        if(effects.size() > (GuiSize.DOUBLE.size() - 1))
+            return null;
+        ChestGui gui = new ChestGui(GuiSize.min(effects.size() + 2), PlaceholderValue.fake("new Powerup effect"));
+
+        int i = 0;
+        for(PowerupEffect effect : effects) {
+            gui.setIcon(
+                    i,
+                    Icon.of(
+                            GuiUtil.setNameAndLores(
+                                    effect.getDisplay().clone(),
+                                    effect.getId()
+                            ),
+                            p -> {
+                                box.setEffect(effect);
+                                previous.run(p);
+                            }
+                    )
+            );
+            i++;
+        }
+        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, "Back"), GuiAction.back()));
+        return gui;
+    }
+
     private boolean enable(Player player, Arena arena) {
         if (!arena.isReady()) {
             player.sendMessage(RED + "The arena \"" + arena.getName() + "\" is not ready.");
@@ -367,10 +530,6 @@ public class ArenaSetupGuiCommand extends Command {
         QuakeCraftReloaded.get().getGameManager().removeGame(arena);
         player.sendMessage(GREEN + "The arena \"" + arena.getName() + "\" disabled successfully.");
         return true;
-    }
-
-    private String format(Location loc, boolean world) {
-        return (world ? (loc.getWorld().getName() + ":") : "") + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ();
     }
 
     public static ClickHandler nonArenaFilter(BiConsumer<Player, String> listener) {

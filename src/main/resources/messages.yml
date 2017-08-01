@@ -33,8 +33,32 @@ commands:
     no-shop: "&cCannot find shop gui!"
 
   arena:
-    add-spawn:
-      success: "&aSpawn added"
+    spawn:
+      add:
+        success: "&aSpawn added"
+      list:
+        header: "&a--Found %spawns% spawns!--"
+        line: "&b%index% > %loc%%"
+        footer: [] #Empy list
+        no-spawn-found: "&cNo spawn found!"
+      remove:
+        invalid-index: "&cCannot find index '%index%'"
+        success: "&aSuccessfully removed spawn!"
+    powerup:
+      effects:
+        header: "&a--Found %effects% Powerup effects!--"
+        line: "&b- %effect%%"
+        footer: [] #Empy list
+      add:
+        success: "&aSuccessfully added Powerup to %arena%"
+      list:
+        header: "&a--Found %boxes% Powerups!--"
+        line: "&b%index% > %loc% %effect% %respawn%"
+        footer: [] #Empy list
+        no-box-found: "&cNo spawn found!"
+      remove:
+        invalid-index: "&cCannot find index '%index%'"
+        success: "&aSuccessfully removed Powerup!"
     create:
       name-already-present: "&cAn arena with this id already exist"
       invalid-name: "&cInvalid id, it must only contain alphabetic or digit characters"

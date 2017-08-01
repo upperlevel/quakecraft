@@ -64,6 +64,18 @@ playing-hotbar:
 dash:
   base-power: 1.5
 
+powerups:
+  speed:
+    display:
+      type: gold boots
+    duration: 200
+    value: 1.0
+  rapid-fire:
+    display:
+      type: arrow
+    duration: 200
+    cooldown: 0.2
+
 purchase-gui:
   buying:
   - ''

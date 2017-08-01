@@ -15,6 +15,8 @@ public class Participant {
     public int killsSinceDeath;
     private KillStreak nextKillStreak;
 
+    private float gunCooldownBase = 1.0f;
+
     public String getName() {
         return player.getName();
     }

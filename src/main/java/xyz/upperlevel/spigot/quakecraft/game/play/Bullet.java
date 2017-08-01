@@ -12,6 +12,7 @@ import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
+import xyz.upperlevel.spigot.quakecraft.game.Participant;
 
 import java.util.*;
 
@@ -30,6 +31,7 @@ public class Bullet {
 
     private final Player player;
     private final QuakePlayer qp;
+    private final Participant participant;
     private final List<Vector> positions;
     private int positionIndex;
     private BukkitTask laserSpreader;
@@ -46,10 +48,11 @@ public class Bullet {
         this.phase = phase;
         this.player = player;
         this.qp = QuakeCraftReloaded.get().getPlayerManager().getPlayer(player);
+        this.participant = phase.getParent().getParticipant(player);
         this.positions = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection()).traverse(150, 0.25);
         positionIndex = 0;
 
-        this.cooldownMillis = (long) (qp.getSelectedTrigger().getFiringSpeed() * 1000);
+        this.cooldownMillis = (long) (qp.getSelectedTrigger().getFiringSpeed() * 1000 * participant.getGunCooldownBase());
         this.particles = Collections.unmodifiableList(qp.getSelectedMuzzle().getParticles());
     }
 

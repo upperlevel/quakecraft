@@ -1,19 +1,22 @@
 package xyz.upperlevel.spigot.quakecraft.arena;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Location;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.util.SerializationUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
-@Data
+import static com.google.common.collect.Maps.immutableEntry;
+import static java.util.Collections.emptyList;
+
+@Getter
+@Setter
 public class Arena {
 
     private final String id;
@@ -22,6 +25,7 @@ public class Arena {
     private int killsToWin;
     private Location lobby;
     private List<Location> spawns = new ArrayList<>();
+    private List<Powerup> powerups = new ArrayList<>();
     @Getter
     private PlaceholderRegistry placeholders;
 
@@ -59,6 +63,7 @@ public class Arena {
         p.set("arena_lobby", () -> String.valueOf(getLobby() != null));
         p.set("arena_spawns", () -> String.valueOf(getSpawns().size()));
         p.set("arena_kills_to_win", () -> String.valueOf(getKillsToWin()));
+        p.set("arena_item_boxes", () -> String.valueOf(getPowerups().size()));
     }
 
     public String toInfo() {
@@ -70,6 +75,7 @@ public class Arena {
         o += "§aLobby: " + (lobby != null) + "\n";
         o += "§aSpawns: " + spawns.size() + "\n";
         o += "&aKills to win:" + killsToWin + "\n";
+        o += "&aPowerups: " + powerups.size() + "\n";
         return o;
     }
 
@@ -91,6 +97,8 @@ public class Arena {
         data.put("spawns", spawns);
 
         data.put("kills_to_win", killsToWin);
+
+        data.put("powerups", powerups.stream().map(Powerup::save).collect(Collectors.toList()));
         return data;
     }
 
@@ -104,9 +112,14 @@ public class Arena {
         arena.minPlayers = players.getInt("min");
         arena.maxPlayers = players.getInt("max");
 
-        arena.spawns = config.getLocationList("spawns");
+        arena.spawns = config.getLocationList("spawns", emptyList());
 
         arena.killsToWin = config.getInt("kills_to_win", -1);
+
+        arena.powerups = config.getConfigList("powerups", emptyList())
+                .stream()
+                .map(c -> new Powerup(arena, c))
+                .collect(Collectors.toList());
         return arena;
     }
 

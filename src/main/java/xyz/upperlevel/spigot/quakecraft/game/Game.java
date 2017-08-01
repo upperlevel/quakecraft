@@ -139,7 +139,7 @@ public class Game implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onFood(FoodLevelChangeEvent e) {
         if (e.getEntity() instanceof Player && players.contains(e.getEntity()))
             e.setCancelled(true);
@@ -147,13 +147,13 @@ public class Game implements Listener {
 
     // ITEM INTERACT
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPickup(PlayerPickupItemEvent e) {
         if (players.contains(e.getPlayer()))
             e.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent e) {
         if (players.contains(e.getPlayer()))
             e.setCancelled(true);
@@ -161,14 +161,14 @@ public class Game implements Listener {
 
     // WORLD INTERACT
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent e) {
         if (players.contains(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent e) {
         if (players.contains(e.getPlayer()))
             e.setCancelled(true);

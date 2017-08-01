@@ -24,6 +24,7 @@ import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
+import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.task.Timer;
@@ -118,12 +119,15 @@ public class PlayingPhase implements Phase, Listener {
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
-        List<Player> pList = new ArrayList<>(game.getPlayers());
+        List<Player> players = new ArrayList<>(game.getPlayers());
         for (int i = 0; i < game.getPlayers().size(); i++) {
-            Player p = pList.get(i);
+            Player p = players.get(i);
             setup(p);
             p.teleport(game.getArena().getSpawns().get(i % game.getArena().getSpawns().size()));
         }
+
+        for(Powerup box : getGame().getArena().getPowerups())
+            box.onGameBegin(getParent());
         timer.start();
     }
 
@@ -131,6 +135,8 @@ public class PlayingPhase implements Phase, Listener {
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
         clear();
+        for(Powerup box : getGame().getArena().getPowerups())
+            box.onGameEnd();
     }
 
     @EventHandler

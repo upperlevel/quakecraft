@@ -9,7 +9,9 @@ public class ArenaCommand extends NodeCommand {
     public ArenaCommand() {
         super("arena");
 
-        register(new ArenaAddSpawnCommand());
+        register(new ArenaSetupGuiCommand());
+        register(new ArenaSpawnCommand());
+        register(new ArenaPowerupCommand());
         register(new ArenaCreateCommand());
         register(new ArenaDeleteCommand());
         register(new ArenaDisableCommand());
@@ -19,7 +21,6 @@ public class ArenaCommand extends NodeCommand {
         register(new ArenaSetLimitsCommand());
         register(new ArenaSetLobbyCommand());
         register(new ArenaSetNameCommand());
-        register(new ArenaSetupGuiCommand());
         register(new SetKillsToWinCommand());
 
         setDescription("Commands for arena editing.");
@@ -27,7 +28,8 @@ public class ArenaCommand extends NodeCommand {
     }
 
     public static void loadConfig() {
-        loadSafe("add-spawn", ArenaAddSpawnCommand::loadConfig);
+        loadSafe("spawn", ArenaSpawnCommand::loadConfig);
+        loadSafe("item-box", ArenaPowerupCommand::loadConfig);
         loadSafe("create", ArenaCreateCommand::loadConfig);
         loadSafe("delete", ArenaDeleteCommand::loadConfig);
         loadSafe("disable", ArenaDisableCommand::loadConfig);
