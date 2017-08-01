@@ -13,7 +13,7 @@ public class Participant {
     public int deaths;
 
     public int killsSinceDeath;
-    private KillStreak nextKillStreak;
+    private KillStreak nextKillStreak = KillStreak.get(0);
 
     private float gunCooldownBase = 1.0f;
 
@@ -30,5 +30,6 @@ public class Participant {
 
     public void onDeath() {
         killsSinceDeath = 0;
+        nextKillStreak = KillStreak.get(0);
     }
 }

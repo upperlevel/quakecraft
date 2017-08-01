@@ -12,6 +12,7 @@ import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class KillStreak {
     private static List<KillStreak> streaks = new ArrayList<>();
 
     @Getter
-    private final int index;
+    private int index;
     @Getter
     private final int kills;
     @Getter
@@ -31,8 +32,10 @@ public class KillStreak {
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled())
             return this;
-        else
+        else {
+            message.broadcast("killer_name", p.getName());
             return get(index + 1);
+        }
     }
 
     public static KillStreak get(int index) {
@@ -43,7 +46,6 @@ public class KillStreak {
         streaks.clear();
         MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("game");
         Map<String, Object> kills = manager.getConfig().getSectionRequired("killstreak");
-        int index = 0;
         for(Map.Entry<String, Object> kill : kills.entrySet()) {
             int killNumber;
             try {
@@ -51,7 +53,11 @@ public class KillStreak {
             } catch (NumberFormatException exception) {
                 throw new InvalidConfigurationException("Cannot parse '" + kill.getKey() + "' as number", "in killstreak messages");
             }
-            streaks.add(new KillStreak(index++, killNumber, Message.fromConfig(kill.getValue())));
+            streaks.add(new KillStreak(killNumber, Message.fromConfig(kill.getValue())));
         }
+        streaks.sort(Comparator.comparingInt(x -> x.kills));
+        int index = 0;
+        for(KillStreak s : streaks)
+            s.index = index++;
     }
 }
