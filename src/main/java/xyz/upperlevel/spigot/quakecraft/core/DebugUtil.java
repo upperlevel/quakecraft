@@ -2,8 +2,6 @@ package xyz.upperlevel.spigot.quakecraft.core;
 
 import org.bukkit.Bukkit;
 
-import java.util.logging.Level;
-
 import static org.bukkit.ChatColor.*;
 
 public final class DebugUtil {

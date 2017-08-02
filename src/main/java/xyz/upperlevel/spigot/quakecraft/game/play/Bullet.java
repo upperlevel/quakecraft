@@ -1,5 +1,6 @@
 package xyz.upperlevel.spigot.quakecraft.game.play;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -10,6 +11,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
+import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
@@ -27,10 +29,14 @@ public class Bullet {
 
     private final static Set<Player> cooldowns = new HashSet<>();
 
+    @Getter
     private final PlayingPhase phase;
 
+    @Getter
     private final Player player;
+    @Getter
     private final QuakePlayer qp;
+    @Getter
     private final Participant participant;
     private final List<Vector> positions;
     private int positionIndex;
@@ -42,6 +48,7 @@ public class Bullet {
     private long shootTime = -1;
     private BukkitTask notifier;
 
+    @Getter
     private List<Player> killed = new ArrayList<>();
 
     public Bullet(PlayingPhase phase, Player player) {
@@ -109,6 +116,8 @@ public class Bullet {
 
     public void stopLaser() {
         laserSpreader.cancel();
+        Bukkit.getPluginManager().callEvent(new LaserHitEvent(phase, qp, killed));
+        MultiStab.tryReach(phase.getParent(), this);
     }
 
     public void updatePlayer() {

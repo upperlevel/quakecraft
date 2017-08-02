@@ -2,6 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import lombok.Getter;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
@@ -11,6 +12,7 @@ import xyz.upperlevel.uppercore.board.Board;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 public class GameBoard extends Board {
@@ -55,15 +57,19 @@ public class GameBoard extends Board {
 
         @Override
         public List<String> render(Player player, PlaceholderRegistry placeholders) {
-            List<String> result = phase.getRanking().stream()
-                    .map(participant -> text.resolve(player, PlaceholderRegistry.create()
-                            .set("player_name", participant.getName())
-                            .set("kills", participant.getKills())))
-                    .collect(Collectors.toList());
+            Stream<String> stream = phase.getRanking().stream()
+                    .map(participant ->
+                        text.resolve(
+                                player,
+                                PlaceholderRegistry.wrap(
+                                        "player_name", participant.getName(),
+                                        "kills", String.valueOf(participant.getKills())
+                                )
+                        )
+                    );
             if (size >= 0)
-                return result.subList(0, Math.min(size, result.size()));
-            else
-                return result;
+                stream = stream.limit(size);
+            return stream.collect(Collectors.toList());
         }
     }
 }

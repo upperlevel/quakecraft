@@ -1,22 +1,14 @@
 game:
   dash:
-    cooldown: "&cDash cooling down! %remaining_secs%s remaining!"
-  multi-stab:
-    double: "&6DOUBLE KILL"
-    triple: "&9TRIPLE KILL"
-    multi: "&4>>&c&lMULTI KILL&r&4<<"
-  killstreak:
-    5 : "%killer_name%&r is on a Killing Spree!"
-    10: "%killer_name%&r is on a Rampage!"
-    15: "%killer_name%&r is Dominating!"
-    20: "%killer_name%&r is Unstoppable!"
-    25: "%killer_name%&r is Godlike!"
-    30: "%killer_name%&r Broke the Game!"
-    35: "%killer_name%&r Fixed the Game!"
-    40: "%killer_name%&r Entered a new dimension!"
-    50: "%killer_name%&r Went to oblivion!"
-    60: "%killer_name%&r Reached infinite and beyond!"
-    70: "%killer_name%&r Fond the meaning of life!"
+    cooldown: '&cDash cooling down! %remaining_secs%s remaining!'
+  end-gain:
+  - '&a----------------'
+  - '&fReward Summary'
+  - ''
+  - '&6Total earned Coins: %money%'
+  - ''
+  - '&a----------------'
+
 lobby:
 
 shop:

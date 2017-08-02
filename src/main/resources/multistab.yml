@@ -1,0 +1,14 @@
+double:
+  stabs: 2
+  message: '&6DOUBLE KILL'
+  gain: 1
+
+triple:
+  stabs: 3
+  message: '&9TRIPLE KILL'
+  gain: 5
+
+monster:
+  stabs: 4
+  message: '&4>>&c&lMONSTER KILL&r&4<<'
+  gain: 10

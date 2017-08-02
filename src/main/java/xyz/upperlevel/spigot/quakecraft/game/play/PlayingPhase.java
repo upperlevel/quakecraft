@@ -1,7 +1,10 @@
 package xyz.upperlevel.spigot.quakecraft.game.play;
 
 import lombok.Data;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,24 +20,25 @@ import xyz.upperlevel.spigot.quakecraft.core.NmsUtil;
 import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
+import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
+import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.message.MessageManager;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.task.Timer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
@@ -42,10 +46,12 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
-    private static Message DOUBLE_KILL;
-    private static Message TRIPLE_KILL;
-    private static Message MULTI_KILL;
+    private static Message endGainMessage;
 
+    private static GainType baseGain;
+    private static GainType firstGain;
+    private static GainType secondGain;
+    private static GainType thirdGain;
 
     private final Game game;
     private final GamePhase parent;
@@ -135,6 +141,29 @@ public class PlayingPhase implements Phase, Listener {
     @Override
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
+
+        {//Give players the gains
+            for(Participant p : parent.getParticipants())
+                baseGain.grant(p);
+
+            Iterator<Participant> ranking = parent.getRanking().iterator();
+            if(ranking.hasNext()) {
+                firstGain.grant(ranking.next());
+                if(ranking.hasNext()) {
+                    secondGain.grant(ranking.next());
+                    if(ranking.hasNext())
+                        thirdGain.grant(ranking.next());
+                }
+            }
+            if(EconomyManager.isEnabled()) {
+                for (Participant p : parent.getParticipants()) {
+                    EconomyManager.get(p.getPlayer()).give(p.coins);
+                    endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
+                }
+            } else
+                QuakeCraftReloaded.get().getLogger().warning("Valut not found, no money given!");
+        }
+
         clear();
         for(Powerup box : getGame().getArena().getPowerups())
             box.onGameEnd();
@@ -195,22 +224,6 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     @EventHandler
-    public void onLaserHit(LaserHitEvent e) {
-        int victims = e.getVictims().size();
-        if(victims > 1) {
-            Set<Player> receivers = e.getPhase().getGame().getPlayers();
-            String name = e.getShooter().getPlayer().getDisplayName();
-            if(victims == 2) {
-                DOUBLE_KILL.broadcast(receivers, "killer_name", name);
-            } else if(victims == 3) {
-                TRIPLE_KILL.broadcast(receivers, "killer_name", name);
-            } else {
-                MULTI_KILL.broadcast(receivers, "killer_name", name, "kills", String.valueOf(e.getVictims().size()));
-            }
-        }
-    }
-
-    @EventHandler
     public void onLaserSpread(LaserSpreadEvent e) {
         if (this.equals(e.getPhase())) {
             Location loc = e.getLocation();
@@ -233,10 +246,14 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
+    public static void loadGains() {
+        baseGain = GainType.create("base");
+        firstGain = GainType.create("1-place");
+        secondGain = GainType.create("2-place");
+        thirdGain = GainType.create("3-place");
+    }
+
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("game.multi-stab");
-        DOUBLE_KILL = manager.get("double");
-        TRIPLE_KILL = manager.get("triple");
-        MULTI_KILL = manager.get("multi");
+        endGainMessage = QuakeCraftReloaded.get().getMessages().get("game.end-gain");
     }
 }

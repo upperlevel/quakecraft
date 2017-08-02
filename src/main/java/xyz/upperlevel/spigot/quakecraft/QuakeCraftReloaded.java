@@ -7,6 +7,7 @@ import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
+import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
 import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
@@ -102,6 +103,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("dash", Dash::loadConfig);
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
         loadSafe("railgun", RailgunSelectGui::loadConfig);
+        loadSafe("gain", GainType::loadConfig);
 
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
     }

@@ -1,26 +1,22 @@
 package xyz.upperlevel.spigot.quakecraft.shop.railgun;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import lombok.Getter;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.gun.GunCategory;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.GuiId;
 
 import java.io.File;
-import java.security.InvalidParameterException;
 import java.util.*;
 
-import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
 
 public class RailgunManager {
     private final GunCategory gunProvider;
@@ -65,43 +61,20 @@ public class RailgunManager {
                 throw e;
             }
         }
-    }
-
-    public void loadConfig(File file) {
-        if(!file.exists())
-            throw new InvalidParameterException("Cannot find file " + file);
-
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        loadConfig((Map<String, Config>)config.getValues(false)
-                .entrySet()
-                .stream()
-                .map(e -> {
-                    Object o = e.getValue();
-                    if(o instanceof Map)
-                        return Maps.immutableEntry(e.getKey(), Config.wrap((Map)o));
-                    else if(o instanceof ConfigurationSection)
-                        return Maps.immutableEntry(e.getKey(), Config.wrap((ConfigurationSection) o));
-                    else {
-                        QuakeCraftReloaded.get().getLogger().severe("Cannot parse gun " + e.getKey() + ": expected map (found: " + o.getClass().getSimpleName() + ")");
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(toMap(LinkedHashMap::new)));
         if(gui != null)
             gui.print();
     }
 
     public void loadConfig() {
-        File file = new File(
-                QuakeCraftReloaded.get().getDataFolder(),
-                "shop" + File.separator + "gun" + File.separator +  "guns.yml"
-        );
-        loadConfig(file);
+        loadConfig(ConfigUtils.loadConfigMap(
+                QuakeCraftReloaded.get(),
+                "shop" + File.separator + "gun" + File.separator +  "guns.yml",
+                "gun"
+        ));
     }
 
 
-    public void loadGui(Plugin plugin, String id, Config config) {
+    public void loadGui(Plugin plugin, Config config) {
         RailgunSelectGui gui;
         try {
             gui = new RailgunSelectGui(config, this);
@@ -110,19 +83,16 @@ public class RailgunManager {
             throw e;
         }
         this.gui = gui;
-        QuakeCraftReloaded.get().getGuis().register(new GuiId(plugin, id, gui));
+        QuakeCraftReloaded.get().getGuis().register(new GuiId(plugin, "guns", gui));
         gui.print();
     }
 
     public void loadGui(Plugin plugin) {
-        File file = new File(
-                QuakeCraftReloaded.get().getDataFolder(),
+        FileConfiguration config = ConfigUtils.loadConfig(
+                QuakeCraftReloaded.get(),
                 "guis" + File.separator + "guns.yml"
         );
-        if(!file.exists())
-            throw new InvalidParameterException("Cannot find file " + file);
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        loadGui(plugin, file.getName().replaceFirst("[.][^.]+$", ""), Config.wrap(config));
+        loadGui(plugin, Config.wrap(config));
     }
 
     public void load() {
