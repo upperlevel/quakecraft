@@ -4,6 +4,7 @@ import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.shop.Category;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.spigot.quakecraft.shop.railgun.RailgunManager;
 
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ public class GunCategory extends Category{
     private MuzzleManager muzzles;
     private TriggerManager triggers;
 
-    private GunManager guns;
+    private RailgunManager guns;
 
     public GunCategory(PurchaseRegistry registry) {
         super(registry);
@@ -25,7 +26,7 @@ public class GunCategory extends Category{
         lasers = new LaserManager(registry);
         muzzles = new MuzzleManager(registry);
         triggers = new TriggerManager(registry);
-        guns = new GunManager(registry, this);
+        guns = new RailgunManager(this);
     }
 
     public void load() {
@@ -47,7 +48,7 @@ public class GunCategory extends Category{
         logger.info("Loaded " + triggers.getPurchases().size() + " triggers");
 
         guns.load();
-        logger.info("Loaded " + guns.getPurchases().size() + " guns");
+        logger.info("Loaded " + guns.getRailguns().size() + " guns");
 
         logger.info("Guns loaded successfully!");
     }

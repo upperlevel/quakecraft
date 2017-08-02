@@ -127,7 +127,7 @@ silver:
   firework-color: 'SILVER'
 
 black:
-  name: 'Orange Laser'
+  name: 'Black Laser'
   cost: 500000
   icon:
     type: 'INK_SACK'

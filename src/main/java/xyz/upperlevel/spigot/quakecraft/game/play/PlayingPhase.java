@@ -25,6 +25,7 @@ import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
 import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
+import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.task.Timer;
@@ -173,20 +174,23 @@ public class PlayingPhase implements Phase, Listener {
         );
     }
 
-    public void checkKillStreak(Participant p) {
-
-    }
-
     @EventHandler
     public void onLaserStab(LaserStabEvent e) {
         if (equals(e.getPhase())) {
             Participant hit = parent.getParticipant(e.getHit());
             Participant shooter = parent.getParticipant(e.getShooter());
             kill(hit, shooter);
-            e.getQShooter().getSelectedKillSound().play(e.getLocation());
+            QuakePlayer qshooter = e.getQShooter();
+            qshooter.getSelectedKillSound().play(e.getLocation());
             explodeBarrel(e.getLocation(), e.getQShooter());
-            game.broadcast(e.getShooter().getName() + " shot " + e.getHit().getName()); // todo kill message
-            checkKillStreak(shooter);
+
+            Railgun gun = qshooter.getGun();
+            String killMessage;
+            if(gun == null || gun.getKillMessage() == null)
+                killMessage = " shot ";
+            else
+                killMessage = " " + gun.getKillMessage() + " ";
+            game.broadcast(e.getShooter().getName() + killMessage + e.getHit().getName());
         }
     }
 

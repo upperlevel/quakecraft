@@ -22,7 +22,7 @@ clay:
     block:
       type: 'CLAY'
 
-wooden:
+wood:
   name: 'Wooden Muzzle'
   cost: 5000
   icon:
@@ -34,7 +34,7 @@ wooden:
     block:
       type: 'WOOD'
 
-golden:
+gold:
   name: 'Golden Muzzle'
   cost: 7500
   icon:

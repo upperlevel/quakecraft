@@ -19,6 +19,15 @@ game:
     70: "%killer_name%&r Fond the meaning of life!"
 lobby:
 
+shop:
+  railgun:
+    already-selected: '&cAlready selected'
+    selected: '&aGun selected'
+    parts-missing:
+      header: '&c--There are %parts% missing parts!--'
+      line: '&c- %name%'
+      footer: [] #Empy list
+
 commands:
   join:
     already-playing:

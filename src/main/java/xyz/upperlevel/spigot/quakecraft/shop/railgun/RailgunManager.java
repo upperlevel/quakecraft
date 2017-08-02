@@ -1,47 +1,70 @@
-package xyz.upperlevel.spigot.quakecraft.shop.purchase.single;
+package xyz.upperlevel.spigot.quakecraft.shop.railgun;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseGui;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseManager;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.shop.gun.GunCategory;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.GuiId;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.core.CollectionUtil.toMap;
 
-public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends PurchaseManager<P> {
-    public SinglePurchaseManager(PurchaseRegistry registry) {
-        super(registry);
+public class RailgunManager {
+    private final GunCategory gunProvider;
+    private List<Railgun> railguns = new ArrayList<>();
+    private Multimap<Purchase<?>, Railgun> bySingleComponent = ArrayListMultimap.create(128, 5);
+    private Map<List<? extends Purchase<?>>, Railgun> byComponents = new HashMap<>(28);
+    @Getter
+    private RailgunSelectGui gui;
+
+    public RailgunManager(GunCategory gunProvider) {
+        this.gunProvider = gunProvider;
     }
 
-    public abstract String getGuiLoc();
 
-    public abstract String getConfigLoc();
+    public void register(Railgun railgun) {
+        railguns.add(railgun);
+        List<? extends Purchase<?>> components = railgun.getComponents();
+        byComponents.put(components, railgun);
+        for(Purchase<?> p : components)
+            bySingleComponent.put(p, railgun);
+    }
+
+    public Railgun computeSelected(QuakePlayer player) {
+        return byComponents.get(player.getGunComponents());
+    }
+
+    public Collection<Railgun> getUsedFor(Purchase<?> component) {
+        return bySingleComponent.get(component);
+    }
+
+    public List<Railgun> getRailguns() {
+        return Collections.unmodifiableList(railguns);
+    }
+
 
     public void loadConfig(Map<String, Config> config) {
         for(Map.Entry<String, Config> entry : config.entrySet()) {
             try {
-                add(deserialize(entry.getKey(), entry.getValue()));
+                register(new Railgun(entry.getKey(), gunProvider, entry.getValue()));
             } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in " + getPurchaseName() + " '" + entry.getKey() + "'");
+                e.addLocalizer("in gun '" + entry.getKey() + "'");
                 throw e;
             }
         }
-        if(getDefault() == null)
-            throw new InvalidConfigurationException("No default value for " + getPurchaseName());
     }
 
     public void loadConfig(File file) {
@@ -59,42 +82,42 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
                     else if(o instanceof ConfigurationSection)
                         return Maps.immutableEntry(e.getKey(), Config.wrap((ConfigurationSection) o));
                     else {
-                        QuakeCraftReloaded.get().getLogger().severe("Cannot parse " + getPurchaseName() + e.getKey() + ": expected map (found: " + o.getClass().getSimpleName() + ")");
+                        QuakeCraftReloaded.get().getLogger().severe("Cannot parse gun " + e.getKey() + ": expected map (found: " + o.getClass().getSimpleName() + ")");
                         return null;
                     }
                 })
                 .filter(Objects::nonNull)
                 .collect(toMap(LinkedHashMap::new)));
+        if(gui != null)
+            gui.print();
     }
 
     public void loadConfig() {
         File file = new File(
                 QuakeCraftReloaded.get().getDataFolder(),
-                "shop" + File.separator + getConfigLoc() + ".yml"
+                "shop" + File.separator + "gun" + File.separator +  "guns.yml"
         );
         loadConfig(file);
     }
 
 
     public void loadGui(Plugin plugin, String id, Config config) {
-        PurchaseGui gui;
+        RailgunSelectGui gui;
         try {
-            gui = PurchaseGui.deserialize(QuakeCraftReloaded.get(), id, config, this);
+            gui = new RailgunSelectGui(config, this);
         } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in '" + getPurchaseName() + "' gui");
+            e.addLocalizer("in gun gui");
             throw e;
         }
-        setGui(gui);
+        this.gui = gui;
         QuakeCraftReloaded.get().getGuis().register(new GuiId(plugin, id, gui));
+        gui.print();
     }
 
     public void loadGui(Plugin plugin) {
-        String guiLoc = getGuiLoc();
-        if(guiLoc == null)
-            return;
         File file = new File(
                 QuakeCraftReloaded.get().getDataFolder(),
-                "guis" + File.separator + guiLoc + ".yml"
+                "guis" + File.separator + "guns.yml"
         );
         if(!file.exists())
             throw new InvalidParameterException("Cannot find file " + file);

@@ -39,8 +39,8 @@ varnished-wood:
     enchantments:
       arrow damage: 10
 
-polished-wood:
-  name: 'Polished Wood Case'
+polished-marbled:
+  name: 'Polished Marbled Case'
   cost: 1000
   icon:
     type: 'STONE_HOE'
@@ -105,7 +105,7 @@ polished-plated:
     enchantments:
       arrow damage: 10
 
-polished-bling-case:
+polished-bling:
   name: 'Polished Bling Case'
   cost: 100000
   icon:
@@ -121,7 +121,7 @@ polished-bling-case:
     enchantments:
       arrow damage: 10
 
-polished-reinforced-case:
+polished-reinforced:
   name: 'Polished Reinforced Case'
   cost: 200000
   icon:

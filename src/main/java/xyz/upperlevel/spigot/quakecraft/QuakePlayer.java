@@ -1,6 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.shop.KillSoundManager;
 import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
@@ -10,12 +11,15 @@ import xyz.upperlevel.spigot.quakecraft.shop.dash.DashCooldownManager;
 import xyz.upperlevel.spigot.quakecraft.shop.dash.DashPowerManager;
 import xyz.upperlevel.spigot.quakecraft.shop.gun.*;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
+import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 public class QuakePlayer {
 
     private final Player player;
@@ -30,7 +34,7 @@ public class QuakePlayer {
     private LaserManager.Laser selectedLaser;
     private MuzzleManager.Muzzle selectedMuzzle;
     private TriggerManager.Trigger selectedTrigger;
-    private GunManager.Gun selectedGun;
+    private Railgun gun;
 
     private BootManager.Boot selectedBoot;
     private LeggingManager.Legging selectedLegging;
@@ -54,7 +58,7 @@ public class QuakePlayer {
         selectedLaser = guns.getLasers().getDefault();
         selectedMuzzle = guns.getMuzzles().getDefault();
         selectedTrigger = guns.getTriggers().getDefault();
-        selectedGun = guns.getGuns().getDefault();
+        gun = guns.getGuns().computeSelected(this);
 
         ArmorCategory armors = shop.getArmors();
 
@@ -71,12 +75,11 @@ public class QuakePlayer {
         selectedDashCooldown = dash.getCooldown().getDefault();
 
         purchases.addAll(Arrays.asList(
-                selectedBarrel,
                 selectedCase,
                 selectedLaser,
+                selectedBarrel,
                 selectedMuzzle,
                 selectedTrigger,
-                selectedGun,
 
                 selectedBoot,
                 selectedLegging,
@@ -88,6 +91,64 @@ public class QuakePlayer {
                 selectedDashPower,
                 selectedDashCooldown
         ));
+    }
+
+    protected void onGunComponentSelectChange() {
+        gun = QuakeCraftReloaded.get().getShop().getGuns().getGuns().computeSelected(this);
+    }
+
+    public void setSelectedCase(CaseManager.Case gcase) {
+        if(this.selectedCase != gcase) {
+            this.selectedCase = gcase;
+            onGunComponentSelectChange();
+        }
+    }
+
+    public void setSelectedLaser(LaserManager.Laser laser) {
+        if(this.selectedLaser != laser) {
+            this.selectedLaser = laser;
+            onGunComponentSelectChange();
+        }
+    }
+
+    public void setSelectedBarrel(BarrelManager.Barrel barrel) {
+        if(this.selectedBarrel != barrel) {
+            this.selectedBarrel = barrel;
+            onGunComponentSelectChange();
+        }
+    }
+
+    public void setSelectedMuzzle(MuzzleManager.Muzzle muzzle) {
+        if(this.selectedMuzzle != muzzle) {
+            this.selectedMuzzle = muzzle;
+            onGunComponentSelectChange();
+        }
+    }
+
+    public void setSelectedTrigger(TriggerManager.Trigger trigger) {
+        if(this.selectedTrigger != trigger) {
+            this.selectedTrigger = trigger;
+            onGunComponentSelectChange();
+        }
+    }
+
+    public void setGunComponents(List<? extends Purchase<?>> components) {
+        this.selectedCase = (CaseManager.Case) components.get(0);
+        this.selectedLaser = (LaserManager.Laser) components.get(1);
+        this.selectedBarrel = (BarrelManager.Barrel) components.get(2);
+        this.selectedMuzzle = (MuzzleManager.Muzzle) components.get(3);
+        this.selectedTrigger = (TriggerManager.Trigger) components.get(4);
+        onGunComponentSelectChange();
+    }
+
+    public List<? extends Purchase<?>> getGunComponents() {
+        return Arrays.asList(
+                selectedCase,
+                selectedLaser,
+                selectedBarrel,
+                selectedMuzzle,
+                selectedTrigger
+        );
     }
 
     public void load() {

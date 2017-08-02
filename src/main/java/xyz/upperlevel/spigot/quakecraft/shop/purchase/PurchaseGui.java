@@ -71,13 +71,13 @@ public class PurchaseGui extends ChestGui {
             Collection<SimplePurchase<?>> purchases = (Collection<SimplePurchase<?>>) adapter.manager.getPurchases().values();
             int[] slots = adapter.slots;
             int i = 0;
+            if(purchases.size() > slots.length) {
+                QuakeCraftReloaded.get().getLogger().severe("Cannot fill " + adapter.manager.getPurchaseName() + "'s inventory: too many items!");
+                return;
+            }
+
             for (Purchase<?> p : purchases) {
-                int slot = slots[i++];
-                if (slot < 0) {
-                    QuakeCraftReloaded.get().getLogger().severe("Cannot fill " + adapter.manager.getPurchaseName() + "'s inventory: too many items!");
-                    return;
-                }
-                purchaseMap.put(slot, p);
+                purchaseMap.put(slots[i++], p);
             }
         }
         dirty = false;
@@ -270,7 +270,7 @@ public class PurchaseGui extends ChestGui {
             PurchaseGui gui = new PurchaseGui(plugin, config);
             gui.add(
                     manager,
-                    deserialize(config.getCollectionRequired("slots"))
+                    deserializeSlots(config.getCollectionRequired("slots"))
             );
             return gui;
         } catch (InvalidConfigurationException e) {
@@ -279,7 +279,7 @@ public class PurchaseGui extends ChestGui {
         }
     }
 
-    public static int[] deserialize(Collection<?> slots) {
+    public static int[] deserializeSlots(Collection<?> slots) {
         return slots.stream().mapToInt(o -> {
             if (o instanceof Number)
                 return ((Number) o).intValue();

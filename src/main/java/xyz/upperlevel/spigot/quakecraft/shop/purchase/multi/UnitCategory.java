@@ -33,7 +33,7 @@ public abstract class UnitCategory extends Category {
         for(MultiPurchaseManager manager : getChildren()) {
             gui.add(
                     manager,
-                    PurchaseGui.deserialize(config.getCollectionRequired(manager.getPartName() + "-slots"))
+                    PurchaseGui.deserializeSlots(config.getCollectionRequired(manager.getPartName() + "-slots"))
             );
         }
 

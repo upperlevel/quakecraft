@@ -13,3 +13,22 @@ slots: [
   19, 20, 21, 22, 23, 24, 25,
   28, 29, 30, 31, 32, 33, 34
 ]
+lores:
+  common:
+  - 'Case: %case%'
+  - 'Laser %laser%'
+  - 'Barrel: %barrel%'
+  - 'Muzzle: %muzzle%'
+  - 'Trigger: %trigger%'
+  - ''
+  kill-message:
+  - 'Case: %case%'
+  - 'Laser %laser%'
+  - 'Barrel: %barrel%'
+  - 'Muzzle: %muzzle%'
+  - 'Trigger: %trigger%'
+  - 'Kill message: %kill-message%'
+  - ''
+  selected: '&aSelected'
+  selectable: '&bClick to select'
+  missing-parts: '&cMissing parts!'
