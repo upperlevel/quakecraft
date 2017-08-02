@@ -38,7 +38,8 @@ import java.util.stream.Collectors;
 
 public class PurchaseGui extends ChestGui {
     private static Sound ANVIL_BREAK = CompatibleSound.getRaw("BLOCK_ANVIL_BREAK");
-    private static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
+    public static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
+    public static String prefixSelected, prefixSelectable, prefixBuying;
     @Getter
     private List<PurchaseAdapter> adapters = new ArrayList<>();
     private Map<Integer, Purchase<?>> purchaseMap = new LinkedHashMap<>();
@@ -173,7 +174,9 @@ public class PurchaseGui extends ChestGui {
 
     public void processMeta(QuakePlayer player, Purchase<?> purchase, ItemMeta meta, boolean selected) {
         Player p = player.getPlayer();
-        meta.setDisplayName(purchase.getName().resolve(p));
+        boolean purchased = selected || player.getPurchases().contains(purchase);
+
+        meta.setDisplayName(ChatColor.RESET + getPrefix(purchased, selected) + purchase.getName().resolve(p));
 
         if(selected && enchantSelected)
             addGlow(meta);
@@ -184,9 +187,9 @@ public class PurchaseGui extends ChestGui {
             metaLore = new ArrayList<>();
 
         metaLore.addAll(
-                getLore(player, purchase, selected)
+                getLore(purchased, selected)
                         .stream()
-                        .map(lore -> lore.resolve(p, purchase.getPlaceholders()))
+                        .map(lore -> ChatColor.RESET + lore.resolve(p, purchase.getPlaceholders()))
                         .collect(Collectors.toList())
         );
 
@@ -206,14 +209,14 @@ public class PurchaseGui extends ChestGui {
             String description = require.description();
             if(description != null)//If there's no description nor progress the require is displayed as a one-line require
                 lore.add("");
-            lore.add(" " + pre + " " + req);
+            lore.add(ChatColor.RESET + " " + pre + " " + req);
 
             if(description != null) {
-                lore.add("   " + description);
+                lore.add(ChatColor.RESET + "   " + description);
                 if (!pass) {
                     String progress = require.getProgress();
                     if (progress != null)
-                        lore.add("   " + progress);
+                        lore.add(ChatColor.RESET + "   " + progress);
                 }
             }
         }
@@ -224,13 +227,23 @@ public class PurchaseGui extends ChestGui {
         EnchantGlow.addGlow(meta);
     }
 
-    protected List<PlaceholderValue<String>> getLore(QuakePlayer player, Purchase purchase, boolean selected) {
+    protected List<PlaceholderValue<String>> getLore(boolean purchased, boolean selected) {
         if (selected)
             return selectedLores;
-        else if (player.getPurchases().contains(purchase))
+        else if (purchased)
             return boughtLores;
         else
             return buyingLores;
+    }
+
+
+    public static String getPrefix(boolean purchased, boolean selected) {
+        if (selected)
+            return prefixSelected;
+        else if (purchased)
+            return prefixSelectable;
+        else
+            return prefixBuying;
     }
 
     public Map<Integer, Purchase<?>> getPurchaseMap() {
@@ -258,10 +271,20 @@ public class PurchaseGui extends ChestGui {
     @SuppressWarnings("unchecked")
     public static void loadConfig() {
         Config config = QuakeCraftReloaded.get().getCustomConfig().getConfigRequired("purchase-gui");
-        buyingLores = config.getMessageStrListRequired("buying");
-        boughtLores = config.getMessageStrListRequired("bought");
-        selectedLores = config.getMessageStrListRequired("selected");
+        Config lores = config.getConfigRequired("lore");
+        buyingLores = lores.getMessageStrListRequired("buying");
+        boughtLores = lores.getMessageStrListRequired("bought");
+        selectedLores = lores.getMessageStrListRequired("selected");
+
+        Config prefixes = config.getConfigRequired("name-prefix");
+        prefixSelected = processColors(prefixes.getStringRequired("selected"));
+        prefixSelectable = processColors(prefixes.getStringRequired("selectable"));
+        prefixBuying = processColors(prefixes.getStringRequired("buying"));
         QuakeCraftReloaded.get().getLogger().info("PurchaseGui's config loaded!");
+    }
+
+    private static String processColors(String selected) {
+        return ChatColor.translateAlternateColorCodes('&', selected);
     }
 
     @SuppressWarnings("unchecked")

@@ -77,12 +77,17 @@ powerups:
     cooldown: 0.2
 
 purchase-gui:
-  buying:
-  - ''
-  - "&7Cost: &6%cost%"
-  bought:
-  - ''
-  - "&eClick to select"
-  selected:
-  - ''
-  - "&aSELECTED"
+  lore:
+    buying:
+    - ''
+    - "&7Cost: &6%cost%"
+    bought:
+    - ''
+    - "&eClick to select"
+    selected:
+    - ''
+    - "&aSELECTED"
+  name-prefix:
+    selected: '&a'
+    selectable: '&a'
+    buying: '&c'

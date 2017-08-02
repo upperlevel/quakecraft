@@ -1,5 +1,6 @@
 package xyz.upperlevel.spigot.quakecraft.shop.railgun;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseGui.deserializeSlots;
+import static xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseGui.getPrefix;
 
 public class RailgunSelectGui extends ChestGui {
     private static Message GUN_ALREADY_SELECTED;
@@ -73,7 +75,7 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     protected ItemStack getIcon(Railgun gun, QuakePlayer player) {
-        CustomItem icon = gun.getCase().getItem();
+        CustomItem icon = gun.getCase().getIcon();
         Player p = player.getPlayer();
 
         ItemStack item = icon.resolve(p);
@@ -87,7 +89,10 @@ public class RailgunSelectGui extends ChestGui {
 
     public void processMeta(QuakePlayer player, Railgun gun, ItemMeta meta) {
         Player p = player.getPlayer();
-        meta.setDisplayName(gun.getName().resolve(p));
+        boolean selected = player.getGun() == gun;
+        boolean selectable = selected || gun.canSelect(player);
+
+        meta.setDisplayName(ChatColor.RESET + getPrefix(selectable, selected) + gun.getName().resolve(p));
 
         //Lore processing (additional lore + requires)
         List<String> metaLore = meta.getLore();
@@ -103,19 +108,19 @@ public class RailgunSelectGui extends ChestGui {
         metaLore.addAll(
                 Stream.concat(
                         stream,
-                        getLore(player, gun).stream()
+                        getLore(selectable, selected).stream()
                 )
-                .map(l -> l.resolve(p, gun.getPlaceholders()))
+                .map(l -> ChatColor.RESET + l.resolve(p, gun.getPlaceholders()))
                 .collect(Collectors.toList())
         );
 
         meta.setLore(metaLore);
     }
 
-    protected List<PlaceholderValue<String>> getLore(QuakePlayer player, Railgun gun) {
-        if (player.getGun() == gun)
+    protected List<PlaceholderValue<String>> getLore(boolean selectable, boolean selected) {
+        if (selected)
             return selectedLore;
-        else if (gun.canSelect(player))
+        else if (selectable)
             return selectableLore;
         else
             return missingPartsLore;
