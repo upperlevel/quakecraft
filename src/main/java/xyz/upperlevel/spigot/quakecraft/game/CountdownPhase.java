@@ -14,6 +14,8 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.board.BoardView;
+import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.message.Message;
@@ -31,6 +33,8 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class CountdownPhase implements Phase, Listener {
+    private static Hotbar sampleHotbar;
+    private static CountdownBoard sampleBoard;
     public static Sound ORB_PICKUP = CompatibleSound.getRaw("ENTITY_EXPERIENCE_ORB_PICKUP");
 
     private static Map<String, Message> countdownMsg;
@@ -67,24 +71,8 @@ public class CountdownPhase implements Phase, Listener {
     public CountdownPhase(LobbyPhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
-        // HOTBAR
-        {
-            File file = new File(get().getHotbars().getFolder(), "countdown-solo.yml");
-            if (file.exists())
-                hotbar = Hotbar.deserialize(get(), YamlConfiguration.loadConfiguration(file)::get);
-            else {
-                QuakeCraftReloaded.get().getLogger().severe("Could not find file: \"" + file + "\"");
-            }
-        }
-        // BOARD
-        {
-            File file = new File(get().getBoards().getFolder(), "countdown-solo.yml");
-            if (file.exists())
-                board = CountdownBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
-            else {
-                QuakeCraftReloaded.get().getLogger().severe("Could not find file: \"" + file + "\"");
-            }
-        }
+        this.hotbar = sampleHotbar;
+        this.board = new CountdownBoard(this, sampleBoard);
     }
 
     private void setup(Player player) {
@@ -176,5 +164,14 @@ public class CountdownPhase implements Phase, Listener {
     public static void loadConfig() {
         MessageManager msg = QuakeCraftReloaded.get().getMessages().getSection("lobby");
         countdownMsg = msg.load("countdown");
+        sampleHotbar = Hotbar.deserialize(QuakeCraftReloaded.get(), Config.wrap(ConfigUtils.loadConfig(
+                QuakeCraftReloaded.get().getHotbars().getFolder(),
+                "countdown-solo.yml"
+        )));
+
+        sampleBoard = CountdownBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
+                QuakeCraftReloaded.get().getBoards().getFolder(),
+                "countdown-solo.yml"
+        )));
     }
 }

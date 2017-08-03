@@ -6,10 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
-import xyz.upperlevel.spigot.quakecraft.game.CountdownPhase;
-import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
-import xyz.upperlevel.spigot.quakecraft.game.GameManager;
-import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.spigot.quakecraft.game.*;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
@@ -68,13 +65,14 @@ public class QuakeCraftReloaded extends JavaPlugin {
             saveDefaultConfig();
 
             //Load command messages
-            loadConfig();
             arenaManager = new ArenaManager();
             gameManager = new GameManager();
 
             guis = new GuiRegistry(this);
             hotbars = new HotbarRegistry(this);
             boards =  new BoardRegistry(this);
+
+            loadConfig();
 
             arenaManager.load();
             gameManager.load();
@@ -108,10 +106,13 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
-        loadSafe("game", EndingPhase::loadConfig);
-        loadSafe("lobby", LobbyPhase::loadConfig);
-        loadSafe("lobby", CountdownPhase::loadConfig);
         loadSafe("shot", PlayingPhase::loadConfig);
+        //---boards---
+        loadSafe("waiting phase", WaitingPhase::loadConfig);
+        loadSafe("playing phase", PlayingPhase::loadConfig);
+        loadSafe("countdown phase", CountdownPhase::loadConfig);
+        loadSafe("ending phase", EndingPhase::loadConfig);
+        loadSafe("lobby phase", LobbyPhase::loadConfig);
 
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
     }

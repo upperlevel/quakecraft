@@ -19,6 +19,16 @@ import java.util.List;
 
 public class PlayingHotbar extends Hotbar {
 
+    public PlayingHotbar(Config config) {
+        super(QuakeCraftReloaded.get(), config);
+        Config sub;
+        sub = config.getConfigRequired("gun");
+        setIcon(sub.getIntRequired("slot"), new Icon(Gun.deserialize(sub.getConfigRequired("item"))));
+
+        sub = config.getConfigRequired("tracker");
+        setIcon(sub.getIntRequired("slot"), new Icon(Tracker.deserialize(sub.getConfigRequired("item"))));
+    }
+
     // GUN
     public static class Gun implements ItemResolver {
         private final PlaceholderValue<String> name;
@@ -82,19 +92,9 @@ public class PlayingHotbar extends Hotbar {
         }
     }
 
-    public PlayingHotbar(Plugin plugin, Config config) {
-        super(plugin, config);
-        Config sub;
-        sub = config.getConfigRequired("gun");
-        setIcon(sub.getIntRequired("slot"), new Icon(Gun.deserialize(sub.getConfigRequired("item"))));
-
-        sub = config.getConfigRequired("tracker");
-        setIcon(sub.getIntRequired("slot"), new Icon(Tracker.deserialize(sub.getConfigRequired("item"))));
-    }
-
-    public static PlayingHotbar deserialize(Plugin plugin, String id, Config config) {
+    public static PlayingHotbar deserialize(String id, Config config) {
         try {
-            return new PlayingHotbar(plugin, config);
+            return new PlayingHotbar(config);
         } catch (InvalidConfigurationException e) {
             e.addLocalizer("in hotbar " + id);
             throw e;

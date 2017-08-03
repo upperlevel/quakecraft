@@ -12,6 +12,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
+import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.message.Message;
@@ -19,7 +21,6 @@ import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -39,6 +40,9 @@ public class EndingPhase implements Phase, Listener {
     private static GainType firstGain;
     private static GainType secondGain;
     private static GainType thirdGain;
+
+    private static EndingHotbar sampleHotbar;
+    private static EndingBoard sampleBoard;
 
     private Participant winner;
 
@@ -77,20 +81,8 @@ public class EndingPhase implements Phase, Listener {
     public EndingPhase(GamePhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
-        // HOTBAR
-        {
-            File file = new File(get().getBoards().getFolder(), "ending-solo.yml");
-            if (!file.exists())
-                throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
-            hotbar = EndingHotbar.deserialize(get(), YamlConfiguration.loadConfiguration(file)::get);
-        }
-        // BOARD
-        {
-            File file = new File(get().getBoards().getFolder(), "ending-solo.yml");
-            if (!file.exists())
-                throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
-            board = EndingBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
-        }
+        this.hotbar = sampleHotbar;
+        this.board = new EndingBoard(this, sampleBoard);
     }
 
     public void giveGains() {
@@ -206,5 +198,15 @@ public class EndingPhase implements Phase, Listener {
         MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("game");
         endGainMessage = manager.get("end-gain");
         endRankingMessage = manager.get("end-ranking");
+
+        sampleHotbar = EndingHotbar.deserialize(QuakeCraftReloaded.get(), Config.wrap(ConfigUtils.loadConfig(
+                QuakeCraftReloaded.get().getHotbars().getFolder(),
+                "ending-solo.yml"
+        )));
+
+        sampleBoard = EndingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
+                QuakeCraftReloaded.get().getBoards().getFolder(),
+                "ending-solo.yml"
+        )));
     }
 }

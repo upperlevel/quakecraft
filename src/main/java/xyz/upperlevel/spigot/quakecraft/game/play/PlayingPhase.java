@@ -1,8 +1,10 @@
 package xyz.upperlevel.spigot.quakecraft.game.play;
 
 import lombok.Data;
-import org.bukkit.*;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -13,8 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.uppercore.game.Phase;
-import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
@@ -24,15 +24,21 @@ import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
 import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.ConfigUtils;
+import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
+import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.uppercore.task.Timer;
 import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 import xyz.upperlevel.uppercore.util.TextUtil;
 import xyz.upperlevel.uppercore.task.UpdaterTask;
 
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 import static org.bukkit.ChatColor.GRAY;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
@@ -43,6 +49,12 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 public class PlayingPhase implements Phase, Listener {
     private static Message shotMessage;
     private static String defKillMessage;
+    private static PlayingHotbar sampleHotbar;
+    private static PlayingBoard sampleBoard;
+
+    private static int gunSlot;
+
+
     private final Game game;
     private final GamePhase parent;
 
@@ -81,20 +93,8 @@ public class PlayingPhase implements Phase, Listener {
     public PlayingPhase(GamePhase parent) {
         this.parent = parent;
         this.game = parent.getGame();
-        // HOTBAR
-        {
-            File file = new File(get().getHotbars().getFolder(), "playing-solo.yml");
-            if (!file.exists())
-                throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
-            hotbar = PlayingHotbar.deserialize(get(), "playing-solo", YamlConfiguration.loadConfiguration(file)::get);
-        }
-        // BOARD
-        {
-            File file = new File(get().getBoards().getFolder(), "playing-solo.yml");
-            if (!file.exists())
-                throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
-            board = PlayingBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
-        }
+        this.hotbar = sampleHotbar;
+        this.board = new PlayingBoard(this, sampleBoard);
         compassUpdater = new UpdaterTask(20 * 5, () -> {
             for (Player player : game.getPlayers()) {
                 Player target = getNearbyPlayer(player);
@@ -238,7 +238,7 @@ public class PlayingPhase implements Phase, Listener {
         Player p = e.getPlayer();
         if (!game.equals(get().getGameManager().getGame(p)))
             return;
-        if (p.getInventory().getHeldItemSlot() == get().getConfig().getInt("playing-hotbar.gun.slot")) {//TODO parse before game :(
+        if (p.getInventory().getHeldItemSlot() == gunSlot) {
             if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
                 Bullet.shoot(this, p);
             else if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)
@@ -250,5 +250,17 @@ public class PlayingPhase implements Phase, Listener {
         MessageManager messages = QuakeCraftReloaded.get().getMessages().getSection("game");
         shotMessage = messages.get("shot");
         defKillMessage = TextUtil.translatePlain(messages.getConfig().getStringRequired("def-kill-message"));
+
+        gunSlot = QuakeCraftReloaded.get().getCustomConfig().getIntRequired("playing-hotbar.gun.slot");
+
+        sampleHotbar = PlayingHotbar.deserialize("playing-solo", Config.wrap(ConfigUtils.loadConfig(
+                QuakeCraftReloaded.get().getHotbars().getFolder(),
+                "playing-solo.yml"
+        )));
+
+        sampleBoard = PlayingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
+                QuakeCraftReloaded.get().getBoards().getFolder(),
+                "playing-solo.yml"
+        )));
     }
 }

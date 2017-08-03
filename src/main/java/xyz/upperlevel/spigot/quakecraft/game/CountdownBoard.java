@@ -7,8 +7,12 @@ import xyz.upperlevel.uppercore.board.Board;
 import static java.lang.String.valueOf;
 
 public class CountdownBoard extends Board {
-    public CountdownBoard(CountdownPhase phase, Config config) {
+    public CountdownBoard(Config config) {
         super(config);
+    }
+
+    public CountdownBoard(CountdownPhase phase, CountdownBoard board) {
+        super(board);
         Game game = phase.getGame();
         getPlaceholders()
                 .set("arena_id", game::getId)
@@ -19,9 +23,9 @@ public class CountdownBoard extends Board {
                 .set("countdown", () -> valueOf(phase.getTimer()));
     }
 
-    public static CountdownBoard deserialize(CountdownPhase phase, Config config) {
+    public static CountdownBoard deserialize(Config config) {
         try {
-            return new CountdownBoard(phase, config);
+            return new CountdownBoard(config);
         } catch (InvalidConfigurationException e) {
             e.addLocalizer("in waiting board");
             throw e;

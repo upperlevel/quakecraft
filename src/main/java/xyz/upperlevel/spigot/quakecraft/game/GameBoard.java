@@ -17,13 +17,30 @@ import java.util.stream.Stream;
 @Getter
 public class GameBoard extends Board {
     private final GamePhase phase;
+    private TextArea header, footer;
+    private Ranking ranking;
+
+    public GameBoard(Config config) {
+        this(null, config);
+    }
 
     public GameBoard(GamePhase phase, Config config) {
         super(config);
         this.phase = phase;
-        add(new TextArea(config.getMessageStrList("header")));
-        add(new Ranking(config.getConfigRequired("ranking")));
-        add(new TextArea(config.getMessageStrList("footer")));
+        this.header = new TextArea(config.getMessageStrList("header"));
+        this.ranking = new Ranking(config.getConfigRequired("ranking"));
+        this.footer = new TextArea(config.getMessageStrList("footer"));
+    }
+
+    public GameBoard(GamePhase phase, GameBoard sample) {
+        super(sample);
+        this.phase = phase;
+        this.header = sample.header;
+        this.ranking = new Ranking(sample.ranking);
+        this.footer = sample.footer;
+        add(header);
+        add(ranking);
+        add(footer);
     }
 
     public static GameBoard deserialize(GamePhase phase, Config config) {
@@ -51,6 +68,11 @@ public class GameBoard extends Board {
             }
         }
 
+        public Ranking(Ranking sample) {
+            this.size = sample.size;
+            this.text = sample.text;
+        }
+
         @Override
         public void update() {
         }
@@ -70,6 +92,11 @@ public class GameBoard extends Board {
             if (size >= 0)
                 stream = stream.limit(size);
             return stream.collect(Collectors.toList());
+        }
+
+        @Override
+        public Ranking copy() {
+            return this;
         }
     }
 }
