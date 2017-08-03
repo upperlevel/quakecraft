@@ -30,6 +30,7 @@ import xyz.upperlevel.uppercore.gui.ChestGui;
 import xyz.upperlevel.uppercore.gui.GuiAction;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
 
@@ -37,9 +38,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PurchaseGui extends ChestGui {
-    private static Sound ANVIL_BREAK = CompatibleSound.getRaw("BLOCK_ANVIL_BREAK");
     public static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     public static String prefixSelected, prefixSelectable, prefixBuying;
+    public static Message notEnoughMoney;
     @Getter
     private List<PurchaseAdapter> adapters = new ArrayList<>();
     private Map<Integer, Purchase<?>> purchaseMap = new LinkedHashMap<>();
@@ -133,8 +134,7 @@ public class PurchaseGui extends ChestGui {
                         GuiAction.back()
                 );
             } else {
-                PlayerUtil.playSound(player, ANVIL_BREAK);
-                player.sendMessage(ChatColor.RED + "You don't have enough money");
+                notEnoughMoney.send(player, "required", String.valueOf(purchase.getCost()));
             }
         } else
             reloadSelection(p, slot, purchase);
@@ -281,6 +281,8 @@ public class PurchaseGui extends ChestGui {
         prefixSelectable = processColors(prefixes.getStringRequired("selectable"));
         prefixBuying = processColors(prefixes.getStringRequired("buying"));
         QuakeCraftReloaded.get().getLogger().info("PurchaseGui's config loaded!");
+
+        notEnoughMoney = config.getMessageRequired("not-enough-money");
     }
 
     private static String processColors(String selected) {

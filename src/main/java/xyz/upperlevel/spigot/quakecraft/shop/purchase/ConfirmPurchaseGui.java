@@ -79,7 +79,7 @@ public class ConfirmPurchaseGui extends ChestGui {
         if(balance.take(purchase.getCost()))
             onAgree.run(player);
         else
-            player.sendMessage(ChatColor.RED + "Ypu don't have enough money!");
+            PurchaseGui.notEnoughMoney.send(player);
     }
 
 
