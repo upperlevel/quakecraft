@@ -209,16 +209,16 @@ public class PlayingPhase implements Phase, Listener {
             qshooter.getSelectedKillSound().play(e.getLocation());
             explodeBarrel(e.getLocation(), e.getQShooter());
 
-            // kill msg
+            //--- kill msg
             Railgun gun = qshooter.getGun();
-
             Message message = shotMessage.filter(
                     "killer", e.getShooter().getName(),
                     "killed", e.getHit().getName(),
                     "kill_message", (gun == null || gun.getKillMessage() == null) ? defKillMessage : gun.getKillMessage()
             );
-
             message.broadcast(game.getPlayers());
+
+            kill(hit, shooter);
         }
     }
 
@@ -227,7 +227,7 @@ public class PlayingPhase implements Phase, Listener {
         if (this.equals(e.getPhase())) {
             Location loc = e.getLocation();
             Collection<Player> players = getGame().getPlayers();
-            for(Particle p : e.getParticles())
+            for (Particle p : e.getParticles())
                 p.display(loc, players);
         }
     }

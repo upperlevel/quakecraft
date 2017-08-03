@@ -53,18 +53,18 @@ commands:
     already-playing:
     - '&cYou are already playing! &6Use this command to quit the current game:'
     - '&6/quake leave'
-    no-game-found: "&cCannot find game: '%game%'"
-    success: "&aThe game '%game%' has been joined successfully!"
+    no-game-found: '&cCannot find game: "%game%"'
+    success: []
   leave:
     not-playing: "&cYou are not in any arena"
-    success: "&aYou left the game '%game%'"
+    success: '&aYou left the game "%game%"'
   shop:
     no-shop: "&cCannot find shop gui!"
 
   arena:
     spawn:
       add:
-        success: "&aSpawn added"
+        success: "&aSpawn added!"
       list:
         header: "&a--Found %spawns% spawns!--"
         line: "&b%index% > %loc%%"
