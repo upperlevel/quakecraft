@@ -2,26 +2,26 @@ game:
   dash:
     cooldown: '&cDash cooling down! %remaining_secs%s remaining!'
 
-  end-gain:
-  - '&a----------------'
-  - '&fReward Summary'
-  - ''
-  - '&6Total earned Coins: %money%'
-  - ''
-  - '&a----------------'
-
   end-ranking:
-  - '&a----------------'
-  - '&fQuakecraft Reloaded'
+  - '^a'
+  - '^|&fQuakecraft Reloaded'
   - ''
-  - '&eWinner &7- %ranking_name_1%'
-  - '&eGun &7- %ranking_gun_1%'
+  - '^|&eWinner &7- %ranking_name_1%'
+  - '^|&eGun &7- %ranking_gun_1%'
   - ''
-  - '&e1st Place &7- %ranking_name_1% - %ranking_kills_1%'
-  - '&62nd Place &7- %ranking_name_2% - %ranking_kills_2%'
-  - '&c3rd Place &7- %ranking_name_3% - %ranking_kills_3%'
+  - '^|&e1st Place &7- %ranking_name_1% &7- %ranking_kills_1%'
+  - '^|&62nd Place &7- %ranking_name_2% &7- %ranking_kills_2%'
+  - '^|&c3rd Place &7- %ranking_name_3% &7- %ranking_kills_3%'
   - ''
-  - '&a----------------'
+  - '^a'
+
+  end-gain:
+  - '^a'
+  - '^|&fReward Summary'
+  - ''
+  - '^|&6Total earned Coins: %money%'
+  - ''
+  - '^a'
 
 lobby:
 

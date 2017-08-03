@@ -1,10 +1,7 @@
 package xyz.upperlevel.spigot.quakecraft.game.play;
 
 import lombok.Data;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,17 +23,12 @@ import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
-import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
-import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.task.Timer;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -187,9 +179,9 @@ public class PlayingPhase implements Phase, Listener {
             Railgun gun = qshooter.getGun();
             String killMessage;
             if(gun == null || gun.getKillMessage() == null)
-                killMessage = " shot ";
+                killMessage = ChatColor.RESET + " shot ";
             else
-                killMessage = " " + gun.getKillMessage() + " ";
+                killMessage = ChatColor.RESET + " " + gun.getKillMessage() + " ";
             game.broadcast(e.getShooter().getName() + killMessage + e.getHit().getName());
         }
     }
