@@ -220,7 +220,7 @@ public class ArenaSetupGuiCommand extends Command {
                                 AQUA + String.valueOf(arena.getPowerups().size())
                         ),
                         p -> {
-                            Gui gui = editItemBoxesGui(arena);
+                            Gui gui = editPowerupsGui(arena);
                             if (gui != null)
                                 guis().open(p, gui);
                             else
@@ -373,7 +373,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .build();
     }
 
-    public Gui editItemBoxesGui(Arena arena) {//TODO page-based displaying
+    public Gui editPowerupsGui(Arena arena) {//TODO page-based displaying
         List<Powerup> boxes = arena.getPowerups();
         if (boxes.size() > (GuiSize.DOUBLE.size() - 2))
             return null;
@@ -397,13 +397,13 @@ public class ArenaSetupGuiCommand extends Command {
                     i,
                     Icon.of(
                             GuiUtil.itemStack(
-                                    Material.MONSTER_EGG,
+                                    box.getEffect().getDisplay().getType(),
                                     GOLD + "Powerup " + (i + 1),
                                     AQUA + "loc: " + format(box.getLocation(), !sameWorld),
                                     AQUA + "type: " + box.getEffect().getId(),
                                     AQUA + "respawn: " + box.getRespawnTicks()
                             ),
-                            p -> guis().change(p, editItemBoxGui(boxes, index, pl -> guis().change(pl, editItemBoxesGui(arena))))
+                            p -> guis().change(p, editPowerupGui(boxes, index, pl -> guis().change(pl, editPowerupsGui(arena))))
                     )
             );
             i++;
@@ -415,7 +415,7 @@ public class ArenaSetupGuiCommand extends Command {
                         p -> {
                             boxes.add(new Powerup(arena, p.getLocation(), PowerupEffectManager.getDef(), 300));
                             p.sendMessage(GREEN + "Powerup added to arena!");
-                            guis().change(p, editItemBoxesGui(arena));//Reload page
+                            guis().change(p, editPowerupsGui(arena));//Reload page
                         }
                 )
         );
@@ -423,7 +423,7 @@ public class ArenaSetupGuiCommand extends Command {
         return gui;
     }
 
-    public Gui editItemBoxGui(List<Powerup> boxes, int index, Link previous) {//TODO rethink GUI system
+    public Gui editPowerupGui(List<Powerup> boxes, int index, Link previous) {//TODO rethink GUI system
         Powerup box = boxes.get(index);
         return ChestGui.builder(9)
                 .title("Spawn editor")
@@ -446,16 +446,16 @@ public class ArenaSetupGuiCommand extends Command {
                         p -> {//TODO add confirm
                             box.setLocation(p.getLocation());
                             p.sendMessage(GREEN + "Powerup " + (index + 1) + " new position: " + format(p.getLocation(), true) + "!");
-                            guis().change(p, editItemBoxGui(boxes, index, previous));
+                            guis().change(p, editPowerupGui(boxes, index, previous));
                         }
                 )
                 .add(
                         GuiUtil.itemStack(
-                                Material.MONSTER_EGG,
+                                box.getEffect().getDisplay().getType(),
                                 GOLD + "Effect type",
                                 AQUA + box.getEffect().getId()
                         ),
-                        p -> guis().change(p, editItemBoxEffectGui(box, pl -> guis().change(pl, editItemBoxGui(boxes, index, previous))))
+                        p -> guis().change(p, editItemBoxEffectGui(box, pl -> guis().change(pl, editPowerupGui(boxes, index, previous))))
                 )
                 .add(
                         GuiUtil.itemStack(
@@ -469,7 +469,7 @@ public class ArenaSetupGuiCommand extends Command {
                             gui.setListener(filterInt(
                                     (pl, in) -> {
                                         box.setRespawnTicks(in);
-                                        guis().change(pl, editItemBoxGui(boxes, index, previous));
+                                        guis().change(pl, editPowerupGui(boxes, index, previous));
                                     },
                                     i -> i > 0
                             ));
