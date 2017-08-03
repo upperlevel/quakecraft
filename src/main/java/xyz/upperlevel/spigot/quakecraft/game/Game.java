@@ -19,6 +19,7 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.game.PhaseManager;
+import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
 import java.util.HashSet;
