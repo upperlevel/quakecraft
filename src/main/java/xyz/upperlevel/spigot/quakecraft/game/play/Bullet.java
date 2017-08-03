@@ -56,7 +56,10 @@ public class Bullet {
         this.player = player;
         this.qp = QuakeCraftReloaded.get().getPlayerManager().getPlayer(player);
         this.participant = phase.getParent().getParticipant(player);
-        this.positions = new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection()).traverse(150, 0.25);
+        Vector start = player.getEyeLocation().toVector();
+        start.setY(start.getY() - 0.15);
+        Vector direction = player.getEyeLocation().getDirection();
+        this.positions = new RayTrace(start, direction).traverse(150, 0.25);
         positionIndex = 0;
 
         this.cooldownMillis = (long) (qp.getSelectedTrigger().getFiringSpeed() * 1000 * participant.getGunCooldownBase());
