@@ -9,17 +9,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
+import sun.misc.resources.Messages;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
 import java.io.File;
+import java.util.Map;
 
+import static java.lang.String.valueOf;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
@@ -27,6 +32,8 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 @Data
 public class CountdownPhase implements Phase, Listener {
     public static Sound ORB_PICKUP = CompatibleSound.getRaw("ENTITY_EXPERIENCE_ORB_PICKUP");
+
+    private static Map<String, Message> countdownMsg;
 
     private final Game game;
     private final LobbyPhase parent;
@@ -42,6 +49,11 @@ public class CountdownPhase implements Phase, Listener {
                 player.setLevel(timer);
                 player.playSound(player.getLocation(), ORB_PICKUP, 0, 100f);
                 boards().view(player).render();
+
+                // msg.get(timer) -> not so nice
+                Message msg = countdownMsg.get(valueOf(timer));
+                if (msg != null)
+                    msg.send(player);
             }
             if (timer > 0)
                 timer--;
@@ -133,7 +145,7 @@ public class CountdownPhase implements Phase, Listener {
         Bukkit.getPluginManager().registerEvents(this, get());
         for (Player player : game.getPlayers())
             setup(player);
-        timer = 10;
+        timer = QuakeCraftReloaded.get().getConfig().getInt("lobby.countdown"); // todo parse before game
         task.runTaskTimer(get(), 0, 20);
     }
 
@@ -159,5 +171,10 @@ public class CountdownPhase implements Phase, Listener {
             clear(e.getPlayer());
             update();
         }
+    }
+
+    public static void loadConfig() {
+        MessageManager msg = QuakeCraftReloaded.get().getMessages().getSection("lobby");
+        countdownMsg = msg.load("countdown");
     }
 }

@@ -118,6 +118,14 @@ public class Game implements Listener {
         players.forEach(player -> player.sendMessage(msg));
     }
 
+    public void broadcast(Message msg) {
+        players.forEach(msg::send);
+    }
+
+    public void broadcast(Message msg, PlaceholderRegistry placeholders) {
+        players.forEach(p -> msg.send(p, placeholders));
+    }
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         if (players.contains(e.getPlayer()))

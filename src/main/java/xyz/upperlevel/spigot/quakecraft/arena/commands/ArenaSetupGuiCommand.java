@@ -39,27 +39,27 @@ public class ArenaSetupGuiCommand extends Command {
         Player player = (Player) sender;
         sender.sendMessage(GREEN + "Opening GUI.");
         Gui gui = arena == null ? selectArena(player) : editArena(player, arena, GuiAction.close());
-        if(gui != null)
+        if (gui != null)
             guis().open(player, gui);
     }
 
     public Gui selectArena(Player player) {//TODO page-based displaying
         List<Arena> arenas = QuakeCraftReloaded.get().getArenaManager().getArenas();
-        if(arenas.size() > (GuiSize.DOUBLE.size() - 2)) {
+        if (arenas.size() > (GuiSize.DOUBLE.size() - 2)) {
             player.sendMessage(RED + "Too many arenas! specify the arena name in the command!");
             return null;
         }
         ChestGui gui = new ChestGui(GuiSize.min(arenas.size() + 2), PlaceholderValue.fake("Select arena"));
         int i = 0;
-        for(Arena arena : arenas) {
+        for (Arena arena : arenas) {
             gui.setIcon(
                     i,
                     Icon.of(
                             GuiUtil.itemStack(
                                     Material.MONSTER_EGG,
-                                    arena.getId(),
+                                    AQUA + arena.getId(),
                                     GRAY + "Id: " + AQUA + arena.getId(),
-                                    GRAY + "Name:" + AQUA + arena.getName(),
+                                    GRAY + "Name: " + AQUA + arena.getName(),
                                     GRAY + "Spawns: " + AQUA + arena.getSpawns().size()
 
                             ),
@@ -69,9 +69,9 @@ public class ArenaSetupGuiCommand extends Command {
             i++;
         }
         gui.setIcon(
-                gui.getSize()  - 2,
+                gui.getSize() - 2,
                 Icon.of(
-                        GuiUtil.wool(DyeColor.GREEN, "Add"),
+                        GuiUtil.wool(DyeColor.LIME, GOLD + "Add"),
                         p -> {
                             AnvilGui anvil = new AnvilGui();
                             anvil.setMessage("Arena Id");
@@ -87,7 +87,7 @@ public class ArenaSetupGuiCommand extends Command {
                         }
                 )
         );
-        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, "Back"), GuiAction.back()));
+        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, GOLD + "Back"), GuiAction.back()));
         return gui;
     }
 
@@ -98,18 +98,18 @@ public class ArenaSetupGuiCommand extends Command {
                 .title(arena.getId() + "'s setup")
                 .add(
                         () -> GuiUtil.wool(
-                                arena.isEnabled() ? DyeColor.GREEN : DyeColor.RED,
-                                arena.isEnabled() ? "Disable" : "Enable"),
+                                arena.isEnabled() ? DyeColor.LIME : DyeColor.RED,
+                                arena.isEnabled() ? RED + "Disable" : GREEN + "Enable"),
                         p -> {
                             boolean changed = arena.isEnabled() ? disable(player, arena) : enable(player, arena);
-                            if(changed)
+                            if (changed)
                                 guis().reprint(p);
                         }
                 )
                 .add(
                         () -> GuiUtil.itemStack(
                                 Material.NAME_TAG,
-                                "Name",
+                                GOLD + "Name",
                                 AQUA + arena.getName()
                         ),
                         p -> {
@@ -126,7 +126,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         () -> GuiUtil.itemStack(
                                 Material.STONE_SLAB2,
-                                "Min players",
+                                GOLD + "Min players",
                                 AQUA + (arena.getMinPlayers() > 0 ? String.valueOf(arena.getMinPlayers()) : (RED + "Not set"))
                         ),
                         p -> {
@@ -146,7 +146,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         () -> GuiUtil.itemStack(
                                 Material.RED_SANDSTONE,
-                                "Max players",
+                                GOLD + "Max players",
                                 AQUA + (arena.getMaxPlayers() > 0 ? String.valueOf(arena.getMaxPlayers()) : (RED + "Not set"))
                         ),
                         p -> {
@@ -166,8 +166,8 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         () -> GuiUtil.itemStack(
                                 Material.MONSTER_EGG,
-                                "Spawns",
-                                AQUA + String.valueOf(arena.getSpawns().size()) + " Spawns"
+                                GOLD + "Spawns",
+                                AQUA + String.valueOf(arena.getSpawns().size())
                         ),
                         p -> {
                             Gui gui = editSpawnsGui(arena);
@@ -180,11 +180,11 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         () -> GuiUtil.itemStack(
                                 Material.WATCH,
-                                "Lobby",
+                                GOLD + "Lobby",
                                 lobbyLoc == null ? (RED + "Not set") : (AQUA + format(lobbyLoc, true))
                         ),
                         p -> {
-                            if(lobbyLoc == null) {
+                            if (lobbyLoc == null) {
                                 arena.setLobby(p.getLocation());
                                 p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
                                 guis().change(player, editArena(player, arena, previous));
@@ -196,7 +196,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         () -> GuiUtil.itemStack(
                                 Material.GOLD_SWORD,
-                                "Kills to win",
+                                GOLD + "Kills to win",
                                 AQUA + (arena.getKillsToWin() > 0 ? String.valueOf(arena.getKillsToWin()) : (RED + "Not set"))
                         ),
                         p -> {
@@ -216,8 +216,8 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         () -> GuiUtil.itemStack(
                                 Material.TRAPPED_CHEST,
-                                "Powerups",
-                                AQUA + String.valueOf(arena.getPowerups().size()) + " Powerups"
+                                GOLD + "Powerups",
+                                AQUA + String.valueOf(arena.getPowerups().size())
                         ),
                         p -> {
                             Gui gui = editItemBoxesGui(arena);
@@ -229,9 +229,9 @@ public class ArenaSetupGuiCommand extends Command {
                 )
                 .set(
                         16,
-                        GuiUtil.itemStack(Material.BARRIER, "Remove"),
+                        GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
                         p -> {//TODO add confirm
-                            if(arena.isEnabled()) {
+                            if (arena.isEnabled()) {
                                 player.sendMessage(RED + "Disable the arena before removing it!");
                                 return;
                             }
@@ -242,7 +242,7 @@ public class ArenaSetupGuiCommand extends Command {
                 )
                 .set(
                         17,
-                        GuiUtil.itemStack(Material.ARROW, "Back"),
+                        GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
                         previous
                 )
                 .build();
@@ -250,15 +250,15 @@ public class ArenaSetupGuiCommand extends Command {
 
     public Gui editSpawnsGui(Arena arena) {//TODO page-based displaying
         List<Location> locs = arena.getSpawns();
-        if(locs.size() > (GuiSize.DOUBLE.size() - 2))
+        if (locs.size() > (GuiSize.DOUBLE.size() - 2))
             return null;
-        ChestGui gui = new ChestGui(GuiSize.min(locs.size() + 2), PlaceholderValue.fake(arena.getId() + "'s Spawns"));
+        ChestGui gui = new ChestGui(GuiSize.min(locs.size() + 2), PlaceholderValue.fake(arena.getId() + "'s spawns"));
 
         boolean sameWorld = true;
-        if(locs.size() > 0){
+        if (locs.size() > 0) {
             World w = locs.get(0).getWorld();
-            for(int i = locs.size() - 1; i >= 1; i--) {
-                if(w != locs.get(i).getWorld()) {
+            for (int i = locs.size() - 1; i >= 1; i--) {
+                if (w != locs.get(i).getWorld()) {
                     sameWorld = false;
                     break;
                 }
@@ -266,14 +266,14 @@ public class ArenaSetupGuiCommand extends Command {
         }
 
         int i = 0;
-        for(Location loc : locs) {
+        for (Location loc : locs) {
             final int index = i;
             gui.setIcon(
                     i,
                     Icon.of(
                             GuiUtil.itemStack(
                                     Material.MONSTER_EGG,
-                                    "Spawn " + (i + 1),
+                                    GOLD + "Spawn " + (i + 1),
                                     String.valueOf(AQUA) + format(loc, !sameWorld)
                             ),
                             p -> guis().change(p, editSpawnGui(locs, index, pl -> guis().change(pl, editSpawnsGui(arena))))
@@ -282,9 +282,9 @@ public class ArenaSetupGuiCommand extends Command {
             i++;
         }
         gui.setIcon(
-                gui.getSize()  - 2,
+                gui.getSize() - 2,
                 Icon.of(
-                        GuiUtil.wool(DyeColor.GREEN, "Add"),
+                        GuiUtil.wool(DyeColor.GREEN, GOLD + "Add"),
                         p -> {
                             locs.add(p.getLocation());
                             p.sendMessage(GREEN + "Spawn added to arena!");
@@ -303,7 +303,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         GuiUtil.itemStack(
                                 Material.SADDLE,
-                                "Teleport",
+                                GOLD + "Teleport",
                                 AQUA + "To " + format(loc, true)),
                         p -> {
                             guis().close(p);
@@ -314,7 +314,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         GuiUtil.itemStack(
                                 Material.STICK,
-                                "Edit"
+                                GOLD + "Edit"
                         ),
                         p -> {//TODO add confirm
                             list.set(index, p.getLocation());
@@ -323,7 +323,7 @@ public class ArenaSetupGuiCommand extends Command {
                         }
                 )
                 .add(
-                        GuiUtil.itemStack(Material.BARRIER, "Remove"),
+                        GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
                         p -> {//TODO add confirm
                             list.remove(index);
                             p.sendMessage(GREEN + "Spawn " + (index + 1) + " removed!");
@@ -332,7 +332,7 @@ public class ArenaSetupGuiCommand extends Command {
                 )
                 .set(
                         8,
-                        GuiUtil.itemStack(Material.ARROW, "Back"),
+                        GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
                         previous
                 )
                 .build();
@@ -345,7 +345,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         GuiUtil.itemStack(
                                 Material.SADDLE,
-                                "Teleport",
+                                GOLD + "Teleport",
                                 AQUA + "To " + format(loc, true)),
                         p -> {
                             guis().close(p);
@@ -355,8 +355,9 @@ public class ArenaSetupGuiCommand extends Command {
                 )
                 .add(
                         GuiUtil.itemStack(
+
                                 Material.STICK,
-                                "Edit"
+                                GOLD + "Edit"
                         ),
                         p -> {//TODO add confirm
                             arena.setLobby(p.getLocation());
@@ -374,15 +375,15 @@ public class ArenaSetupGuiCommand extends Command {
 
     public Gui editItemBoxesGui(Arena arena) {//TODO page-based displaying
         List<Powerup> boxes = arena.getPowerups();
-        if(boxes.size() > (GuiSize.DOUBLE.size() - 2))
+        if (boxes.size() > (GuiSize.DOUBLE.size() - 2))
             return null;
-        ChestGui gui = new ChestGui(GuiSize.min(boxes.size() + 2), PlaceholderValue.fake(arena.getId() + "'s Powerups"));
+        ChestGui gui = new ChestGui(GuiSize.min(boxes.size() + 2), PlaceholderValue.fake(arena.getId() + "'s powerups"));
 
         boolean sameWorld = true;
-        if(boxes.size() > 0){
+        if (boxes.size() > 0) {
             World w = boxes.get(0).getLocation().getWorld();
-            for(int i = boxes.size() - 1; i >= 1; i--) {
-                if(w != boxes.get(i).getLocation().getWorld()) {
+            for (int i = boxes.size() - 1; i >= 1; i--) {
+                if (w != boxes.get(i).getLocation().getWorld()) {
                     sameWorld = false;
                     break;
                 }
@@ -390,14 +391,14 @@ public class ArenaSetupGuiCommand extends Command {
         }
 
         int i = 0;
-        for(Powerup box : boxes) {
+        for (Powerup box : boxes) {
             final int index = i;
             gui.setIcon(
                     i,
                     Icon.of(
                             GuiUtil.itemStack(
                                     Material.MONSTER_EGG,
-                                    "Powerup " + (i + 1),
+                                    GOLD + "Powerup " + (i + 1),
                                     AQUA + "loc: " + format(box.getLocation(), !sameWorld),
                                     AQUA + "type: " + box.getEffect().getId(),
                                     AQUA + "respawn: " + box.getRespawnTicks()
@@ -408,9 +409,9 @@ public class ArenaSetupGuiCommand extends Command {
             i++;
         }
         gui.setIcon(
-                gui.getSize()  - 2,
+                gui.getSize() - 2,
                 Icon.of(
-                        GuiUtil.wool(DyeColor.GREEN, "Add"),
+                        GuiUtil.wool(DyeColor.GREEN, GOLD + "Add"),
                         p -> {
                             boxes.add(new Powerup(arena, p.getLocation(), PowerupEffectManager.getDef(), 300));
                             p.sendMessage(GREEN + "Powerup added to arena!");
@@ -429,7 +430,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         GuiUtil.itemStack(
                                 Material.SADDLE,
-                                "Teleport",
+                                GOLD + "Teleport",
                                 AQUA + "To " + format(box.getLocation(), true)),
                         p -> {
                             guis().close(p);
@@ -440,7 +441,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         GuiUtil.itemStack(
                                 Material.STICK,
-                                "Edit"
+                                GOLD + "Edit"
                         ),
                         p -> {//TODO add confirm
                             box.setLocation(p.getLocation());
@@ -451,7 +452,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         GuiUtil.itemStack(
                                 Material.MONSTER_EGG,
-                                "Effect type",
+                                GOLD + "Effect type",
                                 AQUA + box.getEffect().getId()
                         ),
                         p -> guis().change(p, editItemBoxEffectGui(box, pl -> guis().change(pl, editItemBoxGui(boxes, index, previous))))
@@ -459,7 +460,7 @@ public class ArenaSetupGuiCommand extends Command {
                 .add(
                         GuiUtil.itemStack(
                                 Material.WATCH,
-                                "Respawn ticks",
+                                GOLD + "Respawn ticks",
                                 String.valueOf(AQUA) + box.getRespawnTicks() + " ticks"
                         ),
                         p -> {
@@ -476,7 +477,7 @@ public class ArenaSetupGuiCommand extends Command {
                         }
                 )
                 .add(
-                        GuiUtil.itemStack(Material.BARRIER, "Remove"),
+                        GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
                         p -> {//TODO add confirm
                             boxes.remove(index);
                             p.sendMessage(GREEN + "Powerup " + (index + 1) + " removed!");
@@ -485,7 +486,7 @@ public class ArenaSetupGuiCommand extends Command {
                 )
                 .set(
                         8,
-                        GuiUtil.itemStack(Material.ARROW, "Back"),
+                        GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
                         previous
                 )
                 .build();
@@ -493,12 +494,12 @@ public class ArenaSetupGuiCommand extends Command {
 
     public Gui editItemBoxEffectGui(Powerup box, Link previous) {//TODO rethink GUI system
         Collection<PowerupEffect> effects = PowerupEffectManager.get();
-        if(effects.size() > (GuiSize.DOUBLE.size() - 1))
+        if (effects.size() > (GuiSize.DOUBLE.size() - 1))
             return null;
         ChestGui gui = new ChestGui(GuiSize.min(effects.size() + 2), PlaceholderValue.fake("new Powerup effect"));
 
         int i = 0;
-        for(PowerupEffect effect : effects) {
+        for (PowerupEffect effect : effects) {
             gui.setIcon(
                     i,
                     Icon.of(
@@ -514,7 +515,7 @@ public class ArenaSetupGuiCommand extends Command {
             );
             i++;
         }
-        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, "Back"), GuiAction.back()));
+        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, GOLD + "Back"), GuiAction.back()));
         return gui;
     }
 
@@ -536,7 +537,7 @@ public class ArenaSetupGuiCommand extends Command {
 
     public static ClickHandler nonArenaFilter(BiConsumer<Player, String> listener) {
         return (player, id) -> {
-            if(!Arena.isValidName(id))
+            if (!Arena.isValidName(id))
                 return "Invalid id";
             Arena arena = QuakeCraftReloaded.get().getArenaManager().getArena(id);
             if (arena != null)

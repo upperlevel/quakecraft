@@ -7,26 +7,37 @@ game:
 
   end-ranking:
   - '^a'
-  - '^|&fQuakecraft Reloaded'
+  - '^|&f&lQuakecraft Reloaded'
   - ''
-  - '^|&eWinner &7- %ranking_name_1%'
-  - '^|&eGun &7- %ranking_gun_1%'
+  - '^|&e&lWinner &7- %ranking_name_1%'
+  - '^|&e&lGun &7- %ranking_gun_1%'
   - ''
-  - '^|&e1st Place &7- %ranking_name_1% &7- %ranking_kills_1%'
-  - '^|&62nd Place &7- %ranking_name_2% &7- %ranking_kills_2%'
-  - '^|&c3rd Place &7- %ranking_name_3% &7- %ranking_kills_3%'
+  - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'
+  - '^|&6&l2nd Place &r&7- %ranking_name_2% &7- %ranking_kills_2%'
+  - '^|&c&l3rd Place &r&7- %ranking_name_3% &7- %ranking_kills_3%'
   - ''
   - '^a'
 
   end-gain:
   - '^a'
-  - '^|&fReward Summary'
+  - '^|&f&lReward Summary'
   - ''
-  - '^|&6Total earned Coins: %money%'
+  - '^<&6Total earned Coins: %money%'
   - ''
   - '^a'
 
 lobby:
+  join: '&7%player_name%&e has joined (&b%players%&e/&b%max_players%&e)!'
+  quit: '&7%player_name%&e has quit!'
+  countdown:
+    40: '&eThe game is starting within &b40&e seconds!'
+    20: '&eThe game is starting within 20 seconds!'
+    10: '&eThe game starts in &610&e seconds!'
+    5:  '&eThe game starts in &c5&e seconds!'
+    4:  '&eThe game starts in &c4&e seconds!'
+    3:  '&eThe game starts in &c3&e seconds!'
+    2:  '&eThe game starts in &c2&e seconds!'
+    1:  '&eThe game starts in &c1&e second!'
 
 shop:
   railgun:

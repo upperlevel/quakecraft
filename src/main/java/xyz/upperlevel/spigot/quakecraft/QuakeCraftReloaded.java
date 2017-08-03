@@ -6,8 +6,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
+import xyz.upperlevel.spigot.quakecraft.game.CountdownPhase;
 import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
+import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
@@ -107,6 +109,8 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
         loadSafe("game", EndingPhase::loadConfig);
+        loadSafe("lobby", LobbyPhase::loadConfig);
+        loadSafe("lobby", CountdownPhase::loadConfig);
         loadSafe("shot", PlayingPhase::loadConfig);
 
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
@@ -122,7 +126,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
             gameManager.save();
             arenaManager.save();
         } catch (IOException e) {
-            System.err.println("ERR"); // todo error system
+            getLogger().severe("Cannot save game/arena settings: " + e);
         }
         gameManager.stop();
     }

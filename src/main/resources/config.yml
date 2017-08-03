@@ -1,59 +1,7 @@
-
-#
-# Plugin messages may have different placeholders, depending on the context. You are able to know the placeholders available for every message in a comment above each one.
-#
-# However, if the placeholder API is present in the plugin you are able to use plenty of placeholder in addiction that you can find here:
-# https://www.spigotmc.org/wiki/placeholderapi-placeholders/
-#
-
-solo:
-  canInteractDoors: true
-  canInteractTraps: true
-
-  lobby:
-    #
-    # The lobby countdown starts when the arena reaches the minimum number of players.
-    # If you disable it, players will be directly teleported to the game spawn.
-    #
-    countdown:
-      enabled: true
-      startAt: 10
-
-    #
-    # Lobby board
-    #
-    # Placeholders available:
-    # %arena%     - arena
-    # %players%   - players currently in the arena
-    # %min%       - min number of players
-    # %max%       - max number of players
-    # %countdown% - countdown current seconds
-    #
-    board:
-
-      #
-      # If enabled, the board will be updated each amount of ticks specified and whenever placeholders inside of it changes.
-      # If disabled, the board will be updated only for the second occasion written above.
-      #
-      # Pay attention that if you have PlaceholderAPI placeholders, they will not be updated if update is disabled.
-      #
-      update:
-        enabled: true
-        each: 10
-
-      title: '&e&lQUAKECRAFT'
-      lines:
-        - ''
-        - '&fArena: &a%arena%'
-        - '&fPlayers: &a%players%/%max%'
-        - ''
-        - '&fStarting in: &a%countdown%'
-        - ''
-
 lobby:
-  countdown: 10
+  countdown: 40 # seconds
 game:
-  countdown: 10
+  countdown: 600 # 10 minutes
 
 playing-hotbar:
   gun:

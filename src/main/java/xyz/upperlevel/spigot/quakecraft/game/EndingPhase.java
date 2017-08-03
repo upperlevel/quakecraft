@@ -2,9 +2,13 @@ package xyz.upperlevel.spigot.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
@@ -17,6 +21,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
@@ -25,6 +30,8 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class EndingPhase implements Phase, Listener {
+    private static final Random random = new Random();
+
     private static Message endGainMessage;
     private static Message endRankingMessage;
 
@@ -33,15 +40,35 @@ public class EndingPhase implements Phase, Listener {
     private static GainType secondGain;
     private static GainType thirdGain;
 
+    private Participant winner;
+
     private final Game game;
     private final GamePhase parent;
 
     private final EndingHotbar hotbar;
     private final EndingBoard board;
 
-    private final BukkitRunnable task = new BukkitRunnable() {
+    private final BukkitRunnable fireworksTask = new BukkitRunnable() {
         @Override
         public void run() {
+            Firework f = winner.getPlayer().getWorld().spawn(winner.getPlayer().getLocation(), Firework.class);
+            FireworkMeta fm = f.getFireworkMeta();
+            fm.addEffect(FireworkEffect.builder()
+                    .withColor(Color.fromRGB(
+                            random.nextInt(255),
+                            random.nextInt(255),
+                            random.nextInt(255)
+                    ))
+                    .build());
+            fm.setPower(1);
+            f.setFireworkMeta(fm);
+        }
+    };
+
+    private final BukkitRunnable endingTask = new BukkitRunnable() {
+        @Override
+        public void run() {
+            fireworksTask.cancel();
             giveGains();
             game.getPhaseManager().setPhase(new LobbyPhase(game));
         }
@@ -95,7 +122,7 @@ public class EndingPhase implements Phase, Listener {
 
         PlaceholderRegistry<?> reg = PlaceholderRegistry.create(gameReg);
         reg.set("ranking_name", (p, s) -> {
-            if(s == null)
+            if (s == null)
                 return null;
             try {
                 return getParent().getRanking().get(Integer.parseInt(s) - 1).getPlayer().getName();
@@ -129,7 +156,7 @@ public class EndingPhase implements Phase, Listener {
 
         gameReg.setParent(gameRegParent);
 
-        for(Player player : getParent().getGame().getPlayers())
+        for (Player player : getParent().getGame().getPlayers())
             filtered.send(player);
     }
 
@@ -148,23 +175,23 @@ public class EndingPhase implements Phase, Listener {
     }
 
     public void clear() {
-        Bukkit.getOnlinePlayers().forEach(this::clear);
+        game.getPlayers().forEach(this::clear);
     }
 
     @Override
     public void onEnable(Phase previous) {
-        Participant winner = parent.getWinner();
-        game.setWinner(winner.getPlayer());
+        winner = parent.getWinner();
         printRanking();
 
         setup();
 
-        task.runTaskLater(get(), 20 * 10);
+        fireworksTask.runTaskTimer(get(), 0, 20);
+        endingTask.runTaskLater(get(), 20 * 10);
     }
 
     @Override
     public void onDisable(Phase next) {
-        task.cancel();
+        endingTask.cancel();
         clear();
     }
 

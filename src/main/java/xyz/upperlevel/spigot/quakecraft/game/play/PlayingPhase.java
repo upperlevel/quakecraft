@@ -27,12 +27,14 @@ import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.task.Timer;
-import xyz.upperlevel.uppercore.util.TextUtil;
 import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
+import xyz.upperlevel.uppercore.util.TextUtil;
+import xyz.upperlevel.uppercore.task.UpdaterTask;
 
 import java.io.File;
 import java.util.*;
 
+import static org.bukkit.ChatColor.GRAY;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
@@ -46,12 +48,12 @@ public class PlayingPhase implements Phase, Listener {
 
     private final PlayingHotbar hotbar;
     private final PlayingBoard board;
-
-    private final Timer timer = new Timer(get(), 10 * 60 * 20, 20) {
+    private final Timer timer = new Timer(get(), get().getConfig().getInt("game.countdown") * 20, 20) {
         @Override
         public void tick() {
-            for (Player player : game.getPlayers())
+            for (Player player : game.getPlayers()) {
                 boards().view(player).render();
+            }
         }
 
         @Override
@@ -59,6 +61,22 @@ public class PlayingPhase implements Phase, Listener {
             parent.setPhase(new EndingPhase(parent));
         }
     };
+    private final UpdaterTask compassUpdater;
+
+    private Player getNearbyPlayer(Player player) {
+        Player res = null;
+        double dist = 0;
+        for (Player other : game.getPlayers()) {
+            if (!player.equals(other)) {
+                double curr = player.getLocation().distanceSquared(other.getLocation());
+                if (res == null || dist > curr) {
+                    res = other;
+                    dist = curr;
+                }
+            }
+        }
+        return res;
+    }
 
     public PlayingPhase(GamePhase parent) {
         this.parent = parent;
@@ -77,6 +95,13 @@ public class PlayingPhase implements Phase, Listener {
                 throw new IllegalArgumentException("Cannot find file: \"" + file.getPath() + "\"");
             board = PlayingBoard.deserialize(this, YamlConfiguration.loadConfiguration(file)::get);
         }
+        compassUpdater = new UpdaterTask(20 * 5, () -> {
+            for (Player player : game.getPlayers()) {
+                Player target = getNearbyPlayer(player);
+                if (target != null)
+                    player.setCompassTarget(target.getLocation());
+            }
+        });
     }
 
     public void setup(Player player) {
@@ -121,18 +146,23 @@ public class PlayingPhase implements Phase, Listener {
             p.teleport(game.getArena().getSpawns().get(i % game.getArena().getSpawns().size()));
         }
 
-        for(Powerup box : getGame().getArena().getPowerups())
+        for (Powerup box : getGame().getArena().getPowerups())
             box.onGameBegin(getParent());
+
         timer.start();
+        compassUpdater.start();
     }
 
     @Override
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
 
+        compassUpdater.stop();
+        timer.stop();
+
         clear();
-        for(Powerup box : getGame().getArena().getPowerups())
-            box.onGameEnd();
+        for (Powerup powerup : getGame().getArena().getPowerups())
+            powerup.onGameEnd();
     }
 
     @EventHandler
@@ -163,9 +193,9 @@ public class PlayingPhase implements Phase, Listener {
         FireworkNms.instantFirework(
                 location,
                 FireworkEffect.builder()
-                .with(type)
-                .withColor(color)
-                .build()
+                        .with(type)
+                        .withColor(color)
+                        .build()
         );
     }
 
@@ -174,11 +204,12 @@ public class PlayingPhase implements Phase, Listener {
         if (equals(e.getPhase())) {
             Participant hit = parent.getParticipant(e.getHit());
             Participant shooter = parent.getParticipant(e.getShooter());
-            kill(hit, shooter);
+
             QuakePlayer qshooter = e.getQShooter();
             qshooter.getSelectedKillSound().play(e.getLocation());
             explodeBarrel(e.getLocation(), e.getQShooter());
 
+            // kill msg
             Railgun gun = qshooter.getGun();
 
             Message message = shotMessage.filter(
