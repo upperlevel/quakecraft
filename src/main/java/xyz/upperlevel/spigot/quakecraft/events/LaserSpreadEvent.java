@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
+import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
 

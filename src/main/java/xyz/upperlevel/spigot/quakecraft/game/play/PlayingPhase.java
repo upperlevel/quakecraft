@@ -13,9 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.core.NmsUtil;
-import xyz.upperlevel.spigot.quakecraft.core.Phase;
-import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
+import xyz.upperlevel.uppercore.game.Phase;
+import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
@@ -27,14 +26,12 @@ import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.task.Timer;
+import xyz.upperlevel.uppercore.util.NmsUtil;
 import xyz.upperlevel.uppercore.util.TextUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
@@ -198,8 +195,9 @@ public class PlayingPhase implements Phase, Listener {
     public void onLaserSpread(LaserSpreadEvent e) {
         if (this.equals(e.getPhase())) {
             Location loc = e.getLocation();
+            Collection<Player> players = getGame().getPlayers();
             for(Particle p : e.getParticles())
-                p.display(loc, getGame());
+                p.display(loc, players);
         }
     }
 

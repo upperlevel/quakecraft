@@ -8,10 +8,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import xyz.upperlevel.spigot.quakecraft.core.Phase;
-import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
-import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
+import xyz.upperlevel.uppercore.game.Phase;
+import xyz.upperlevel.uppercore.game.PhaseManager;
+import xyz.upperlevel.uppercore.util.PlayerUtil;
 
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 

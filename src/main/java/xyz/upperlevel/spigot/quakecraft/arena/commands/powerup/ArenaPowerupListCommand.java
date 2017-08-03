@@ -14,7 +14,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
 import java.util.List;
 
-import static xyz.upperlevel.spigot.quakecraft.core.LocUtil.format;
+import static xyz.upperlevel.uppercore.util.LocUtil.format;
 
 public class ArenaPowerupListCommand extends Command {
     private static Message HEADER;

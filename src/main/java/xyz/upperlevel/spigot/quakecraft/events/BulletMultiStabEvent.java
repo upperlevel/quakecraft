@@ -12,7 +12,7 @@ import xyz.upperlevel.uppercore.message.Message;
 
 @Getter
 @Setter
-public class MultiStabEvent extends Event implements Cancellable {
+public class BulletMultiStabEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final GamePhase phase;
@@ -23,7 +23,7 @@ public class MultiStabEvent extends Event implements Cancellable {
     private boolean cancelled;
 
 
-    public MultiStabEvent(GamePhase phase, Bullet bullet, MultiStab stab, Message message) {
+    public BulletMultiStabEvent(GamePhase phase, Bullet bullet, MultiStab stab, Message message) {
         this.phase = phase;
         this.bullet = bullet;
         this.stab = stab;

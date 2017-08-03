@@ -3,7 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.game.play;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.events.MultiStabEvent;
+import xyz.upperlevel.spigot.quakecraft.events.BulletMultiStabEvent;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.uppercore.config.Config;
@@ -42,7 +42,7 @@ public class MultiStab {
     }
 
     public void reach(GamePhase phase, Bullet bullet) {
-        MultiStabEvent event = new MultiStabEvent(phase, bullet, this, message);
+        BulletMultiStabEvent event = new BulletMultiStabEvent(phase, bullet, this, message);
         Bukkit.getPluginManager().callEvent(event);
         if(!event.isCancelled()){
             event.getMessage().broadcast(phase.getGame().getPlayers(),"killer_name", bullet.getPlayer().getName(), "kills", String.valueOf(bullet.getKilled().size()));

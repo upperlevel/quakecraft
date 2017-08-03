@@ -7,12 +7,14 @@ import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
-import xyz.upperlevel.uppercore.util.SerializationUtil;
+import xyz.upperlevel.uppercore.util.LocUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.Maps.immutableEntry;
 import static java.util.Collections.emptyList;
 
 @Getter
@@ -84,7 +86,7 @@ public class Arena {
         data.put("id", id);
         data.put("name", name);
         if(lobby != null)
-            data.put("lobby", SerializationUtil.serialize(lobby));
+            data.put("lobby", LocUtil.serialize(lobby));
 
         Map<String, Object> players = new HashMap<>();
         players.put("min", minPlayers);
@@ -93,7 +95,7 @@ public class Arena {
 
         List<Map<String, Object>> spawns = new ArrayList<>();
         for (Location spawn : this.spawns)
-            spawns.add(SerializationUtil.serialize(spawn));
+            spawns.add(LocUtil.serialize(spawn));
         data.put("spawns", spawns);
 
         data.put("kills_to_win", killsToWin);

@@ -4,9 +4,9 @@ import lombok.Getter;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import xyz.upperlevel.spigot.quakecraft.core.Phase;
-import xyz.upperlevel.spigot.quakecraft.core.PhaseManager;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
+import xyz.upperlevel.uppercore.game.Phase;
+import xyz.upperlevel.uppercore.game.PhaseManager;
 
 import java.util.*;
 

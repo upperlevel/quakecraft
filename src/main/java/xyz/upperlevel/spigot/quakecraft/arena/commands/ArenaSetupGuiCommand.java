@@ -1,7 +1,10 @@
 package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import net.wesjd.anvilgui.AnvilGUI.ClickHandler;
-import org.bukkit.*;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
@@ -20,11 +23,10 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import static org.bukkit.ChatColor.*;
-import static xyz.upperlevel.spigot.quakecraft.core.LocUtil.format;
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 import static xyz.upperlevel.uppercore.gui.InputFilters.filterInt;
-import static xyz.upperlevel.uppercore.gui.InputFilters.filterPlayer;
 import static xyz.upperlevel.uppercore.gui.InputFilters.plain;
+import static xyz.upperlevel.uppercore.util.LocUtil.format;
 
 public class ArenaSetupGuiCommand extends Command {
     public ArenaSetupGuiCommand() {

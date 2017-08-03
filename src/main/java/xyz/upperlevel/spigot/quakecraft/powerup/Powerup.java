@@ -20,7 +20,7 @@ import xyz.upperlevel.spigot.quakecraft.game.Participant;
 import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.util.SerializationUtil;
+import xyz.upperlevel.uppercore.util.LocUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,14 +89,14 @@ public class Powerup {
 
     public Map<String, Object> save() {
         return ImmutableMap.of(
-                "loc", SerializationUtil.serialize(location),
+                "loc", LocUtil.serialize(location),
                 "effect", effect.getId(),
                 "respawn-ticks", respawnTicks
         );
     }
 
     public void load(Config config) {
-        this.location = SerializationUtil.deserializeLocation(config.getConfigRequired("loc"));
+        this.location = LocUtil.deserialize(config.getConfigRequired("loc"));
         String effectId = config.getStringRequired("effect");
         this.effect = PowerupEffectManager.fromId(effectId);
         if(effect == null)

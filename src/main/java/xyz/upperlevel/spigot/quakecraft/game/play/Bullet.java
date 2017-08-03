@@ -9,8 +9,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.core.math.RayTrace;
-import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
+import xyz.upperlevel.uppercore.math.RayTrace;
+import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
@@ -18,7 +18,7 @@ import xyz.upperlevel.spigot.quakecraft.game.Participant;
 
 import java.util.*;
 
-import static xyz.upperlevel.spigot.quakecraft.core.PlayerUtil.forEveryPlayerAround;
+import static xyz.upperlevel.uppercore.util.PlayerUtil.forEveryPlayerAround;
 
 public class Bullet {
     public static final int MILLIS_IN_TICK = 50;

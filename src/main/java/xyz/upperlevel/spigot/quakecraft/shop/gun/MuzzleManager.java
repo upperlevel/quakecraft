@@ -2,7 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.shop.gun;
 
 import lombok.Getter;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.core.particle.Particle;
+import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;

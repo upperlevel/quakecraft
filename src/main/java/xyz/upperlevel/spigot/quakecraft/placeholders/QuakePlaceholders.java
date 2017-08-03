@@ -2,16 +2,11 @@ package xyz.upperlevel.spigot.quakecraft.placeholders;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.core.Phase;
 import xyz.upperlevel.spigot.quakecraft.game.CountdownPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.spigot.quakecraft.game.WaitingPhase;
-import xyz.upperlevel.spigot.quakecraft.shop.gun.CaseManager;
+import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.placeholder.Placeholder;
-
-import java.util.Locale;
 
 import static java.lang.String.valueOf;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;

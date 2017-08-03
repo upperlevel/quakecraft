@@ -8,16 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.core.Phase;
-import xyz.upperlevel.spigot.quakecraft.core.PlayerUtil;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.uppercore.Uppercore;
-import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.hotbar.HotbarManager;
 import xyz.upperlevel.uppercore.board.Board;
-import xyz.upperlevel.uppercore.board.BoardManager;
 
 import java.io.File;
 
