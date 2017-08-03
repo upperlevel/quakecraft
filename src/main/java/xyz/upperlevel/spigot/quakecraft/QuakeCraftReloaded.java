@@ -11,6 +11,7 @@ import xyz.upperlevel.spigot.quakecraft.game.GameManager;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
+import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
 import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.spigot.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
@@ -106,6 +107,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
         loadSafe("game", EndingPhase::loadConfig);
+        loadSafe("shot", PlayingPhase::loadConfig);
 
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
     }

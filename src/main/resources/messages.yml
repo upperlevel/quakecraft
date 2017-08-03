@@ -2,6 +2,9 @@ game:
   dash:
     cooldown: '&cDash cooling down! %remaining_secs%s remaining!'
 
+  shot: '&7%killer% %kill_message% &7%killed%'
+  def-kill-message: '&7shot'
+
   end-ranking:
   - '^a'
   - '^|&fQuakecraft Reloaded'

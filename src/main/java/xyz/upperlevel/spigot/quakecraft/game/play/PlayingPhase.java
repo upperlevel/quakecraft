@@ -25,7 +25,11 @@ import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
 import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.message.MessageManager;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.task.Timer;
+import xyz.upperlevel.uppercore.util.TextUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,6 +42,8 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
+    private static Message shotMessage;
+    private static String defKillMessage;
     private final Game game;
     private final GamePhase parent;
 
@@ -177,12 +183,14 @@ public class PlayingPhase implements Phase, Listener {
             explodeBarrel(e.getLocation(), e.getQShooter());
 
             Railgun gun = qshooter.getGun();
-            String killMessage;
-            if(gun == null || gun.getKillMessage() == null)
-                killMessage = ChatColor.RESET + " shot ";
-            else
-                killMessage = ChatColor.RESET + " " + gun.getKillMessage() + " ";
-            game.broadcast(e.getShooter().getName() + killMessage + e.getHit().getName());
+
+            Message message = shotMessage.filter(
+                    "killer", e.getShooter().getName(),
+                    "killed", e.getHit().getName(),
+                    "kill_message", (gun == null || gun.getKillMessage() == null) ? defKillMessage : gun.getKillMessage()
+            );
+
+            message.broadcast(game.getPlayers());
         }
     }
 
@@ -207,5 +215,11 @@ public class PlayingPhase implements Phase, Listener {
             else if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)
                 Dash.dash(p);
         }
+    }
+
+    public static void loadConfig() {
+        MessageManager messages = QuakeCraftReloaded.get().getMessages().getSection("game");
+        shotMessage = messages.get("shot");
+        defKillMessage = TextUtil.translatePlain(messages.getConfig().getStringRequired("def-kill-message"));
     }
 }
