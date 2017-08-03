@@ -27,8 +27,8 @@ import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.task.Timer;
-import xyz.upperlevel.uppercore.util.NmsUtil;
 import xyz.upperlevel.uppercore.util.TextUtil;
+import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 
 import java.io.File;
 import java.util.*;
@@ -160,7 +160,7 @@ public class PlayingPhase implements Phase, Listener {
         FireworkEffect.Type type = p.getSelectedBarrel().getFireworkType();
         Color color = p.getSelectedLaser().getFireworkColor();
 
-        NmsUtil.instantFirework(
+        FireworkNms.instantFirework(
                 location,
                 FireworkEffect.builder()
                 .with(type)
