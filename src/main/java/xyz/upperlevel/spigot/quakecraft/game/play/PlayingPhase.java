@@ -46,13 +46,6 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
-    private static Message endGainMessage;
-
-    private static GainType baseGain;
-    private static GainType firstGain;
-    private static GainType secondGain;
-    private static GainType thirdGain;
-
     private final Game game;
     private final GamePhase parent;
 
@@ -142,28 +135,6 @@ public class PlayingPhase implements Phase, Listener {
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
 
-        {//Give players the gains
-            for(Participant p : parent.getParticipants())
-                baseGain.grant(p);
-
-            Iterator<Participant> ranking = parent.getRanking().iterator();
-            if(ranking.hasNext()) {
-                firstGain.grant(ranking.next());
-                if(ranking.hasNext()) {
-                    secondGain.grant(ranking.next());
-                    if(ranking.hasNext())
-                        thirdGain.grant(ranking.next());
-                }
-            }
-            if(EconomyManager.isEnabled()) {
-                for (Participant p : parent.getParticipants()) {
-                    EconomyManager.get(p.getPlayer()).give(p.coins);
-                    endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
-                }
-            } else
-                QuakeCraftReloaded.get().getLogger().warning("Valut not found, no money given!");
-        }
-
         clear();
         for(Powerup box : getGame().getArena().getPowerups())
             box.onGameEnd();
@@ -244,16 +215,5 @@ public class PlayingPhase implements Phase, Listener {
             else if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)
                 Dash.dash(p);
         }
-    }
-
-    public static void loadGains() {
-        baseGain = GainType.create("base");
-        firstGain = GainType.create("1-place");
-        secondGain = GainType.create("2-place");
-        thirdGain = GainType.create("3-place");
-    }
-
-    public static void loadConfig() {
-        endGainMessage = QuakeCraftReloaded.get().getMessages().get("game.end-gain");
     }
 }

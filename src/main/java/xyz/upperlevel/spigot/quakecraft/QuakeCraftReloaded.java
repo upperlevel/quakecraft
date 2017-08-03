@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
+import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.GameManager;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
@@ -104,6 +105,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
+        loadSafe("game", EndingPhase::loadConfig);
 
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
     }

@@ -91,4 +91,4 @@ purchase-gui:
     selected: '&a'
     selectable: '&a'
     buying: '&c'
-  not-enough-money: '
+  not-enough-money: '&cNot enough money!'

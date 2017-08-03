@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.events.ParticipantGainMoneyEvent;
+import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
 import xyz.upperlevel.uppercore.config.Config;
@@ -101,7 +102,7 @@ public class GainType {
 
     public static void loadChildren() {
         Participant.loadGains();
-        PlayingPhase.loadGains();
+        EndingPhase.loadGains();
     }
 
     public static void  loadConfig() {
