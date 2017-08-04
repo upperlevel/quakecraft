@@ -4,10 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.uppercore.command.Argument;
-import xyz.upperlevel.uppercore.command.Command;
-import xyz.upperlevel.uppercore.command.Executor;
-import xyz.upperlevel.uppercore.command.Sender;
+import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -16,6 +13,7 @@ import java.util.List;
 
 import static xyz.upperlevel.uppercore.util.LocUtil.format;
 
+@WithPermission(value = "list", desc = "Allows you to list all spawns in an arena")
 public class ArenaSpawnListCommand extends Command {
     private static Message HEADER;
     private static Message LINE;

@@ -6,9 +6,11 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
+@WithPermission(value = "delete", desc = "Allows you to delete an arena")
 public class ArenaDeleteCommand extends Command {
     private static Message NOT_FOUND;
     private static Message SUCCESS;

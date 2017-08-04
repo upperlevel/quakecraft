@@ -1,17 +1,14 @@
 package xyz.upperlevel.spigot.quakecraft.arena.commands.spawn;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.uppercore.command.Argument;
-import xyz.upperlevel.uppercore.command.Command;
-import xyz.upperlevel.uppercore.command.Executor;
-import xyz.upperlevel.uppercore.command.Sender;
+import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
+@WithPermission(value = "remove", desc = "Allows you to remove a spawn from an arena")
 public class ArenaSpawnRemoveCommand extends Command {
     private static Message INVALID_INDEX;
     private static Message SUCCESS;

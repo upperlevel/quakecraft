@@ -6,12 +6,14 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 import xyz.upperlevel.uppercore.command.Sender;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.gui.GuiId;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 
+@WithPermission(value = "shop", desc = "Allows you to open the shop")
 public class ShopCommand extends Command {
     private static Message NO_GUI;
 

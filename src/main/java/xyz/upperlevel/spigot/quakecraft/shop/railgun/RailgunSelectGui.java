@@ -157,8 +157,6 @@ public class RailgunSelectGui extends ChestGui {
         Railgun old = p.getGun();
         gun.select(p);
 
-        System.out.println("OLD: " + old);
-
         //Find old gun's index
         int oldIndex = gunMap.entrySet()
                 .stream()

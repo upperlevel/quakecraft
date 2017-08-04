@@ -6,16 +6,14 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
 import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
-import xyz.upperlevel.uppercore.command.Argument;
-import xyz.upperlevel.uppercore.command.Command;
-import xyz.upperlevel.uppercore.command.Executor;
-import xyz.upperlevel.uppercore.command.Sender;
+import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.util.LocUtil;
 
 
+@WithPermission(value = "add", desc = "Allows you to add a powerup to an arena")
 public class ArenaPowerupAddCommand extends Command {
     private static Message SUCCESS;
 

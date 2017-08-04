@@ -5,11 +5,13 @@ import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
 import java.util.Collection;
 
+@WithPermission(value = "list", desc = "Allows you to get a list of all arenas")
 public class ArenaListCommand extends Command {
     private static Message HEADER;
     private static Message LINE_ENABLED;

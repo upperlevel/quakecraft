@@ -28,6 +28,7 @@ import static xyz.upperlevel.uppercore.gui.InputFilters.filterInt;
 import static xyz.upperlevel.uppercore.gui.InputFilters.plain;
 import static xyz.upperlevel.uppercore.util.LocUtil.format;
 
+@WithPermission(value = "setupgui", desc = "Allows you to edit arenas from a GUI interface")
 public class ArenaSetupGuiCommand extends Command {
     public ArenaSetupGuiCommand() {
         super("setupgui");

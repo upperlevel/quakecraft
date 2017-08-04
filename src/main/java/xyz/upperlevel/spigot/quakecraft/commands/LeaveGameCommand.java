@@ -7,12 +7,14 @@ import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 import xyz.upperlevel.uppercore.command.Sender;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
 import java.util.Arrays;
 import java.util.List;
 
+@WithPermission(value = "leave", desc = "Allows you to leave an arena")
 public class LeaveGameCommand extends Command {
     private static Message NO_GAME;
     private static Message SUCCESS;

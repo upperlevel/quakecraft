@@ -6,9 +6,11 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
+@WithPermission(value = "create", desc = "Allows you to create a new arena")
 public class ArenaCreateCommand extends Command {
     private static Message NAME_ALREADY_PRESENT;
     private static Message INVALID_NAME;

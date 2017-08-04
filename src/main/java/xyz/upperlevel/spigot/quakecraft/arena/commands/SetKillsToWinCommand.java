@@ -6,10 +6,12 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
+@WithPermission(value = "setkillstowin", desc = "Allows you to set an arena's kills to win")
 public class SetKillsToWinCommand extends Command {
     private static Message NEGATIVE_KILLS;
     private static Message SUCCESS;

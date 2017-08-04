@@ -6,11 +6,13 @@ import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
 import java.util.Collection;
 
+@WithPermission(value = "effects", desc = "Allows you to list all powerup effects available")
 public class ArenaPowerupEffectsCommand extends Command {
     private static Message HEADER;
     private static Message LINE;
