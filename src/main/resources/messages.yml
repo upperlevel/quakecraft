@@ -5,6 +5,8 @@ game:
   shot: '&7%killer% %kill_message% &7%killed%'
   def-kill-message: '&7shot'
 
+  snake-disabled: '&cSnaking is disabled! Your name is still visible'
+
   end-ranking:
   - '^a'
   - '^|&f&lQuakecraft Reloaded'

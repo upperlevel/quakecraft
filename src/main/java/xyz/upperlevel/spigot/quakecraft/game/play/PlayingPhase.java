@@ -11,6 +11,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
@@ -48,6 +49,7 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 @Data
 public class PlayingPhase implements Phase, Listener {
     private static Message shotMessage;
+    private static Message snakeDisabledMessage;
     private static String defKillMessage;
     private static PlayingHotbar sampleHotbar;
     private static PlayingBoard sampleBoard;
@@ -246,9 +248,18 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerSnake(PlayerToggleSneakEvent e) {
+        if (!e.isSneaking() || !game.equals(get().getGameManager().getGame(e.getPlayer())))
+            return;
+        e.setCancelled(true);
+        snakeDisabledMessage.send(e.getPlayer());
+    }
+
     public static void loadConfig() {
         MessageManager messages = QuakeCraftReloaded.get().getMessages().getSection("game");
         shotMessage = messages.get("shot");
+        snakeDisabledMessage = messages.get("snake-disabled");
         defKillMessage = TextUtil.translatePlain(messages.getConfig().getStringRequired("def-kill-message"));
 
         gunSlot = QuakeCraftReloaded.get().getCustomConfig().getIntRequired("playing-hotbar.gun.slot");
