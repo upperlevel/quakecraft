@@ -19,7 +19,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
-import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
+import xyz.upperlevel.spigot.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
@@ -44,7 +44,6 @@ import java.util.Random;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
-import static xyz.upperlevel.uppercore.Uppercore.messages;
 
 @Data
 public class PlayingPhase implements Phase, Listener {

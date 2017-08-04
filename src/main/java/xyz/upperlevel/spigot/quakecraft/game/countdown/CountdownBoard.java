@@ -1,5 +1,6 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.spigot.quakecraft.game.countdown;
 
+import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.board.Board;

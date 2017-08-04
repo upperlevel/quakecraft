@@ -1,6 +1,7 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.spigot.quakecraft.game.waiting;
 
 import lombok.Getter;
+import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;

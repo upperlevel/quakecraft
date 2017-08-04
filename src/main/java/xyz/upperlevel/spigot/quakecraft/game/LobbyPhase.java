@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
+import xyz.upperlevel.spigot.quakecraft.game.waiting.WaitingPhase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 import xyz.upperlevel.uppercore.game.Phase;

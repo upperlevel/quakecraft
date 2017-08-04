@@ -1,17 +1,21 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.spigot.quakecraft.game.ending;
 
 import lombok.Data;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
+import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
+import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.spigot.quakecraft.game.Participant;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
+import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
@@ -133,7 +137,8 @@ public class EndingPhase implements Phase, Listener {
 
         reg.set("ranking_gun", (p, s) -> {
             try {
-                return QuakeCraftReloaded.get().getPlayerManager().getPlayer(getParent().getRanking().get(Integer.parseInt(s) - 1).getPlayer()).getGun().getName().resolve(p);
+                QuakePlayer player = QuakeCraftReloaded.get().getPlayerManager().getPlayer(getParent().getRanking().get(Integer.parseInt(s) - 1).getPlayer());
+                return player.getGun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getGun().getName().resolve(p);
             } catch (Exception e) {
                 return null;
             }

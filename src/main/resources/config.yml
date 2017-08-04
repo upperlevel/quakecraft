@@ -3,6 +3,7 @@ lobby:
 game:
   countdown: 600 # 10 minutes
   headshot-height: 1.4
+  custom-gun: 'Custom Gun'
 
 playing-hotbar:
   gun:

@@ -2,7 +2,7 @@ package xyz.upperlevel.spigot.quakecraft.placeholders;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
-import xyz.upperlevel.spigot.quakecraft.game.CountdownPhase;
+import xyz.upperlevel.spigot.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.uppercore.game.Phase;

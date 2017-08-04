@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.spigot.quakecraft.game.waiting;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
@@ -9,6 +9,9 @@ import org.bukkit.event.Listener;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.spigot.quakecraft.game.countdown.CountdownPhase;
+import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;

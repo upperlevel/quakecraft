@@ -3,6 +3,7 @@ package xyz.upperlevel.spigot.quakecraft.shop.railgun;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.shop.gun.*;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
@@ -10,6 +11,7 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.util.TextUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class Railgun {
+    public static PlaceholderValue<String> CUSTOM_NAME ;
     private final String id;
     private PlaceholderValue<String> name;
     @Getter(value = AccessLevel.NONE)
@@ -73,7 +76,7 @@ public class Railgun {
             throw new InvalidConfigurationException("Cannot find trigger \"" + triggerName + "\"");
 
         String rawMessage = config.getString("message");
-        this.killMessage = rawMessage == null ? null : ChatColor.translateAlternateColorCodes('&', rawMessage);
+        this.killMessage = rawMessage == null ? null : TextUtil.translatePlain(rawMessage);
         this.placeholders = PlaceholderRegistry.create();
         processPlaceholders(placeholders);
     }
@@ -115,5 +118,9 @@ public class Railgun {
         reg.set("muzzle", p -> muzzle.getName().resolve(p));
         reg.set("trigger", p -> trigger.getName().resolve(p));
         reg.set("kill-message", p -> killMessage != null ? killMessage : "none");
+    }
+
+    public static void loadConfig() {
+        CUSTOM_NAME = QuakeCraftReloaded.get().getCustomConfig().getMessageStr("game.custom-gun");
     }
 }
