@@ -110,7 +110,10 @@ public class Powerup {
         public void onPlayerPickup(PlayerPickupItemEvent event) {
             Powerup box = drops.remove(event.getItem());
             if(box != null) {
+                event.setCancelled(true);
                 Participant p = box.phase.getParticipant(event.getPlayer());
+                if(p == null)
+                    return;
                 ItemBoxPickupEvent e = new ItemBoxPickupEvent(box, p);
                 if(!e.isCancelled())
                     box.onPickup(p);
