@@ -19,11 +19,17 @@ powerups:
       type: gold boots
     duration: 200
     value: 0.6
+    messages:
+      active: '%name% &6activated &b&lSpeed Boost&6!'
+      deactive: []
   rapid-fire:
     display:
       type: arrow
     duration: 200
     cooldown: 0.2
+    messages:
+          active: '%name% &6activated &c&lRapid Fire&6!'
+          deactive: []
 
 purchase-gui:
   lore:
