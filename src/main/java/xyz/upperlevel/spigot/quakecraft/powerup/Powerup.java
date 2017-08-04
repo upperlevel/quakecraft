@@ -63,6 +63,7 @@ public class Powerup {
     private void onPickup(Participant player) {
         effect.apply(player);
         spawned.remove();
+        spawned = null;
         beginSpawnTask();
     }
 
