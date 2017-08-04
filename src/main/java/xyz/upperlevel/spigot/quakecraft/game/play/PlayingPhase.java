@@ -32,16 +32,15 @@ import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.uppercore.task.Timer;
-import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
-import xyz.upperlevel.uppercore.util.TextUtil;
 import xyz.upperlevel.uppercore.task.UpdaterTask;
+import xyz.upperlevel.uppercore.util.TextUtil;
+import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static org.bukkit.ChatColor.GRAY;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;

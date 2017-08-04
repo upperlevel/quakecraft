@@ -1,5 +1,5 @@
 lobby:
-  countdown: 5 # seconds
+  countdown: 40 # seconds
 game:
   countdown: 600 # 10 minutes
 
