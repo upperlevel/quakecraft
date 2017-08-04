@@ -1,7 +1,6 @@
 package xyz.upperlevel.spigot.quakecraft.events;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,7 +11,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
 
 @Getter
-@RequiredArgsConstructor
+@Setter
 public class LaserStabEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -20,9 +19,18 @@ public class LaserStabEvent extends Event implements Cancellable {
     private final Location location;
     private final QuakePlayer qShooter;
     private final Player shooter, hit;
+    private boolean headshot;
 
-    @Setter
     private boolean cancelled;
+
+    public LaserStabEvent(PlayingPhase phase, Location location, QuakePlayer qShooter, Player shooter, Player hit, boolean headshot) {
+        this.phase = phase;
+        this.location = location;
+        this.qShooter = qShooter;
+        this.shooter = shooter;
+        this.hit = hit;
+        this.headshot = headshot;
+    }
 
     @Override
     public HandlerList getHandlers() {

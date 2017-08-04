@@ -8,6 +8,7 @@ import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.*;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
+import xyz.upperlevel.spigot.quakecraft.game.play.Bullet;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
@@ -72,10 +73,10 @@ public class QuakeCraftReloaded extends JavaPlugin {
             hotbars = new HotbarRegistry(this);
             boards =  new BoardRegistry(this);
 
-            loadConfig();
-
             arenaManager.load();
             gameManager.load();
+
+            loadConfig();
 
             shop = new ShopCategory();
             shop.load();
@@ -106,7 +107,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
-        loadSafe("shot", PlayingPhase::loadConfig);
+        loadSafe("bullet", Bullet::loadConfig);
         //---boards---
         loadSafe("waiting phase", WaitingPhase::loadConfig);
         loadSafe("playing phase", PlayingPhase::loadConfig);

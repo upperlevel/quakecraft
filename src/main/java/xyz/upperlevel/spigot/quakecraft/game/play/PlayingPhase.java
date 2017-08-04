@@ -44,10 +44,12 @@ import java.util.Random;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
+import static xyz.upperlevel.uppercore.Uppercore.messages;
 
 @Data
 public class PlayingPhase implements Phase, Listener {
     private static Message shotMessage;
+    private static Message headshotMessage;
     private static Message snakeDisabledMessage;
     private static String defKillMessage;
     private static PlayingHotbar sampleHotbar;
@@ -173,12 +175,12 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
-    private void kill(Participant hit, Participant shooter) {
+    private void kill(Participant hit, Participant shooter, boolean headshot) {
         List<Location> spawns = game.getArena().getSpawns();
         hit.getPlayer().teleport(spawns.get(new Random().nextInt(spawns.size())));
 
         hit.onDeath();
-        shooter.onKill();
+        shooter.onKill(headshot);
 
         updateRanking();
         update();
@@ -212,14 +214,16 @@ public class PlayingPhase implements Phase, Listener {
 
             //--- kill msg
             Railgun gun = qshooter.getGun();
-            Message message = shotMessage.filter(
+            Message message = e.isHeadshot() ? headshotMessage : shotMessage;
+
+            message = message.filter(
                     "killer", e.getShooter().getName(),
                     "killed", e.getHit().getName(),
                     "kill_message", (gun == null || gun.getKillMessage() == null) ? defKillMessage : gun.getKillMessage()
             );
             message.broadcast(game.getPlayers());
 
-            kill(hit, shooter);
+            kill(hit, shooter, e.isHeadshot());
         }
     }
 
@@ -258,6 +262,7 @@ public class PlayingPhase implements Phase, Listener {
     public static void loadConfig() {
         MessageManager messages = QuakeCraftReloaded.get().getMessages().getSection("game");
         shotMessage = messages.get("shot");
+        headshotMessage = messages.get("headshot");
         snakeDisabledMessage = messages.get("snake-disabled");
         defKillMessage = TextUtil.translatePlain(messages.getConfig().getStringRequired("def-kill-message"));
 

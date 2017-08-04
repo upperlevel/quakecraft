@@ -3,6 +3,7 @@ game:
     cooldown: '&cDash cooling down! %remaining_secs%s remaining!'
 
   shot: '&7%killer% %kill_message% &7%killed%'
+  headshot: '&7%killer% %kill_message% &7%killed% &eHEADSHOT'
   def-kill-message: '&7shot'
 
   snake-disabled: '&cSnaking is disabled! Your name is still visible'

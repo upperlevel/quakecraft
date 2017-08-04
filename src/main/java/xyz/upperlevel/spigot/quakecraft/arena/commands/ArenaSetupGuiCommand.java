@@ -74,12 +74,12 @@ public class ArenaSetupGuiCommand extends Command {
                         GuiUtil.wool(DyeColor.LIME, GOLD + "Add"),
                         p -> {
                             AnvilGui anvil = new AnvilGui();
-                            anvil.setMessage("Arena Id");
+                            anvil.setMessage("Id");
                             anvil.setListener(nonArenaFilter(
                                     (pl, id) -> {
                                         Arena arena = new Arena(id);
                                         QuakeCraftReloaded.get().getArenaManager().addArena(arena);
-                                        p.sendMessage(GREEN + "Spawn added to arena!");
+                                        p.sendMessage(GREEN + "Arena added!");
                                         guis().change(pl, editArena(pl, arena, pr -> guis().change(pr, selectArena(pr))));
                                     }
                             ));
@@ -131,7 +131,7 @@ public class ArenaSetupGuiCommand extends Command {
                         ),
                         p -> {
                             AnvilGui gui = new AnvilGui();
-                            gui.setMessage("Min players");
+                            gui.setMessage("Min");
                             gui.setListener(filterInt(
                                     (pl, i) -> {
                                         arena.setMinPlayers(i);
@@ -151,7 +151,7 @@ public class ArenaSetupGuiCommand extends Command {
                         ),
                         p -> {
                             AnvilGui gui = new AnvilGui();
-                            gui.setMessage("Max players");
+                            gui.setMessage("Max");
                             gui.setListener(filterInt(
                                     (pl, i) -> {
                                         arena.setMaxPlayers(i);
@@ -201,7 +201,7 @@ public class ArenaSetupGuiCommand extends Command {
                         ),
                         p -> {
                             AnvilGui gui = new AnvilGui();
-                            gui.setMessage("kills");
+                            gui.setMessage("Kills");
                             gui.setListener(filterInt(
                                     (pl, i) -> {
                                         arena.setKillsToWin(i);

@@ -21,6 +21,7 @@ import java.util.*;
 import static xyz.upperlevel.uppercore.util.PlayerUtil.forEveryPlayerAround;
 
 public class Bullet {
+    public static double headshotHeight = 1.35;
     public static final int MILLIS_IN_TICK = 50;
 
     public static final double LASER_BLOCKS_PER_TICK = 5;
@@ -98,7 +99,7 @@ public class Bullet {
 
             forEveryPlayerAround(player, loc, 0.25, hit -> {
                 if (phase.getGame().isPlaying(hit)) {
-                    LaserStabEvent e = new LaserStabEvent(phase, loc, qp, player, hit);
+                    LaserStabEvent e = new LaserStabEvent(phase, loc, qp, player, hit, isHeadshot(hit, loc));
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
                         killed.add(player);
@@ -139,5 +140,13 @@ public class Bullet {
             return false;
         new Bullet(phase, player).bang();
         return true;
+    }
+
+    public boolean isHeadshot(Player player, Location loc) {
+        return loc.getY() - player.getLocation().getY() > headshotHeight;
+    }
+
+    public static void loadConfig() {
+        headshotHeight = QuakeCraftReloaded.get().getCustomConfig().getDoubleRequired("game.headshot-height");
     }
 }
