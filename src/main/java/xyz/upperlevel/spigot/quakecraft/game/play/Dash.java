@@ -40,16 +40,16 @@ public class Dash {
         }
 
         float power = event.getPower();
-        long cooldownMillis = (long) (event.getCooldown() * 1000);
+        int cooldownTicks = event.getCooldown();
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
 
         dashing.put(player.getPlayer(), this);
-        scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownMillis/MILLIS_IN_TICK);
+        scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownTicks);
         player.getPlayer().setVelocity(player.getPlayer().getLocation().getDirection().multiply(power * BASE_POWER));
 
         startTime = System.currentTimeMillis();
-        endTime = startTime + cooldownMillis;
+        endTime = startTime + (cooldownTicks * MILLIS_IN_TICK);
     }
 
     public void cooldownEnd() {

@@ -40,11 +40,11 @@ public class DashCooldownManager extends MultiPurchaseManager<DashCooldownManage
 
     public class DashCooldown extends BaseDashUpgrade<DashCooldown> {
         @Getter
-        private final float cooldown;
+        private final int cooldown;
 
         public DashCooldown(String id, Config config) {
             super(DashCooldownManager.this, id, config);
-            cooldown = config.getFloatRequired("cooldown");
+            cooldown = config.getIntRequired("cooldown");
         }
 
         @Override

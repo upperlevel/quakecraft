@@ -17,7 +17,7 @@ powerups:
     display:
       type: gold boots
     duration: 200
-    value: 1.0
+    value: 0.6
   rapid-fire:
     display:
       type: arrow

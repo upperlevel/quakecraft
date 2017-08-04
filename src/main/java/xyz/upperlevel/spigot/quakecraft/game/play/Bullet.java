@@ -44,7 +44,7 @@ public class Bullet {
 
     private List<Particle> particles;
 
-    private long cooldownMillis;
+    private int cooldownTicks;
     private long shootTime = -1;
     private BukkitTask notifier;
 
@@ -62,7 +62,7 @@ public class Bullet {
         this.positions = new RayTrace(start, direction).traverse(150, 0.25);
         positionIndex = 0;
 
-        this.cooldownMillis = (long) (qp.getSelectedTrigger().getFiringSpeed() * 1000 * participant.getGunCooldownBase());
+        this.cooldownTicks = (int) Math.ceil(qp.getSelectedTrigger().getFiringSpeed() * participant.getGunCooldownBase());
         this.particles = Collections.unmodifiableList(qp.getSelectedMuzzle().getParticles());
     }
 
@@ -76,7 +76,7 @@ public class Bullet {
         shootTime = System.currentTimeMillis();
         notifier = scheduler.runTaskTimer(QuakeCraftReloaded.get(), this::updatePlayer, EXP_UPDATE_EVERY, EXP_UPDATE_EVERY);
         player.setExp(1f);
-        scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownMillis/MILLIS_IN_TICK);
+        scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownTicks);
     }
 
     public void laserSpreaderRun() {
@@ -124,7 +124,7 @@ public class Bullet {
     }
 
     public void updatePlayer() {
-        float perc = 1f - ((System.currentTimeMillis() - shootTime) / (float) cooldownMillis);
+        float perc = 1f - ((System.currentTimeMillis() - shootTime) / (float) (cooldownTicks * MILLIS_IN_TICK));
         player.setExp(perc < 0f ? 0f : perc);
     }
 
