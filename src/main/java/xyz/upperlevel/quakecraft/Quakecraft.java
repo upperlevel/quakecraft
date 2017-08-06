@@ -7,18 +7,24 @@ import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.spigot.quakecraft.game.*;
+import xyz.upperlevel.spigot.quakecraft.game.countdown.CountdownPhase;
+import xyz.upperlevel.spigot.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
+import xyz.upperlevel.spigot.quakecraft.game.play.Bullet;
 import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
 import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
 import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
+import xyz.upperlevel.spigot.quakecraft.game.waiting.WaitingPhase;
+import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
 import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.spigot.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
-import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.ConfirmPurchaseGui;
 import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
+import xyz.upperlevel.spigot.quakecraft.shop.purchase.ConfirmPurchaseGui;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseGui;
+import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.spigot.quakecraft.shop.railgun.RailgunSelectGui;
+import xyz.upperlevel.uppercore.board.BoardRegistry;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.database.Store;
@@ -27,7 +33,6 @@ import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
-import xyz.upperlevel.uppercore.board.BoardRegistry;
 import xyz.upperlevel.uppercore.util.CrashUtil;
 
 import java.io.IOException;
@@ -75,10 +80,10 @@ public class QuakeCraftReloaded extends JavaPlugin {
             boards =  new BoardRegistry(this);
             store = new Store(this);
 
-            loadConfig();
-
             arenaManager.load();
             gameManager.load();
+
+            loadConfig();
 
             shop = new ShopCategory();
             shop.load();
@@ -108,7 +113,8 @@ public class QuakeCraftReloaded extends JavaPlugin {
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
-        loadSafe("shot", PlayingPhase::loadConfig);
+        loadSafe("bullet", Bullet::loadConfig);
+        loadSafe("railgun", Railgun::loadConfig);
         //---boards---
         loadSafe("waiting phase", WaitingPhase::loadConfig);
         loadSafe("playing phase", PlayingPhase::loadConfig);

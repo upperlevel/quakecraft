@@ -4,14 +4,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
 import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.uppercore.command.Argument;
-import xyz.upperlevel.uppercore.command.Command;
-import xyz.upperlevel.uppercore.command.Executor;
-import xyz.upperlevel.uppercore.command.Sender;
+import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
 
+@WithPermission(value = "add", desc = "Allows you to add a spawn to an arena")
 public class ArenaSpawnAddCommand extends Command {
     private static Message SUCCESS;
 

@@ -26,8 +26,10 @@ public class Participant {
         return player.getName();
     }
 
-    public void onKill() {
+    public void onKill(boolean headshot) {
         kills++;
+        if(headshot)
+            headshotGain.grant(this);
         killGain.grant(this);
         if(++killsSinceDeath >= nextKillStreak.getKills()) {
             nextKillStreak = nextKillStreak.reach(phase, this);

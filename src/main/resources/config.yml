@@ -2,6 +2,8 @@ lobby:
   countdown: 40 # seconds
 game:
   countdown: 600 # 10 minutes
+  headshot-height: 1.4
+  custom-gun: 'Custom Gun'
 
 playing-hotbar:
   gun:
@@ -17,12 +19,18 @@ powerups:
     display:
       type: gold boots
     duration: 200
-    value: 1.0
+    value: 0.6
+    messages:
+      active: '%name% &6activated &b&lSpeed Boost&6!'
+      deactive: []
   rapid-fire:
     display:
       type: arrow
     duration: 200
     cooldown: 0.2
+    messages:
+          active: '%name% &6activated &c&lRapid Fire&6!'
+          deactive: []
 
 purchase-gui:
   lore:

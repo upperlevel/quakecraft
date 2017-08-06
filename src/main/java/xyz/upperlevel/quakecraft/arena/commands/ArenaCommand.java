@@ -1,9 +1,14 @@
 package xyz.upperlevel.spigot.quakecraft.arena.commands;
 
 import xyz.upperlevel.uppercore.command.NodeCommand;
+import xyz.upperlevel.uppercore.command.WithChildPermission;
+import xyz.upperlevel.uppercore.command.WithPermission;
 
+import static xyz.upperlevel.uppercore.command.DefaultPermission.OP;
 import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
+@WithPermission(value = "arena", def = OP)
+@WithChildPermission(def = OP, desc = "Gives access to all the arena commands")
 public class ArenaCommand extends NodeCommand {
 
     public ArenaCommand() {

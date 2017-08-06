@@ -63,6 +63,7 @@ public class Powerup {
     private void onPickup(Participant player) {
         effect.apply(player);
         spawned.remove();
+        spawned = null;
         beginSpawnTask();
     }
 
@@ -109,7 +110,10 @@ public class Powerup {
         public void onPlayerPickup(PlayerPickupItemEvent event) {
             Powerup box = drops.remove(event.getItem());
             if(box != null) {
+                event.setCancelled(true);
                 Participant p = box.phase.getParticipant(event.getPlayer());
+                if(p == null)
+                    return;
                 ItemBoxPickupEvent e = new ItemBoxPickupEvent(box, p);
                 if(!e.isCancelled())
                     box.onPickup(p);

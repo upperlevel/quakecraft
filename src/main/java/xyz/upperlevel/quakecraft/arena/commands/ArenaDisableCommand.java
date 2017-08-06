@@ -6,9 +6,11 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
+@WithPermission(value = "disable", desc = "Allows you to disable an arena")
 public class ArenaDisableCommand extends Command {
     private static Message ALREADY_DISABLED;
     private static Message SUCCESS;

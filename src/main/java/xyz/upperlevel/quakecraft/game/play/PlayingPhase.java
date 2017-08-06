@@ -11,6 +11,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
@@ -18,7 +19,7 @@ import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
 import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
-import xyz.upperlevel.spigot.quakecraft.game.EndingPhase;
+import xyz.upperlevel.spigot.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.spigot.quakecraft.game.Game;
 import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
 import xyz.upperlevel.spigot.quakecraft.game.Participant;
@@ -31,16 +32,15 @@ import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.uppercore.task.Timer;
-import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
-import xyz.upperlevel.uppercore.util.TextUtil;
 import xyz.upperlevel.uppercore.task.UpdaterTask;
+import xyz.upperlevel.uppercore.util.TextUtil;
+import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static org.bukkit.ChatColor.GRAY;
 import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
@@ -48,6 +48,8 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 @Data
 public class PlayingPhase implements Phase, Listener {
     private static Message shotMessage;
+    private static Message headshotMessage;
+    private static Message snakeDisabledMessage;
     private static String defKillMessage;
     private static PlayingHotbar sampleHotbar;
     private static PlayingBoard sampleBoard;
@@ -166,12 +168,12 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
-    private void kill(Participant hit, Participant shooter) {
+    private void kill(Participant hit, Participant shooter, boolean headshot) {
         List<Location> spawns = game.getArena().getSpawns();
         hit.getPlayer().teleport(spawns.get(new Random().nextInt(spawns.size())));
 
         hit.onDeath();
-        shooter.onKill();
+        shooter.onKill(headshot);
 
         updateRanking();
         update();
@@ -205,14 +207,16 @@ public class PlayingPhase implements Phase, Listener {
 
             //--- kill msg
             Railgun gun = qshooter.getGun();
-            Message message = shotMessage.filter(
+            Message message = e.isHeadshot() ? headshotMessage : shotMessage;
+
+            message = message.filter(
                     "killer", e.getShooter().getName(),
                     "killed", e.getHit().getName(),
                     "kill_message", (gun == null || gun.getKillMessage() == null) ? defKillMessage : gun.getKillMessage()
             );
             message.broadcast(game.getPlayers());
 
-            kill(hit, shooter);
+            kill(hit, shooter, e.isHeadshot());
         }
     }
 
@@ -240,9 +244,19 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerSnake(PlayerToggleSneakEvent e) {
+        if (!e.isSneaking() || !game.equals(get().getGameManager().getGame(e.getPlayer())))
+            return;
+        e.setCancelled(true);
+        snakeDisabledMessage.send(e.getPlayer());
+    }
+
     public static void loadConfig() {
         MessageManager messages = QuakeCraftReloaded.get().getMessages().getSection("game");
         shotMessage = messages.get("shot");
+        headshotMessage = messages.get("headshot");
+        snakeDisabledMessage = messages.get("snake-disabled");
         defKillMessage = TextUtil.translatePlain(messages.getConfig().getStringRequired("def-kill-message"));
 
         gunSlot = QuakeCraftReloaded.get().getCustomConfig().getIntRequired("playing-hotbar.gun.slot");

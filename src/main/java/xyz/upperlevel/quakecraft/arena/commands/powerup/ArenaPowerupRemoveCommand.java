@@ -7,9 +7,11 @@ import xyz.upperlevel.spigot.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
+import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 
+@WithPermission(value = "remove", desc = "Allows you to remove a powerup from an arena")
 public class ArenaPowerupRemoveCommand extends Command {
     private static Message INVALID_INDEX;
     private static Message SUCCESS;

@@ -15,12 +15,12 @@ public class PlayerDashEvent extends Event implements Cancellable {
     @Setter
     private float power;
     @Setter
-    private float cooldown;
+    private int cooldown;
 
     @Setter
     private boolean cancelled;
 
-    public PlayerDashEvent(QuakePlayer player, float power, float cooldown) {
+    public PlayerDashEvent(QuakePlayer player, float power, int cooldown) {
         this.player = player;
         this.power = power;
         this.cooldown = cooldown;
