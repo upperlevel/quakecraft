@@ -1,0 +1,301 @@
+none:
+  name: 'No Hats'
+  default: true
+  icon:
+    type: 'BARRIER'
+
+cactus:
+  name: 'Cactus Hat'
+  cost: 350
+  icon:
+    type: 'CACTUS'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'CACTUS'
+
+melon:
+  name: 'Melon Hat'
+  cost: 350
+  icon:
+    type: 'MELON'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'MELON'
+
+spaceman:
+  name: 'Spaceman Hat'
+  cost: 700
+  icon:
+    type: 'GLASS'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'GLASS'
+
+lantern:
+  name: 'Lantern Hat'
+  cost: 700
+  icon:
+    type: 'JACK_O_LANTERN'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'JACK_O_LANTERN'
+
+redstone:
+  name: 'Redstone Hat'
+  cost: 700
+  icon:
+    type: 'REDSTONE_BLOCK'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'REDSTONE_BLOCK'
+
+diamond:
+  name: 'Diamond Hat'
+  cost: 700
+  icon:
+    type: 'DIAMOND_BLOCK'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'DIAMOND_BLOCK'
+
+diamond:
+  name: 'Dispenser Hat'
+  cost: 700
+  icon:
+    type: 'DISPENSER'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'DISPENSER'
+
+diamond:
+  name: 'TNT Hat'
+  cost: 700
+  icon:
+    type: 'TNT'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'TNT'
+
+majestic:
+  name: 'Majestic Hat'
+  cost: 700
+  icon:
+    type: 'GOLD_HELMET'
+    lore:
+    - '&7Collect all the hats!'
+    flags:
+    - hide attributes
+  item:
+    type: 'GOLD_HELMET'
+
+hipster:
+  name: 'Hipster Hat'
+  cost: 850
+  icon:
+    type: 'GRASS'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'GRASS'
+
+caveman:
+  name: 'Caveman Hat'
+  cost: 850
+  icon:
+    type: 'BEDROCK'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'BEDROCK'
+
+control_freak:
+  name: 'Control Freak Hat'
+  cost: 850
+  icon:
+    type: 'COMMAND'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'COMMAND'
+
+walking_dead:
+  name: 'Walking Dead Hat'
+  cost: 900
+  icon:
+    type: 'SKULL_ITEM'
+    data: 2
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'SKULL_ITEM'
+    data: 2
+
+jeepers_creepers:
+  name: 'Jeepers Creepers Hat'
+  cost: 900
+  icon:
+    type: 'SKULL_ITEM'
+    data: 4
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'SKULL_ITEM'
+    data: 4
+
+richy_rich:
+  name: 'Richy Rich Hat'
+  cost: 1000
+  icon:
+    type: 'GOLD_ORE'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'GOLD_ORE'
+
+engineering:
+  name: 'Engineering Hat'
+  cost: 1000
+  icon:
+    type: 'PISTON_STICKY_BASE'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'PISTON_STICKY_BASE'
+
+classy:
+  name: 'Classy Hat'
+  cost: 1000
+  icon:
+    type: 'STAINED_GLASS'
+    data: 3
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'STAINED_GLASS'
+    data: 3
+
+light:
+  name: 'Light Hat'
+  cost: 1000
+  icon:
+    type: 'GLOWSTONE'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'GLOWSTONE'
+
+ecology:
+  name: 'Ecology Hat'
+  cost: 1000
+  icon:
+    type: 'LEAVES'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'LEAVES'
+
+bob:
+  name: 'Bob Hat'
+  cost: 1500
+  icon:
+    type: 'SPONGE'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'SPONGE'
+
+notch:
+  name: 'Notch Hat'
+  cost: 2000
+  icon:
+    type: 'SKULL_ITEM'
+    data: 3
+    owner: 'Notch'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'SKULL_ITEM'
+    data: 3
+    owner: 'Notch'
+
+librarian:
+  name: 'Librarian Hat'
+  cost: 2500
+  icon:
+    type: 'BOOKSHELF'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'BOOKSHELF'
+
+explosive:
+  name: 'Explosive Hat'
+  cost: 5000
+  icon:
+    type: 'TNT'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'TNT'
+
+crafter:
+  name: 'Crafter Hat'
+  cost: 15000
+  icon:
+    type: 'WORKBENCH'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'WORKBENCH'
+
+bouncy:
+  name: 'Bouncy Hat'
+  cost: 25000
+  icon:
+    type: 'SLIME_BLOCK'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'SLIME_BLOCK'
+
+radiant:
+  name: 'Radiant Hat'
+  cost: 50000
+  icon:
+    type: 'BEACON'
+    lore:
+    - '&7Collect all the hats!'
+  item:
+    type: 'BEACON'
+
+disco:
+  name: 'Disco Hat'
+  cost: 75000
+  icon:
+    type: 'LEATHER_HELMET'
+    lore:
+    - '&7Collect all the hats!'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_HELMET'
+
+quakzeodia:
+  name: 'Quakzeodia Hat'
+  cost: 200000
+  icon:
+    type: 'CHAINMAIL_HELMET'
+    lore:
+    - '&7Collect all the hats!'
+    flags:
+    - hide attributes
+  item:
+    type: 'CHAINMAIL_HELMET'

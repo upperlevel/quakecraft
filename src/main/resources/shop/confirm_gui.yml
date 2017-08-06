@@ -1,0 +1,17 @@
+title: '%item_name% (%cost%)'
+size: 45
+
+item-slot: 13
+
+confirm:
+  slot: 29
+  item:
+    type: 'wool'
+    data: 13
+    name: '&aConfirm'
+cancel:
+  slot: 33
+  item:
+    type: 'wool'
+    data: 14
+    name: '&cCancel'

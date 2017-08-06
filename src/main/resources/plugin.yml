@@ -1,11 +1,10 @@
-name: QuakeCraftReloaded
+name: Quakecraft
 version: ${project.version}
-main: xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded
-author: [upperlevel]
+main: xyz.upperlevel.quakecraft.Quakecraft
 
 depend: [UpperCore]
 softdepend: [PlaceholderAPI]
 
 commands:
   quake:
-    description: 'Main commands of QuakeCraftReloaded.'
+    description: 'Main commands of Quakecraft.'

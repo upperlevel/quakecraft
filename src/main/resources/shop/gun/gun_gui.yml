@@ -1,0 +1,78 @@
+title: 'Gun Menu'
+size: 54
+icons:
+- slot: 11
+  item:
+    type: 'fireball'
+    name: '&aBarrels'
+    lore:
+    - '&7Select your firework'
+    - '&7effect!'
+  click:
+    actions:
+    - open-gui: 'barrels_gui'
+- slot: 12
+  item:
+    type: 'iron hoe'
+    name: '&aCases'
+    lore:
+    - "&7Select your railgun's"
+    - '&7appearance!'
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'cases_gui'
+- slot: 13
+  item:
+    type: 'ink sack'
+    data: 1
+    name: '&aLasers'
+    lore:
+    - '&7Select your firework color!'
+  click:
+    actions:
+    - open-gui: 'lasers_gui'
+- slot: 14
+  item:
+    type: 'wood'
+    name: '&aMuzzles'
+    lore:
+    - '&7Select your particle'
+    - '&7effect!'
+  click:
+    actions:
+    - open-gui: 'muzzles_gui'
+- slot: 15
+  item:
+    type: 'stone button'
+    name: '&aTriggers'
+    lore:
+    - '&7Select your firing speed!'
+  click:
+    actions:
+    - open-gui: 'triggers_gui'
+- slot: 31
+  item:
+    type: 'wood hoe'
+    name: '&aRailguns'
+    lore:
+    - '&7See all the railguns you can use.'
+    - ''
+    - '&eShow all presets!'
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'guns_gui'
+- slot: 48
+  item:
+    type: 'arrow'
+    name: '&aGo Back'
+  click:
+    actions:
+    - 'gui-back'
+- slot: 49
+  item:
+    type: 'emerald'
+    name: '&7Coins: &6%vault_eco_balance%'

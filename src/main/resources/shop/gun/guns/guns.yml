@@ -1,0 +1,183 @@
+basic:
+  name: 'Basic Railgun'
+  case: 'wood'
+  laser: 'yellow'
+  barrel: 'small'
+  muzzle: 'none'
+  trigger: '1_5_s'
+
+superior:
+  name: 'Superior Railgun'
+  case: 'reinforced'
+  laser: 'red'
+  barrel: 'burst'
+  muzzle: 'none'
+  trigger: '1_4_s'
+
+hyper_beam:
+  name: 'Hyper Beam Railgun'
+  case: 'plated'
+  laser: 'yellow'
+  barrel: 'star'
+  muzzle: 'none'
+  trigger: '1_3_s'
+
+worm:
+  name: 'The Worm'
+  case: 'marbled'
+  laser: 'green'
+  barrel: 'small'
+  muzzle: 'none'
+  trigger: '5_0_s'
+  message: 'Wormed'
+
+creeper:
+  name: 'Creeper Railgun'
+  case: 'bling'
+  laser: 'green'
+  barrel: 'creeper'
+  muzzle: 'none'
+  trigger: '1_2_s'
+
+turtle:
+  name: 'The Turtle'
+  case: 'reinforced'
+  laser: 'green'
+  barrel: 'large'
+  muzzle: 'iron'
+  trigger: '2_5_s'
+  message: 'Shelled'
+
+snail:
+  name: 'The Snail'
+  case: 'wood'
+  laser: 'red'
+  barrel: 'creeper'
+  muzzle: 'wood'
+  trigger: '9_0_s'
+  message: 'Slimed'
+
+restoner:
+  name: 'Redstoner'
+  case: 'varnished_wood'
+  laser: 'red'
+  barrel: 'burst'
+  muzzle: 'redstone'
+  trigger: '1_2_s'
+  message: '&cRedstoned'
+
+budder_slapper:
+  name: 'Budder Slapper'
+  case: 'polished_plated'
+  laser: 'yellow'
+  barrel: 'small'
+  muzzle: 'gold'
+  trigger: '1_5_s'
+  message: '&6Slapped'
+
+bfg:
+  name: 'BFG'
+  case: 'polished_marbled'
+  laser: 'blue'
+  barrel: 'large'
+  muzzle: 'none'
+  trigger: '1_1_s'
+
+lovegun:
+  name: 'Lovegun'
+  case: 'polished_plated'
+  laser: 'red'
+  barrel: 'star'
+  muzzle: 'redstone'
+  trigger: '1_3_s'
+  message: '&cFell in love with'
+
+harvester:
+  name: 'The Harvester'
+  case: 'marbled'
+  laser: 'green'
+  barrel: 'small'
+  muzzle: 'melon'
+  trigger: '1_5_s'
+  message: '&aFarmed'
+
+blue_lagoon:
+  name: 'Blue Lagoon'
+  case: 'bling'
+  laser: 'blue'
+  barrel: 'burst'
+  muzzle: 'prismarine'
+  trigger: '1_1_s'
+  message: '&9Drowned'
+
+cookie_cannon:
+  name: 'Cookie Cannon'
+  case: 'plated'
+  laser: 'emerald'
+  barrel: 'burst'
+  muzzle: 'command_block'
+  trigger: '1_1_s'
+  message: '&6Baked'
+
+bling_bling_thing:
+  name: 'Bling Bling Thing'
+  case: 'polished_bling'
+  laser: 'purple'
+  barrel: 'large'
+  muzzle: 'diamond'
+  trigger: '1_0_s'
+  message: "&9Bazinga'd"
+
+le_bizzarre:
+  name: 'Le Bizzarre'
+  case: 'polished_bling'
+  laser: 'orange'
+  barrel: 'small'
+  muzzle: 'lapis'
+  trigger: '1_4_s'
+  message: "&3Puzzled"
+
+fabled:
+  name: 'Fabled Railgun'
+  case: 'polished_bling'
+  laser: 'diamond'
+  barrel: 'star'
+  muzzle: 'prismarine'
+  trigger: '1_2_s'
+  message: '&bMagnified'
+
+apple_corer:
+  name: 'Apple Corer'
+  case: 'polished_reinforced'
+  laser: 'gold'
+  barrel: 'star'
+  muzzle: 'obsidian'
+  trigger: '0_9_s'
+  message: '&4Pommed'
+
+darkness:
+  name: 'Railgun of Darkness'
+  case: 'polished_marbled'
+  laser: 'black'
+  barrel: 'large'
+  muzzle: 'obsidian'
+  trigger: '0_9_s'
+  message: '&5Vaporized'
+
+platinum_smelter:
+  name: 'Platinum Smelter'
+  case: 'polished_reinforced'
+  laser: 'silver'
+  barrel: 'burst'
+  muzzle: 'iron'
+  trigger: '0_8_5_s'
+  message: '&fSmelted'
+
+reaper:
+  name: 'The Reaper'
+  case: 'polished_bling'
+  laser: 'black'
+  barrel: 'large'
+  muzzle: 'soul_sand'
+  trigger: '0_8_5_s'
+  message: '&8Consumed'

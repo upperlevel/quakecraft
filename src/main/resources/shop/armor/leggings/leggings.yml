@@ -1,0 +1,235 @@
+none:
+  name: 'No Leggings'
+  default: true
+  icon:
+    type: 'BARRIER'
+
+soldier:
+  name: 'Soldier Pants'
+  cost: 650
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+
+elite:
+  name: 'Elite Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'BLUE'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'BLUE'
+
+majestic:
+  name: 'Majestic Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'YELLOW'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'YELLOW'
+
+commander:
+  name: 'Commander Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'BLACK'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'BLACK'
+
+marine:
+  name: 'Marine Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'GREEN'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'GREEN'
+
+swat:
+  name: 'SWAT Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'GRAY'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'GRAY'
+
+spec_ops:
+  name: 'Spec Ops Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'RED'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'RED'
+
+invader:
+  name: 'Invader Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'ORANGE'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'ORANGE'
+
+revenge:
+  name: 'Revenge Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'PURPLE'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'PURPLE'
+
+space:
+  name: 'Space Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'AQUA'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'AQUA'
+
+slime:
+  name: 'Slime Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'LIME'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'LIME'
+
+snow:
+  name: 'Snow Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'WHITE'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'WHITE'
+
+fashionista:
+  name: 'Fashionista Pants'
+  cost: 2250
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'FUCHSIA'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'FUCHSIA'
+
+medieval:
+  name: 'Medieval Pants'
+  cost: 2750
+  icon:
+    type: 'CHAINMAIL_LEGGINGS'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'CHAINMAIL_LEGGINGS'
+
+budder:
+  name: 'Budder Pants'
+  cost: 3375
+  icon:
+    type: 'GOLD_LEGGINGS'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'GOLD_LEGGINGS'
+
+sweg:
+  name: 'Sweg Pants'
+  cost: 4500
+  icon:
+    type: 'DIAMOND_LEGGINGS'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'DIAMOND_LEGGINGS'
+
+disco:
+  name: 'Disco Pants'
+  cost: 75000
+  icon:
+    type: 'LEATHER_LEGGINGS'
+    color: 'MAROON'
+    lore:
+    - '&7Cosmetic armor'
+    flags:
+    - hide attributes
+  item:
+    type: 'LEATHER_LEGGINGS'
+    color: 'MAROON'

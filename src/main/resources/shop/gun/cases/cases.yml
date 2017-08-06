@@ -1,0 +1,138 @@
+wood:
+  name: 'Wooden Case'
+  cost: 0
+  default: true
+  icon:
+    type: 'WOOD_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+  item:
+    type: 'WOOD_HOE'
+
+marbled:
+  name: 'Marbled Case'
+  cost: 1000
+  icon:
+    type: 'STONE_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+  item:
+    type: 'STONE_HOE'
+
+varnished_wood:
+  name: 'Varnished Wood Case'
+  cost: 1000
+  icon:
+    type: 'WOOD_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+    enchantments:
+      arrow damage: 10
+  item:
+    type: 'WOOD_HOE'
+    enchantments:
+      arrow damage: 10
+
+polished_marbled:
+  name: 'Polished Marbled Case'
+  cost: 1000
+  icon:
+    type: 'STONE_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+    enchantments:
+      arrow damage: 10
+  item:
+    type: 'STONE_HOE'
+    enchantments:
+      arrow damage: 10
+
+reinforced:
+  name: 'Reinforced Case'
+  cost: 2500
+  icon:
+    type: 'IRON_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+  item:
+    type: 'IRON_HOE'
+
+plated:
+  name: 'Plated Case'
+  cost: 4000
+  icon:
+    type: 'GOLD_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+  item:
+    type: 'GOLD_HOE'
+
+bling:
+  name: 'Bling Case'
+  cost: 7000
+  icon:
+    type: 'DIAMOND_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+  item:
+    type: 'DIAMOND_HOE'
+
+polished_plated:
+  name: 'Polished Plated Case'
+  cost: 14000
+  icon:
+    type: 'GOLD_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+  item:
+    type: 'GOLD_HOE'
+    enchantments:
+      arrow damage: 10
+
+polished_bling:
+  name: 'Polished Bling Case'
+  cost: 100000
+  icon:
+    type: 'DIAMOND_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+    enchantments:
+      arrow damage: 10
+  item:
+    type: 'DIAMOND_HOE'
+    enchantments:
+      arrow damage: 10
+
+polished_reinforced:
+  name: 'Polished Reinforced Case'
+  cost: 200000
+  icon:
+    type: 'IRON_HOE'
+    lore:
+    - '&7Choose an appearance!'
+    flags:
+    - hide attributes
+    enchantments:
+      arrow damage: 10
+  item:
+    type: 'IRON_HOE'
+    enchantments:
+      arrow damage: 10

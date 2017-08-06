@@ -1,0 +1,58 @@
+title: 'Armor'
+size: 54
+icons:
+- slot: 19
+  item:
+    type: 'leather helmet'
+    name: '&aHats'
+    lore:
+    - '&7Select your hat!'
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'hats_gui'
+- slot: 21
+  item:
+    type: 'iron chestplate'
+    name: '&aKits'
+    lore:
+    - "&7Select your kit!"
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'kits_gui'
+- slot: 23
+  item:
+    type: 'gold leggings'
+    name: '&aLeggings'
+    lore:
+    - '&7Select your leggings!'
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'leggings_gui'
+- slot: 25
+  item:
+    type: 'leather boots'
+    name: '&aBoots'
+    lore:
+    - '&7Select your boots!'
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'boots_gui'
+- slot: 48
+  item:
+    type: 'arrow'
+    name: '&aGo Back'
+  click:
+    actions:
+    - 'gui-back'
+- slot: 49
+  item:
+    type: 'emerald'
+    name: '&7Coins: &6%vault_eco_balance%'

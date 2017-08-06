@@ -1,0 +1,149 @@
+blaze_death:
+  name: 'Blaze Death'
+  default: true
+  icon:
+    type: 'BLAZE_ROD'
+    lore:
+    - '&7Play Blaze Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_BLAZE_DEATH
+
+horse_death:
+  name: 'Horse Death'
+  cost: 2000
+  icon:
+    type: 'SADDLE'
+    lore:
+    - '&7Play Horse Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_HORSE_DEATH
+
+bat_death:
+  name: 'Bat Death'
+  cost: 2000
+  icon:
+    type: 'FEATHER'
+    lore:
+    - '&7Play Bat Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_BAT_DEATH
+
+enderman_death:
+  name: 'Enderman Death'
+  cost: 2000
+  icon:
+    type: 'ENDER_PEARL'
+    lore:
+    - '&7Play Enderman Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_ENDERMEN_DEATH
+
+golem_death:
+  name: 'Golem Death'
+  cost: 2000
+  icon:
+    type: 'IRON_BLOCK'
+    lore:
+    - '&7Play Golem Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_IRONGOLEM_DEATH
+
+pig_death:
+  name: 'Pig Death'
+  cost: 2000
+  icon:
+    type: 'PORK'
+    lore:
+    - '&7Play Pig Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_PIG_DEATH
+
+cow_hurt:
+  name: 'Cow Hurt'
+  cost: 4000
+  icon:
+    type: 'LEATHER'
+    lore:
+    - '&7Play Cow Hurt sound'
+    - '&7effect on kill!'
+  sound: ENTITY_COW_HURT
+
+creeper_death:
+  name: 'Creeper Death'
+  cost: 4000
+  icon:
+    type: 'SULPHUR'
+    lore:
+    - '&7Play Creeper Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_CREEPER_DEATH
+
+anvil_land:
+  name: 'Creeper Death'
+  cost: 4000
+  icon:
+    type: 'ANVIL'
+    lore:
+    - '&7Play Anvil Land sound'
+    - '&7effect on kill!'
+  sound: BLOCK_ANVIL_LAND
+
+ghast_death:
+  name: 'Ghast Death'
+  cost: 5000
+  icon:
+    type: 'GHAST_TEAR'
+    lore:
+    - '&7Play Ghast Death sound'
+    - '&7effect on kill!'
+  sound: ENTITY_GHAST_DEATH
+
+dragon_growl:
+  name: 'Dragon Growl'
+  cost: 5000
+  icon:
+    type: 'DRAGON_EGG'
+    lore:
+    - '&7Play Dragon Growl sound'
+    - '&7effect on kill!'
+  sound: ENTITY_ENDERDRAGON_GROWL
+
+villager_mhm:
+  name: 'Villager MHM'
+  cost: 5000
+  icon:
+    type: 'EMERALD'
+    lore:
+    - '&7Play Villager MHM sound'
+    - '&7effect on kill!'
+  sound: ENTITY_VILLAGER_AMBIENT
+
+wither:
+  name: 'Wither'
+  cost: 5000
+  icon:
+    type: 'ENDER_PORTAL_FRAME'
+    lore:
+    - '&Play Wither sound'
+    - '&7effect on kill!'
+  sound: ENTITY_WITHER_DEATH
+
+level_up:
+  name: 'Level Up'
+  cost: 10000
+  icon:
+    type: 'EXP_BOTTLE'
+    lore:
+    - '&7Play Level Up sound'
+    - '&7effect on kill!'
+  sound: ENTITY_PLAYER_LEVELUP
+
+zombie_destroy:
+  name: 'Zombie Destroy'
+  cost: 20000
+  icon:
+    type: 'ROTTEN_FLESH'
+    lore:
+    - '&7Play Zombie Destroy sound'
+    - '&7effect on kill!'
+  sound: ENTITY_ZOMBIE_ATTACK_DOOR_WOOD

@@ -1,0 +1,83 @@
+power:
+  power_I:
+    name: 'Dash Power I'
+    default: true
+    lore:
+    - '&7Power: &a100%'
+    power: 1.0
+
+  power_II:
+    name: 'Dash Power II'
+    lore:
+    - '&7Power: &a125%'
+    power: 1.25
+    cost: 10000
+
+  power_III:
+    name: 'Dash Power III'
+    lore:
+    - '&7Power: &a150%'
+    power: 1.5
+    cost: 50000
+    requires:
+    - purchase: 'power_II'
+
+  power_IV:
+    name: 'Dash Power IV'
+    lore:
+    - '&7Power: &a175%'
+    power: 1.75
+    cost: 150000
+    requires:
+    - purchase: 'power_III'
+
+  power_V:
+    name: 'Dash Power V'
+    lore:
+    - '&7Power: &a200%'
+    power: 2.0
+    cost: 500000
+    requires:
+    - purchase: 'power_IV'
+
+cooldown:
+  cooldown_I:
+    name: 'Dash Cooldown I'
+    default: true
+    lore:
+    - '&7Cooldown: &a4.0s'
+    cooldown: 4.0
+
+  cooldown_II:
+    name: 'Dash Cooldown II'
+    lore:
+    - '&7Cooldown: &a3.5s'
+    cooldown: 3.5
+    cost: 10000
+
+  cooldown_III:
+    name: 'Dash Cooldown III'
+    lore:
+    - '&7Cooldown: &a3.0s'
+    cooldown: 3.0
+    cost: 50000
+    requires:
+    - purchase: 'cooldown_II'
+
+  cooldown_IV:
+    name: 'Dash Cooldown IV'
+    lore:
+    - '&7Cooldown: &a2.5s'
+    cooldown: 2.5
+    cost: 150000
+    requires:
+    - purchase: 'cooldown_III'
+
+  cooldown_V:
+    name: 'Dash Cooldown V'
+    lore:
+    - '&7Cooldown: &a2.0s'
+    cooldown: 2.0
+    cost: 500000
+    requires:
+    - purchase: 'cooldown_IV'

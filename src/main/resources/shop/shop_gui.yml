@@ -1,0 +1,69 @@
+title: 'Game Shop'
+size: 54
+icons:
+- slot: 13
+  item:
+    type: 'wood hoe'
+    name: '&aGun Menu'
+    lore:
+    - '&7Build your own gun by'
+    - '&7choosing its parts'
+    - '&7and effects!'
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'gun_gui'
+- slot: 28
+  item:
+    type: 'chainmail chestplate'
+    name: '&aArmor'
+    lore:
+    - '&7Choose your armor this'
+    - '&7is completely cosmetic!'
+    flags:
+    - hide attributes
+  click:
+    actions:
+    - open-gui: 'armor_gui'
+- slot: 30
+  item:
+    type: 'carrot stick'
+    name: '&aDash Upgrades'
+    lore:
+    - '&7Upgrade your dash ability!'
+    - '&7Use your dash by left-clicking your gun!'
+  click:
+    actions:
+    - open-gui: 'dash_upgrades_gui'
+- slot: 32
+  item:
+    type: 'jukebox'
+    name: '&aKill Sounds'
+    lore:
+    - '&7Pick your sound to play on'
+    - '&7kill.'
+  click:
+    actions:
+    - open-gui: 'kill_sounds_gui'
+- slot: 34
+  item:
+    type: 'redstone comparator'
+    name: '&aSettings'
+    lore:
+    - '&7Configure your personal'
+    - '&7settings!'
+  click:
+    actions:
+    - open-gui: 'settings_gui'
+- slot: 48
+  item:
+    type: 'arrow'
+    name: '&aGo Back'
+  click:
+    actions:
+    - 'gui-back'
+- slot: 49
+  item:
+    type: 'emerald'
+    name: '&7Coins: &6%vault_eco_balance%'
