@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.powerup;
+package xyz.upperlevel.quakecraft.powerup;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
@@ -12,12 +12,12 @@ import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.spigot.quakecraft.events.ItemBoxPickupEvent;
-import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
-import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.events.ItemBoxPickupEvent;
+import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.util.LocUtil;
@@ -82,7 +82,7 @@ public class Powerup {
 
     protected void beginSpawnTask() {
         spawner = Bukkit.getScheduler().runTaskLater(
-                QuakeCraftReloaded.get(),
+                Quakecraft.get(),
                 this::spawn,
                 respawnTicks
         );
@@ -128,6 +128,6 @@ public class Powerup {
     }
 
     public static void load() {
-        Bukkit.getPluginManager().registerEvents(new EventListener(), QuakeCraftReloaded.get());
+        Bukkit.getPluginManager().registerEvents(new EventListener(), Quakecraft.get());
     }
 }

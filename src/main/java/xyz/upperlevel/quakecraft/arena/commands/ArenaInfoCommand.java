@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
@@ -25,7 +25,7 @@ public class ArenaInfoCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.info");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.info");
         FORMAT = manager.get("format");
     }
 }

@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.powerup.arguments;
+package xyz.upperlevel.quakecraft.powerup.arguments;
 
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
-import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
+import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
+import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParser;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.command.argument.exceptions.ParseException;

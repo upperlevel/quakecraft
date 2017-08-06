@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
@@ -23,7 +23,7 @@ public class ArenaCreateCommand extends Command {
 
     @Executor
     public void run(CommandSender sender, @Argument("arena") String arenaId) {
-        if (QuakeCraftReloaded.get().getArenaManager().getArena(arenaId) != null) {
+        if (Quakecraft.get().getArenaManager().getArena(arenaId) != null) {
             NAME_ALREADY_PRESENT.send(sender, "arena", arenaId);
             return;
         }
@@ -32,12 +32,12 @@ public class ArenaCreateCommand extends Command {
             return;
         }
         Arena arena = new Arena(arenaId);
-        QuakeCraftReloaded.get().getArenaManager().addArena(arena);
+        Quakecraft.get().getArenaManager().addArena(arena);
         SUCCESS.send(sender, arena.getPlaceholders());
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.create");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.create");
         NAME_ALREADY_PRESENT = manager.get("name-already-present");
         INVALID_NAME = manager.get("invalid-name");
         SUCCESS = manager.get("success");

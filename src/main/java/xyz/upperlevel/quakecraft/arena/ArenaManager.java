@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.arena;
+package xyz.upperlevel.quakecraft.arena;
 
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
+import xyz.upperlevel.quakecraft.Quakecraft;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class ArenaManager {
     private final File file;
 
     public ArenaManager() {
-        file = new File(QuakeCraftReloaded.get().getDataFolder(), "arenas.yml");
+        file = new File(Quakecraft.get().getDataFolder(), "arenas.yml");
     }
 
     public void addArena(Arena arena) {

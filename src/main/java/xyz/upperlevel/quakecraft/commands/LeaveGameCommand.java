@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 import xyz.upperlevel.uppercore.command.Sender;
@@ -31,7 +31,7 @@ public class LeaveGameCommand extends Command {
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender) {
-        Game game = QuakeCraftReloaded.get().getGameManager().getGame((Player) sender);
+        Game game = Quakecraft.get().getGameManager().getGame((Player) sender);
         if (game == null) {
             NO_GAME.send(sender);
             return;
@@ -41,7 +41,7 @@ public class LeaveGameCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.leave");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.leave");
         NO_GAME = manager.get("not-playing");
         SUCCESS = manager.get("success");
     }

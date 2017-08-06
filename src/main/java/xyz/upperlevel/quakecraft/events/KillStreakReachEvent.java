@@ -1,13 +1,13 @@
-package xyz.upperlevel.spigot.quakecraft.events;
+package xyz.upperlevel.quakecraft.events;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
-import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
+import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.playing.KillStreak;
 import xyz.upperlevel.uppercore.message.Message;
 
 @Getter

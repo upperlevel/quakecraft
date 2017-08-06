@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.shop.require.impl;
+package xyz.upperlevel.quakecraft.shop.require.impl;
 
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.require.Require;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
+import xyz.upperlevel.quakecraft.shop.require.Require;
 
 public class RequirePermission implements Require {
     private String permission;

@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.shop.armor;
+package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.shop.Category;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.shop.Category;
+import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 
 import java.util.logging.Logger;
 
@@ -24,7 +24,7 @@ public class ArmorCategory extends Category {
     }
 
     public void load() {
-        final Logger logger = QuakeCraftReloaded.get().getLogger();
+        final Logger logger = Quakecraft.get().getLogger();
         logger.info("Init loading armor");
 
         loadGui();
@@ -44,6 +44,6 @@ public class ArmorCategory extends Category {
 
     @Override
     public String getGuiLoc() {
-        return "armor";
+        return "armor/armor_gui";
     }
 }

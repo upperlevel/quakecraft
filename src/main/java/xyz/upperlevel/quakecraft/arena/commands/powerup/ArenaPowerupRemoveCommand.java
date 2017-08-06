@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands.powerup;
+package xyz.upperlevel.quakecraft.arena.commands.powerup;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
@@ -32,7 +32,7 @@ public class ArenaPowerupRemoveCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.powerup.remove");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.powerup.remove");
         INVALID_INDEX = manager.get("invalid-index");
         SUCCESS = manager.get("success");
     }

@@ -1,11 +1,11 @@
-package xyz.upperlevel.spigot.quakecraft.events;
+package xyz.upperlevel.quakecraft.events;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.game.Game;
 
 @Getter
 @Setter

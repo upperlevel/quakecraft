@@ -1,10 +1,10 @@
-package xyz.upperlevel.spigot.quakecraft.arena;
+package xyz.upperlevel.quakecraft.arena;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
-import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
+import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.util.LocUtil;

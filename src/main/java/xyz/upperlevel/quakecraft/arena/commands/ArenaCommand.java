@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.WithChildPermission;

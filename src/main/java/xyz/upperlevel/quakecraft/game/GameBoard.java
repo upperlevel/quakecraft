@@ -1,14 +1,14 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Data;
 import lombok.Getter;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
+import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
-import xyz.upperlevel.uppercore.board.Board;
 
 import java.util.List;
 import java.util.stream.Collectors;

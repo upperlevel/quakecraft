@@ -3,9 +3,9 @@ package xyz.upperlevel.quakecraft.placeholders;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.game.CountdownPhase;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.placeholder.Placeholder;
 

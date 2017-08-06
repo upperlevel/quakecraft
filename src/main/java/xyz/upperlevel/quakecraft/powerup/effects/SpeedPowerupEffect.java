@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.powerup.effects;
+package xyz.upperlevel.quakecraft.powerup.effects;
 
 import lombok.Getter;
 import lombok.Setter;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.uppercore.config.Config;
 
 public class SpeedPowerupEffect extends TimeBasedPowerupEffect {

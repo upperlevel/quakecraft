@@ -1,10 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
-import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
-import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
+import xyz.upperlevel.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.game.playing.KillStreak;
 
 @Data
 public class Participant {

@@ -1,10 +1,10 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
@@ -23,12 +23,12 @@ public class JoinGameCommand extends Command {
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
         Player player = (Player) sender;
-        Game game = QuakeCraftReloaded.get().getGameManager().getGame(player);
+        Game game = Quakecraft.get().getGameManager().getGame(player);
         if (game != null) {
             ALREADY_PLAYING.send(player, game.getPlaceholders());
             return;
         }
-        game = QuakeCraftReloaded.get().getGameManager().getGame(arena);
+        game = Quakecraft.get().getGameManager().getGame(arena);
         if (game == null) {
             NO_GAME_FOUND.send(player, "game", arena.getName());
             return;
@@ -38,7 +38,7 @@ public class JoinGameCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.join");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.join");
         ALREADY_PLAYING = manager.get("already-playing");
         NO_GAME_FOUND = manager.get("no-game-found");
         SUCCESS = manager.get("success");

@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import net.wesjd.anvilgui.AnvilGUI.ClickHandler;
 import org.bukkit.DyeColor;
@@ -7,12 +7,12 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
-import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
-import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
-import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.powerup.Powerup;
+import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
+import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.gui.*;
 import xyz.upperlevel.uppercore.gui.link.Link;
@@ -45,7 +45,7 @@ public class ArenaSetupGuiCommand extends Command {
     }
 
     public Gui selectArena(Player player) {//TODO page-based displaying
-        List<Arena> arenas = QuakeCraftReloaded.get().getArenaManager().getArenas();
+        List<Arena> arenas = Quakecraft.get().getArenaManager().getArenas();
         if (arenas.size() > (GuiSize.DOUBLE.size() - 2)) {
             player.sendMessage(RED + "Too many arenas! specify the arena name in the command!");
             return null;
@@ -79,7 +79,7 @@ public class ArenaSetupGuiCommand extends Command {
                             anvil.setListener(nonArenaFilter(
                                     (pl, id) -> {
                                         Arena arena = new Arena(id);
-                                        QuakeCraftReloaded.get().getArenaManager().addArena(arena);
+                                        Quakecraft.get().getArenaManager().addArena(arena);
                                         p.sendMessage(GREEN + "Arena added!");
                                         guis().change(pl, editArena(pl, arena, pr -> guis().change(pr, selectArena(pr))));
                                     }
@@ -236,7 +236,7 @@ public class ArenaSetupGuiCommand extends Command {
                                 player.sendMessage(RED + "Disable the arena before removing it!");
                                 return;
                             }
-                            QuakeCraftReloaded.get().getArenaManager().removeArena(arena.getId());
+                            Quakecraft.get().getArenaManager().removeArena(arena.getId());
                             p.sendMessage(GREEN + "Arena '" + arena.getId() + "' removed!");
                             previous.run(player);
                         }
@@ -525,13 +525,13 @@ public class ArenaSetupGuiCommand extends Command {
             player.sendMessage(RED + "The arena \"" + arena.getName() + "\" is not ready.");
             return false;
         }
-        QuakeCraftReloaded.get().getGameManager().addGame(new Game(arena));
+        Quakecraft.get().getGameManager().addGame(new Game(arena));
         player.sendMessage(GREEN + "Arena \"" + arena.getName() + "\" enabled successfully.");
         return true;
     }
 
     private boolean disable(Player player, Arena arena) {
-        QuakeCraftReloaded.get().getGameManager().removeGame(arena);
+        Quakecraft.get().getGameManager().removeGame(arena);
         player.sendMessage(GREEN + "The arena \"" + arena.getName() + "\" disabled successfully.");
         return true;
     }
@@ -540,7 +540,7 @@ public class ArenaSetupGuiCommand extends Command {
         return (player, id) -> {
             if (!Arena.isValidName(id))
                 return "Invalid id";
-            Arena arena = QuakeCraftReloaded.get().getArenaManager().getArena(id);
+            Arena arena = Quakecraft.get().getArenaManager().getArena(id);
             if (arena != null)
                 return "Already taken";
             listener.accept(player, id);

@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
@@ -22,7 +22,7 @@ public class ArenaDisableCommand extends Command {
 
     @Executor
     public void run(CommandSender sender, @Argument("arena") Arena arena) {
-        if (QuakeCraftReloaded.get().getGameManager().removeGame(arena) == null) {
+        if (Quakecraft.get().getGameManager().removeGame(arena) == null) {
             ALREADY_DISABLED.send(sender, arena.getPlaceholders());
             return;
         }
@@ -30,7 +30,7 @@ public class ArenaDisableCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.disable");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.disable");
         ALREADY_DISABLED = manager.get("arena-already-disabled");
         SUCCESS = manager.get("success");
     }

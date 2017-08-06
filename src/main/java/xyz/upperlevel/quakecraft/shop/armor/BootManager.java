@@ -1,12 +1,12 @@
-package xyz.upperlevel.spigot.quakecraft.shop.armor;
+package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 
@@ -23,12 +23,12 @@ public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
 
     @Override
     public String getGuiLoc() {
-        return "boots";
+        return "armor/boots/boots_gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "armor/boots";
+        return "armor/boots/boots";
     }
 
     @Override

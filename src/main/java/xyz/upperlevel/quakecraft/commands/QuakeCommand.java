@@ -1,7 +1,7 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandExecutor;
-import xyz.upperlevel.spigot.quakecraft.arena.commands.*;
+import xyz.upperlevel.quakecraft.arena.commands.*;
 import xyz.upperlevel.uppercore.command.DefaultPermission;
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.WithChildPermission;

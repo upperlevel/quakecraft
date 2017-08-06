@@ -1,10 +1,11 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Getter;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
+import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 

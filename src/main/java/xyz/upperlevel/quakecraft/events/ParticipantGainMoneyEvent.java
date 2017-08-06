@@ -1,12 +1,12 @@
-package xyz.upperlevel.spigot.quakecraft.events;
+package xyz.upperlevel.quakecraft.events;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
-import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.gains.GainType;
 
 @Getter
 @Setter

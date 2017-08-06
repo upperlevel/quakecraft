@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands.spawn;
+package xyz.upperlevel.quakecraft.arena.commands.spawn;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
@@ -50,7 +50,7 @@ public class ArenaSpawnListCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.spawn.list");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.spawn.list");
         HEADER = manager.get("header");
         LINE = manager.get("line");
         FOOTER = manager.get("footer");

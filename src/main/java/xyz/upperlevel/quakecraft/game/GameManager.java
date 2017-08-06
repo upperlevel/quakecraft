@@ -1,10 +1,10 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.quakecraft.game;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class GameManager {
     private final File file;
 
     public GameManager() {
-        file = new File(QuakeCraftReloaded.get().getDataFolder(), "games.yml");
+        file = new File(Quakecraft.get().getDataFolder(), "games.yml");
     }
 
     public void addGame(Game game) {
@@ -60,7 +60,7 @@ public class GameManager {
         if (file.exists()) {
             FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
             for (String arenaName : cfg.getStringList("games")) {
-                Arena arena = QuakeCraftReloaded.get().getArenaManager().getArena(arenaName);
+                Arena arena = Quakecraft.get().getArenaManager().getArena(arenaName);
                 if (arena != null)
                     addGame(new Game(arena));
             }

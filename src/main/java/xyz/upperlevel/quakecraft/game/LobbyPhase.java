@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -8,26 +8,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
-import xyz.upperlevel.spigot.quakecraft.game.waiting.WaitingPhase;
-import xyz.upperlevel.uppercore.game.PhaseManager;
-import xyz.upperlevel.uppercore.util.PlayerUtil;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.GameJoinEvent;
+import xyz.upperlevel.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
 import xyz.upperlevel.uppercore.game.Phase;
-import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.util.PlayerUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
 public class LobbyPhase extends PhaseManager implements Phase, Listener {
     private static Message joinMsg;
     private static Message quitMsg;
-    private static Map<String, Message> countdownMsg = new HashMap<>();
 
     @Getter
     private final Game game;
@@ -94,7 +90,7 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        MessageManager msg = QuakeCraftReloaded.get().getMessages().getSection("lobby");
+        MessageManager msg = Quakecraft.get().getMessages().getSection("lobby");
         joinMsg = msg.get("join");
         quitMsg = msg.get("quit");
     }

@@ -1,12 +1,12 @@
-package xyz.upperlevel.spigot.quakecraft.events;
+package xyz.upperlevel.quakecraft.events;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
 
 import java.util.List;
 

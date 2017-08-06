@@ -1,11 +1,11 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands.powerup;
+package xyz.upperlevel.quakecraft.arena.commands.powerup;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
-import xyz.upperlevel.spigot.quakecraft.powerup.effects.PowerupEffect;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.powerup.Powerup;
+import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
@@ -33,7 +33,7 @@ public class ArenaPowerupAddCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.powerup.add");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.powerup.add");
         SUCCESS = manager.get("success");
     }
 }

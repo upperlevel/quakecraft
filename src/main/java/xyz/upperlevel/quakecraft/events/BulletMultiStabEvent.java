@@ -6,8 +6,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.play.Bullet;
-import xyz.upperlevel.quakecraft.game.play.MultiStab;
+import xyz.upperlevel.quakecraft.game.playing.Bullet;
+import xyz.upperlevel.quakecraft.game.playing.MultiStab;
 import xyz.upperlevel.uppercore.message.Message;
 
 @Getter

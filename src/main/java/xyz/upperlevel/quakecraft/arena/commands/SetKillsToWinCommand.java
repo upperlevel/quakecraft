@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
@@ -34,7 +34,7 @@ public class SetKillsToWinCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.set-kills-to-win");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.set-kills-to-win");
         NEGATIVE_KILLS = manager.get("negative-kills");
         SUCCESS = manager.get("success");
     }

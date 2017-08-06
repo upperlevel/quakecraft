@@ -1,10 +1,10 @@
-package xyz.upperlevel.spigot.quakecraft.shop.armor;
+package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseRegistry;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.SimplePurchase;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.single.SinglePurchaseManager;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 
@@ -21,12 +21,12 @@ public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
     @Override
     public String getGuiLoc() {
-        return "hats";
+        return "armor/hats/hats_gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "armor/hats";
+        return "armor/hats/hats";
     }
 
     @Override

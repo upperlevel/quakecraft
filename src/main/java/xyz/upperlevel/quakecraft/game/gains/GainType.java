@@ -1,12 +1,12 @@
-package xyz.upperlevel.spigot.quakecraft.game.gains;
+package xyz.upperlevel.quakecraft.game.gains;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.events.ParticipantGainMoneyEvent;
-import xyz.upperlevel.spigot.quakecraft.game.ending.EndingPhase;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.ParticipantGainMoneyEvent;
+import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
@@ -58,22 +58,22 @@ public class GainType {
     public void grant(Participant player) {
         ParticipantGainMoneyEvent event = new ParticipantGainMoneyEvent(player, this);
         Bukkit.getPluginManager().callEvent(event);
-        if(!event.isCancelled()) {
+        if (!event.isCancelled()) {
             player.coins += amount;
-            if(name != null)
+            if (name != null)
                 message.send(player.getPlayer(), "gain_amount", EconomyManager.format(event.getGain()), "gain_name", name.resolve(player.getPlayer()));
         }
     }
 
     public static void register(GainType type) {
-        if(initialized) {
+        if (initialized) {
             throw new IllegalStateException("Cannot register a GainType after the config loafing!");
         }
         gains.add(type);
     }
 
     public static GainType create(String id) {
-        if(id == null) return new GainType();
+        if (id == null) return new GainType();
         GainType type = new GainType(id);
         register(type);
         return type;
@@ -86,8 +86,8 @@ public class GainType {
     public static void loadConfig(Config config) {
         message = config.getMessageRequired("message");
         loadChildren();
-        for(GainType type : gains) {
-            if(type.id == null)
+        for (GainType type : gains) {
+            if (type.id == null)
                 continue;
             try {
                 type.load(config.getConfigRequired(type.id));
@@ -104,7 +104,7 @@ public class GainType {
         EndingPhase.loadGains();
     }
 
-    public static void  loadConfig() {
-        loadConfig(Config.wrap(ConfigUtils.loadConfig(QuakeCraftReloaded.get(), "gains.yml")));
+    public static void loadConfig() {
+        loadConfig(Config.wrap(ConfigUtils.loadConfig(Quakecraft.get(), "game/gains.yml")));
     }
 }

@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
@@ -22,7 +22,7 @@ public class ArenaDeleteCommand extends Command {
 
     @Executor
     public void run(CommandSender sender, @Argument("arena") String arenaId) {
-        Arena arena = QuakeCraftReloaded.get().getArenaManager().removeArena(arenaId);
+        Arena arena = Quakecraft.get().getArenaManager().removeArena(arenaId);
         if (arena == null) {
             NOT_FOUND.send(sender, "arena", arenaId);
             return;
@@ -31,7 +31,7 @@ public class ArenaDeleteCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.delete");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.delete");
         NOT_FOUND = manager.get("arena-not-found");
         SUCCESS = manager.get("success");
     }

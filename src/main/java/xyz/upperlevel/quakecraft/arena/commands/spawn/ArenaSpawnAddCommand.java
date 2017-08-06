@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands.spawn;
+package xyz.upperlevel.quakecraft.arena.commands.spawn;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.uppercore.command.*;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
@@ -25,7 +25,7 @@ public class ArenaSpawnAddCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.spawn.add");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.spawn.add");
         SUCCESS = manager.get("success");
     }
 }

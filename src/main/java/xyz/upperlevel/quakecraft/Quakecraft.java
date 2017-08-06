@@ -1,29 +1,30 @@
-package xyz.upperlevel.spigot.quakecraft;
+package xyz.upperlevel.quakecraft;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.upperlevel.spigot.quakecraft.arena.ArenaManager;
-import xyz.upperlevel.spigot.quakecraft.arena.arguments.ArenaArgumentParser;
-import xyz.upperlevel.spigot.quakecraft.commands.QuakeCommand;
-import xyz.upperlevel.spigot.quakecraft.game.*;
-import xyz.upperlevel.spigot.quakecraft.game.countdown.CountdownPhase;
-import xyz.upperlevel.spigot.quakecraft.game.ending.EndingPhase;
-import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
-import xyz.upperlevel.spigot.quakecraft.game.play.Bullet;
-import xyz.upperlevel.spigot.quakecraft.game.play.Dash;
-import xyz.upperlevel.spigot.quakecraft.game.play.KillStreak;
-import xyz.upperlevel.spigot.quakecraft.game.play.PlayingPhase;
-import xyz.upperlevel.spigot.quakecraft.game.waiting.WaitingPhase;
-import xyz.upperlevel.spigot.quakecraft.placeholders.QuakePlaceholders;
-import xyz.upperlevel.spigot.quakecraft.powerup.PowerupEffectManager;
-import xyz.upperlevel.spigot.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
-import xyz.upperlevel.spigot.quakecraft.shop.ShopCategory;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.ConfirmPurchaseGui;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.Purchase;
-import xyz.upperlevel.spigot.quakecraft.shop.purchase.PurchaseGui;
-import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
-import xyz.upperlevel.spigot.quakecraft.shop.railgun.RailgunSelectGui;
+import xyz.upperlevel.quakecraft.arena.ArenaManager;
+import xyz.upperlevel.quakecraft.arena.arguments.ArenaArgumentParser;
+import xyz.upperlevel.quakecraft.commands.QuakeCommand;
+import xyz.upperlevel.quakecraft.game.GameManager;
+import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
+import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
+import xyz.upperlevel.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.game.playing.Bullet;
+import xyz.upperlevel.quakecraft.game.playing.Dash;
+import xyz.upperlevel.quakecraft.game.playing.KillStreak;
+import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
+import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
+import xyz.upperlevel.quakecraft.placeholders.QuakePlaceholders;
+import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
+import xyz.upperlevel.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
+import xyz.upperlevel.quakecraft.shop.ShopCategory;
+import xyz.upperlevel.quakecraft.shop.purchase.ConfirmPurchaseGui;
+import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
+import xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui;
+import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
 import xyz.upperlevel.uppercore.board.BoardRegistry;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
@@ -41,9 +42,9 @@ import static xyz.upperlevel.uppercore.Uppercore.guis;
 import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
 @Getter
-public class QuakeCraftReloaded extends JavaPlugin {
+public class Quakecraft extends JavaPlugin {
 
-    private static QuakeCraftReloaded instance;
+    private static Quakecraft instance;
 
     // impl
     private ArenaManager arenaManager;
@@ -145,7 +146,7 @@ public class QuakeCraftReloaded extends JavaPlugin {
         return gameManager;
     }
 
-    public static QuakeCraftReloaded get() {
+    public static Quakecraft get() {
         return instance;
     }
 }

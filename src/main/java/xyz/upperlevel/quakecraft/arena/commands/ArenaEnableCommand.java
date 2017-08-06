@@ -1,9 +1,9 @@
-package xyz.upperlevel.spigot.quakecraft.arena.commands;
+package xyz.upperlevel.quakecraft.arena.commands;
 
 import org.bukkit.command.CommandSender;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.command.Argument;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
@@ -28,16 +28,16 @@ public class ArenaEnableCommand extends Command {
             NOT_READY.send(sender, arena.getPlaceholders());
             return;
         }
-        if (QuakeCraftReloaded.get().getGameManager().getGame(arena) != null) {
+        if (Quakecraft.get().getGameManager().getGame(arena) != null) {
             ALREADY_ENABLED.send(sender, arena.getPlaceholders());
             return;
         }
-        QuakeCraftReloaded.get().getGameManager().addGame(new Game(arena));
+        Quakecraft.get().getGameManager().addGame(new Game(arena));
         SUCCESS.send(sender, arena.getPlaceholders());
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.arena.enable");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.arena.enable");
         NOT_READY = manager.get("arena-not-ready");
         ALREADY_ENABLED = manager.get("arena-already-enabled");
         SUCCESS = manager.get("success");

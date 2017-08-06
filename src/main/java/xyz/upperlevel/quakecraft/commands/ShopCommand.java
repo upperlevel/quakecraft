@@ -1,8 +1,8 @@
-package xyz.upperlevel.spigot.quakecraft.commands;
+package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
+import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.uppercore.command.Command;
 import xyz.upperlevel.uppercore.command.Executor;
 import xyz.upperlevel.uppercore.command.Sender;
@@ -24,7 +24,7 @@ public class ShopCommand extends Command {
 
     @Executor(sender = Sender.PLAYER)
     public void run(CommandSender sender) {
-        GuiId gui =  QuakeCraftReloaded.get().getGuis().get("shop");
+        GuiId gui =  Quakecraft.get().getGuis().get("shop_gui");
         if (gui == null) {
             NO_GUI.send((Player) sender);
             return;
@@ -33,7 +33,7 @@ public class ShopCommand extends Command {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("commands.shop");
+        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.shop");
         NO_GUI = manager.get("no-shop");
     }
 }

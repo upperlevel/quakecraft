@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Data;
 import lombok.Getter;
@@ -15,9 +15,9 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import xyz.upperlevel.spigot.quakecraft.arena.Arena;
-import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
-import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.events.GameJoinEvent;
+import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -25,7 +25,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import java.util.HashSet;
 import java.util.Set;
 
-import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
 @Data
 public class Game implements Listener {

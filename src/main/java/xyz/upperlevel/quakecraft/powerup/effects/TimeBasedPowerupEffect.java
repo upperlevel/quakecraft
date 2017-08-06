@@ -1,12 +1,12 @@
-package xyz.upperlevel.spigot.quakecraft.powerup.effects;
+package xyz.upperlevel.quakecraft.powerup.effects;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
@@ -33,7 +33,7 @@ public abstract class TimeBasedPowerupEffect extends BasePowerupEffect {
         Collection<Player> messageReceivers = player.getPhase().getGame().getPlayers();
         activeMessage.broadcast(messageReceivers, "name", player.getName());
         final BukkitTask task = Bukkit.getScheduler().runTaskLater(
-                QuakeCraftReloaded.get(),
+                Quakecraft.get(),
                 () -> {
                     tasks.remove(player.getPlayer());
                     end(player);
