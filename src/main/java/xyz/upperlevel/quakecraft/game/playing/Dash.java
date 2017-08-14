@@ -1,19 +1,17 @@
-package xyz.upperlevel.spigot.quakecraft.game.play;
+package xyz.upperlevel.quakecraft.game.playing;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.events.PlayerDashCooldownEnd;
-import xyz.upperlevel.spigot.quakecraft.events.PlayerDashEvent;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.PlayerDashCooldownEnd;
+import xyz.upperlevel.quakecraft.events.PlayerDashEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.message.Message;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.bukkit.ChatColor.RED;
 
 public class Dash {
     public static final int MILLIS_IN_TICK = 50;
@@ -45,7 +43,7 @@ public class Dash {
         BukkitScheduler scheduler = Bukkit.getScheduler();
 
         dashing.put(player.getPlayer(), this);
-        scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownTicks);
+        scheduler.runTaskLater(Quakecraft.get(), this::cooldownEnd, cooldownTicks);
         player.getPlayer().setVelocity(player.getPlayer().getLocation().getDirection().multiply(power * BASE_POWER));
 
         startTime = System.currentTimeMillis();
@@ -64,13 +62,13 @@ public class Dash {
             return;
         }
 
-        QuakePlayer player = QuakeCraftReloaded.get().getPlayerManager().getPlayer(p);
+        QuakePlayer player = Quakecraft.get().getPlayerManager().getPlayer(p);
         new Dash(player).swish();
     }
 
     public static void loadConfig() {
-        Config config = QuakeCraftReloaded.get().getCustomConfig().getConfigRequired("dash");
+        Config config = Quakecraft.get().getCustomConfig().getConfigRequired("dash");
         BASE_POWER = config.getIntRequired("base-power");
-        COOLDOWN_MESSAGE = QuakeCraftReloaded.get().getMessages().get("game.dash.cooldown");
+        COOLDOWN_MESSAGE = Quakecraft.get().getMessages().get("game.dash.cooldown");
     }
 }

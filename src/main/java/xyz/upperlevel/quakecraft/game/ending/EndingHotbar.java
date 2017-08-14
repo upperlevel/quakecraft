@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game.ending;
+package xyz.upperlevel.quakecraft.game.ending;
 
 import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.uppercore.config.Config;

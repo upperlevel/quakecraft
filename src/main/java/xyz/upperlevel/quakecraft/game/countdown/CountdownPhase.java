@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game.countdown;
+package xyz.upperlevel.quakecraft.game.countdown;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
@@ -8,13 +8,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
-import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
-import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
-import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.spigot.quakecraft.game.waiting.WaitingPhase;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.GameJoinEvent;
+import xyz.upperlevel.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
 import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
@@ -25,10 +25,11 @@ import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
+import java.io.File;
 import java.util.Map;
 
 import static java.lang.String.valueOf;
-import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.quakecraft.Quakecraft.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
@@ -129,12 +130,16 @@ public class CountdownPhase implements Phase, Listener {
             update(player);
     }
 
+    private static File getPhaseFolder() {
+        return new File(Quakecraft.get().getDataFolder(), "game/countdown");
+    }
+
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
         for (Player player : game.getPlayers())
             setup(player);
-        timer = QuakeCraftReloaded.get().getConfig().getInt("lobby.countdown"); // todo parse before game
+        timer = Quakecraft.get().getConfig().getInt("lobby.countdown"); // todo parse before game
         task.runTaskTimer(get(), 0, 20);
     }
 
@@ -163,16 +168,16 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        MessageManager msg = QuakeCraftReloaded.get().getMessages().getSection("lobby");
+        MessageManager msg = get().getMessages().getSection("lobby");
         countdownMsg = msg.load("countdown");
-        sampleHotbar = Hotbar.deserialize(QuakeCraftReloaded.get(), Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getHotbars().getFolder(),
-                "countdown-solo.yml"
+        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.wrap(ConfigUtils.loadConfig(
+                getPhaseFolder(),
+                "countdown_hotbar.yml"
         )));
 
         sampleBoard = CountdownBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getBoards().getFolder(),
-                "countdown-solo.yml"
+                getPhaseFolder(),
+                "countdown_board.yml"
         )));
     }
 }

@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game.waiting;
+package xyz.upperlevel.quakecraft.game.waiting;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
@@ -6,16 +6,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.events.GameJoinEvent;
-import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.spigot.quakecraft.game.countdown.CountdownPhase;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
-import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.GameJoinEvent;
+import xyz.upperlevel.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
+
+import java.io.File;
 
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
@@ -72,9 +74,13 @@ public class WaitingPhase implements Phase, Listener {
             update(player);
     }
 
+    private static File getPhaseFolder() {
+        return new File(Quakecraft.get().getDataFolder(), "game/waiting");
+    }
+
     @Override
     public void onEnable(Phase previous) {
-        Bukkit.getPluginManager().registerEvents(this, QuakeCraftReloaded.get());
+        Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
         for (Player player : game.getPlayers())
             setup(player);
         tryStart();
@@ -103,14 +109,14 @@ public class WaitingPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        sampleHotbar = Hotbar.deserialize(QuakeCraftReloaded.get(), Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getHotbars().getFolder(),
-                "waiting-solo.yml"
+        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.wrap(ConfigUtils.loadConfig(
+                getPhaseFolder(),
+                "waiting_hotbar.yml"
         )));
 
         sampleBoard = WaitingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getBoards().getFolder(),
-                "waiting-solo.yml"
+                getPhaseFolder(),
+                "waiting_board.yml"
         )));
     }
 }

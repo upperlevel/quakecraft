@@ -3,8 +3,9 @@ package xyz.upperlevel.quakecraft.game;
 import lombok.Data;
 import lombok.Getter;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.uppercore.board.Board;
+import xyz.upperlevel.uppercore.board.FixBoardSection;
+import xyz.upperlevel.uppercore.board.BoardSection;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
 @Getter
 public class GameBoard extends Board {
     private final GamePhase phase;
-    private TextArea header, footer;
+    private FixBoardSection header, footer;
     private Ranking ranking;
 
     public GameBoard(Config config) {
@@ -27,9 +28,9 @@ public class GameBoard extends Board {
     public GameBoard(GamePhase phase, Config config) {
         super(config);
         this.phase = phase;
-        this.header = new TextArea(config.getMessageStrList("header"));
+        this.header = new FixBoardSection(config.getMessageStrList("header"));
         this.ranking = new Ranking(config.getConfigRequired("ranking"));
-        this.footer = new TextArea(config.getMessageStrList("footer"));
+        this.footer = new FixBoardSection(config.getMessageStrList("footer"));
     }
 
     public GameBoard(GamePhase phase, GameBoard sample) {
@@ -38,9 +39,9 @@ public class GameBoard extends Board {
         this.header = sample.header;
         this.ranking = new Ranking(sample.ranking);
         this.footer = sample.footer;
-        add(header);
-        add(ranking);
-        add(footer);
+        append(header);
+        append(ranking);
+        append(footer);
     }
 
     public static GameBoard deserialize(GamePhase phase, Config config) {
@@ -54,7 +55,7 @@ public class GameBoard extends Board {
 
     // RANKING
     @Data
-    private class Ranking implements Area {
+    private class Ranking implements BoardSection {
         private final int size;
         private final PlaceholderValue<String> text;
 
@@ -74,10 +75,6 @@ public class GameBoard extends Board {
         }
 
         @Override
-        public void update() {
-        }
-
-        @Override
         public List<String> render(Player player, PlaceholderRegistry placeholders) {
             Stream<String> stream = phase.getRanking().stream()
                     .map(participant ->
@@ -92,11 +89,6 @@ public class GameBoard extends Board {
             if (size >= 0)
                 stream = stream.limit(size);
             return stream.collect(Collectors.toList());
-        }
-
-        @Override
-        public Ranking copy() {
-            return this;
         }
     }
 }

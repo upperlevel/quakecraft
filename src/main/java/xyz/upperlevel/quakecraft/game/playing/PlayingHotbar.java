@@ -1,17 +1,16 @@
-package xyz.upperlevel.spigot.quakecraft.game.play;
+package xyz.upperlevel.quakecraft.game.playing;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.gui.Icon;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.itemstack.ItemResolver;
-import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
@@ -20,7 +19,7 @@ import java.util.List;
 public class PlayingHotbar extends Hotbar {
 
     public PlayingHotbar(Config config) {
-        super(QuakeCraftReloaded.get(), config);
+        super(Quakecraft.get(), config);
         Config sub;
         sub = config.getConfigRequired("gun");
         setIcon(sub.getIntRequired("slot"), new Icon(Gun.deserialize(sub.getConfigRequired("item"))));
@@ -41,7 +40,7 @@ public class PlayingHotbar extends Hotbar {
 
         @Override
         public ItemStack resolve(Player player) {
-            QuakePlayer quake = QuakeCraftReloaded.get().getPlayerManager().getPlayer(player);
+            QuakePlayer quake = Quakecraft.get().getPlayerManager().getPlayer(player);
             CustomItem item = quake.getSelectedCase().getItem();
             item.setDisplayName(name);
             item.setLore(lore);

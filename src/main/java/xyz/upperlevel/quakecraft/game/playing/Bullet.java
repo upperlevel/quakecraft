@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game.play;
+package xyz.upperlevel.quakecraft.game.playing;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -7,14 +7,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.LaserHitEvent;
+import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
+import xyz.upperlevel.quakecraft.events.LaserStabEvent;
+import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.uppercore.math.RayTrace;
 import xyz.upperlevel.uppercore.particle.Particle;
-import xyz.upperlevel.spigot.quakecraft.events.LaserHitEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
 
 import java.util.*;
 
@@ -55,7 +55,7 @@ public class Bullet {
     public Bullet(PlayingPhase phase, Player player) {
         this.phase = phase;
         this.player = player;
-        this.qp = QuakeCraftReloaded.get().getPlayerManager().getPlayer(player);
+        this.qp = Quakecraft.get().getPlayerManager().getPlayer(player);
         this.participant = phase.getParent().getParticipant(player);
         Vector start = player.getEyeLocation().toVector();
         start.setY(start.getY() - 0.15);
@@ -72,12 +72,12 @@ public class Bullet {
             throw new IllegalStateException("Already shot!");
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
-        laserSpreader = scheduler.runTaskTimer(QuakeCraftReloaded.get(), this::laserSpreaderRun, 0, 1);
+        laserSpreader = scheduler.runTaskTimer(Quakecraft.get(), this::laserSpreaderRun, 0, 1);
 
         shootTime = System.currentTimeMillis();
-        notifier = scheduler.runTaskTimer(QuakeCraftReloaded.get(), this::updatePlayer, EXP_UPDATE_EVERY, EXP_UPDATE_EVERY);
+        notifier = scheduler.runTaskTimer(Quakecraft.get(), this::updatePlayer, EXP_UPDATE_EVERY, EXP_UPDATE_EVERY);
         player.setExp(1f);
-        scheduler.runTaskLater(QuakeCraftReloaded.get(), this::cooldownEnd, cooldownTicks);
+        scheduler.runTaskLater(Quakecraft.get(), this::cooldownEnd, cooldownTicks);
     }
 
     public void laserSpreaderRun() {
@@ -147,6 +147,6 @@ public class Bullet {
     }
 
     public static void loadConfig() {
-        headshotHeight = QuakeCraftReloaded.get().getCustomConfig().getDoubleRequired("game.headshot-height");
+        headshotHeight = Quakecraft.get().getCustomConfig().getDoubleRequired("game.headshot-height");
     }
 }

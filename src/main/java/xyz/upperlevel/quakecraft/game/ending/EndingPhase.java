@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game.ending;
+package xyz.upperlevel.quakecraft.game.ending;
 
 import lombok.Data;
 import org.bukkit.Color;
@@ -8,14 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
-import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
-import xyz.upperlevel.spigot.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
-import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
-import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
@@ -25,11 +25,12 @@ import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.quakecraft.Quakecraft.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
@@ -108,7 +109,7 @@ public class EndingPhase implements Phase, Listener {
                 endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
             }
         } else
-            QuakeCraftReloaded.get().getLogger().warning("Vault not found, no money given!");
+            get().getLogger().warning("Vault not found, no money given!");
     }
 
     public void printRanking() {
@@ -137,7 +138,7 @@ public class EndingPhase implements Phase, Listener {
 
         reg.set("ranking_gun", (p, s) -> {
             try {
-                QuakePlayer player = QuakeCraftReloaded.get().getPlayerManager().getPlayer(getParent().getRanking().get(Integer.parseInt(s) - 1).getPlayer());
+                QuakePlayer player = get().getPlayerManager().getPlayer(getParent().getRanking().get(Integer.parseInt(s) - 1).getPlayer());
                 return player.getGun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getGun().getName().resolve(p);
             } catch (Exception e) {
                 return null;
@@ -175,6 +176,10 @@ public class EndingPhase implements Phase, Listener {
         game.getPlayers().forEach(this::clear);
     }
 
+    private static File getPhaseFolder() {
+        return new File(get().getDataFolder(), "game/ending");
+    }
+
     @Override
     public void onEnable(Phase previous) {
         winner = parent.getWinner();
@@ -200,18 +205,18 @@ public class EndingPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        MessageManager manager = QuakeCraftReloaded.get().getMessages().getSection("game");
+        MessageManager manager = get().getMessages().getSection("game");
         endGainMessage = manager.get("end-gain");
         endRankingMessage = manager.get("end-ranking");
 
-        sampleHotbar = EndingHotbar.deserialize(QuakeCraftReloaded.get(), Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getHotbars().getFolder(),
-                "ending-solo.yml"
+        sampleHotbar = EndingHotbar.deserialize(get(), Config.wrap(ConfigUtils.loadConfig(
+                getPhaseFolder(),
+                "ending_hotbar.yml"
         )));
 
         sampleBoard = EndingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getBoards().getFolder(),
-                "ending-solo.yml"
+                getPhaseFolder(),
+                "ending_board.yml"
         )));
     }
 }

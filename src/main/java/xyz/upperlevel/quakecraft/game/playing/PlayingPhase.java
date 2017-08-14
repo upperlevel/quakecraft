@@ -1,4 +1,4 @@
-package xyz.upperlevel.spigot.quakecraft.game.play;
+package xyz.upperlevel.quakecraft.game.playing;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
@@ -14,17 +14,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.QuakePlayer;
-import xyz.upperlevel.spigot.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserSpreadEvent;
-import xyz.upperlevel.spigot.quakecraft.events.LaserStabEvent;
-import xyz.upperlevel.spigot.quakecraft.game.ending.EndingPhase;
-import xyz.upperlevel.spigot.quakecraft.game.Game;
-import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
-import xyz.upperlevel.spigot.quakecraft.powerup.Powerup;
-import xyz.upperlevel.spigot.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
+import xyz.upperlevel.quakecraft.events.LaserStabEvent;
+import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
+import xyz.upperlevel.quakecraft.powerup.Powerup;
+import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;
@@ -36,12 +36,13 @@ import xyz.upperlevel.uppercore.task.UpdaterTask;
 import xyz.upperlevel.uppercore.util.TextUtil;
 import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded.get;
+import static xyz.upperlevel.quakecraft.Quakecraft.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
@@ -103,7 +104,7 @@ public class PlayingPhase implements Phase, Listener {
     public void setup(Player player) {
         hotbars().view(player).addHotbar(hotbar);
         boards().view(player).setBoard(board);
-        QuakePlayer qp = QuakeCraftReloaded.get().getPlayerManager().getPlayer(player);
+        QuakePlayer qp = Quakecraft.get().getPlayerManager().getPlayer(player);
         PlayerInventory inventory = player.getInventory();
         inventory.setArmorContents(new ItemStack[]{
                 qp.getSelectedBoot().getItem().resolve(player),
@@ -130,6 +131,10 @@ public class PlayingPhase implements Phase, Listener {
     public void clear() {
         for (Player p : game.getPlayers())
             clear(p);
+    }
+
+    private static File getPhaseFolder() {
+        return new File(Quakecraft.get().getDataFolder(), "game/playing");
     }
 
     @Override
@@ -253,22 +258,22 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        MessageManager messages = QuakeCraftReloaded.get().getMessages().getSection("game");
+        MessageManager messages = Quakecraft.get().getMessages().getSection("game");
         shotMessage = messages.get("shot");
         headshotMessage = messages.get("headshot");
         snakeDisabledMessage = messages.get("snake-disabled");
         defKillMessage = TextUtil.translatePlain(messages.getConfig().getStringRequired("def-kill-message"));
 
-        gunSlot = QuakeCraftReloaded.get().getCustomConfig().getIntRequired("playing-hotbar.gun.slot");
+        gunSlot = Quakecraft.get().getCustomConfig().getIntRequired("playing-hotbar.gun.slot");
 
         sampleHotbar = PlayingHotbar.deserialize("playing-solo", Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getHotbars().getFolder(),
-                "playing-solo.yml"
+                getPhaseFolder(),
+                "playing_hotbar.yml"
         )));
 
         sampleBoard = PlayingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                QuakeCraftReloaded.get().getBoards().getFolder(),
-                "playing-solo.yml"
+                getPhaseFolder(),
+                "playing_board.yml"
         )));
     }
 }

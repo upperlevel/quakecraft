@@ -1,12 +1,12 @@
-package xyz.upperlevel.spigot.quakecraft.game.play;
+package xyz.upperlevel.quakecraft.game.playing;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import xyz.upperlevel.spigot.quakecraft.QuakeCraftReloaded;
-import xyz.upperlevel.spigot.quakecraft.events.KillStreakReachEvent;
-import xyz.upperlevel.spigot.quakecraft.game.GamePhase;
-import xyz.upperlevel.spigot.quakecraft.game.Participant;
-import xyz.upperlevel.spigot.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.KillStreakReachEvent;
+import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
@@ -81,8 +81,8 @@ public class KillStreak {
 
     public static void loadConfig() {
         loadConfig(ConfigUtils.loadConfigMap(
-                QuakeCraftReloaded.get(),
-                "killstreak.yml",
+                Quakecraft.get(),
+                "game/playing/killstreak.yml",
                 "killstreak"
         ));
     }
