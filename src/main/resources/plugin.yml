@@ -2,7 +2,7 @@ name: Quakecraft
 version: ${project.version}
 main: xyz.upperlevel.quakecraft.Quakecraft
 
-depend: [UpperCore]
+depend: [Uppercore]
 softdepend: [PlaceholderAPI]
 
 commands:
