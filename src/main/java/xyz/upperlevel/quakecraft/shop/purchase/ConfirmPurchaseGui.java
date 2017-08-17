@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
-import xyz.upperlevel.uppercore.gui.Icon;
+import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -37,8 +37,8 @@ public class ConfirmPurchaseGui extends ChestGui {
         cancelItem.setPlaceholders(placeholders);
 
         this.onAgree = onAgree;
-        setIcon(options.confirmSlots, Icon.of(confirmItem, this::onBuy));
-        setIcon(options.cancelSlots, Icon.of(cancelItem, onCancel));
+        setIcon(options.confirmSlots, ConfigIcon.of(confirmItem, this::onBuy));
+        setIcon(options.cancelSlots, ConfigIcon.of(cancelItem, onCancel));
 
         placeholders.set("cost", purchase.getCostFormatted());
         placeholders.set("item_id", purchase.getId());

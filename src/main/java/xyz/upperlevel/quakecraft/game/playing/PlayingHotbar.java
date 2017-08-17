@@ -7,7 +7,7 @@ import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.gui.Icon;
+import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.itemstack.ItemResolver;
@@ -22,10 +22,10 @@ public class PlayingHotbar extends Hotbar {
         super(Quakecraft.get(), config);
         Config sub;
         sub = config.getConfigRequired("gun");
-        setIcon(sub.getIntRequired("slot"), new Icon(Gun.deserialize(sub.getConfigRequired("item"))));
+        setIcon(sub.getIntRequired("slot"), new ConfigIcon(Gun.deserialize(sub.getConfigRequired("item"))));
 
         sub = config.getConfigRequired("tracker");
-        setIcon(sub.getIntRequired("slot"), new Icon(Tracker.deserialize(sub.getConfigRequired("item"))));
+        setIcon(sub.getIntRequired("slot"), new ConfigIcon(Tracker.deserialize(sub.getConfigRequired("item"))));
     }
 
     // GUN

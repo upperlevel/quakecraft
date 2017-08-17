@@ -1,5 +1,7 @@
 package xyz.upperlevel.quakecraft.arena.commands;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.wesjd.anvilgui.AnvilGUI.ClickHandler;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -14,12 +16,10 @@ import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.command.*;
+import xyz.upperlevel.uppercore.command.Optional;
 import xyz.upperlevel.uppercore.gui.*;
-import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static org.bukkit.ChatColor.*;
@@ -39,501 +39,648 @@ public class ArenaSetupGuiCommand extends Command {
     public void run(CommandSender sender, @Optional @Argument("arena") Arena arena) {
         Player player = (Player) sender;
         sender.sendMessage(GREEN + "Opening GUI.");
-        Gui gui = arena == null ? selectArena(player) : editArena(player, arena, GuiAction.close());
-        if (gui != null)
-            guis().open(player, gui);
+        guis().open(player, arena == null ? new ArenaSelectGui() : new ArenaEditGui(arena));
     }
 
-    public Gui selectArena(Player player) {//TODO page-based displaying
-        List<Arena> arenas = Quakecraft.get().getArenaManager().getArenas();
-        if (arenas.size() > (GuiSize.DOUBLE.size() - 2)) {
-            player.sendMessage(RED + "Too many arenas! specify the arena name in the command!");
-            return null;
+
+    public static class ArenaSelectGui extends MenuGui {
+
+        @Override
+        public String buildTitle(int i) {
+            return "Select Arena";
         }
-        ChestGui gui = new ChestGui(GuiSize.min(arenas.size() + 2), PlaceholderValue.fake("Select arena"));
-        int i = 0;
-        for (Arena arena : arenas) {
-            gui.setIcon(
-                    i,
+
+        @Override
+        public List<Icon> buildBody() {
+            List<Arena> arenas = Quakecraft.get().getArenaManager().getArenas();
+            List<Icon> res = new ArrayList<>(arenas.size());
+            for (Arena arena : arenas) {
+                res.add(Icon.of(
+                        GuiUtil.itemStack(
+                                Material.MONSTER_EGG,
+                                AQUA + arena.getId(),
+                                GRAY + "Id: " + AQUA + arena.getId(),
+                                GRAY + "Name: " + AQUA + arena.getName(),
+                                GRAY + "Spawns: " + AQUA + arena.getSpawns().size()
+
+                        ),
+                        p -> guis().open(p, new ArenaEditGui(arena)))
+                );
+            }
+            return res;
+        }
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.wool(DyeColor.LIME, GOLD + "Add"),
+                            p -> {
+                                AnvilGui anvil = new AnvilGui();
+                                anvil.setMessage("Id");
+                                anvil.setListener(nonArenaFilter(
+                                        (pl, id) -> {
+                                            Arena arena = new Arena(id);
+                                            Quakecraft.get().getArenaManager().addArena(arena);
+                                            p.sendMessage(GREEN + "Arena added!");
+                                            refreshAll();
+                                            guis().back(pl);
+                                        }
+                                ));
+                                guis().open(p, anvil);
+                            }
+                    ),
+                    Icon.of(GuiUtil.itemStack(Material.ARROW, GOLD + "Back"), GuiAction.back())
+            );
+        }
+
+        @Override
+        public void onOpen(Player player) {
+            super.onOpen(player);
+            refreshAll();
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static class ArenaEditGui extends SimpleGui {
+        @Getter
+        private final Arena arena;
+
+        @Override
+        public String buildTitle() {
+            return arena.getId() + "'s setup";
+        }
+
+        @Override
+        public List<Icon> buildBody() {
+            Location lobbyLoc = arena.getLobby();
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.wool(
+                                    arena.isEnabled() ? DyeColor.LIME : DyeColor.RED,
+                                    arena.isEnabled() ? RED + "Disable" : GREEN + "Enable"
+                            ),
+                            p -> {
+                                boolean changed = arena.isEnabled() ? disable(p, arena) : enable(p, arena);
+                                if (changed)
+                                    refreshAll();
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.NAME_TAG,
+                                    GOLD + "Name",
+                                    AQUA + arena.getName()
+                            ),
+                            p -> {
+                                AnvilGui gui = new AnvilGui();
+                                gui.setMessage("name");
+                                gui.setListener(plain((pl, n) -> {
+                                    arena.setName(n);
+                                    refreshAll();
+                                    guis().back(p);
+                                    pl.sendMessage(GREEN + "New arena name: '" + n + "'!");
+                                }));
+                                guis().open(p, gui);
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.STONE_SLAB2,
+                                    GOLD + "Min players",
+                                    AQUA + (arena.getMinPlayers() > 0 ? String.valueOf(arena.getMinPlayers()) : (RED + "Not set"))
+                            ),
+                            p -> {
+                                AnvilGui gui = new AnvilGui();
+                                gui.setMessage("Min");
+                                gui.setListener(filterInt(
+                                        (pl, i) -> {
+                                            arena.setMinPlayers(i);
+                                            pl.sendMessage(GREEN + "Arena's min players: '" + i + "'!");
+                                            refreshAll();
+                                            guis().back(pl);
+                                        },
+                                        i -> i >= 2
+                                ));
+                                guis().open(p, gui);
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.RED_SANDSTONE,
+                                    GOLD + "Max players",
+                                    AQUA + (arena.getMaxPlayers() > 0 ? String.valueOf(arena.getMaxPlayers()) : (RED + "Not set"))
+                            ),
+                            p -> {
+                                AnvilGui gui = new AnvilGui();
+                                gui.setMessage("Max");
+                                gui.setListener(filterInt(
+                                        (pl, i) -> {
+                                            arena.setMaxPlayers(i);
+                                            pl.sendMessage(GREEN + "Arena's max players: '" + i + "'!");
+                                            guis().back(pl);
+                                        },
+                                        i -> i >= 2
+                                ));
+                                guis().open(p, gui);
+                            }
+                    ),
                     Icon.of(
                             GuiUtil.itemStack(
                                     Material.MONSTER_EGG,
-                                    AQUA + arena.getId(),
-                                    GRAY + "Id: " + AQUA + arena.getId(),
-                                    GRAY + "Name: " + AQUA + arena.getName(),
-                                    GRAY + "Spawns: " + AQUA + arena.getSpawns().size()
-
+                                    GOLD + "Spawns",
+                                    AQUA + String.valueOf(arena.getSpawns().size())
                             ),
-                            p -> guis().change(p, editArena(p, arena, pr -> guis().change(pr, selectArena(pr))))
+                            p -> guis().open(p, new EditArenaSpawnsGui(arena))
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.WATCH,
+                                    GOLD + "Lobby",
+                                    lobbyLoc == null ? (RED + "Not set") : (AQUA + format(lobbyLoc, true))
+                            ),
+                            p -> {
+                                if (lobbyLoc == null) {
+                                    arena.setLobby(p.getLocation());
+                                    p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
+                                    refreshAll();
+                                } else
+                                    guis().change(p, new EditArenaLobbyGui(arena));
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.GOLD_SWORD,
+                                    GOLD + "Kills to win",
+                                    AQUA + (arena.getKillsToWin() > 0 ? String.valueOf(arena.getKillsToWin()) : (RED + "Not set"))
+                            ),
+                            p -> {
+                                AnvilGui gui = new AnvilGui();
+                                gui.setMessage("Kills");
+                                gui.setListener(filterInt(
+                                        (pl, i) -> {
+                                            arena.setKillsToWin(i);
+                                            pl.sendMessage(GREEN + "Arena's kills to win: '" + i + "'!");
+                                            refreshAll();
+                                            guis().back(pl);
+                                        },
+                                        i -> i >= 2
+                                ));
+                                guis().open(p, gui);
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.TRAPPED_CHEST,
+                                    GOLD + "Powerups",
+                                    AQUA + String.valueOf(arena.getPowerups().size())
+                            ),
+                            p -> guis().open(p, new EditArenaPowerupsGui(arena))
                     )
             );
-            i++;
         }
-        gui.setIcon(
-                gui.getSize() - 2,
-                Icon.of(
-                        GuiUtil.wool(DyeColor.LIME, GOLD + "Add"),
-                        p -> {
-                            AnvilGui anvil = new AnvilGui();
-                            anvil.setMessage("Id");
-                            anvil.setListener(nonArenaFilter(
-                                    (pl, id) -> {
-                                        Arena arena = new Arena(id);
-                                        Quakecraft.get().getArenaManager().addArena(arena);
-                                        p.sendMessage(GREEN + "Arena added!");
-                                        guis().change(pl, editArena(pl, arena, pr -> guis().change(pr, selectArena(pr))));
-                                    }
-                            ));
-                            guis().open(p, anvil);
-                        }
-                )
-        );
-        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, GOLD + "Back"), GuiAction.back()));
-        return gui;
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
+                            p -> {//TODO add confirm
+                                if (arena.isEnabled()) {
+                                    p.sendMessage(RED + "Disable the arena before removing it!");
+                                    return;
+                                }
+                                Quakecraft.get().getArenaManager().removeArena(arena.getId());
+                                p.sendMessage(GREEN + "Arena '" + arena.getId() + "' removed!");
+                                guis().back(p);
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
+                            GuiAction.back()
+                    )
+            );
+        }
+
+        private boolean enable(Player player, Arena arena) {
+            if (!arena.isReady()) {
+                player.sendMessage(RED + "The arena \"" + arena.getName() + "\" is not ready.");
+                return false;
+            }
+            Quakecraft.get().getGameManager().addGame(new Game(arena));
+            player.sendMessage(GREEN + "Arena \"" + arena.getName() + "\" enabled successfully.");
+            return true;
+        }
+
+        private boolean disable(Player player, Arena arena) {
+            Quakecraft.get().getGameManager().removeGame(arena);
+            player.sendMessage(GREEN + "The arena \"" + arena.getName() + "\" disabled successfully.");
+            return true;
+        }
+
+        @Override
+        public void onOpen(Player p) {
+            super.onOpen(p);
+            refreshAll();
+        }
     }
 
-    public Gui editArena(Player player, Arena arena, Link previous) {//TODO: OMG kill me I want the fucking classes!
-        //enabled, name, min_player, max_player, spawn, lobby
-        Location lobbyLoc = arena.getLobby();
-        return ChestGui.builder(18)
-                .title(arena.getId() + "'s setup")
-                .add(
-                        () -> GuiUtil.wool(
-                                arena.isEnabled() ? DyeColor.LIME : DyeColor.RED,
-                                arena.isEnabled() ? RED + "Disable" : GREEN + "Enable"),
-                        p -> {
-                            boolean changed = arena.isEnabled() ? disable(player, arena) : enable(player, arena);
-                            if (changed)
-                                guis().reprint(p);
-                        }
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.NAME_TAG,
-                                GOLD + "Name",
-                                AQUA + arena.getName()
-                        ),
-                        p -> {
-                            AnvilGui gui = new AnvilGui();
-                            gui.setMessage("Arena name");
-                            gui.setListener(plain((pl, n) -> {
-                                arena.setName(n);
+    @RequiredArgsConstructor
+    public static class EditArenaSpawnsGui extends MenuGui {
+        @Getter
+        private final Arena arena;
+
+        @Override
+        public String buildTitle(int i) {
+            return arena.getId() + "'s spawns";
+        }
+
+        @Override
+        public List<Icon> buildBody() {
+            List<Location> locs = arena.getSpawns();
+            List<Icon> res = Arrays.asList(new Icon[locs.size()]);
+
+            boolean sameWorld = true;
+            if (locs.size() > 0) {
+                World w = locs.get(0).getWorld();
+                for (int i = locs.size() - 1; i >= 1; i--) {
+                    if (w != locs.get(i).getWorld()) {
+                        sameWorld = false;
+                        break;
+                    }
+                }
+            }
+
+            int i = 0;
+            for(Location loc : locs) {
+                final int index = i;
+                res.set(
+                        i,
+                        Icon.of(
+                                GuiUtil.itemStack(
+                                        Material.MONSTER_EGG,
+                                        GOLD + "Spawn " + (i + 1),
+                                        String.valueOf(AQUA) + format(loc, !sameWorld)
+                                ),
+                                p -> guis().open(p, new EditArenaSpawnGui(locs, index))
+                        )
+                );
+                i++;
+            }
+
+            return res;
+        }
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.wool(DyeColor.GREEN, GOLD + "Add"),
+                            p -> {
+                                arena.getSpawns().add(p.getLocation());
+                                p.sendMessage(GREEN + "Spawn added to arena!");
+                                refreshAll();
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(Material.ARROW, "Back"),
+                            GuiAction.back()
+                    )
+            );
+        }
+
+        @Override
+        public void onOpen(Player p) {
+            super.onOpen(p);
+            refreshAll();
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static class EditArenaSpawnGui extends SimpleGui {
+        private final List<Location> locs;
+        private final int index;
+
+        @Override
+        public String buildTitle() {
+            return "Spawn editor";
+        }
+
+        @Override
+        public List<Icon> buildBody() {
+            Location loc = locs.get(index);
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.SADDLE,
+                                    GOLD + "Teleport",
+                                    AQUA + "To " + format(loc, true)),
+                            p -> {
+                                guis().close(p);
+                                p.sendMessage(AQUA + "Teleporting...");
+                                p.teleport(loc);
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.STICK,
+                                    GOLD + "Edit"
+                            ),
+                            p -> {//TODO add confirm
+                                locs.set(index, p.getLocation());
+                                p.sendMessage(GREEN + "Spawn " + (index + 1) + " new position: " + format(p.getLocation(), true) + "!");
+                                refreshAll();
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
+                            p -> {//TODO add confirm
+                                locs.remove(index);
+                                p.sendMessage(GREEN + "Spawn " + (index + 1) + " removed!");
                                 guis().back(p);
-                                pl.sendMessage(GREEN + "New arena name: '" + n + "'!");
-                            }));
-                            guis().open(p, gui);
-                        }
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.STONE_SLAB2,
-                                GOLD + "Min players",
-                                AQUA + (arena.getMinPlayers() > 0 ? String.valueOf(arena.getMinPlayers()) : (RED + "Not set"))
-                        ),
-                        p -> {
-                            AnvilGui gui = new AnvilGui();
-                            gui.setMessage("Min");
-                            gui.setListener(filterInt(
-                                    (pl, i) -> {
-                                        arena.setMinPlayers(i);
-                                        pl.sendMessage(GREEN + "Arena's min players: '" + i + "'!");
-                                        guis().back(pl);
-                                    },
-                                    i -> i >= 2
-                            ));
-                            guis().open(p, gui);
-                        }
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.RED_SANDSTONE,
-                                GOLD + "Max players",
-                                AQUA + (arena.getMaxPlayers() > 0 ? String.valueOf(arena.getMaxPlayers()) : (RED + "Not set"))
-                        ),
-                        p -> {
-                            AnvilGui gui = new AnvilGui();
-                            gui.setMessage("Max");
-                            gui.setListener(filterInt(
-                                    (pl, i) -> {
-                                        arena.setMaxPlayers(i);
-                                        pl.sendMessage(GREEN + "Arena's max players: '" + i + "'!");
-                                        guis().back(pl);
-                                    },
-                                    i -> i >= 2
-                            ));
-                            guis().open(p, gui);
-                        }
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.MONSTER_EGG,
-                                GOLD + "Spawns",
-                                AQUA + String.valueOf(arena.getSpawns().size())
-                        ),
-                        p -> {
-                            Gui gui = editSpawnsGui(arena);
-                            if (gui != null)
-                                guis().open(p, gui);
-                            else
-                                player.sendMessage(RED + "Too many spawns for a gui, use command-based editing instead");
-                        }
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.WATCH,
-                                GOLD + "Lobby",
-                                lobbyLoc == null ? (RED + "Not set") : (AQUA + format(lobbyLoc, true))
-                        ),
-                        p -> {
-                            if (lobbyLoc == null) {
+                            }
+                    )
+            );
+        }
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Collections.singletonList(
+                    Icon.of(
+                            GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
+                            GuiAction.back()
+                    )
+            );
+        }
+
+        @Override
+        public void onOpen(Player p) {
+            super.onOpen(p);
+            refreshAll();
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static class EditArenaLobbyGui extends SimpleGui {
+        @Getter
+        private final Arena arena;
+
+        @Override
+        public String buildTitle() {
+            return "Lobby editor";
+        }
+
+        @Override
+        public List<Icon> buildBody() {
+            Location loc = arena.getLobby();
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.SADDLE,
+                                    GOLD + "Teleport",
+                                    AQUA + "To " + format(loc, true)),
+                            p -> {
+                                guis().close(p);
+                                p.sendMessage(AQUA + "Teleporting...");
+                                p.teleport(loc);
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+
+                                    Material.STICK,
+                                    GOLD + "Edit"
+                            ),
+                            p -> {//TODO add confirm
                                 arena.setLobby(p.getLocation());
                                 p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
-                                guis().change(player, editArena(player, arena, previous));
-                            } else
-                                guis().change(player, editLobby(arena, editArena(player, arena, previous)));
-                        }
-
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.GOLD_SWORD,
-                                GOLD + "Kills to win",
-                                AQUA + (arena.getKillsToWin() > 0 ? String.valueOf(arena.getKillsToWin()) : (RED + "Not set"))
-                        ),
-                        p -> {
-                            AnvilGui gui = new AnvilGui();
-                            gui.setMessage("Kills");
-                            gui.setListener(filterInt(
-                                    (pl, i) -> {
-                                        arena.setKillsToWin(i);
-                                        pl.sendMessage(GREEN + "Arena's kills to win: '" + i + "'!");
-                                        guis().back(pl);
-                                    },
-                                    i -> i >= 2
-                            ));
-                            guis().open(p, gui);
-                        }
-                )
-                .add(
-                        () -> GuiUtil.itemStack(
-                                Material.TRAPPED_CHEST,
-                                GOLD + "Powerups",
-                                AQUA + String.valueOf(arena.getPowerups().size())
-                        ),
-                        p -> {
-                            Gui gui = editPowerupsGui(arena);
-                            if (gui != null)
-                                guis().open(p, gui);
-                            else
-                                player.sendMessage(RED + "Too many Powerups for a gui, use command-based editing instead");
-                        }
-                )
-                .set(
-                        16,
-                        GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
-                        p -> {//TODO add confirm
-                            if (arena.isEnabled()) {
-                                player.sendMessage(RED + "Disable the arena before removing it!");
-                                return;
+                                refreshAll();
                             }
-                            Quakecraft.get().getArenaManager().removeArena(arena.getId());
-                            p.sendMessage(GREEN + "Arena '" + arena.getId() + "' removed!");
-                            previous.run(player);
-                        }
-                )
-                .set(
-                        17,
-                        GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
-                        previous
-                )
-                .build();
-    }
-
-    public Gui editSpawnsGui(Arena arena) {//TODO page-based displaying
-        List<Location> locs = arena.getSpawns();
-        if (locs.size() > (GuiSize.DOUBLE.size() - 2))
-            return null;
-        ChestGui gui = new ChestGui(GuiSize.min(locs.size() + 2), PlaceholderValue.fake(arena.getId() + "'s spawns"));
-
-        boolean sameWorld = true;
-        if (locs.size() > 0) {
-            World w = locs.get(0).getWorld();
-            for (int i = locs.size() - 1; i >= 1; i--) {
-                if (w != locs.get(i).getWorld()) {
-                    sameWorld = false;
-                    break;
-                }
-            }
-        }
-
-        int i = 0;
-        for (Location loc : locs) {
-            final int index = i;
-            gui.setIcon(
-                    i,
-                    Icon.of(
-                            GuiUtil.itemStack(
-                                    Material.MONSTER_EGG,
-                                    GOLD + "Spawn " + (i + 1),
-                                    String.valueOf(AQUA) + format(loc, !sameWorld)
-                            ),
-                            p -> guis().change(p, editSpawnGui(locs, index, pl -> guis().change(pl, editSpawnsGui(arena))))
                     )
             );
-            i++;
         }
-        gui.setIcon(
-                gui.getSize() - 2,
-                Icon.of(
-                        GuiUtil.wool(DyeColor.GREEN, GOLD + "Add"),
-                        p -> {
-                            locs.add(p.getLocation());
-                            p.sendMessage(GREEN + "Spawn added to arena!");
-                            guis().change(p, editSpawnsGui(arena));//Reload page
-                        }
-                )
-        );
-        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, "Back"), GuiAction.back()));
-        return gui;
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Collections.singletonList(
+                    Icon.of(
+                            GuiUtil.itemStack(Material.ARROW, "Back"),
+                            GuiAction.back()
+                    )
+            );
+        }
     }
 
-    public Gui editSpawnGui(List<Location> list, int index, Link previous) {//TODO rethink GUI system
-        Location loc = list.get(index);
-        return ChestGui.builder(9)
-                .title("Spawn editor")
-                .add(
-                        GuiUtil.itemStack(
-                                Material.SADDLE,
-                                GOLD + "Teleport",
-                                AQUA + "To " + format(loc, true)),
-                        p -> {
-                            guis().close(p);
-                            p.sendMessage(AQUA + "Teleporting...");
-                            p.teleport(loc);
-                        }
-                )
-                .add(
-                        GuiUtil.itemStack(
-                                Material.STICK,
-                                GOLD + "Edit"
-                        ),
-                        p -> {//TODO add confirm
-                            list.set(index, p.getLocation());
-                            p.sendMessage(GREEN + "Spawn " + (index + 1) + " new position: " + format(p.getLocation(), true) + "!");
-                            guis().change(p, editSpawnGui(list, index, previous));
-                        }
-                )
-                .add(
-                        GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
-                        p -> {//TODO add confirm
-                            list.remove(index);
-                            p.sendMessage(GREEN + "Spawn " + (index + 1) + " removed!");
-                            previous.run(p);
-                        }
-                )
-                .set(
-                        8,
-                        GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
-                        previous
-                )
-                .build();
-    }
+    @RequiredArgsConstructor
+    public static class EditArenaPowerupsGui extends MenuGui {
+        @Getter
+        private final Arena arena;
 
-    public Gui editLobby(Arena arena, Link previous) {//TODO rethink GUI system
-        Location loc = arena.getLobby();
-        return ChestGui.builder(9)
-                .title("Lobby editor")
-                .add(
-                        GuiUtil.itemStack(
-                                Material.SADDLE,
-                                GOLD + "Teleport",
-                                AQUA + "To " + format(loc, true)),
-                        p -> {
-                            guis().close(p);
-                            p.sendMessage(AQUA + "Teleporting...");
-                            p.teleport(loc);
-                        }
-                )
-                .add(
-                        GuiUtil.itemStack(
+        @Override
+        public String buildTitle(int i) {
+            return arena.getId() + "'s powerups";
+        }
 
-                                Material.STICK,
-                                GOLD + "Edit"
-                        ),
-                        p -> {//TODO add confirm
-                            arena.setLobby(p.getLocation());
-                            p.sendMessage(GREEN + "lobby's new position: " + format(p.getLocation(), true) + "!");
-                            guis().change(p, editLobby(arena, previous));
-                        }
-                )
-                .set(
-                        8,
-                        GuiUtil.itemStack(Material.ARROW, "Back"),
-                        previous
-                )
-                .build();
-    }
+        @Override
+        public List<Icon> buildBody() {
+            List<Powerup> boxes = arena.getPowerups();
+            List<Icon> res = Arrays.asList(new Icon[boxes.size()]);
 
-    public Gui editPowerupsGui(Arena arena) {//TODO page-based displaying
-        List<Powerup> boxes = arena.getPowerups();
-        if (boxes.size() > (GuiSize.DOUBLE.size() - 2))
-            return null;
-        ChestGui gui = new ChestGui(GuiSize.min(boxes.size() + 2), PlaceholderValue.fake(arena.getId() + "'s powerups"));
-
-        boolean sameWorld = true;
-        if (boxes.size() > 0) {
-            World w = boxes.get(0).getLocation().getWorld();
-            for (int i = boxes.size() - 1; i >= 1; i--) {
-                if (w != boxes.get(i).getLocation().getWorld()) {
-                    sameWorld = false;
-                    break;
+            boolean sameWorld = true;
+            if (boxes.size() > 0) {
+                World w = boxes.get(0).getLocation().getWorld();
+                for (int i = boxes.size() - 1; i >= 1; i--) {
+                    if (w != boxes.get(i).getLocation().getWorld()) {
+                        sameWorld = false;
+                        break;
+                    }
                 }
             }
+
+            int i = 0;
+            for (Powerup box : boxes) {
+                final int index = i;
+                res.set(
+                        i,
+                        Icon.of(
+                                GuiUtil.itemStack(
+                                        box.getEffect().getDisplay().getType(),
+                                        GOLD + "Powerup " + (i + 1),
+                                        AQUA + "loc: " + format(box.getLocation(), !sameWorld),
+                                        AQUA + "type: " + box.getEffect().getId(),
+                                        AQUA + "respawn: " + box.getRespawnTicks()
+                                ),
+                                p -> guis().open(p, new EditArenaPowerup(boxes, index))
+                        )
+                );
+                i++;
+            }
+            return res;
         }
 
-        int i = 0;
-        for (Powerup box : boxes) {
-            final int index = i;
-            gui.setIcon(
-                    i,
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.wool(DyeColor.GREEN, GOLD + "Add"),
+                            p -> {
+                                arena.getPowerups().add(new Powerup(arena, p.getLocation(), PowerupEffectManager.getDef(), 300));
+                                p.sendMessage(GREEN + "Powerup added to arena!");
+                                refreshAll();
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(Material.ARROW, "Back"),
+                            GuiAction.back()
+                    )
+            );
+        }
+
+        @Override
+        public void onOpen(Player p) {
+            super.onOpen(p);
+            refreshAll();
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static class EditArenaPowerup extends SimpleGui {
+        @Getter
+        private final List<Powerup> boxes;
+        @Getter
+        private final int index;
+
+        @Override
+        public String buildTitle() {
+            return "Powerup editor";
+        }
+
+        @Override
+        public List<Icon> buildBody() {
+            Powerup box = boxes.get(index);
+            return Arrays.asList(
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.SADDLE,
+                                    GOLD + "Teleport",
+                                    AQUA + "To " + format(box.getLocation(), true)),
+                            p -> {
+                                guis().close(p);
+                                p.sendMessage(AQUA + "Teleporting...");
+                                p.teleport(box.getLocation());
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.STICK,
+                                    GOLD + "Edit"
+                            ),
+                            p -> {//TODO add confirm
+                                box.setLocation(p.getLocation());
+                                p.sendMessage(GREEN + "Powerup " + (index + 1) + " new position: " + format(p.getLocation(), true) + "!");
+                                refreshAll();
+                            }
+                    ),
                     Icon.of(
                             GuiUtil.itemStack(
                                     box.getEffect().getDisplay().getType(),
-                                    GOLD + "Powerup " + (i + 1),
-                                    AQUA + "loc: " + format(box.getLocation(), !sameWorld),
-                                    AQUA + "type: " + box.getEffect().getId(),
-                                    AQUA + "respawn: " + box.getRespawnTicks()
+                                    GOLD + "Effect type",
+                                    AQUA + box.getEffect().getId()
                             ),
-                            p -> guis().change(p, editPowerupGui(boxes, index, pl -> guis().change(pl, editPowerupsGui(arena))))
-                    )
-            );
-            i++;
-        }
-        gui.setIcon(
-                gui.getSize() - 2,
-                Icon.of(
-                        GuiUtil.wool(DyeColor.GREEN, GOLD + "Add"),
-                        p -> {
-                            boxes.add(new Powerup(arena, p.getLocation(), PowerupEffectManager.getDef(), 300));
-                            p.sendMessage(GREEN + "Powerup added to arena!");
-                            guis().change(p, editPowerupsGui(arena));//Reload page
-                        }
-                )
-        );
-        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, "Back"), GuiAction.back()));
-        return gui;
-    }
-
-    public Gui editPowerupGui(List<Powerup> boxes, int index, Link previous) {//TODO rethink GUI system
-        Powerup box = boxes.get(index);
-        return ChestGui.builder(9)
-                .title("Spawn editor")
-                .add(
-                        GuiUtil.itemStack(
-                                Material.SADDLE,
-                                GOLD + "Teleport",
-                                AQUA + "To " + format(box.getLocation(), true)),
-                        p -> {
-                            guis().close(p);
-                            p.sendMessage(AQUA + "Teleporting...");
-                            p.teleport(box.getLocation());
-                        }
-                )
-                .add(
-                        GuiUtil.itemStack(
-                                Material.STICK,
-                                GOLD + "Edit"
-                        ),
-                        p -> {//TODO add confirm
-                            box.setLocation(p.getLocation());
-                            p.sendMessage(GREEN + "Powerup " + (index + 1) + " new position: " + format(p.getLocation(), true) + "!");
-                            guis().change(p, editPowerupGui(boxes, index, previous));
-                        }
-                )
-                .add(
-                        GuiUtil.itemStack(
-                                box.getEffect().getDisplay().getType(),
-                                GOLD + "Effect type",
-                                AQUA + box.getEffect().getId()
-                        ),
-                        p -> guis().change(p, editItemBoxEffectGui(box, pl -> guis().change(pl, editPowerupGui(boxes, index, previous))))
-                )
-                .add(
-                        GuiUtil.itemStack(
-                                Material.WATCH,
-                                GOLD + "Respawn ticks",
-                                String.valueOf(AQUA) + box.getRespawnTicks() + " ticks"
-                        ),
-                        p -> {
-                            AnvilGui gui = new AnvilGui();
-                            gui.setMessage("ticks");
-                            gui.setListener(filterInt(
-                                    (pl, in) -> {
-                                        box.setRespawnTicks(in);
-                                        guis().change(pl, editPowerupGui(boxes, index, previous));
-                                    },
-                                    i -> i > 0
-                            ));
-                            guis().change(p, gui);
-                        }
-                )
-                .add(
-                        GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
-                        p -> {//TODO add confirm
-                            boxes.remove(index);
-                            p.sendMessage(GREEN + "Powerup " + (index + 1) + " removed!");
-                            previous.run(p);
-                        }
-                )
-                .set(
-                        8,
-                        GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
-                        previous
-                )
-                .build();
-    }
-
-    public Gui editItemBoxEffectGui(Powerup box, Link previous) {//TODO rethink GUI system
-        Collection<PowerupEffect> effects = PowerupEffectManager.get();
-        if (effects.size() > (GuiSize.DOUBLE.size() - 1))
-            return null;
-        ChestGui gui = new ChestGui(GuiSize.min(effects.size() + 2), PlaceholderValue.fake("new Powerup effect"));
-
-        int i = 0;
-        for (PowerupEffect effect : effects) {
-            gui.setIcon(
-                    i,
+                            p -> guis().open(p, new EditArenaPowerupEffectGui(box))
+                    ),
                     Icon.of(
-                            GuiUtil.setNameAndLores(
-                                    effect.getDisplay().clone(),
-                                    effect.getId()
+                            GuiUtil.itemStack(
+                                    Material.WATCH,
+                                    GOLD + "Respawn ticks",
+                                    String.valueOf(AQUA) + box.getRespawnTicks() + " ticks"
                             ),
                             p -> {
-                                box.setEffect(effect);
-                                previous.run(p);
+                                AnvilGui gui = new AnvilGui();
+                                gui.setMessage("ticks");
+                                gui.setListener(filterInt(
+                                        (pl, in) -> {
+                                            box.setRespawnTicks(in);
+                                            guis().back(pl);
+                                        },
+                                        i -> i > 0
+                                ));
+                                guis().open(p, gui);
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(Material.BARRIER, GOLD + "Remove"),
+                            p -> {//TODO add confirm
+                                boxes.remove(index);
+                                p.sendMessage(GREEN + "Powerup " + (index + 1) + " removed!");
+                                guis().back(p);
                             }
                     )
             );
-            i++;
         }
-        gui.setIcon(gui.getSize() - 1, Icon.of(GuiUtil.itemStack(Material.ARROW, GOLD + "Back"), GuiAction.back()));
-        return gui;
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Collections.singletonList(
+                    Icon.of(
+                            GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
+                            GuiAction.back()
+                    )
+            );
+        }
+
+        @Override
+        public void onOpen(Player p) {
+            super.onOpen(p);
+            refreshAll();
+        }
     }
 
-    private boolean enable(Player player, Arena arena) {
-        if (!arena.isReady()) {
-            player.sendMessage(RED + "The arena \"" + arena.getName() + "\" is not ready.");
-            return false;
-        }
-        Quakecraft.get().getGameManager().addGame(new Game(arena));
-        player.sendMessage(GREEN + "Arena \"" + arena.getName() + "\" enabled successfully.");
-        return true;
-    }
+    @RequiredArgsConstructor
+    public static class EditArenaPowerupEffectGui extends MenuGui {
+        @Getter
+        private final Powerup powerup;
 
-    private boolean disable(Player player, Arena arena) {
-        Quakecraft.get().getGameManager().removeGame(arena);
-        player.sendMessage(GREEN + "The arena \"" + arena.getName() + "\" disabled successfully.");
-        return true;
+        @Override
+        public String buildTitle(int i) {
+            return "new Powerup effect";
+        }
+
+        @Override
+        public List<Icon> buildBody() {
+            Collection<PowerupEffect> effects = PowerupEffectManager.get();
+            List<Icon> res = Arrays.asList(new Icon[effects.size()]);
+
+            int i = 0;
+            for (PowerupEffect effect : effects) {
+                res.set(
+                        i,
+                        Icon.of(
+                                GuiUtil.setNameAndLores(
+                                        effect.getDisplay().clone(),
+                                        effect.getId()
+                                ),
+                                p -> {
+                                    powerup.setEffect(effect);
+                                    guis().back(p);
+                                }
+                        )
+                );
+                i++;
+            }
+            return res;
+        }
+
+        @Override
+        public List<Icon> buildFooter() {
+            return Collections.singletonList(
+                    Icon.of(
+                            GuiUtil.itemStack(Material.ARROW, GOLD + "Back"),
+                            GuiAction.back()
+                    )
+            );
+        }
     }
 
     public static ClickHandler nonArenaFilter(BiConsumer<Player, String> listener) {
