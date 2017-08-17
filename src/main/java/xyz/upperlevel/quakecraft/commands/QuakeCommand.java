@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
 @WithPermission("quakecraft")
-@WithChildPermission(desc = "Gives access to all quakecraft commands", def = DefaultPermission.FALSE)
+@WithChildPermission(desc = "Gives access to all quakecraft commands")
 public class QuakeCommand extends NodeCommand implements CommandExecutor {
 
     public QuakeCommand() {
