@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.arena;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
+import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.config.Config;
@@ -31,8 +32,6 @@ public class Arena {
     @Getter
     private PlaceholderRegistry placeholders;
 
-    private boolean enabled;
-
     public Arena(String id) {
         this.id = id.toLowerCase();
         this.name = id;
@@ -51,6 +50,10 @@ public class Arena {
 
     public boolean isReady() {
         return name != null && minPlayers > 0 && maxPlayers > 0 && lobby != null && spawns.size() > 0 && killsToWin >= 0;
+    }
+
+    public boolean isEnabled() {
+        return Quakecraft.get().getGameManager().getGame(this) != null;
     }
 
     public Game getStartable() {
