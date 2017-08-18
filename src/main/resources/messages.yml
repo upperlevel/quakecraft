@@ -14,7 +14,7 @@ game:
 
   end-ranking:
   - '^a'
-  - '^|&f&lQuakecraft Reloaded'
+  - '^|&f&lQuakecraft'
   - ''
   - '^|&e&lWinner &7- %ranking_name_1%'
   - '^|&e&lGun &7- %ranking_gun_1%'

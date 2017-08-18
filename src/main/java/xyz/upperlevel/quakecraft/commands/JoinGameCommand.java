@@ -30,7 +30,7 @@ public class JoinGameCommand extends Command {
         }
         game = Quakecraft.get().getGameManager().getGame(arena);
         if (game == null) {
-            NO_GAME_FOUND.send(player, "game", arena.getName());
+            NO_GAME_FOUND.send(player, "game", arena.getId());
             return;
         }
         if(game.join(player))

@@ -264,17 +264,17 @@ public class ArenaSetupGuiCommand extends Command {
 
         private boolean enable(Player player, Arena arena) {
             if (!arena.isReady()) {
-                player.sendMessage(RED + "The arena \"" + arena.getName() + "\" is not ready.");
+                player.sendMessage(RED + "The arena \"" + arena.getId() + "\" is not ready.");
                 return false;
             }
             Quakecraft.get().getGameManager().addGame(new Game(arena));
-            player.sendMessage(GREEN + "Arena \"" + arena.getName() + "\" enabled successfully.");
+            player.sendMessage(GREEN + "Arena \"" + arena.getId() + "\" enabled successfully.");
             return true;
         }
 
         private boolean disable(Player player, Arena arena) {
             Quakecraft.get().getGameManager().removeGame(arena);
-            player.sendMessage(GREEN + "The arena \"" + arena.getName() + "\" disabled successfully.");
+            player.sendMessage(GREEN + "The arena \"" + arena.getId() + "\" disabled successfully.");
             return true;
         }
 
