@@ -73,6 +73,7 @@ public class Quakecraft extends JavaPlugin {
 
         try {
             saveDefaultConfig();
+            loadConfig();
 
             //Load command messages
             arenaManager = new ArenaManager();
@@ -85,8 +86,6 @@ public class Quakecraft extends JavaPlugin {
 
             arenaManager.load();
             gameManager.load();
-
-            loadConfig();
 
             shop = new ShopCategory();
             shop.load();
