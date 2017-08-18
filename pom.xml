@@ -38,20 +38,6 @@
             <version>${mcVersion}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- bukkit -->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>${mcVersion}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- placeholder api -->
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.0.8</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- uppercore -->
         <dependency>
             <groupId>xyz.upperlevel.uppercore</groupId>
