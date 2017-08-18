@@ -142,10 +142,12 @@ public class Quakecraft extends JavaPlugin {
                 gameManager.save();
             if(arenaManager != null)
                 arenaManager.save();
+
+            if(gameManager != null)
+                gameManager.stop();
         } catch (IOException e) {
             getLogger().severe("Cannot save game/arena settings: " + e);
         }
-        gameManager.stop();
     }
 
     public GameManager getGameManager() {
