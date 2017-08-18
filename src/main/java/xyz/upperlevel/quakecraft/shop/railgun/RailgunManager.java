@@ -83,7 +83,7 @@ public class RailgunManager {
             throw e;
         }
         this.gui = gui;
-        Quakecraft.get().getGuis().register(new GuiId(plugin, "guns", gui));
+        Quakecraft.get().getGuis().register(new GuiId(plugin, "guns_gui", gui));
         gui.print();
     }
 
