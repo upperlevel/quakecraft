@@ -10,7 +10,7 @@ import xyz.upperlevel.quakecraft.powerup.Powerup;
 
 @RequiredArgsConstructor
 @Data
-public class ItemBoxPickupEvent extends Event implements Cancellable {
+public class PowerupPickupEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final Powerup powerup;

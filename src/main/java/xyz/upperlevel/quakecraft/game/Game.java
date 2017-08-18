@@ -3,21 +3,22 @@ package xyz.upperlevel.quakecraft.game;
 import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
+import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
+import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -29,6 +30,7 @@ import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
 @Data
 public class Game implements Listener {
+    public static Message CANNOT_JOIN_MAX_REACHED;
 
     private final Arena arena;
     private final PhaseManager phaseManager = new PhaseManager();
@@ -96,8 +98,12 @@ public class Game implements Listener {
         if (players.add(player)) {
             GameJoinEvent e = new GameJoinEvent(this, player);
             Bukkit.getPluginManager().callEvent(e);
-            if (e.isCancelled())
+            if (e.isCancelled()) {
                 players.remove(player);
+                if(e.getKickReason() != null)
+                    player.sendMessage(e.getKickReason().toArray(new String[0]));
+                return false;
+            }
             return true;
         }
         return false;
@@ -185,5 +191,18 @@ public class Game implements Listener {
             e.setCancelled(true);
             e.setBuild(false);
         }
+    }
+
+    // ARENA INTERACT
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(GameJoinEvent e) {
+        if(e.getGame() == this && players.size() > arena.getMaxPlayers()) {
+            e.cancel(CANNOT_JOIN_MAX_REACHED.get(e.getPlayer(), getPlaceholders()));
+        }
+    }
+
+    public static void loadConfig() {
+        CANNOT_JOIN_MAX_REACHED = Quakecraft.get().getMessages().get("game.cannot-join.max-players");
     }
 }

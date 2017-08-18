@@ -1,13 +1,20 @@
 package xyz.upperlevel.quakecraft.game;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
+import xyz.upperlevel.uppercore.message.Message;
 
 import java.util.*;
 
@@ -15,6 +22,8 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 
 @Getter
 public class GamePhase extends PhaseManager implements Phase, Listener {
+    public static Message CANNOT_JOIN_ALREADY_PLAYING;
+
     private final Game game;
     private final Map<Player, Participant> participants = new HashMap<>();
     private final List<Participant> ranking = new ArrayList<>();
@@ -61,6 +70,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     @Override
     public void onEnable(Phase previous) {
+        Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
         for (Player player : game.getPlayers()) {
             register(player);
             setup(player);
@@ -70,6 +80,18 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     @Override
     public void onDisable(Phase next) {
+        HandlerList.unregisterAll(this);
         clear();
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void onPlayerJoin(GameJoinEvent event) {
+        if(event.getGame() == getGame()) {
+            event.cancel(CANNOT_JOIN_ALREADY_PLAYING.get(event.getPlayer(), getGame().getPlaceholders()));
+        }
+    }
+
+    public static void loadConfig() {
+        CANNOT_JOIN_ALREADY_PLAYING = Quakecraft.get().getMessages().get("game.cannot-join.in-game");
     }
 }

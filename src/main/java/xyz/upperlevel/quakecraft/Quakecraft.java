@@ -6,7 +6,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.quakecraft.arena.arguments.ArenaArgumentParser;
 import xyz.upperlevel.quakecraft.commands.QuakeCommand;
+import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.GameManager;
+import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
@@ -116,8 +118,10 @@ public class Quakecraft extends JavaPlugin {
         loadSafe("gain", GainType::loadConfig);
         loadSafe("bullet", Bullet::loadConfig);
         loadSafe("railgun", Railgun::loadConfig);
-        //---boards---
+        loadSafe("game", Game::loadConfig);
+        //---phase configs---
         loadSafe("waiting phase", WaitingPhase::loadConfig);
+        loadSafe("game phase", GamePhase::loadConfig);
         loadSafe("playing phase", PlayingPhase::loadConfig);
         loadSafe("countdown phase", CountdownPhase::loadConfig);
         loadSafe("ending phase", EndingPhase::loadConfig);
@@ -133,9 +137,12 @@ public class Quakecraft extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            playerManager.close();
-            gameManager.save();
-            arenaManager.save();
+            if(playerManager != null)
+                playerManager.close();
+            if(gameManager != null)
+                gameManager.save();
+            if(arenaManager != null)
+                arenaManager.save();
         } catch (IOException e) {
             getLogger().severe("Cannot save game/arena settings: " + e);
         }

@@ -33,8 +33,8 @@ public class JoinGameCommand extends Command {
             NO_GAME_FOUND.send(player, "game", arena.getName());
             return;
         }
-        game.join(player);
-        SUCCESS.send(player, game.getPlaceholders());
+        if(game.join(player))
+            SUCCESS.send(player, game.getPlaceholders());
     }
 
     public static void loadConfig() {

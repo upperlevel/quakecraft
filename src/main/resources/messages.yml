@@ -1,4 +1,8 @@
 game:
+  cannot-join:
+    max-players: '&cCannot join game "%game_name%": Max players reached'
+    in-game: '&cCannot join game "%game_name%": Already playing'
+
   dash:
     cooldown: '&cDash cooling down! %remaining_secs%s remaining!'
 

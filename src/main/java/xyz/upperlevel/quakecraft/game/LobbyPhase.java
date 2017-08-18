@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -58,9 +59,9 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
             clear(p);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onGameJoin(GameJoinEvent e) {
-        if (game.equals(e.getGame())) {
+        if (e.getGame() == game) {
             Player p = e.getPlayer();
             setup(p);
             game.broadcast(joinMsg, PlaceholderRegistry.create()
@@ -73,7 +74,7 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
 
     @EventHandler
     public void onGameQuit(GameQuitEvent e) {
-        if (game.equals(e.getGame())) {
+        if (e.getGame() == game) {
             Player p = e.getPlayer();
             game.broadcast(quitMsg, PlaceholderRegistry.create()
                     .set("player_name", p.getName())

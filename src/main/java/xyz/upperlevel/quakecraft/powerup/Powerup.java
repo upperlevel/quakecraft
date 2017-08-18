@@ -9,12 +9,13 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.Arena;
-import xyz.upperlevel.quakecraft.events.ItemBoxPickupEvent;
+import xyz.upperlevel.quakecraft.events.PowerupPickupEvent;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
@@ -112,12 +113,21 @@ public class Powerup {
             if(box != null) {
                 event.setCancelled(true);
                 Participant p = box.phase.getParticipant(event.getPlayer());
-                if(p == null)
+                if(p == null) {
+                    drops.put(event.getItem(), box);
                     return;
-                ItemBoxPickupEvent e = new ItemBoxPickupEvent(box, p);
+                }
+                PowerupPickupEvent e = new PowerupPickupEvent(box, p);
                 if(!e.isCancelled())
                     box.onPickup(p);
             }
+        }
+
+        @EventHandler(ignoreCancelled = true)
+        public void onItemMerge(ItemMergeEvent event) {
+            if(     drops.containsKey(event.getEntity()) ||
+                    drops.containsKey(event.getTarget()))
+                event.setCancelled(true);
         }
 
         @EventHandler(ignoreCancelled = true)

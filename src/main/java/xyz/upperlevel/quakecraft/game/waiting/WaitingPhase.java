@@ -4,6 +4,7 @@ import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import xyz.upperlevel.quakecraft.Quakecraft;
@@ -92,7 +93,7 @@ public class WaitingPhase implements Phase, Listener {
         clear();
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onGameJoin(GameJoinEvent e) {
         if (e.getGame().equals(game)) {
             setup(e.getPlayer());
