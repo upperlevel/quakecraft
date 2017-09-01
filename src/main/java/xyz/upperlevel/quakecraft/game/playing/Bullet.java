@@ -98,11 +98,11 @@ public class Bullet {
             // TODO: what if we search backwards? players -> chunk -> Bounding box?
 
             forEveryPlayerAround(player, loc, 0.25, hit -> {
-                if (phase.getGame().isPlaying(hit)) {
+                if (phase.getGame().isPlaying(hit) && !killed.contains(hit)) {
                     LaserStabEvent e = new LaserStabEvent(phase, loc, qp, player, hit, isHeadshot(hit, loc));
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
-                        killed.add(player);
+                        killed.add(hit);
                     }
                 }
             });

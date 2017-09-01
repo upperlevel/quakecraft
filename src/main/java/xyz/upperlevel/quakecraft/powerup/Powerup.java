@@ -71,13 +71,13 @@ public class Powerup {
         if(NmsVersion.MINOR >= 10) {
             spawned.setGravity(false);
         } else {
-            ArmorStand armorStand = location.getWorld().spawn(location.clone().add(0.0, SPAWN_HEIGHT, 0.0), ArmorStand.class);
-            EntityNms.editTag(armorStand, tag -> {
+            support = location.getWorld().spawn(location.clone().add(0.0, SPAWN_HEIGHT, 0.0), ArmorStand.class);
+            EntityNms.editTag(support, tag -> {
                 TagNms.setBool(tag, "Invisible", true);
                 TagNms.setBool(tag, "Marker", true);
                 TagNms.setBool(tag, "NoGravity", true);
             });
-            armorStand.setPassenger(spawned);
+            support.setPassenger(spawned);
         }
         drops.put(spawned, this);
     }
