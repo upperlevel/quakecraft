@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.Quakecraft;
@@ -21,7 +23,11 @@ import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.util.ItemDemerger;
 import xyz.upperlevel.uppercore.util.LocUtil;
+import xyz.upperlevel.uppercore.util.nms.NmsVersion;
+import xyz.upperlevel.uppercore.util.nms.impl.TagNms;
+import xyz.upperlevel.uppercore.util.nms.impl.entity.EntityNms;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +44,9 @@ public class Powerup {
     private int respawnTicks;
 
     private Item spawned;
+    //Only used in versions < 1.10 to make the Powerup float
+    private ArmorStand support = null;
+
     private GamePhase phase;
     private BukkitTask spawner;
 
@@ -55,9 +64,21 @@ public class Powerup {
 
     public void spawn() {
         spawner = null;
-        spawned = location.getWorld().dropItem(location.clone().add(0.0, SPAWN_HEIGHT, 0.0), effect.getDisplay());
+        ItemStack display = effect.getDisplay();
+        display = ItemDemerger.setItem(display);
+        spawned = location.getWorld().dropItem(location.clone().add(0.0, SPAWN_HEIGHT, 0.0), display);
         spawned.setVelocity(new Vector());
-        spawned.setGravity(false);
+        if(NmsVersion.MINOR >= 10) {
+            spawned.setGravity(false);
+        } else {
+            ArmorStand armorStand = location.getWorld().spawn(location.clone().add(0.0, SPAWN_HEIGHT, 0.0), ArmorStand.class);
+            EntityNms.editTag(armorStand, tag -> {
+                TagNms.setBool(tag, "Invisible", true);
+                TagNms.setBool(tag, "Marker", true);
+                TagNms.setBool(tag, "NoGravity", true);
+            });
+            armorStand.setPassenger(spawned);
+        }
         drops.put(spawned, this);
     }
 
@@ -65,6 +86,10 @@ public class Powerup {
         effect.apply(player);
         spawned.remove();
         spawned = null;
+        if(support != null) {
+            support.remove();
+            support = null;
+        }
         beginSpawnTask();
     }
 
@@ -121,13 +146,6 @@ public class Powerup {
                 if(!e.isCancelled())
                     box.onPickup(p);
             }
-        }
-
-        @EventHandler(ignoreCancelled = true)
-        public void onItemMerge(ItemMergeEvent event) {
-            if(     drops.containsKey(event.getEntity()) ||
-                    drops.containsKey(event.getTarget()))
-                event.setCancelled(true);
         }
 
         @EventHandler(ignoreCancelled = true)
