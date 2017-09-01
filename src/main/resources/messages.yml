@@ -10,7 +10,7 @@ game:
   headshot: '&7%killer% %kill_message% &7%killed% &e&lHEADSHOT'
   def-kill-message: '&7shot'
 
-  snake-disabled: '&cSnaking is disabled! Your name is still visible'
+  snake-disabled: '&cSneaking is disabled! Your name is still visible'
 
   end-ranking:
   - '^a'
