@@ -14,6 +14,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <mcVersion>1.12-R0.1-SNAPSHOT</mcVersion>
+        <coreVersion>1.0.1</coreVersion>
     </properties>
 
     <repositories>
@@ -42,7 +43,7 @@
         <dependency>
             <groupId>xyz.upperlevel.uppercore</groupId>
             <artifactId>uppercore</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${coreVersion}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

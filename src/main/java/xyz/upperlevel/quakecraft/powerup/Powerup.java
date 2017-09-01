@@ -66,12 +66,17 @@ public class Powerup {
         spawner = null;
         ItemStack display = effect.getDisplay();
         display = ItemDemerger.setItem(display);
-        spawned = location.getWorld().dropItem(location.clone().add(0.0, SPAWN_HEIGHT, 0.0), display);
+        Location spawnLoc = location.clone().add(0.0, SPAWN_HEIGHT, 0.0);
+        spawned = location.getWorld().dropItem(spawnLoc, display);
         spawned.setVelocity(new Vector());
         if(NmsVersion.MINOR >= 10) {
             spawned.setGravity(false);
         } else {
-            support = location.getWorld().spawn(location.clone().add(0.0, SPAWN_HEIGHT, 0.0), ArmorStand.class);
+            if (NmsVersion.RELEASE == 1) {
+                //Markers NOT supported
+                spawnLoc = spawnLoc.subtract(0.0, 1.975, 0.0);
+            }
+            support = location.getWorld().spawn(spawnLoc, ArmorStand.class);
             EntityNms.editTag(support, tag -> {
                 TagNms.setBool(tag, "Invisible", true);
                 TagNms.setBool(tag, "Marker", true);
