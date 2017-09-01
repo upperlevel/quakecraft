@@ -36,6 +36,8 @@ import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
+import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
+import xyz.upperlevel.uppercore.update.UpdateChecker;
 import xyz.upperlevel.uppercore.util.CrashUtil;
 
 import java.io.IOException;
@@ -45,7 +47,8 @@ import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
 @Getter
 public class Quakecraft extends JavaPlugin {
-
+    public static final String SPIGOT_ID = "quakecraft.45928";
+    //public static final long SPIGET_ID = 45928;
     private static Quakecraft instance;
 
     // impl
@@ -63,6 +66,8 @@ public class Quakecraft extends JavaPlugin {
     private MessageManager messages;
 
     private Config customConfig;
+
+    private UpdateChecker updater;
 
     // confirm gui
     private ConfirmPurchaseGui.Options defConfirmOptions;
@@ -99,6 +104,8 @@ public class Quakecraft extends JavaPlugin {
             new QuakeCommand().subscribe();
 
             playerManager = new QuakePlayerManager();
+
+            updater = new SpigotUpdateChecker(this, SPIGOT_ID);
         } catch (Throwable t) {
             CrashUtil.saveCrash(this, t);
             setEnabled(false);
