@@ -7,6 +7,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -21,6 +22,7 @@ import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
@@ -37,6 +39,7 @@ import xyz.upperlevel.uppercore.util.TextUtil;
 import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 
 import java.io.File;
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -162,14 +165,30 @@ public class PlayingPhase implements Phase, Listener {
         timer.stop();
 
         clear();
+
         for (Powerup powerup : getGame().getArena().getPowerups())
             powerup.onGameEnd();
+        getGame().getArena().getPowerups()
+                .stream()
+                .map(Powerup::getEffect)
+                .distinct()
+                .forEach(e -> e.clear(getParent().getParticipants()));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onGameQuit(GameQuitEvent e) {
         if (game.equals(e.getGame())) {
             clear(e.getPlayer());
+            switch (getParent().getParticipants().size()) {
+                case 1:
+                    Quakecraft.get().getLogger().info("One player remained, setting phase to ending");
+                    parent.setPhase(new EndingPhase(parent));
+                    break;
+                case 0:
+                    Quakecraft.get().getLogger().info("No player remained, setting phase to lobby");
+                    game.getPhaseManager().setPhase(new LobbyPhase(game));
+                    break;
+            }
         }
     }
 

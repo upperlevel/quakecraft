@@ -59,10 +59,12 @@ public class GameManager {
     public void load() {
         if (file.exists()) {
             FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-            for (String arenaName : cfg.getStringList("games")) {
-                Arena arena = Quakecraft.get().getArenaManager().getArena(arenaName);
+            for (String arenaId : cfg.getStringList("games")) {
+                Arena arena = Quakecraft.get().getArenaManager().getArena(arenaId);
                 if (arena != null)
                     addGame(new Game(arena));
+                else
+                    Quakecraft.get().getLogger().warning("Cannot find arena: \"" + arenaId + "\", arena disabled");
             }
         }
     }
@@ -72,7 +74,7 @@ public class GameManager {
         file.createNewFile();
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        cfg.set("games", games.stream().map(Game::getId).collect(Collectors.toList()));
+        cfg.set("games", games.stream().map(g -> g.getArena().getId()).collect(Collectors.toList()));
         cfg.save(file);
     }
 
