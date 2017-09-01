@@ -66,7 +66,7 @@ public class CountdownPhase implements Phase, Listener {
                 timer--;
             else {
                 cancel();
-                parent.setPhase(new GamePhase(game));
+                game.getPhaseManager().setPhase(new GamePhase(game));
             }
         }
     };
@@ -110,7 +110,6 @@ public class CountdownPhase implements Phase, Listener {
     private void clear() {
         for (Player p : game.getPlayers()) {
             clear(p);
-            clearTick(p);
         }
     }
 

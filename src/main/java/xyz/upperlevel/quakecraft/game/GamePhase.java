@@ -10,8 +10,9 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
-import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
+import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.message.Message;
@@ -81,6 +82,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     @Override
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
+        setPhase(null);
         clear();
     }
 
@@ -88,6 +90,22 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     public void onPlayerJoin(GameJoinEvent event) {
         if(event.getGame() == getGame()) {
             event.cancel(CANNOT_JOIN_ALREADY_PLAYING.get(event.getPlayer(), getGame().getPlaceholders()));
+        }
+    }
+
+    @EventHandler
+    public void onGameQuit(GameQuitEvent event) {
+        if(event.getGame() == game) {
+            Participant p = participants.remove(event.getPlayer());
+            ranking.remove(p);
+            if(getPhase() instanceof PlayingPhase) {
+                //Clear powerup effects
+                getGame().getArena().getPowerups()
+                        .stream()
+                        .map(Powerup::getEffect)
+                        .distinct()
+                        .forEach(e -> e.clear(Collections.singletonList(p)));
+            }
         }
     }
 

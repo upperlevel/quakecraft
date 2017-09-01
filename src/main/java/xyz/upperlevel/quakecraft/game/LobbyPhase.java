@@ -57,6 +57,7 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
         HandlerList.unregisterAll(this);
         for (Player p : game.getPlayers())
             clear(p);
+        setPhase(null);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
