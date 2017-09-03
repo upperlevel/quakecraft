@@ -6,7 +6,7 @@
 
     <groupId>xyz.upperlevel.quakecraft</groupId>
     <artifactId>quakecraft</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
 
     <name>Quakecraft</name>
 
@@ -14,7 +14,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <mcVersion>1.12-R0.1-SNAPSHOT</mcVersion>
-        <coreVersion>1.1</coreVersion>
+        <coreVersion>1.1.1</coreVersion>
     </properties>
 
     <repositories>
