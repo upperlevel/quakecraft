@@ -13,17 +13,28 @@ game:
   snake-disabled: '&cSneaking is disabled! Your name is still visible'
 
   end-ranking:
-  - '^a'
-  - '^|&f&lQuakecraft'
-  - ''
-  - '^|&e&lWinner &7- %ranking_name_1%'
-  - '^|&e&lGun &7- %ranking_gun_1%'
-  - ''
-  - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'
-  - '^|&6&l2nd Place &r&7- %ranking_name_2% &7- %ranking_kills_2%'
-  - '^|&c&l3rd Place &r&7- %ranking_name_3% &7- %ranking_kills_3%'
-  - ''
-  - '^a'
+    header:
+    - '^a'
+    - '^|&f&lQuakecraft'
+    - ''
+    - '^|&e&lWinner &7- %ranking_name_1%'
+    - '^|&e&lGun &7- %ranking_gun_1%'
+    - ''
+    body: # Here you can change the ranking list depending on how many players there are
+          # the plugin gets the minimum number and displayes that message
+          # example: 3 players -> 3, 2 players -> 2, 10 players -> 3 (is the lowest)
+      3: # Used when there are three or more players (most of the times)
+      - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'
+      - '^|&6&l2nd Place &r&7- %ranking_name_2% &7- %ranking_kills_2%'
+      - '^|&c&l3rd Place &r&7- %ranking_name_3% &7- %ranking_kills_3%'
+      - ''
+      2: # Used when there are two players (sometimes it can happen)
+      - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'
+      - '^|&6&l2nd Place &r&7- %ranking_name_2% &7- %ranking_kills_2%'
+      - ''
+      1: [] # Used when only one player is remaining (the others quit)
+    footer:
+    - '^a'
 
   end-gain:
   - '^a'

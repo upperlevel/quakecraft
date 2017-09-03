@@ -26,8 +26,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
@@ -39,7 +38,9 @@ public class EndingPhase implements Phase, Listener {
     private static final Random random = new Random();
 
     private static Message endGainMessage;
-    private static Message endRankingMessage;
+    private static Message endRankingHeader;
+    private static NavigableMap<Integer, Message> endRankingBody;
+    private static Message endRankingFooter;
 
     private static GainType baseGain;
     private static GainType firstGain;
@@ -144,13 +145,18 @@ public class EndingPhase implements Phase, Listener {
                 return null;
             }
         });
+        List<PlaceholderValue<String>> lines = new ArrayList<>();
 
-        Message filtered = new Message(
-                endRankingMessage.getLines()
-                        .stream()
-                        .map(l -> PlaceholderValue.stringValue(l.resolve(null, reg)))
-                        .collect(Collectors.toList())
-        );
+        lines.addAll(endRankingHeader.filter(reg).getLines());
+        Map.Entry<Integer, Message> bodyEntry = endRankingBody.floorEntry(getParent().getRanking().size());
+        if(bodyEntry == null) {
+            Quakecraft.get().getLogger().severe("ERROR: cannot find ending ranking body for: " + getParent().getRanking().size() + ", indexes " + endRankingBody.keySet());
+        } else {
+            lines.addAll(bodyEntry.getValue().filter(reg).getLines());
+        }
+        lines.addAll(endRankingFooter.filter(reg).getLines());
+
+        Message filtered = new Message(lines);
 
         gameReg.setParent(gameRegParent);
 
@@ -207,7 +213,19 @@ public class EndingPhase implements Phase, Listener {
     public static void loadConfig() {
         MessageManager manager = get().getMessages().getSection("game");
         endGainMessage = manager.get("end-gain");
-        endRankingMessage = manager.get("end-ranking");
+        MessageManager endRanking = manager.getSection("end-ranking");
+        endRankingHeader = endRanking.get("header");
+        endRankingBody =  endRanking.getConfig()
+                .getSectionRequired("body")
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        e -> Integer.parseInt(e.getKey()),
+                        (Map.Entry<String, Object> e) -> Message.fromConfig(e.getValue()),
+                        (a, b) -> b,
+                        TreeMap::new)
+                );
+        endRankingFooter = endRanking.get("footer");
 
         sampleHotbar = EndingHotbar.deserialize(get(), Config.wrap(ConfigUtils.loadConfig(
                 getPhaseFolder(),
