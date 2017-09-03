@@ -12,6 +12,7 @@ import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
+import xyz.upperlevel.quakecraft.game.gains.GainNotifier;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.quakecraft.game.playing.Bullet;
 import xyz.upperlevel.quakecraft.game.playing.Dash;
@@ -102,6 +103,8 @@ public class Quakecraft extends JavaPlugin {
             ArgumentParserSystem.register(new PowerupEffectArgumentParser());
 
             new QuakeCommand().subscribe();
+
+            GainNotifier.setup();
 
             playerManager = new QuakePlayerManager();
 

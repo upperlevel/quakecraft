@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
+import xyz.upperlevel.quakecraft.game.gains.GainNotifier;
 import xyz.upperlevel.quakecraft.shop.KillSoundManager;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.armor.*;
@@ -47,6 +48,8 @@ public class QuakePlayer {
 
     private DashPowerManager.DashPower selectedDashPower;
     private DashCooldownManager.DashCooldown selectedDashCooldown;
+
+    private GainNotifier gainNotifier = new GainNotifier(this);
 
     public QuakePlayer(Player player) {
         this.player = player;

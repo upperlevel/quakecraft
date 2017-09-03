@@ -33,6 +33,8 @@ game:
   - ''
   - '^a'
 
+  on-gain: '&6+%raw_gain%'
+
 lobby:
   join: '&7%player_name%&e has joined (&b%players%&e/&b%max_players%&e)!'
   quit: '&7%player_name%&e has quit!'
