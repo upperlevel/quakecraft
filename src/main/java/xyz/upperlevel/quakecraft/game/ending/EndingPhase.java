@@ -1,8 +1,12 @@
 package xyz.upperlevel.quakecraft.game.ending;
 
 import lombok.Data;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -24,6 +28,7 @@ import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.util.nms.impl.MessageNms;
 
 import java.io.File;
 import java.util.*;
@@ -46,6 +51,9 @@ public class EndingPhase implements Phase, Listener {
     private static GainType firstGain;
     private static GainType secondGain;
     private static GainType thirdGain;
+
+    private static boolean autoJoin;
+    private static Message rejoinMessage;
 
     private static EndingHotbar sampleHotbar;
     private static EndingBoard sampleBoard;
@@ -201,6 +209,21 @@ public class EndingPhase implements Phase, Listener {
     public void onDisable(Phase next) {
         endingTask.cancel();
         clear();
+        if(!autoJoin) {
+            Location lobby = Quakecraft.get().getArenaManager().getLobby();
+            if(lobby != null) {
+                for (Player player : new ArrayList<>(getGame().getPlayers())) {
+                    getGame().leave(player);
+                    BaseComponent[] comps = TextComponent.fromLegacyText(rejoinMessage.get(player).stream().collect(Collectors.joining("\n")));
+                    TextComponent component = new TextComponent();
+                    component.setExtra(Arrays.asList(comps));
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quake join " + getGame().getArena().getId()));
+                    MessageNms.sendJson(player, component);
+                }
+            } else {
+                Quakecraft.get().getLogger().severe("autoJoin enabled but lobby location not set, use '/quake lobby set' to set the global lobby location");
+            }
+        }
     }
 
     public static void loadGains() {
@@ -213,6 +236,7 @@ public class EndingPhase implements Phase, Listener {
     public static void loadConfig() {
         MessageManager manager = get().getMessages().getSection("game");
         endGainMessage = manager.get("end-gain");
+
         MessageManager endRanking = manager.getSection("end-ranking");
         endRankingHeader = endRanking.get("header");
         endRankingBody =  endRanking.getConfig()
@@ -226,6 +250,9 @@ public class EndingPhase implements Phase, Listener {
                         TreeMap::new)
                 );
         endRankingFooter = endRanking.get("footer");
+
+        autoJoin = Quakecraft.get().getCustomConfig().getBoolRequired("auto-join");
+        rejoinMessage = Quakecraft.get().getCustomConfig().getMessageRequired("rejoin-message");
 
         sampleHotbar = EndingHotbar.deserialize(get(), Config.wrap(ConfigUtils.loadConfig(
                 getPhaseFolder(),

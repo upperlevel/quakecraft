@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -116,6 +117,12 @@ public class Game implements Listener {
     public boolean leave(Player player) {
         if (players.remove(player)) {
             Bukkit.getPluginManager().callEvent(new GameQuitEvent(this, player));
+            Location lobby = Quakecraft.get().getArenaManager().getLobby();
+            if (lobby != null) {
+                player.teleport(Quakecraft.get().getArenaManager().getLobby());
+            } else {
+                Quakecraft.get().getLogger().severe("global lobby location not set, use '/quake lobby set' to set the global lobby location");
+            }
             return true;
         }
         return false;

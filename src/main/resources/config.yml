@@ -14,6 +14,12 @@ playing-hotbar:
 dash:
   base-power: 1.5
 
+# If set to true the players at the end of a game will rejoin automatically the lobby they were in
+auto-join: false
+# Clickable message displayed at the end of a game that, when clicked, will make the players rejoin the lobby
+# If you don't want any message to be displayed put an empty array ("[]") instead of the message
+rejoin-message: '&bClick here to play again'
+
 powerups:
   speed:
     display:
