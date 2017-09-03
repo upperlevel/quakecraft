@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandExecutor;
 import xyz.upperlevel.quakecraft.arena.commands.*;
+import xyz.upperlevel.quakecraft.settings.SettingsCommand;
 import xyz.upperlevel.uppercore.command.DefaultPermission;
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.WithChildPermission;
@@ -21,6 +22,7 @@ public class QuakeCommand extends NodeCommand implements CommandExecutor {
         register(new LeaveGameCommand());
         register(new ShopCommand());
         register(new ArenaCommand());
+        register(new SettingsCommand());
 
         setDescription("Main commands of QuakeReloaded plugin.");
         addAliases("quakecraft", "quakecraftreloaded");
@@ -31,6 +33,7 @@ public class QuakeCommand extends NodeCommand implements CommandExecutor {
             loadSafe("join", JoinGameCommand::loadConfig);
             loadSafe("leave", LeaveGameCommand::loadConfig);
             loadSafe("arena", ArenaCommand::loadConfig);
+            loadSafe("settings", SettingsCommand::loadConfig);
         } catch (InvalidConfigurationException e) {
             e.addLocalizer("in commands messages");
             throw e;

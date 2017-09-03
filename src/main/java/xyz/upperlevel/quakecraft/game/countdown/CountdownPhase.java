@@ -54,7 +54,8 @@ public class CountdownPhase implements Phase, Listener {
         public void run() {
             for (Player player : game.getPlayers()) {
                 player.setLevel(timer);
-                player.playSound(player.getLocation(), ORB_PICKUP, 0, 100f);
+                if(Quakecraft.get().getPlayerManager().getPlayer(player).isSoundActive())
+                    player.playSound(player.getLocation(), ORB_PICKUP, 0, 100f);
                 boards().view(player).render();
 
                 // msg.get(timer) -> not so nice

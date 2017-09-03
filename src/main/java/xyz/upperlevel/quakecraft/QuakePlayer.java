@@ -48,6 +48,10 @@ public class QuakePlayer {
     private DashPowerManager.DashPower selectedDashPower;
     private DashCooldownManager.DashCooldown selectedDashCooldown;
 
+    private boolean trackingActive;
+    private boolean particleActive;
+
+
     public QuakePlayer(Player player) {
         this.player = player;
 

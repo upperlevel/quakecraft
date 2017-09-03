@@ -1,6 +1,7 @@
 package xyz.upperlevel.quakecraft;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.ArenaManager;
