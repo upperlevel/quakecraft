@@ -18,7 +18,7 @@ dash:
 auto-join: false
 # Clickable message displayed at the end of a game that, when clicked, will make the players rejoin the lobby
 # If you don't want any message to be displayed put an empty array ("[]") instead of the message
-rejoin-message: '&bClick here to play again'
+rejoin-message: '&eWant to play again?&l&bClick here'
 
 powerups:
   speed:
