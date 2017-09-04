@@ -183,6 +183,13 @@ public class Game implements Listener {
         return dt;
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(GameJoinEvent e) {
+        if (e.getGame() == this && players.size() > arena.getMaxPlayers()) {
+            e.cancel(CANNOT_JOIN_MAX_REACHED.get(e.getPlayer(), getPlaceholders()));
+        }
+    }
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         if (players.contains(e.getPlayer()))
@@ -226,6 +233,11 @@ public class Game implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         if (players.contains(e.getPlayer())) {
             e.setCancelled(true);
+        } else {
+            Sign s = signs.get(e.getClickedBlock());
+            if (s != null) {
+                Bukkit.dispatchCommand(e.getPlayer(), "quake join " + id);
+            }
         }
     }
 
@@ -245,14 +257,6 @@ public class Game implements Listener {
         }
     }
 
-    // ARENA INTERACT
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerJoin(GameJoinEvent e) {
-        if (e.getGame() == this && players.size() > arena.getMaxPlayers()) {
-            e.cancel(CANNOT_JOIN_MAX_REACHED.get(e.getPlayer(), getPlaceholders()));
-        }
-    }
 
     public static void loadConfig() {
         CANNOT_JOIN_MAX_REACHED = Quakecraft.get().getMessages().get("game.cannot-join.max-players");

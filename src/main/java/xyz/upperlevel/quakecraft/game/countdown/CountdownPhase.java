@@ -16,6 +16,7 @@ import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.QuakePhase;
 import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
 import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.config.Config;
@@ -39,7 +40,7 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class CountdownPhase implements Phase, Listener {
+public class CountdownPhase implements QuakePhase, Listener {
     private static Hotbar sampleHotbar;
     private static CountdownBoard sampleBoard;
 
@@ -121,12 +122,14 @@ public class CountdownPhase implements Phase, Listener {
         }
     }
 
-    private void tryStopCountdown() {
+    private boolean tryStopCountdown() {
         if (game.getPlayers().size() < game.getMinPlayers()) {
             task.cancel();
             clearTick();
             parent.setPhase(new WaitingPhase(parent));
+            return true;
         }
+        return false;
     }
 
     private void update(Player player) {
@@ -142,6 +145,7 @@ public class CountdownPhase implements Phase, Listener {
         return new File(Quakecraft.get().getDataFolder(), "game/countdown");
     }
 
+    @Override
     public void updateSigns() {
         for (int i = 0; i < signLines.size(); i++) {
             for (Sign sign : game.getSigns()) {
@@ -178,21 +182,23 @@ public class CountdownPhase implements Phase, Listener {
         if (e.getGame().equals(game)) {
             setup(e.getPlayer());
             update();
+            updateSigns();
         }
     }
 
     @EventHandler
     public void onGameQuit(GameQuitEvent e) {
         if (e.getGame().equals(game)) {
-            tryStopCountdown();
             clear(e.getPlayer());
-            update();
+            if (!tryStopCountdown()) {
+                updateSigns();
+                update();
+            }
         }
     }
 
     public static void loadConfig() {
         MessageManager msg = get().getMessages().getSection("lobby");
-        signLines = Config.wrap(Quakecraft.get().getConfig()).getConfig("game").getMessageStrList("countdown-sign");
         countdownMsg = msg.load("countdown");
         sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.wrap(ConfigUtils.loadConfig(
                 getPhaseFolder(),
@@ -203,5 +209,7 @@ public class CountdownPhase implements Phase, Listener {
                 getPhaseFolder(),
                 "countdown_board.yml"
         )));
+
+        signLines = get().getMessages().getConfig().getConfig("game").getMessageStrList("countdown-sign");
     }
 }

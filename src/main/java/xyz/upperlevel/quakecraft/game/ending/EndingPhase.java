@@ -20,10 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
@@ -45,7 +42,7 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class EndingPhase implements Phase, Listener {
+public class EndingPhase implements QuakePhase, Listener {
     private static final Random random = new Random();
 
     private static Message endGainMessage;
@@ -202,6 +199,7 @@ public class EndingPhase implements Phase, Listener {
         return new File(get().getDataFolder(), "game/ending");
     }
 
+    @Override
     public void updateSigns() {
         for (int i = 0; i < signLines.size(); i++) {
             for (Sign sign : game.getSigns()) {
@@ -300,6 +298,7 @@ public class EndingPhase implements Phase, Listener {
             if(e.getPlayer() == winner.getPlayer()) {
                 fireworksTask.cancel();
             }
+            updateSigns();
         }
     }
 }

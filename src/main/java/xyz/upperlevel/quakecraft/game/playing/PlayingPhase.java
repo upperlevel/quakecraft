@@ -23,10 +23,7 @@ import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.quakecraft.events.LaserStabEvent;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
@@ -56,7 +53,7 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class PlayingPhase implements Phase, Listener {
+public class PlayingPhase implements QuakePhase, Listener {
     private static Message shotMessage;
     private static Message headshotMessage;
     private static Message snakeDisabledMessage;
@@ -223,6 +220,7 @@ public class PlayingPhase implements Phase, Listener {
     public void onGameQuit(GameQuitEvent e) {
         if (game.equals(e.getGame())) {
             clear(e.getPlayer());
+            updateSigns();
             switch (getParent().getParticipants().size()) {
                 case 1:
                     Quakecraft.get().getLogger().info("One player remained, setting phase to ending");

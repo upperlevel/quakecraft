@@ -2,8 +2,7 @@ package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandExecutor;
 import xyz.upperlevel.quakecraft.arena.commands.*;
-import xyz.upperlevel.quakecraft.game.sign.commands.SignCmd;
-import xyz.upperlevel.uppercore.command.DefaultPermission;
+import xyz.upperlevel.quakecraft.game.commands.SignCmd;
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.WithChildPermission;
 import xyz.upperlevel.uppercore.command.WithPermission;

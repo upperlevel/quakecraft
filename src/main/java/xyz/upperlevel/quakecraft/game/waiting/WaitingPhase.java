@@ -13,6 +13,7 @@ import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.QuakePhase;
 import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
@@ -28,7 +29,7 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class WaitingPhase implements Phase, Listener {
+public class WaitingPhase implements QuakePhase, Listener {
     private static Hotbar sampleHotbar;
     private static WaitingBoard sampleBoard;
 
@@ -86,6 +87,7 @@ public class WaitingPhase implements Phase, Listener {
         return new File(Quakecraft.get().getDataFolder(), "game/waiting");
     }
 
+    @Override
     public void updateSigns() {
         for (int i = 0; i < signLines.size(); i++) {
             for (Sign sign : game.getSigns()) {
@@ -104,8 +106,8 @@ public class WaitingPhase implements Phase, Listener {
         Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
         for (Player player : game.getPlayers())
             setup(player);
-        updateSigns();
         tryStartCountdown();
+        updateSigns();
     }
 
     @Override
@@ -120,6 +122,7 @@ public class WaitingPhase implements Phase, Listener {
             setup(e.getPlayer());
             update();
             tryStartCountdown();
+            updateSigns();
         }
     }
 
@@ -127,6 +130,7 @@ public class WaitingPhase implements Phase, Listener {
     public void onGameQuit(GameQuitEvent e) {
         if (e.getGame().equals(game)) {
             clear(e.getPlayer());
+            updateSigns();
         }
     }
 

@@ -26,7 +26,7 @@ import java.util.List;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
-public class LobbyPhase extends PhaseManager implements Phase, Listener {
+public class LobbyPhase extends PhaseManager implements QuakePhase, Listener {
     private static Message joinMsg;
     private static Message quitMsg;
 
@@ -99,5 +99,10 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
         MessageManager msg = Quakecraft.get().getMessages().getSection("lobby");
         joinMsg = msg.get("join");
         quitMsg = msg.get("quit");
+    }
+
+    @Override
+    public void updateSigns() {
+        ((QuakePhase) getPhase()).updateSigns();
     }
 }

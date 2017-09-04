@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.game.sign.commands;
+package xyz.upperlevel.quakecraft.game.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -7,6 +7,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.game.Game;
+import xyz.upperlevel.quakecraft.game.QuakePhase;
 import xyz.upperlevel.uppercore.command.*;
 
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 public class SignCmd extends NodeCommand {
     public SignCmd() {
         super("sign");
-
+        setDescription("Sign commands");
         register(new SignAddCmd());
         register(new SignRemoveCmd());
     }
@@ -32,9 +33,10 @@ public class SignCmd extends NodeCommand {
         public void onRun(CommandSender sender, Game game) {
             Block b = ((Player) sender).getTargetBlock((Set<Material>) null, 100);
             if (b != null && b.getState() instanceof Sign) {
-                if (game.addSign((Sign) b.getState()))
+                if (game.addSign((Sign) b.getState())) {
+                    ((QuakePhase) game.getPhaseManager().getPhase()).updateSigns();
                     sender.sendMessage(ChatColor.GREEN + "Sign added.");
-                else
+                } else
                     sender.sendMessage(ChatColor.RED + "This sign has been already added.");
             } else {
                 sender.sendMessage(ChatColor.RED + "You are not targeting a sign.");
