@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scoreboard.Team;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
@@ -27,6 +28,7 @@ import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;
@@ -59,7 +61,6 @@ public class PlayingPhase implements Phase, Listener {
     private static PlayingBoard sampleBoard;
 
     private static int gunSlot;
-
 
     private final Game game;
     private final GamePhase parent;
@@ -106,7 +107,17 @@ public class PlayingPhase implements Phase, Listener {
 
     public void setup(Player player) {
         hotbars().view(player).addHotbar(hotbar);
-        boards().view(player).setBoard(board);
+        BoardView view = boards().view(player);
+        if (game.getArena().isHideNametags()) {
+            Team team = view.getHandle().registerNewTeam("hide_nametags");
+            for(Player other : game.getPlayers()) {
+                view.getEntries().add(other.getName());// Occupy the name entry
+                team.addEntry(other.getName());
+            }
+            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+        }
+        view.setBoard(board);
+
         QuakePlayer qp = Quakecraft.get().getPlayerManager().getPlayer(player);
         PlayerInventory inventory = player.getInventory();
         inventory.setArmorContents(new ItemStack[]{
@@ -128,7 +139,14 @@ public class PlayingPhase implements Phase, Listener {
 
     public void clear(Player player) {
         hotbars().view(player).removeHotbar(hotbar);
-        boards().view(player).clear();
+        BoardView view = boards().view(player);
+
+        if (game.getArena().isHideNametags()) {
+            view.getEntries().remove(player.getName());// Deoccupy the name entry
+            view.getHandle().getTeam("hide_nametags").unregister();
+        }
+
+        view.clear();
     }
 
     public void clear() {
@@ -143,6 +161,7 @@ public class PlayingPhase implements Phase, Listener {
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
+
         List<Player> players = new ArrayList<>(game.getPlayers());
         for (int i = 0; i < game.getPlayers().size(); i++) {
             Player p = players.get(i);
@@ -269,11 +288,11 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerSnake(PlayerToggleSneakEvent e) {
-        if (!e.isSneaking() || !game.equals(get().getGameManager().getGame(e.getPlayer())))
-            return;
-        e.setCancelled(true);
-        snakeDisabledMessage.send(e.getPlayer());
+    public void onPlayerSneake(PlayerToggleSneakEvent e) {
+        if (e.isSneaking() && game.equals(get().getGameManager().getGame(e.getPlayer())) && !game.getArena().isSneakEnabled()) {
+            e.setCancelled(true);
+            snakeDisabledMessage.send(e.getPlayer());
+        }
     }
 
     public static void loadConfig() {

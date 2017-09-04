@@ -236,6 +236,28 @@ public class ArenaSetupGuiCommand extends Command {
                                     AQUA + String.valueOf(arena.getPowerups().size())
                             ),
                             p -> guis().open(p, new EditArenaPowerupsGui(arena))
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.LEASH,
+                                    (arena.isSneakEnabled() ? GREEN : RED) + "Sneaking",
+                                    (arena.isSneakEnabled() ? GREEN + "Enabled" : RED + "Disabled")
+                            ),
+                            p -> {
+                                arena.setSneakEnabled(!arena.isSneakEnabled());
+                                refreshAll();
+                            }
+                    ),
+                    Icon.of(
+                            GuiUtil.itemStack(
+                                    Material.NAME_TAG,
+                                    (arena.isHideNametags() ? RED : GREEN) + "Nametags",
+                                    (arena.isHideNametags() ? RED + "Hidden" : GREEN + "Shown")
+                            ),
+                            p -> {
+                                arena.setHideNametags(!arena.isHideNametags());
+                                refreshAll();
+                            }
                     )
             );
         }
