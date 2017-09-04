@@ -4,6 +4,10 @@ game:
   countdown: 600 # 10 minutes
   headshot-height: 1.4
   custom-gun: 'Custom Gun'
+  shoot-sound:
+    sound: ENTITY_BLAZE_HURT
+    pitch: 1.9
+    volume: 0.7
 
 playing-hotbar:
   gun:
