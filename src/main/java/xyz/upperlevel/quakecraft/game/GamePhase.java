@@ -22,7 +22,7 @@ import java.util.*;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 
 @Getter
-public class GamePhase extends PhaseManager implements Phase, Listener {
+public class GamePhase extends PhaseManager implements QuakePhase, Listener {
     public static Message CANNOT_JOIN_ALREADY_PLAYING;
 
     private final Game game;
@@ -111,5 +111,10 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     public static void loadConfig() {
         CANNOT_JOIN_ALREADY_PLAYING = Quakecraft.get().getMessages().get("game.cannot-join.in-game");
+    }
+
+    @Override
+    public void updateSigns() {
+        ((QuakePhase) getPhase()).updateSigns();
     }
 }

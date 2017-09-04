@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,10 +23,7 @@ import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.quakecraft.events.LaserStabEvent;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
@@ -36,6 +34,8 @@ import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.particle.Particle;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.task.Timer;
 import xyz.upperlevel.uppercore.task.UpdaterTask;
 import xyz.upperlevel.uppercore.util.TextUtil;
@@ -53,15 +53,18 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class PlayingPhase implements Phase, Listener {
+public class PlayingPhase implements QuakePhase, Listener {
     private static Message shotMessage;
     private static Message headshotMessage;
     private static Message snakeDisabledMessage;
     private static String defKillMessage;
+
     private static PlayingHotbar sampleHotbar;
     private static PlayingBoard sampleBoard;
 
     private static int gunSlot;
+
+    private static List<PlaceholderValue<String>> signLines;
 
     private final Game game;
     private final GamePhase parent;
@@ -95,6 +98,7 @@ public class PlayingPhase implements Phase, Listener {
                 () -> {
                     for (Player player : game.getPlayers())
                         boards().view(player).render();
+                    updateSigns();
                 },
                 () -> parent.setPhase(new EndingPhase(parent)));
         this.compassUpdater = new UpdaterTask(20 * 5, () -> {
@@ -160,6 +164,20 @@ public class PlayingPhase implements Phase, Listener {
         return new File(Quakecraft.get().getDataFolder(), "game/playing");
     }
 
+    public void updateSigns() {
+        for (int i = 0; i < signLines.size(); i++) {
+            for (Sign sign : game.getSigns()) {
+                sign.setLine(i, signLines.get(i).resolve(null, PlaceholderRegistry.create()
+                        .set("min_players", game.getMinPlayers())
+                        .set("max_players", game.getMaxPlayers())
+                        .set("players", game.getPlayers().size())
+                        .set("countdown", timer)
+                ));
+            }
+        }
+        game.getSigns().forEach(Sign::update);
+    }
+
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
@@ -176,6 +194,8 @@ public class PlayingPhase implements Phase, Listener {
 
         timer.start();
         compassUpdater.start();
+
+        updateSigns();
     }
 
     @Override
@@ -200,6 +220,7 @@ public class PlayingPhase implements Phase, Listener {
     public void onGameQuit(GameQuitEvent e) {
         if (game.equals(e.getGame())) {
             clear(e.getPlayer());
+            updateSigns();
             switch (getParent().getParticipants().size()) {
                 case 1:
                     Quakecraft.get().getLogger().info("One player remained, setting phase to ending");
@@ -290,7 +311,7 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerSneake(PlayerToggleSneakEvent e) {
+    public void onPlayerSneak(PlayerToggleSneakEvent e) {
         if (e.isSneaking() && game.equals(get().getGameManager().getGame(e.getPlayer())) && !game.getArena().isSneakEnabled()) {
             e.setCancelled(true);
             snakeDisabledMessage.send(e.getPlayer());
@@ -315,5 +336,7 @@ public class PlayingPhase implements Phase, Listener {
                 getPhaseFolder(),
                 "playing_board.yml"
         )));
+
+        signLines = messages.getConfig().getMessageStrList("playing-sign");
     }
 }

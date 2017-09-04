@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.game.waiting;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,21 +13,28 @@ import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.QuakePhase;
 import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.io.File;
+import java.util.List;
 
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class WaitingPhase implements Phase, Listener {
+public class WaitingPhase implements QuakePhase, Listener {
     private static Hotbar sampleHotbar;
     private static WaitingBoard sampleBoard;
+
+    private static List<PlaceholderValue<String>> signLines;
+
     private final Game game;
     private final LobbyPhase parent;
 
@@ -61,7 +69,7 @@ public class WaitingPhase implements Phase, Listener {
             clear(p);
     }
 
-    private void tryStart() {
+    private void tryStartCountdown() {
         if (game.getPlayers().size() >= game.getMinPlayers())
             parent.setPhase(new CountdownPhase(parent));
     }
@@ -80,11 +88,26 @@ public class WaitingPhase implements Phase, Listener {
     }
 
     @Override
+    public void updateSigns() {
+        for (int i = 0; i < signLines.size(); i++) {
+            for (Sign sign : game.getSigns()) {
+                sign.setLine(i, signLines.get(i).resolve(null, PlaceholderRegistry.create()
+                        .set("min_players", game.getMinPlayers())
+                        .set("max_players", game.getMaxPlayers())
+                        .set("players", game.getPlayers().size())
+                ));
+            }
+        }
+        game.getSigns().forEach(Sign::update);
+    }
+
+    @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
         for (Player player : game.getPlayers())
             setup(player);
-        tryStart();
+        tryStartCountdown();
+        updateSigns();
     }
 
     @Override
@@ -98,7 +121,8 @@ public class WaitingPhase implements Phase, Listener {
         if (e.getGame().equals(game)) {
             setup(e.getPlayer());
             update();
-            tryStart();
+            tryStartCountdown();
+            updateSigns();
         }
     }
 
@@ -106,6 +130,7 @@ public class WaitingPhase implements Phase, Listener {
     public void onGameQuit(GameQuitEvent e) {
         if (e.getGame().equals(game)) {
             clear(e.getPlayer());
+            updateSigns();
         }
     }
 
@@ -114,10 +139,11 @@ public class WaitingPhase implements Phase, Listener {
                 getPhaseFolder(),
                 "waiting_hotbar.yml"
         )));
-
         sampleBoard = WaitingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
                 getPhaseFolder(),
                 "waiting_board.yml"
         )));
+
+        signLines = Quakecraft.get().getMessages().getConfig().getConfig("game").getMessageStrList("waiting-sign");
     }
 }
