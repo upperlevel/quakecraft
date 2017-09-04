@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.game.countdown;
 import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +16,7 @@ import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.QuakePhase;
 import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
 import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.config.Config;
@@ -23,10 +25,13 @@ import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.valueOf;
@@ -35,9 +40,12 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class CountdownPhase implements Phase, Listener {
+public class CountdownPhase implements QuakePhase, Listener {
     private static Hotbar sampleHotbar;
     private static CountdownBoard sampleBoard;
+
+    private static List<PlaceholderValue<String>> signLines;
+
     public static Sound ORB_PICKUP = CompatibleSound.getRaw("ENTITY_EXPERIENCE_ORB_PICKUP");
 
     private static Map<String, Message> countdownMsg;
@@ -62,6 +70,7 @@ public class CountdownPhase implements Phase, Listener {
                 if (msg != null)
                     msg.send(player);
             }
+            updateSigns();
             if (timer > 0)
                 timer--;
             else {
@@ -113,12 +122,14 @@ public class CountdownPhase implements Phase, Listener {
         }
     }
 
-    private void tryStop() {
+    private boolean tryStopCountdown() {
         if (game.getPlayers().size() < game.getMinPlayers()) {
             task.cancel();
             clearTick();
             parent.setPhase(new WaitingPhase(parent));
+            return true;
         }
+        return false;
     }
 
     private void update(Player player) {
@@ -135,12 +146,28 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     @Override
+    public void updateSigns() {
+        for (int i = 0; i < signLines.size(); i++) {
+            for (Sign sign : game.getSigns()) {
+                sign.setLine(i, signLines.get(i).resolve(null, PlaceholderRegistry.create()
+                        .set("min_players", game.getMinPlayers())
+                        .set("max_players", game.getMaxPlayers())
+                        .set("players", game.getPlayers().size())
+                        .set("countdown", timer)
+                ));
+            }
+        }
+        game.getSigns().forEach(Sign::update);
+    }
+
+    @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
         for (Player player : game.getPlayers())
             setup(player);
         timer = Quakecraft.get().getConfig().getInt("lobby.countdown"); // todo parse before game
         task.runTaskTimer(get(), 0, 20);
+        updateSigns();
     }
 
     @Override
@@ -155,15 +182,18 @@ public class CountdownPhase implements Phase, Listener {
         if (e.getGame().equals(game)) {
             setup(e.getPlayer());
             update();
+            updateSigns();
         }
     }
 
     @EventHandler
     public void onGameQuit(GameQuitEvent e) {
         if (e.getGame().equals(game)) {
-            tryStop();
             clear(e.getPlayer());
-            update();
+            if (!tryStopCountdown()) {
+                updateSigns();
+                update();
+            }
         }
     }
 
@@ -179,5 +209,7 @@ public class CountdownPhase implements Phase, Listener {
                 getPhaseFolder(),
                 "countdown_board.yml"
         )));
+
+        signLines = get().getMessages().getConfig().getConfig("game").getMessageStrList("countdown-sign");
     }
 }

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,10 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
@@ -44,7 +42,7 @@ import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
-public class EndingPhase implements Phase, Listener {
+public class EndingPhase implements QuakePhase, Listener {
     private static final Random random = new Random();
 
     private static Message endGainMessage;
@@ -62,6 +60,8 @@ public class EndingPhase implements Phase, Listener {
 
     private static EndingHotbar sampleHotbar;
     private static EndingBoard sampleBoard;
+
+    private static List<PlaceholderValue<String>> signLines;
 
     private Participant winner;
 
@@ -200,6 +200,20 @@ public class EndingPhase implements Phase, Listener {
     }
 
     @Override
+    public void updateSigns() {
+        for (int i = 0; i < signLines.size(); i++) {
+            for (Sign sign : game.getSigns()) {
+                sign.setLine(i, signLines.get(i).resolve(null, PlaceholderRegistry.create()
+                        .set("min_players", game.getMinPlayers())
+                        .set("max_players", game.getMaxPlayers())
+                        .set("players", game.getPlayers().size())
+                ));
+            }
+        }
+        game.getSigns().forEach(Sign::update);
+    }
+
+    @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
         winner = parent.getWinner();
@@ -209,6 +223,8 @@ public class EndingPhase implements Phase, Listener {
 
         fireworksTask.runTaskTimer(get(), 0, 20);
         endingTask.runTaskLater(get(), 20 * 10);
+
+        updateSigns();
     }
 
     @Override
@@ -271,6 +287,8 @@ public class EndingPhase implements Phase, Listener {
                 getPhaseFolder(),
                 "ending_board.yml"
         )));
+
+        signLines = manager.getConfig().getMessageStrList("ending-sign");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -280,6 +298,7 @@ public class EndingPhase implements Phase, Listener {
             if(e.getPlayer() == winner.getPlayer()) {
                 fireworksTask.cancel();
             }
+            updateSigns();
         }
     }
 }

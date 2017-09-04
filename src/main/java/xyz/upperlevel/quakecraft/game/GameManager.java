@@ -1,10 +1,12 @@
 package xyz.upperlevel.quakecraft.game;
 
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.uppercore.config.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Getter
 public class GameManager {
-
-    private List<Game> games = new ArrayList<>(); // to save
-    private final Map<Arena, Game> gamesByArena = new HashMap<>(); // to optimize
+    private List<Game> games = new ArrayList<>();
+    private final Map<String, Game> gamesById = new HashMap<>();
 
     private final File file;
 
@@ -27,12 +29,12 @@ public class GameManager {
 
     public void addGame(Game game) {
         games.add(game);
-        gamesByArena.put(game.getArena(), game);
+        gamesById.put(game.getArena().getId(), game);
         game.start();
     }
 
     public Game removeGame(Arena arena) {
-        Game game = gamesByArena.remove(arena);
+        Game game = gamesById.remove(arena.getId());
         if(game != null) {
             games.remove(game);
             game.stop();
@@ -40,8 +42,12 @@ public class GameManager {
         return game;
     }
 
+    public Game getGame(String id) {
+        return gamesById.get(id);
+    }
+
     public Game getGame(Arena arena) {
-        return gamesByArena.get(arena);
+        return gamesById.get(arena.getId());
     }
 
     public Game getGame(Player player) {
@@ -52,19 +58,16 @@ public class GameManager {
         return null;
     }
 
-    public List<Game> getGames() {
-        return games;
-    }
-
     public void load() {
         if (file.exists()) {
             FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-            for (String arenaId : cfg.getStringList("games")) {
-                Arena arena = Quakecraft.get().getArenaManager().getArena(arenaId);
-                if (arena != null)
-                    addGame(new Game(arena));
+            for (Config game_cfg : Config.wrap(cfg).getConfigList("games")) {
+                String arena_id = game_cfg.getString("id");
+                Arena arena = Quakecraft.get().getArenaManager().getArena(arena_id);
+                if (arena == null)
+                    Quakecraft.get().getLogger().warning("Cannot find arena: " + arena_id);
                 else
-                    Quakecraft.get().getLogger().warning("Cannot find arena: \"" + arenaId + "\", arena disabled");
+                    addGame(new Game(arena, game_cfg));
             }
         }
     }
@@ -74,7 +77,9 @@ public class GameManager {
         file.createNewFile();
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        cfg.set("games", games.stream().map(g -> g.getArena().getId()).collect(Collectors.toList()));
+        cfg.set("games", games.stream()
+                .map(Game::save)
+                .collect(Collectors.toList()));
         cfg.save(file);
     }
 

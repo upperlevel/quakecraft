@@ -13,16 +13,20 @@ import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
+import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
+
+import java.util.List;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
-public class LobbyPhase extends PhaseManager implements Phase, Listener {
+public class LobbyPhase extends PhaseManager implements QuakePhase, Listener {
     private static Message joinMsg;
     private static Message quitMsg;
 
@@ -95,5 +99,10 @@ public class LobbyPhase extends PhaseManager implements Phase, Listener {
         MessageManager msg = Quakecraft.get().getMessages().getSection("lobby");
         joinMsg = msg.get("join");
         quitMsg = msg.get("quit");
+    }
+
+    @Override
+    public void updateSigns() {
+        ((QuakePhase) getPhase()).updateSigns();
     }
 }
