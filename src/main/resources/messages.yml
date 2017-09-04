@@ -37,6 +37,39 @@ game:
 
   snake-disabled: '&cSneaking is disabled! Your name is still visible'
 
+  # +--------------------------------------------+
+  # | SIGNS                                      |
+  # +--------------------------------------------+
+
+  # Sign used when the game is under waiting phase.
+  waiting-sign:
+  - '&4&lQUAKECRAFT'
+  - '%players%/%max_players%'
+  - ''
+  - '&2&lWAITING'
+
+  # Sign used when the game is under countdown phase.
+  countdown-sign:
+  - '&4&lQUAKECRAFT'
+  - '%min_players%/%max_players%'
+  - ''
+  - '&1&l%countdown%'
+
+  # Sign used when the game is under playing phase.
+  playing-sign:
+  - '&4&lQUAKECRAFT'
+  - '%min_players%/%max_players%'
+  - ''
+  - '&1&lPLAYING'
+
+  # Sign used when the game is under ending phase.
+  ending-sign:
+  - '&4&lQUAKECRAFT'
+  - ''
+  - '&3&lENDING...'
+
+  # +--------------------------------------------+
+
   end-ranking:
     header:
     - '^a'

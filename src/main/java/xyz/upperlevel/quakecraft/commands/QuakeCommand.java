@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandExecutor;
 import xyz.upperlevel.quakecraft.arena.commands.*;
+import xyz.upperlevel.quakecraft.game.sign.commands.SignCmd;
 import xyz.upperlevel.uppercore.command.DefaultPermission;
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.WithChildPermission;
@@ -22,9 +23,10 @@ public class QuakeCommand extends NodeCommand implements CommandExecutor {
         register(new ShopCommand());
         register(new ArenaCommand());
         register(new LobbyCommand());
+        register(new SignCmd());
 
-        setDescription("Main commands of QuakeReloaded plugin.");
-        addAliases("quakecraft", "quakecraftreloaded");
+        setDescription("Main commands of Quakecraft plugin.");
+        addAliases("quakecraft");
     }
 
     public static void loadConfig() {

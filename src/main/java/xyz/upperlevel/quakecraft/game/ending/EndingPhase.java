@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,6 +63,8 @@ public class EndingPhase implements Phase, Listener {
 
     private static EndingHotbar sampleHotbar;
     private static EndingBoard sampleBoard;
+
+    private static List<PlaceholderValue<String>> signLines;
 
     private Participant winner;
 
@@ -199,6 +202,19 @@ public class EndingPhase implements Phase, Listener {
         return new File(get().getDataFolder(), "game/ending");
     }
 
+    public void updateSigns() {
+        for (int i = 0; i < signLines.size(); i++) {
+            for (Sign sign : game.getSigns()) {
+                sign.setLine(i, signLines.get(i).resolve(null, PlaceholderRegistry.create()
+                        .set("min_players", game.getMinPlayers())
+                        .set("max_players", game.getMaxPlayers())
+                        .set("players", game.getPlayers().size())
+                ));
+            }
+        }
+        game.getSigns().forEach(Sign::update);
+    }
+
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
@@ -209,6 +225,8 @@ public class EndingPhase implements Phase, Listener {
 
         fireworksTask.runTaskTimer(get(), 0, 20);
         endingTask.runTaskLater(get(), 20 * 10);
+
+        updateSigns();
     }
 
     @Override
@@ -271,6 +289,8 @@ public class EndingPhase implements Phase, Listener {
                 getPhaseFolder(),
                 "ending_board.yml"
         )));
+
+        signLines = manager.getConfig().getMessageStrList("ending-sign");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

@@ -10,6 +10,7 @@ import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.GameManager;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.args.GameArgParser;
 import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.quakecraft.game.gains.GainNotifier;
@@ -100,6 +101,7 @@ public class Quakecraft extends JavaPlugin {
 
             PlaceholderUtil.register(this, new QuakePlaceholders());
             ArgumentParserSystem.register(new ArenaArgumentParser());
+            ArgumentParserSystem.register(new GameArgParser());
             ArgumentParserSystem.register(new PowerupEffectArgumentParser());
 
             new QuakeCommand().subscribe();
