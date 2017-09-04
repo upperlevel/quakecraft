@@ -4,16 +4,22 @@ import lombok.Data;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
@@ -30,6 +36,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.util.nms.impl.MessageNms;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -196,6 +203,7 @@ public class EndingPhase implements Phase, Listener {
 
     @Override
     public void onEnable(Phase previous) {
+        Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
         winner = parent.getWinner();
         printRanking();
 
@@ -207,6 +215,8 @@ public class EndingPhase implements Phase, Listener {
 
     @Override
     public void onDisable(Phase next) {
+        HandlerList.unregisterAll(this);
+        fireworksTask.cancel();
         endingTask.cancel();
         clear();
         if(!autoJoin) {
@@ -263,5 +273,15 @@ public class EndingPhase implements Phase, Listener {
                 getPhaseFolder(),
                 "ending_board.yml"
         )));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onGameQuit(GameQuitEvent e) {
+        if (game.equals(e.getGame())) {
+            clear(e.getPlayer());
+            if(e.getPlayer() == winner.getPlayer()) {
+                fireworksTask.cancel();
+            }
+        }
     }
 }
