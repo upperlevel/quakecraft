@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.game.playing;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -15,13 +16,14 @@ import xyz.upperlevel.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.uppercore.math.RayTrace;
 import xyz.upperlevel.uppercore.particle.Particle;
+import xyz.upperlevel.uppercore.sound.CompatibleSound;
+import xyz.upperlevel.uppercore.sound.PlaySound;
 
 import java.util.*;
 
 import static xyz.upperlevel.uppercore.util.PlayerUtil.forEveryPlayerAround;
 
 public class Bullet {
-    public static double headshotHeight = 1.35;
     public static final int MILLIS_IN_TICK = 50;
 
     public static final double LASER_BLOCKS_PER_TICK = 5;
@@ -29,6 +31,9 @@ public class Bullet {
     public static final int EXP_UPDATE_EVERY = 2;
 
     private final static Set<Player> cooldowns = new HashSet<>();
+
+    public static double headshotHeight = 1.35;
+    public static PlaySound shootSound;
 
     @Getter
     private final PlayingPhase phase;
@@ -70,6 +75,8 @@ public class Bullet {
     public void bang() {
         if(shootTime >= 0)
             throw new IllegalStateException("Already shot!");
+
+        shootSound.play(player);
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
         laserSpreader = scheduler.runTaskTimer(Quakecraft.get(), this::laserSpreaderRun, 0, 1);
@@ -148,5 +155,6 @@ public class Bullet {
 
     public static void loadConfig() {
         headshotHeight = Quakecraft.get().getCustomConfig().getDoubleRequired("game.headshot-height");
+        shootSound = Quakecraft.get().getCustomConfig().getPlaySound("game.shoot-sound", PlaySound.SILENT);
     }
 }

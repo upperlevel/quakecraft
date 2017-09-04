@@ -1,3 +1,28 @@
+# In this file is stored almost every message in the plugin
+# The main purpose for this is to change the messages that the players will see, so the setup-section could be removed
+# in the future (and it does NOT contain every command present in the plugin)
+#
+# Every message here is a list of messages, but you can also put only one line writing "name: message"
+# This uses the default bukkit colors (http://www.minecraftforum.net/forums/support/server-support/tutorials-and-faqs/1940467-bukkit-colour-codes)
+# But some custom tools are added to make the messages easier to create:
+# If you use the character "^" at the beginning of the line the custom tools will be activated:
+# "^|text" will center the text in the chat
+# "^>text" will make the text aligned to the left
+# "^<text" will make the text aligned to the right (aka. does nothing)
+# "^^Text" will act as a plain ^ (the printed text would be "^text"
+# While if you put a color code in front of the ^ character it will create a separator
+# For example:
+# message:
+# - '^a'
+# - '^>Right'
+# - '^|Centered'
+# - '^<Left'
+# - '^a'
+# Would create a center inside two aqua separators with tre lines, the first aligned to the right, the second centered
+# And the last one will remain to the left
+# If you don't want any message to be displayed you can simply put an empty array [] in the message (ex. message: [])
+
+
 game:
   cannot-join:
     max-players: '&cCannot join game "%game_name%": Max players reached'
@@ -13,17 +38,28 @@ game:
   snake-disabled: '&cSneaking is disabled! Your name is still visible'
 
   end-ranking:
-  - '^a'
-  - '^|&f&lQuakecraft'
-  - ''
-  - '^|&e&lWinner &7- %ranking_name_1%'
-  - '^|&e&lGun &7- %ranking_gun_1%'
-  - ''
-  - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'
-  - '^|&6&l2nd Place &r&7- %ranking_name_2% &7- %ranking_kills_2%'
-  - '^|&c&l3rd Place &r&7- %ranking_name_3% &7- %ranking_kills_3%'
-  - ''
-  - '^a'
+    header:
+    - '^a'
+    - '^|&f&lQuakecraft'
+    - ''
+    - '^|&e&lWinner &7- %ranking_name_1%'
+    - '^|&e&lGun &7- %ranking_gun_1%'
+    - ''
+    body: # Here you can change the ranking list depending on how many players there are
+          # the plugin gets the minimum number and displayes that message
+          # example: 3 players -> 3, 2 players -> 2, 10 players -> 3 (is the lowest)
+      3: # Used when there are three or more players (most of the times)
+      - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'
+      - '^|&6&l2nd Place &r&7- %ranking_name_2% &7- %ranking_kills_2%'
+      - '^|&c&l3rd Place &r&7- %ranking_name_3% &7- %ranking_kills_3%'
+      - ''
+      2: # Used when there are two players (sometimes it can happen)
+      - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'
+      - '^|&6&l2nd Place &r&7- %ranking_name_2% &7- %ranking_kills_2%'
+      - ''
+      1: [] # Used when only one player is remaining (the others quit)
+    footer:
+    - '^a'
 
   end-gain:
   - '^a'
@@ -32,6 +68,8 @@ game:
   - '^<&6Total earned Coins: %money%'
   - ''
   - '^a'
+
+  on-gain: '&6+%raw_gain%'
 
 lobby:
   join: '&7%player_name%&e has joined (&b%players%&e/&b%max_players%&e)!'
@@ -118,6 +156,8 @@ commands:
       - "&aLobby: %arena_lobby%"
       - "&aSpawns: %arena_spawns%"
       - "&aKills to win: %arena_kills_to_win%"
+      - "&aSneak: %arena_sneak_enabled%"
+      - "&aHide nametags: %arena_hide_nametags%"
     list:
       header: "&a--Found %arenas% arenas!--"
       line:

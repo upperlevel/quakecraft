@@ -2,32 +2,42 @@ lobby:
   countdown: 40 # seconds
 game:
   countdown: 600 # 10 minutes
-  headshot-height: 1.4
-  custom-gun: 'Custom Gun'
+  headshot-height: 1.4 # The height (relative to the player) to count the shot as a headshot
+  custom-gun: 'Custom Gun' # The name of the gun when no pre-baked gun is matched
+  shoot-sound: # The sound used when a player shoots with the gun
+    sound: ENTITY_BLAZE_HURT # Sound type
+    pitch: 1.9 # Sound pitch
+    volume: 0.7 # Sound volume
 
 playing-hotbar:
   gun:
-    slot: 0
+    slot: 0 # The slot in which the gun is stored
   tracker:
-    slot: 1
+    slot: 1 # The slot in which the tracker is stored
 
 dash:
-  base-power: 1.5
+  base-power: 1.5 # The base power of the dash (left-click), that will be multiplied by the upgrades
 
-powerups:
+# If set to true the players at the end of a game will rejoin automatically the lobby they were in
+auto-join: false
+# Clickable message displayed at the end of a game that, when clicked, will make the players rejoin the lobby
+# If you don't want any message to be displayed put an empty array ("[]") instead of the message
+rejoin-message: '&eWant to play again?&l&bClick here'
+
+powerups: # Here's all the powerup configs
   speed:
     display:
       type: gold boots
-    duration: 200
-    value: 0.6
+    duration: 200 # In ticks
+    value: 0.6 # The speed value (from -1 to  1)
     messages:
       active: '%name% &6activated &b&lSpeed Boost&6!'
       deactive: []
   rapid-fire:
     display:
       type: arrow
-    duration: 200
-    cooldown: 0.2
+    duration: 200 # In ticks
+    cooldown: 0.2 # The multiplier that will be applied to the cooldown
     messages:
           active: '%name% &6activated &c&lRapid Fire&6!'
           deactive: []

@@ -10,6 +10,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
+import xyz.upperlevel.uppercore.sound.PlaySound;
 
 import java.util.Map;
 
@@ -51,34 +52,15 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
 
     public class KillSound extends SimplePurchase<KillSound> {
         @Getter
-        private final Sound sound;
-        @Getter
-        private final float pitch, volume;
+        private final PlaySound sound;
 
         public KillSound(String id, Config config) {
             super(KillSoundManager.this, id, config);
-            Object obj = config.getRequired("sound");
-            Config s;
-            if (obj instanceof Map)
-                s = Config.wrap((Map<String, Object>) obj);
-            else if (obj instanceof ConfigurationSection)
-                s = Config.wrap((ConfigurationSection) obj);
-            else
-                s = null;
-
-            if (s != null) {
-                this.sound = s.getSoundRequired("type");
-                this.pitch = s.getFloat("pitch", 1.0f);
-                this.volume = s.getFloat("volume", 1.0f);
-            } else {
-                this.sound = CompatibleSound.get(obj.toString());
-                this.pitch = 1.0f;
-                this.volume = 1.0f;
-            }
+            sound = config.getPlaySound("sound", PlaySound.SILENT);
         }
 
         public void play(Location loc) {
-            loc.getWorld().playSound(loc, sound, volume, pitch);
+            sound.play(loc);
         }
     }
 }

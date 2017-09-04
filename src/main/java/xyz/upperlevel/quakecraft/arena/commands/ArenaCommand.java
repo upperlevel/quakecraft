@@ -27,6 +27,8 @@ public class ArenaCommand extends NodeCommand {
         register(new ArenaSetLobbyCommand());
         register(new ArenaSetNameCommand());
         register(new SetKillsToWinCommand());
+        register(new ArenaSetHideNametagsCommand());
+        register(new ArenaSetSneakCommand());
 
         setDescription("Commands for arena editing.");
         addAlias("map");

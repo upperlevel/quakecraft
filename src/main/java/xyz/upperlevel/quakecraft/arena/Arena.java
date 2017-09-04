@@ -27,9 +27,10 @@ public class Arena {
     private int minPlayers = -1, maxPlayers = -1;
     private int killsToWin;
     private Location lobby;
+    private boolean sneakEnabled;
+    private boolean hideNametags;
     private List<Location> spawns = new ArrayList<>();
     private List<Powerup> powerups = new ArrayList<>();
-    @Getter
     private PlaceholderRegistry placeholders;
 
     public Arena(String id) {
@@ -69,6 +70,8 @@ public class Arena {
         p.set("arena_spawns", () -> String.valueOf(getSpawns().size()));
         p.set("arena_kills_to_win", () -> String.valueOf(getKillsToWin()));
         p.set("arena_item_boxes", () -> String.valueOf(getPowerups().size()));
+        p.set("arena_sneak_enabled", () -> String.valueOf(isSneakEnabled()));
+        p.set("arena_hide_nametags", () -> String.valueOf(isHideNametags()));
     }
 
     public String toInfo() {
@@ -81,6 +84,8 @@ public class Arena {
         o += "§aSpawns: " + spawns.size() + "\n";
         o += "&aKills to win:" + killsToWin + "\n";
         o += "&aPowerups: " + powerups.size() + "\n";
+        o += "&aSneak: " + sneakEnabled + "\n";
+        o += "&aHide nametags: " + hideNametags + "\n";
         return o;
     }
 
@@ -104,6 +109,9 @@ public class Arena {
         data.put("kills_to_win", killsToWin);
 
         data.put("powerups", powerups.stream().map(Powerup::save).collect(Collectors.toList()));
+
+        data.put("sneak", sneakEnabled);
+        data.put("hide_nametags", hideNametags);
         return data;
     }
 
@@ -125,6 +133,10 @@ public class Arena {
                 .stream()
                 .map(c -> new Powerup(arena, c))
                 .collect(Collectors.toList());
+
+        arena.sneakEnabled = config.getBool("sneak", false);
+        arena.hideNametags = config.getBool("hide_nametags", false);
+
         return arena;
     }
 

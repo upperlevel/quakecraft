@@ -1,3 +1,14 @@
+# Quick note:
+# The sound could be written like "sound: sound name"
+# Aswell as
+# sound:
+#   type: sound name
+#   voulme: voume
+#   pitch: pitch
+# And every name can be written in any case and without underscore
+# "ENTITY_BLAZE_DEATH" is the same as "entity blaze death" or "EnTiTy BlaZE_DeatH"
+# For a list of all available sound: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+# WARNING: Not every sound is supported in versions before 1.9, bust most of them are
 blaze_death:
   name: 'Blaze Death'
   default: true
