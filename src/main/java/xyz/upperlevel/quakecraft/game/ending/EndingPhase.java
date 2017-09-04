@@ -16,7 +16,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
@@ -36,7 +35,6 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.util.nms.impl.MessageNms;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -225,10 +223,10 @@ public class EndingPhase implements Phase, Listener {
                 for (Player player : new ArrayList<>(getGame().getPlayers())) {
                     getGame().leave(player);
                     BaseComponent[] comps = TextComponent.fromLegacyText(rejoinMessage.get(player).stream().collect(Collectors.joining("\n")));
-                    TextComponent component = new TextComponent();
-                    component.setExtra(Arrays.asList(comps));
-                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quake join " + getGame().getArena().getId()));
-                    MessageNms.sendJson(player, component);
+                    ClickEvent event = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quake join " + getGame().getArena().getId());
+                    for(BaseComponent comp : comps)
+                        comp.setClickEvent(event);
+                    MessageNms.sendJson(player, comps);
                 }
             } else {
                 Quakecraft.get().getLogger().severe("autoJoin enabled but lobby location not set, use '/quake lobby set' to set the global lobby location");

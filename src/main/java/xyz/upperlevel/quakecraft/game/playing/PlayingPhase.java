@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
@@ -114,7 +115,8 @@ public class PlayingPhase implements Phase, Listener {
                 view.getEntries().add(other.getName());// Occupy the name entry
                 team.addEntry(other.getName());
             }
-            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            //team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            team.setNameTagVisibility(NameTagVisibility.NEVER);
         }
         view.setBoard(board);
 
