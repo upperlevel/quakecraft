@@ -28,10 +28,12 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.util.LocUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
@@ -125,6 +127,21 @@ public class Game implements Listener {
 
     public Collection<Sign> getSigns() {
         return signs.values();
+    }
+
+    public void setSignLines(List<PlaceholderValue<String>> lines, PlaceholderRegistry<?> reg) {
+        int limit = lines.size();
+        if(limit > 4) {
+            Quakecraft.get().getLogger().severe("Sign lines must be only of 4 elements!");
+            limit = 4;
+        }
+        for (int i = 0; i < limit; i++) {
+            String line = lines.get(i).resolve(null, reg);
+            for (Sign sign : signs.values()) {
+                sign.setLine(i, line);
+            }
+        }
+        signs.values().forEach(Sign::update);
     }
 
     public boolean join(Player player) {

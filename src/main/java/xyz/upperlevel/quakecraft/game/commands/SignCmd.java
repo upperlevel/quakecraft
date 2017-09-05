@@ -30,7 +30,7 @@ public class SignCmd extends NodeCommand {
         }
 
         @Executor
-        public void onRun(CommandSender sender, Game game) {
+        public void onRun(CommandSender sender, @Argument("game") Game game) {
             Block b = ((Player) sender).getTargetBlock((Set<Material>) null, 100);
             if (b != null && b.getState() instanceof Sign) {
                 if (game.addSign((Sign) b.getState())) {
@@ -53,7 +53,7 @@ public class SignCmd extends NodeCommand {
         }
 
         @Executor
-        public void onRun(CommandSender sender, Game game) {
+        public void onRun(CommandSender sender, @Argument("game") Game game) {
             Block b = ((Player) sender).getTargetBlock((Set<Material>) null, 100);
             if (b != null && b.getState() instanceof Sign) {
                 if (game.removeSign((Sign) b.getState())) {

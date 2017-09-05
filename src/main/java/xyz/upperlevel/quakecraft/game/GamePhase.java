@@ -8,17 +8,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
+import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
+import xyz.upperlevel.uppercore.command.Optional;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
 import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
 import java.util.*;
 
+import static xyz.upperlevel.quakecraft.Quakecraft.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 
 @Getter
@@ -28,9 +33,42 @@ public class GamePhase extends PhaseManager implements QuakePhase, Listener {
     private final Game game;
     private final Map<Player, Participant> participants = new HashMap<>();
     private final List<Participant> ranking = new ArrayList<>();
+    private final PlaceholderRegistry<?> placeholders;
 
     public GamePhase(Game game) {
         this.game = game;
+        this.placeholders = PlaceholderRegistry.create(game.getPlaceholders());
+        buildPlaceholders(placeholders);
+    }
+
+
+    public void buildPlaceholders(PlaceholderRegistry<?> reg) {
+        reg.set("ranking_name", (p, s) -> {
+            if (s == null)
+                return null;
+            try {
+                return getRanking().get(Integer.parseInt(s) - 1).getPlayer().getName();
+            } catch (Exception e) {
+                return null;
+            }
+        });
+
+        reg.set("ranking_kills", (p, s) -> {
+            try {
+                return String.valueOf(getRanking().get(Integer.parseInt(s) - 1).kills);
+            } catch (Exception e) {
+                return null;
+            }
+        });
+
+        reg.set("ranking_gun", (p, s) -> {
+            try {
+                QuakePlayer player = get().getPlayerManager().getPlayer(getRanking().get(Integer.parseInt(s) - 1).getPlayer());
+                return player.getGun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getGun().getName().resolve(p);
+            } catch (Exception e) {
+                return null;
+            }
+        });
     }
 
     private Participant register(Player player) {
@@ -91,6 +129,10 @@ public class GamePhase extends PhaseManager implements QuakePhase, Listener {
         if(event.getGame() == getGame()) {
             event.cancel(CANNOT_JOIN_ALREADY_PLAYING.get(event.getPlayer(), getGame().getPlaceholders()));
         }
+    }
+
+    public PlaceholderRegistry<?> getPlaceholders() {
+        return placeholders;
     }
 
     @EventHandler
