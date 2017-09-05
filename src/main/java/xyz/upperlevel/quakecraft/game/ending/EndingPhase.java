@@ -127,37 +127,7 @@ public class EndingPhase implements QuakePhase, Listener {
     }
 
     public void printRanking() {
-        PlaceholderRegistry gameReg = game.getPlaceholders();
-        PlaceholderRegistry gameRegParent = gameReg.getParent();
-        gameReg.setParent(null);
-
-        PlaceholderRegistry<?> reg = PlaceholderRegistry.create(gameReg);
-        reg.set("ranking_name", (p, s) -> {
-            if (s == null)
-                return null;
-            try {
-                return getParent().getRanking().get(Integer.parseInt(s) - 1).getPlayer().getName();
-            } catch (Exception e) {
-                return null;
-            }
-        });
-
-        reg.set("ranking_kills", (p, s) -> {
-            try {
-                return String.valueOf(getParent().getRanking().get(Integer.parseInt(s) - 1).kills);
-            } catch (Exception e) {
-                return null;
-            }
-        });
-
-        reg.set("ranking_gun", (p, s) -> {
-            try {
-                QuakePlayer player = get().getPlayerManager().getPlayer(getParent().getRanking().get(Integer.parseInt(s) - 1).getPlayer());
-                return player.getGun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getGun().getName().resolve(p);
-            } catch (Exception e) {
-                return null;
-            }
-        });
+        PlaceholderRegistry<?> reg = getParent().getPlaceholders();
         List<PlaceholderValue<String>> lines = new ArrayList<>();
 
         lines.addAll(endRankingHeader.filter(reg).getLines());
@@ -171,10 +141,8 @@ public class EndingPhase implements QuakePhase, Listener {
 
         Message filtered = new Message(lines);
 
-        gameReg.setParent(gameRegParent);
-
         for (Player player : getParent().getGame().getPlayers())
-            filtered.send(player);
+            filtered.send(player, reg);
     }
 
     public void setup(Player player) {
@@ -201,16 +169,7 @@ public class EndingPhase implements QuakePhase, Listener {
 
     @Override
     public void updateSigns() {
-        for (int i = 0; i < signLines.size(); i++) {
-            for (Sign sign : game.getSigns()) {
-                sign.setLine(i, signLines.get(i).resolve(null, PlaceholderRegistry.create()
-                        .set("min_players", game.getMinPlayers())
-                        .set("max_players", game.getMaxPlayers())
-                        .set("players", game.getPlayers().size())
-                ));
-            }
-        }
-        game.getSigns().forEach(Sign::update);
+        game.setSignLines(signLines, getParent().getPlaceholders());
     }
 
     @Override
