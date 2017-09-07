@@ -17,13 +17,6 @@
         <coreVersion>1.2.1</coreVersion>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <!-- lombok -->
         <dependency>
