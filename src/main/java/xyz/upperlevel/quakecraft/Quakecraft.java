@@ -1,6 +1,7 @@
 package xyz.upperlevel.quakecraft;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.ArenaManager;
@@ -33,6 +34,7 @@ import xyz.upperlevel.uppercore.board.BoardRegistry;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.database.Store;
+import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.GuiRegistry;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
@@ -85,7 +87,7 @@ public class Quakecraft extends JavaPlugin {
             //Load command messages
             guis = new GuiRegistry(this);
             hotbars = new HotbarRegistry(this);
-            boards =  new BoardRegistry(this);
+            boards = new BoardRegistry(this);
             store = new Store(this);
 
             arenaManager = new ArenaManager();
@@ -94,7 +96,14 @@ public class Quakecraft extends JavaPlugin {
             gameManager.load();
 
             shop = new ShopCategory();
-            shop.load();
+            Bukkit.getScheduler().runTask(this, () -> {
+                if (EconomyManager.isEnabled()) {
+                    shop.load();//Requires Economy
+                } else {
+                    getLogger().severe("Cannot find any economy plugin installed!");
+                    setEnabled(false);
+                }
+            });
 
             defConfirmOptions = ConfirmPurchaseGui.load();
 

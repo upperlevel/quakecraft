@@ -6,7 +6,7 @@
 
     <groupId>xyz.upperlevel.quakecraft</groupId>
     <artifactId>quakecraft</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
 
     <name>Quakecraft</name>
 
@@ -16,13 +16,6 @@
         <mcVersion>1.12-R0.1-SNAPSHOT</mcVersion>
         <coreVersion>1.2.1</coreVersion>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <!-- lombok -->
