@@ -50,8 +50,10 @@ public class WaitingPhase implements QuakePhase, Listener {
 
     private void setup(Player player) {
         //-------------------------hotbar
-        if (hotbar != null)
+        if (hotbar != null) {
             hotbars().view(player).addHotbar(hotbar);
+            player.updateInventory();
+        }
         //-------------------------board
         if (board != null)
             boards().view(player).setBoard(board);

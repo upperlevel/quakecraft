@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
@@ -146,6 +147,7 @@ public class Game implements Listener {
 
     public boolean join(Player player) {
         if (players.add(player)) {
+            Quakecraft.get().getPlayerManager().getPlayer(player).saveItems();
             GameJoinEvent e = new GameJoinEvent(this, player);
             Bukkit.getPluginManager().callEvent(e);
             if (e.isCancelled()) {
@@ -172,6 +174,7 @@ public class Game implements Listener {
             } else {
                 Quakecraft.get().getLogger().severe("global lobby location not set, use '/quake lobby set' to set the global lobby location");
             }
+            Quakecraft.get().getPlayerManager().getPlayer(player).restoreItems();
             return true;
         }
         return false;

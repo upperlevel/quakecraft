@@ -83,15 +83,14 @@ public class Quakecraft extends JavaPlugin {
             loadConfig();
 
             //Load command messages
-            arenaManager = new ArenaManager();
-            gameManager = new GameManager();
-
             guis = new GuiRegistry(this);
             hotbars = new HotbarRegistry(this);
             boards =  new BoardRegistry(this);
             store = new Store(this);
 
+            arenaManager = new ArenaManager();
             arenaManager.load();
+            gameManager = new GameManager();
             gameManager.load();
 
             shop = new ShopCategory();
