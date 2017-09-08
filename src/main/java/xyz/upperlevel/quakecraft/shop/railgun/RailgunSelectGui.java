@@ -147,8 +147,11 @@ public class RailgunSelectGui extends ChestGui {
             ArrayList<Purchase<?>> missingParts = new ArrayList<>(gun.getComponents());
             missingParts.removeAll(p.getPurchases());
             GUN_PART_MISSING_HEADER.send(player, "parts", String.valueOf(missingParts.size()));
-            for(Purchase<?> part : missingParts)
+            for(Purchase<?> part : missingParts) {
+                if(part.getCost() == 0)
+                    continue;
                 GUN_PART_MISSING_LINE.send(player, part.getPlaceholders());
+            }
             GUN_PART_MISSING_FOOTER.send(player, "parts", String.valueOf(missingParts.size()));
         }
     }

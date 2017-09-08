@@ -150,6 +150,7 @@ public class QuakePlayer {
         this.selectedBarrel = (BarrelManager.Barrel) components.get(2);
         this.selectedMuzzle = (MuzzleManager.Muzzle) components.get(3);
         this.selectedTrigger = (TriggerManager.Trigger) components.get(4);
+        purchases.addAll(components);//You could call this even when components aren't purchased (ex. cost == 0)
         onGunComponentSelectChange();
     }
 
@@ -227,6 +228,7 @@ public class QuakePlayer {
         data.put("won_matches", wonMatches);
         data.put("played_matches", playedMatches);
         data.put("purchases", purchases.stream()
+                .filter(Objects::nonNull)//Don't know why, sometimes the next line gives null pointers
                 .map(Purchase::getFullId)
                 .collect(Collectors.toList()));
         // ------------------ selected
