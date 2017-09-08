@@ -144,11 +144,16 @@ public class RailgunSelectGui extends ChestGui {
             selectAndReload(p, slot, gun);
             GUN_SELECTED.send(player);
         } else {
-            ArrayList<Purchase<?>> missingParts = new ArrayList<>(gun.getComponents());
-            missingParts.removeAll(p.getPurchases());
+            List<Purchase<?>> missingParts = gun.getComponents()
+                    .stream()
+                    .filter(s -> s.getCost() > 0)
+                    .filter(p.getPurchases()::contains)
+                    .collect(Collectors.toList());
+
             GUN_PART_MISSING_HEADER.send(player, "parts", String.valueOf(missingParts.size()));
-            for(Purchase<?> part : missingParts)
+            for(Purchase<?> part : missingParts) {
                 GUN_PART_MISSING_LINE.send(player, part.getPlaceholders());
+            }
             GUN_PART_MISSING_FOOTER.send(player, "parts", String.valueOf(missingParts.size()));
         }
     }

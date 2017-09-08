@@ -1,3 +1,26 @@
+# For every muzzle you can write one or more particles of various types,
+# Every particle by default has some config values, but others are only available with certain particle types,
+# The default values are
+# particle:
+#   speed: 0.05 # The speed of the particle
+#   amount: 10 # Particle amount
+#   offset:
+#     x: 0
+#     y: 0
+#     z: 0
+# Then you can specify the particle type with the "type" value, the SIMPLE particle is a simple coloured particle,
+# a BLOCK_DUST particle is a particle that has as texture the specified block's texture
+# a SIMPLE particle has the custom value "color" thar represents the color of the particle,
+# particle:
+#   type: 'SIMPLE'
+#   color: 'BLUE' #Or R;G;B or even #hex
+#
+# A  BLOCK_DUST particle has the custom value "block" that represents the displayed block type
+# particle:
+#   type: 'BLOCK_DUST'
+#   block:
+#     type: 'LAPIS_BLOCK'
+#     data: 0 # Optional
 none:
   name: 'No Muzzle'
   cost: 0

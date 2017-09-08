@@ -40,7 +40,9 @@ public class QuakePlayerManager implements Listener {
     }
 
     public void register(QuakePlayer player) {
-        players.put(player.getPlayer(), player);
+        if(player != null) {
+            players.put(player.getPlayer(), player);
+        }
     }
 
     public QuakePlayer unregister(Player player) {
