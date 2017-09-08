@@ -1,3 +1,7 @@
+# The color could be written in many ways, there's the "normal" way (color names) and the advanced way:
+# The advanced way is as follows:
+# color: R;G;B (ex. color: 255;255;255 == WHITE)
+# color: #hex (ex. color: #ffffff == WHITE)
 yellow:
   name: 'Yellow Laser'
   cost: 0
