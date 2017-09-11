@@ -270,7 +270,7 @@ public class PlayingPhase implements QuakePhase, Listener {
                     "killed", e.getHit().getName(),
                     "kill_message", (gun == null || gun.getKillMessage() == null) ? defKillMessage : gun.getKillMessage()
             );
-            message.broadcast(game.getPlayers());
+            game.broadcast(message);
 
             kill(hit, shooter, e.isHeadshot());
         }

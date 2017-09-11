@@ -185,11 +185,11 @@ public class Game implements Listener {
     }
 
     public void broadcast(Message msg) {
-        players.forEach(msg::send);
+        msg.broadcast(players, placeholders);
     }
 
     public void broadcast(Message msg, PlaceholderRegistry placeholders) {
-        players.forEach(p -> msg.send(p, placeholders));
+        msg.broadcast(players, placeholders);
     }
 
 
