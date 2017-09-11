@@ -34,12 +34,24 @@ public class GainNotifier {
         }
         List<String> message = GAIN.get(player.getPlayer(), "raw_gain", format(amount), "gain", EconomyManager.format(amount));
         BaseComponent[] comps;
-        if(message.size() == 1)
-            comps = ComponentSerializer.parse(message.get(0));
-        else if(message.isEmpty())
+        if(message.size() == 1) {
+            try {
+                comps = ComponentSerializer.parse(message.get(0));
+            } catch (RuntimeException e) {//JsonSyntaxException, but for some versions not supported
+                Quakecraft.get().getLogger().warning("Illegal characters in string: '" + message.get(0) + "', cannot send");
+                return;
+            }
+        } else if(message.isEmpty()) {
             comps = new BaseComponent[0];
-        else
-            comps = ComponentSerializer.parse(message.stream().collect(Collectors.joining("\n")));
+        } else {
+            String in = message.stream().collect(Collectors.joining("\n"));
+            try {
+                comps = ComponentSerializer.parse(in);
+            } catch (RuntimeException e) {//JsonSyntaxException, but for some versions not supported
+                Quakecraft.get().getLogger().warning("Illegal characters in string: '" + in + "', cannot send");
+                return;
+            }
+        }
 
         PlayerNms.sendActionBar(player.getPlayer(), comps);
         lastGainTime = currentTime;
