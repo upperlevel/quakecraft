@@ -16,7 +16,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.util.PlayerInventoryBackup;
+import xyz.upperlevel.uppercore.util.PlayerBackup;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,7 +53,7 @@ public class QuakePlayer {
 
     private GainNotifier gainNotifier = new GainNotifier(this);
 
-    private PlayerInventoryBackup preJoinItems;
+    private PlayerBackup preJoinItems;
 
     public QuakePlayer(Player player) {
         this.player = player;
@@ -297,7 +297,7 @@ public class QuakePlayer {
     }
 
     public void saveItems() {
-       preJoinItems = new PlayerInventoryBackup(player);
+       preJoinItems = new PlayerBackup(player);
     }
 
     public void restoreItems() {

@@ -148,6 +148,7 @@ public class Game implements Listener {
     public boolean join(Player player) {
         if (players.add(player)) {
             Quakecraft.get().getPlayerManager().getPlayer(player).saveItems();
+            player.setExp(0f);
             GameJoinEvent e = new GameJoinEvent(this, player);
             Bukkit.getPluginManager().callEvent(e);
             if (e.isCancelled()) {
