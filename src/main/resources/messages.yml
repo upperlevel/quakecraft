@@ -24,6 +24,8 @@
 
 
 game:
+  cannot-run-command-during-game: '&cCannot run commands during game! Only /quake quit is runnable.'
+
   cannot-join:
     max-players: '&cCannot join game "%game_name%": Max players reached'
     in-game: '&cCannot join game "%game_name%": Already playing'
@@ -40,25 +42,38 @@ game:
   # +--------------------------------------------+
   # | SIGNS                                      |
   # +--------------------------------------------+
+  #
+  # Available custom placeholders:
+  # - game: game's id
+  # - game_name: game's name
+  # - game_min_players: minimum number of players to start
+  # - game_max_players: maximum number of players to start
+  # - game_players: current number of players
+  # ONLY IN Countdown or when playing
+  # - countdown: current countdown value
+  # ONLY IN Playing or ending:
+  # - ranking_name_x: the name of the player in ranking position x
+  # - ranking_kills_x: the kill count of the player in ranking position x
+  # - ranking_gun_x: the gun name of the player in ranking position x
 
   # Sign used when the game is under waiting phase.
   waiting-sign:
   - '&4&lQUAKECRAFT'
-  - '%players%/%max_players%'
+  - '%game_players%/%game_max_players%'
   - ''
   - '&2&lWAITING'
 
   # Sign used when the game is under countdown phase.
   countdown-sign:
   - '&4&lQUAKECRAFT'
-  - '%min_players%/%max_players%'
+  - '%game_min_players%/%game_max_players%'
   - ''
   - '&1&l%countdown%'
 
   # Sign used when the game is under playing phase.
   playing-sign:
   - '&4&lQUAKECRAFT'
-  - '%min_players%/%max_players%'
+  - '%game_min_players%/%game_max_players%'
   - ''
   - '&1&lPLAYING'
 

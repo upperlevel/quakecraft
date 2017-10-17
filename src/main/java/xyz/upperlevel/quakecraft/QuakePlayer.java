@@ -15,6 +15,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.util.PlayerInventoryBackup;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,6 +51,8 @@ public class QuakePlayer {
     private DashCooldownManager.DashCooldown selectedDashCooldown;
 
     private GainNotifier gainNotifier = new GainNotifier(this);
+
+    private PlayerInventoryBackup preJoinItems;
 
     public QuakePlayer(Player player) {
         this.player = player;
@@ -147,6 +150,7 @@ public class QuakePlayer {
         this.selectedBarrel = (BarrelManager.Barrel) components.get(2);
         this.selectedMuzzle = (MuzzleManager.Muzzle) components.get(3);
         this.selectedTrigger = (TriggerManager.Trigger) components.get(4);
+        purchases.addAll(components);//You could call this even when components aren't purchased (ex. cost == 0)
         onGunComponentSelectChange();
     }
 
@@ -224,6 +228,7 @@ public class QuakePlayer {
         data.put("won_matches", wonMatches);
         data.put("played_matches", playedMatches);
         data.put("purchases", purchases.stream()
+                .filter(Objects::nonNull)//Don't know why, sometimes the next line gives null pointers
                 .map(Purchase::getFullId)
                 .collect(Collectors.toList()));
         // ------------------ selected
@@ -267,5 +272,14 @@ public class QuakePlayer {
                 .send(data);
 
         get().getLogger().info("It took " + (System.currentTimeMillis() - startedAt) + " ms to send data to db for player: \"" + player.getName() + "\"");
+    }
+
+    public void saveItems() {
+       preJoinItems = new PlayerInventoryBackup(player);
+    }
+
+    public void restoreItems() {
+        preJoinItems.restore(player);
+        preJoinItems = null;
     }
 }

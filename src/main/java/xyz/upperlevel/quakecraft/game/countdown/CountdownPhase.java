@@ -147,17 +147,7 @@ public class CountdownPhase implements QuakePhase, Listener {
 
     @Override
     public void updateSigns() {
-        for (int i = 0; i < signLines.size(); i++) {
-            for (Sign sign : game.getSigns()) {
-                sign.setLine(i, signLines.get(i).resolve(null, PlaceholderRegistry.create()
-                        .set("min_players", game.getMinPlayers())
-                        .set("max_players", game.getMaxPlayers())
-                        .set("players", game.getPlayers().size())
-                        .set("countdown", timer)
-                ));
-            }
-        }
-        game.getSigns().forEach(Sign::update);
+        game.setSignLines(signLines, PlaceholderRegistry.create(game.getPlaceholders()).set("countdown", timer));
     }
 
     @Override

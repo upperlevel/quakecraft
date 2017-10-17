@@ -15,6 +15,7 @@ import xyz.upperlevel.uppercore.util.TextUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 public class Railgun {
@@ -63,15 +64,15 @@ public class Railgun {
         this.muzzle = cat.getMuzzles().get(muzzleName);
         this.trigger = cat.getTriggers().get(triggerName);
 
-        if(barrel == null)
+        if (barrel == null)
             throw new InvalidConfigurationException("Cannot find barrel \"" + barrelName + "\"");
-        if(gcase == null)
+        if (gcase == null)
             throw new InvalidConfigurationException("Cannot find case \"" + caseName + "\"");
-        if(laser == null)
+        if (laser == null)
             throw new InvalidConfigurationException("Cannot find laser \"" + laserName + "\"");
-        if(muzzle == null)
+        if (muzzle == null)
             throw new InvalidConfigurationException("Cannot find muzzle \"" + muzzleName + "\"");
-        if(trigger == null)
+        if (trigger == null)
             throw new InvalidConfigurationException("Cannot find trigger \"" + triggerName + "\"");
 
         String rawMessage = config.getString("message");
@@ -81,7 +82,12 @@ public class Railgun {
     }
 
     public boolean canSelect(QuakePlayer player) {
-        return player.getPurchases().containsAll(getComponents());
+        Set<Purchase<?>> purchases = player.getPurchases();
+        for (Purchase<?> p : getComponents()) {
+            if(p.getCost() > 0 && !purchases.contains(p))
+                return false;
+        }
+        return true;
     }
 
     public List<? extends Purchase<?>> getComponents() {

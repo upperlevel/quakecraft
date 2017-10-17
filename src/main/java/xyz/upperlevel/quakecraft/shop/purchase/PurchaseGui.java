@@ -118,20 +118,25 @@ public class PurchaseGui extends ChestGui {
             if(purchase.getRequires().stream().anyMatch(r -> !r.test(p)))
                 return;
 
-            Balance b = EconomyManager.get(player);
-            if (b == null) {
-                Quakecraft.get().getLogger().severe("Economy not found!");
-                return;
-            }
-            if (b.has(purchase.getCost())) {
-                Quakecraft.get().openConfirmPurchase(
-                        player,
-                        purchase,
-                        ((Link) n -> onPurchaseSucceed(p, purchase)).and(GuiAction.back()),
-                        GuiAction.back()
-                );
+            if(purchase.getCost() > 0) {
+                Balance b = EconomyManager.get(player);
+                if (b == null) {
+                    Quakecraft.get().getLogger().severe("Economy not found!");
+                    return;
+                }
+                if (b.has(purchase.getCost())) {
+                    Quakecraft.get().openConfirmPurchase(
+                            player,
+                            purchase,
+                            ((Link) n -> onPurchaseSucceed(p, purchase)).and(GuiAction.back()),
+                            GuiAction.back()
+                    );
+                } else {
+                    notEnoughMoney.send(player, "required", String.valueOf(purchase.getCost()));
+                }
             } else {
-                notEnoughMoney.send(player, "required", String.valueOf(purchase.getCost()));
+                onPurchaseSucceed(p, purchase);
+                printPurchases(p.getPlayer().getOpenInventory().getTopInventory(), p);
             }
         } else
             reloadSelection(p, slot, purchase);
@@ -171,7 +176,7 @@ public class PurchaseGui extends ChestGui {
 
     public void processMeta(QuakePlayer player, Purchase<?> purchase, ItemMeta meta, boolean selected) {
         Player p = player.getPlayer();
-        boolean purchased = selected || player.getPurchases().contains(purchase);
+        boolean purchased = selected || purchase.getCost() == 0 || player.getPurchases().contains(purchase);
 
         meta.setDisplayName(ChatColor.RESET + getPrefix(purchased, selected) + purchase.getName().resolve(p));
 
