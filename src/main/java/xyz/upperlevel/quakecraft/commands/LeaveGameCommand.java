@@ -16,17 +16,19 @@ import java.util.List;
 
 @WithPermission(value = "leave", desc = "Allows you to leave an arena")
 public class LeaveGameCommand extends Command {
+    public static final List<String> ALIASES = Arrays.asList("leave", "quit", "exit");
+
     private static Message NO_GAME;
     private static Message SUCCESS;
 
     public LeaveGameCommand() {
-        super("leave");
+        super(ALIASES.get(0));
         setDescription("Leaves from the arena joined.");
     }
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("quit", "exit");
+        return Arrays.asList(ALIASES.get(1), ALIASES.get(2));
     }
 
     @Executor(sender = Sender.PLAYER)

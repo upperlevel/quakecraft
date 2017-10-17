@@ -8,11 +8,15 @@ import xyz.upperlevel.uppercore.command.WithChildPermission;
 import xyz.upperlevel.uppercore.command.WithPermission;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
 @WithPermission("quakecraft")
 @WithChildPermission(desc = "Gives access to all quakecraft commands")
 public class QuakeCommand extends NodeCommand implements CommandExecutor {
+    public static final List<String> ALIASES = Arrays.asList("quake", "quakecraft");
 
     public QuakeCommand() {
         super("quake");
