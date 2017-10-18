@@ -52,7 +52,7 @@ public class KillStreak {
         if(event.isCancelled())
             return this;
         else {
-            event.getMessage().broadcast("killer_name", p.getName());
+            event.getMessage().broadcast(phase.getGame().getPlayers(), "killer_name", p.getName());
             gain.grant(p);
             return get(index + 1);
         }

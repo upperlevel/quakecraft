@@ -12,10 +12,11 @@ import xyz.upperlevel.quakecraft.shop.dash.DashCooldownManager;
 import xyz.upperlevel.quakecraft.shop.dash.DashPowerManager;
 import xyz.upperlevel.quakecraft.shop.gun.*;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
+import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.util.PlayerInventoryBackup;
+import xyz.upperlevel.uppercore.util.PlayerBackup;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,7 +53,7 @@ public class QuakePlayer {
 
     private GainNotifier gainNotifier = new GainNotifier(this);
 
-    private PlayerInventoryBackup preJoinItems;
+    private PlayerBackup preJoinItems;
 
     public QuakePlayer(Player player) {
         this.player = player;
@@ -164,6 +165,27 @@ public class QuakePlayer {
         );
     }
 
+    private Purchase<?> getPurchase(PurchaseRegistry reg, Config in, String managerName, String... aliases) {
+        PurchaseManager<?> manager = reg.getManager(managerName);
+        if (manager == null)
+            throw new IllegalArgumentException("Cannot find purchase manager " + managerName);
+        String selectedId = in.getString(managerName);
+        if(selectedId == null) {
+            for (String alias : aliases) {
+                selectedId = in.getString(alias);
+            }
+        }
+        if(selectedId == null) {
+            return manager.getDefault();
+        }
+        Purchase<?> obj = manager.get(selectedId);
+        if (obj == null) {
+            Quakecraft.get().getLogger().warning("Cannot find " + managerName + ": '" + selectedId + "', id changed?");
+            return manager.getDefault();
+        }
+        return obj;
+    }
+
     public void load() {
         long startedAt = System.currentTimeMillis();
 
@@ -188,30 +210,30 @@ public class QuakePlayer {
             // >>>>>>>>>> gun
             {
                 PurchaseRegistry r = get().getShop().getGuns().getRegistry();
-                selectedBarrel = (BarrelManager.Barrel) r.getManager("barrel").get(selected.getString("barrel"));
-                selectedCase = (CaseManager.Case) r.getManager("case").get(selected.getString("case"));
-                selectedLaser = (LaserManager.Laser) r.getManager("laser").get(selected.getString("laser"));
-                selectedMuzzle = (MuzzleManager.Muzzle) r.getManager("muzzle").get(selected.getString("muzzle"));
-                selectedTrigger = (TriggerManager.Trigger) r.getManager("trigger").get(selected.getString("trigger"));
+                selectedBarrel = (BarrelManager.Barrel) getPurchase(r, selected, "barrel");
+                selectedCase = (CaseManager.Case) getPurchase(r, selected, "case");
+                selectedLaser = (LaserManager.Laser) getPurchase(r, selected, "laser");
+                selectedMuzzle = (MuzzleManager.Muzzle) getPurchase(r, selected, "muzzle");
+                selectedTrigger = (TriggerManager.Trigger) getPurchase(r, selected, "trigger");
             }
             // >>>>>>>>>> armor
             {
                 PurchaseRegistry r = get().getShop().getArmors().getRegistry();
-                selectedBoot = (BootManager.Boot) r.getManager("boot").get(selected.getString("boots"));
-                selectedLegging = (LeggingManager.Legging) r.getManager("legging").get(selected.getString("leggings"));
-                selectedChestplate = (ChestplateManager.Chestplate) r.getManager("chestplate").get(selected.getString("chestplate"));
-                selectedHat = (HatManager.Hat) r.getManager("hat").get(selected.getString("hat"));
+                selectedBoot = (BootManager.Boot) getPurchase(r, selected, "boot", "boots");
+                selectedLegging = (LeggingManager.Legging) getPurchase(r, selected, "legging", "leggings");
+                selectedChestplate = (ChestplateManager.Chestplate) getPurchase(r, selected, "chestplate", "chestplates");
+                selectedHat = (HatManager.Hat) getPurchase(r, selected, "hat", "hats");
             }
             // >>>>>>>>>> killsound
             {
                 PurchaseRegistry r = get().getShop().getKillSounds().getRegistry();
-                selectedKillSound = (KillSoundManager.KillSound) r.getManager("kill_sound").get(selected.getString("kill_sound"));
+                selectedKillSound = (KillSoundManager.KillSound) getPurchase(r, selected, "kill_sound");
             }
             // >>>>>>>>>> dash
             {
                 PurchaseRegistry r = get().getShop().getDashes().getRegistry();
-                selectedDashPower = (DashPowerManager.DashPower) r.getManager("dash_power").get(selected.getString("dash_power"));
-                selectedDashCooldown = (DashCooldownManager.DashCooldown) r.getManager("dash_cooldown").get(selected.getString("dash_cooldown"));
+                selectedDashPower = (DashPowerManager.DashPower) getPurchase(r, selected, "dash_power");
+                selectedDashCooldown = (DashCooldownManager.DashCooldown) getPurchase(r, selected, "dash_cooldown");
             }
         }
 
@@ -246,9 +268,9 @@ public class QuakePlayer {
             selected.put("trigger", selectedTrigger.getId());
         // >>>>>>>>>> armor
         if (selectedBoot != null)
-            selected.put("boots", selectedBoot.getId());
+            selected.put("boot", selectedBoot.getId());
         if (selectedLegging != null)
-            selected.put("leggings", selectedLegging.getId());
+            selected.put("legging", selectedLegging.getId());
         if (selectedChestplate != null)
             selected.put("chestplate", selectedChestplate.getId());
         if (selectedHat != null)
@@ -275,7 +297,7 @@ public class QuakePlayer {
     }
 
     public void saveItems() {
-       preJoinItems = new PlayerInventoryBackup(player);
+       preJoinItems = new PlayerBackup(player);
     }
 
     public void restoreItems() {

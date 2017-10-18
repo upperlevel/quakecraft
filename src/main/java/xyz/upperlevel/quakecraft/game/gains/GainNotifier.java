@@ -33,15 +33,7 @@ public class GainNotifier {
             amount += lastGain;
         }
         List<String> message = GAIN.get(player.getPlayer(), "raw_gain", format(amount), "gain", EconomyManager.format(amount));
-        BaseComponent[] comps;
-        if(message.size() == 1)
-            comps = ComponentSerializer.parse(message.get(0));
-        else if(message.isEmpty())
-            comps = new BaseComponent[0];
-        else
-            comps = ComponentSerializer.parse(message.stream().collect(Collectors.joining("\n")));
-
-        PlayerNms.sendActionBar(player.getPlayer(), comps);
+        PlayerNms.sendActionBar(player.getPlayer(), message);
         lastGainTime = currentTime;
         lastGain = amount;
     }

@@ -148,6 +148,7 @@ public class Game implements Listener {
     public boolean join(Player player) {
         if (players.add(player)) {
             Quakecraft.get().getPlayerManager().getPlayer(player).saveItems();
+            player.setExp(0f);
             GameJoinEvent e = new GameJoinEvent(this, player);
             Bukkit.getPluginManager().callEvent(e);
             if (e.isCancelled()) {
@@ -185,11 +186,11 @@ public class Game implements Listener {
     }
 
     public void broadcast(Message msg) {
-        players.forEach(msg::send);
+        msg.broadcast(players, placeholders);
     }
 
     public void broadcast(Message msg, PlaceholderRegistry placeholders) {
-        players.forEach(p -> msg.send(p, placeholders));
+        msg.broadcast(players, placeholders);
     }
 
 
