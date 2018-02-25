@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'distribution'
+}
+
+group = 'xyz.upperlevel.quakecraft'
+version = '1.3.9'
+
+description = """A core used by the Upperlevel group"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+project.ext {
+    mcVersion = '1.12-R0.1-SNAPSHOT'
+    coreVersion = '1.2.3'
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+    // Spigot Api
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
+    compileOnly group: 'org.spigotmc', name: 'spigot-api', version: mcVersion
+    compileOnly group: 'xyz.upperlevel.uppercore', name: 'uppercore', version: coreVersion
+}
+
+shadowJar {
+    baseName = 'QuakeCraft'
+    classifier = null
+    version = null
+}
+
+distributions {
+    spigot {
+        baseName = 'Spigot-Quakecraft'
+        contents {
+            //from shadowJar.
+        }
+    }
+}
+
+import org.apache.tools.ant.filters.*
+processResources {
+    filter(ReplaceTokens, tokens: ['project.version': version])
+}
