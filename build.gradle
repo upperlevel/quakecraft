@@ -39,10 +39,20 @@ shadowJar {
 }
 
 distributions {
-    spigot {
-        baseName = 'Spigot-Quakecraft'
+    main {
+        baseName = 'Quakecraft'
+        version = ''
         contents {
-            //from shadowJar.
+            from { 'build/libs/' + shadowJar.baseName + '.jar' }
+            if (projects.hasProperty('upperCoreLocation')) {
+                from { upperCoreLocation }
+            }
+            into(shadowJar.baseName) {
+                from { 'src/main/configs' }
+                from ('src/main/resources') {
+                    exclude 'plugin.yml'
+                }
+            }
         }
     }
 }
