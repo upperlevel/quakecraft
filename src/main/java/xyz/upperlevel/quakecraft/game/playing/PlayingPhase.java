@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +21,8 @@ import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.commands.LeaveGameCommand;
+import xyz.upperlevel.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.quakecraft.events.LaserStabEvent;
@@ -43,20 +46,19 @@ import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 
 import java.io.File;
 import java.security.spec.ECField;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
+import static xyz.upperlevel.uppercore.Uppercore.messages;
 
 @Data
 public class PlayingPhase implements QuakePhase, Listener {
     private static Message shotMessage;
     private static Message headshotMessage;
     private static Message snakeDisabledMessage;
+    private static Message cannotRunCommands;
     private static String defKillMessage;
 
     private static PlayingHotbar sampleHotbar;
@@ -115,7 +117,7 @@ public class PlayingPhase implements QuakePhase, Listener {
         BoardView view = boards().view(player);
         if (game.getArena().isHideNametags()) {
             Team team = view.getHandle().registerNewTeam("hide_nametags");
-            for(Player other : game.getPlayers()) {
+            for (Player other : game.getPlayers()) {
                 view.getEntries().add(other.getName());// Occupy the name entry
                 team.addEntry(other.getName());
             }
@@ -328,5 +330,19 @@ public class PlayingPhase implements QuakePhase, Listener {
         )));
 
         signLines = messages.getConfig().getMessageStrList("playing-sign");
+        cannotRunCommands = messages.getConfig().getMessage("cannot-run-command-during-game");
+    }
+
+    @EventHandler
+    public void onCmdProcess(PlayerCommandPreprocessEvent e) {
+        String[] pieces = e.getMessage().split(" ");
+        if (game.isPlaying(e.getPlayer())) {
+            if (!(pieces.length >= 2 &&
+                    QuakeCommand.ALIASES.contains(pieces[0].substring(Math.min(pieces[0].length(), 1), pieces[0].length()).toLowerCase(Locale.ENGLISH)) &&
+                    LeaveGameCommand.ALIASES.contains(pieces[1].toLowerCase(Locale.ENGLISH)))) {
+                cannotRunCommands.send(e.getPlayer());
+                e.setCancelled(true);
+            }
+        }
     }
 }

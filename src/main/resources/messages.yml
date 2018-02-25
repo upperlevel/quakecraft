@@ -24,6 +24,8 @@
 
 
 game:
+  cannot-run-command-during-game: '&cCannot run commands during game! Only /quake quit is runnable.'
+
   cannot-join:
     max-players: '&cCannot join game "%game_name%": Max players reached'
     in-game: '&cCannot join game "%game_name%": Already playing'
