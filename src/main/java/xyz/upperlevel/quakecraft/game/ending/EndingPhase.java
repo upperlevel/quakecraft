@@ -20,7 +20,7 @@ import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.lobby.LobbyPhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.game.Phase;

@@ -10,33 +10,31 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
-import xyz.upperlevel.uppercore.command.Optional;
-import xyz.upperlevel.uppercore.game.Phase;
-import xyz.upperlevel.uppercore.game.PhaseManager;
+import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 import java.util.*;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
-import static xyz.upperlevel.uppercore.Uppercore.boards;
 
 @Getter
-public class GamePhase extends PhaseManager implements QuakePhase, Listener {
+public class GamePhase extends PhaseManager implements Phase, Listener {
     public static Message CANNOT_JOIN_ALREADY_PLAYING;
 
-    private final Game game;
+    private final QuakeArena arena;
     private final Map<Player, Participant> participants = new HashMap<>();
     private final List<Participant> ranking = new ArrayList<>();
     private final PlaceholderRegistry<?> placeholders;
 
-    public GamePhase(Game game) {
-        this.game = game;
+    public GamePhase(QuakeArena arena) {
+        this.arena = arena;
         this.placeholders = PlaceholderRegistry.create(game.getPlaceholders());
         buildPlaceholders(placeholders);
     }

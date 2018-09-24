@@ -1,5 +1,6 @@
-title: '&e&lQUAKECRAFT'
-lines:
+board:
+  title: '&e&lQUAKECRAFT'
+  lines:
   - ''
   - '&fMap: &a%arena_name%'
   - '&fPlayers: &a%players%/%max_players%'
