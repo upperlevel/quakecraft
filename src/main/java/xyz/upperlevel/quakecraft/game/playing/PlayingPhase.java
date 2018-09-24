@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,13 +20,13 @@ import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.commands.LeaveGameCommand;
-import xyz.upperlevel.quakecraft.commands.QuakeCommand;
+import xyz.upperlevel.quakecraft.commands.QuakecraftCommand;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
+import xyz.upperlevel.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.board.BoardView;
@@ -45,7 +44,6 @@ import xyz.upperlevel.uppercore.util.TextUtil;
 import xyz.upperlevel.uppercore.util.nms.impl.entity.FireworkNms;
 
 import java.io.File;
-import java.security.spec.ECField;
 import java.util.*;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
@@ -338,7 +336,7 @@ public class PlayingPhase implements QuakePhase, Listener {
         String[] pieces = e.getMessage().split(" ");
         if (game.isPlaying(e.getPlayer())) {
             if (!(pieces.length >= 2 &&
-                    QuakeCommand.ALIASES.contains(pieces[0].substring(Math.min(pieces[0].length(), 1), pieces[0].length()).toLowerCase(Locale.ENGLISH)) &&
+                    QuakecraftCommand.ALIASES.contains(pieces[0].substring(Math.min(pieces[0].length(), 1), pieces[0].length()).toLowerCase(Locale.ENGLISH)) &&
                     LeaveGameCommand.ALIASES.contains(pieces[1].toLowerCase(Locale.ENGLISH)))) {
                 cannotRunCommands.send(e.getPlayer());
                 e.setCancelled(true);

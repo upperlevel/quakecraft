@@ -5,22 +5,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.ArenaManager;
-import xyz.upperlevel.quakecraft.arena.arguments.ArenaArgumentParser;
-import xyz.upperlevel.quakecraft.commands.QuakeCommand;
+import xyz.upperlevel.quakecraft.commands.QuakecraftCommand;
 import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.quakecraft.game.GameManager;
 import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.quakecraft.game.args.GameArgParser;
-import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.quakecraft.game.gains.GainNotifier;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.game.CountdownPhase;
+import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.WaitingPhase;
 import xyz.upperlevel.quakecraft.game.playing.Bullet;
 import xyz.upperlevel.quakecraft.game.playing.Dash;
 import xyz.upperlevel.quakecraft.game.playing.KillStreak;
 import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
-import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
 import xyz.upperlevel.quakecraft.placeholders.QuakePlaceholders;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
@@ -112,7 +111,7 @@ public class Quakecraft extends JavaPlugin {
             ArgumentParserSystem.register(new GameArgParser());
             ArgumentParserSystem.register(new PowerupEffectArgumentParser());
 
-            new QuakeCommand().subscribe();
+            new QuakecraftCommand().subscribe();
 
             GainNotifier.setup();
 
@@ -129,7 +128,7 @@ public class Quakecraft extends JavaPlugin {
         customConfig = Config.wrap(getConfig());
         messages = MessageManager.load(this);
 
-        loadSafe("commands", QuakeCommand::loadConfig);
+        loadSafe("commands", QuakecraftCommand::loadConfig);
         loadSafe("killstreak", KillStreak::loadConfig);
         loadSafe("dash", Dash::loadConfig);
         loadSafe("purchase-gui", PurchaseGui::loadConfig);

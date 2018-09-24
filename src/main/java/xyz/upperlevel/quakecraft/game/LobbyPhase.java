@@ -10,31 +10,25 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
-import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.game.Phase;
-import xyz.upperlevel.uppercore.game.PhaseManager;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
-
-import java.util.List;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
 public class LobbyPhase extends PhaseManager implements QuakePhase, Listener {
-    private static Message joinMsg;
-    private static Message quitMsg;
+    @Getter
+    private final QuakeArena arena;
 
     @Getter
-    private final Game game;
+    private final PlaceholderRegistry placeholderRegistry;
 
-    public LobbyPhase(Game game) {
-        this.game = game;
+    public LobbyPhase(QuakeArena arena) {
+        this.arena = arena;
+        placeholderRegistry = PlaceholderRegistry.create();
     }
 
     private void setup(Player player) {

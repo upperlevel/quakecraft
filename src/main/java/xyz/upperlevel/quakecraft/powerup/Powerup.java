@@ -10,13 +10,13 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemDespawnEvent;
-import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.events.PowerupPickupEvent;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.Participant;
@@ -38,7 +38,7 @@ public class Powerup {
     private static final double SPAWN_HEIGHT = 1.0;
     private static Map<Item, Powerup> drops = new HashMap<>();
 
-    private final Arena arena;
+    private final QuakeArena arena;
     private Location location;
     private PowerupEffect effect;
     private int respawnTicks;
@@ -50,14 +50,14 @@ public class Powerup {
     private GamePhase phase;
     private BukkitTask spawner;
 
-    public Powerup(Arena arena, Location location, PowerupEffect effect, int respawnTicks) {
+    public Powerup(QuakeArena arena, Location location, PowerupEffect effect, int respawnTicks) {
         this.arena = arena;
         this.location = location;
         this.effect = effect;
         this.respawnTicks = respawnTicks;
     }
 
-    public Powerup(Arena arena, Config config) {
+    public Powerup(QuakeArena arena, Config config) {
         this.arena = arena;
         load(config);
     }

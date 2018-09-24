@@ -4,37 +4,24 @@ import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.game.PhaseManager;
-import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.LocUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
@@ -202,80 +189,6 @@ public class Game implements Listener {
                 .map(b -> LocUtil.serialize(b.getLocation()))
                 .collect(Collectors.toList()));
         return dt;
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerJoin(GameJoinEvent e) {
-        if (e.getGame() == this && players.size() > arena.getMaxPlayers()) {
-            e.cancel(CANNOT_JOIN_MAX_REACHED.get(e.getPlayer(), getPlaceholders()));
-        }
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        if (players.contains(e.getPlayer()))
-            leave(e.getPlayer());
-    }
-
-    // PLAYER HEALTH
-
-    @EventHandler
-    public void onDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player && players.contains(e.getEntity())) {
-            e.setCancelled(true);
-            if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
-                ((Player) e.getEntity()).setHealth(0);
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onFood(FoodLevelChangeEvent e) {
-        if (e.getEntity() instanceof Player && players.contains(e.getEntity()))
-            e.setCancelled(true);
-    }
-
-    // ITEM INTERACT
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPickup(PlayerPickupItemEvent e) {
-        if (players.contains(e.getPlayer()))
-            e.setCancelled(true);
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onDrop(PlayerDropItemEvent e) {
-        if (players.contains(e.getPlayer()))
-            e.setCancelled(true);
-    }
-
-    // WORLD INTERACT
-
-    @EventHandler(ignoreCancelled = true)
-    public void onInteract(PlayerInteractEvent e) {
-        if (players.contains(e.getPlayer())) {
-            e.setCancelled(true);
-        } else {
-            Sign s = signs.get(e.getClickedBlock());
-            if (s != null) {
-                Bukkit.dispatchCommand(e.getPlayer(), "quake join " + id);
-            }
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent e) {
-        if (players.contains(e.getPlayer())) {
-            e.setCancelled(true);
-        } else if (signs.remove(e.getBlock()) != null)
-            e.getBlock().setType(Material.AIR);
-    }
-
-    @EventHandler
-    public void onBlockPlace(BlockPlaceEvent e) {
-        if (players.contains(e.getPlayer())) {
-            e.setCancelled(true);
-            e.setBuild(false);
-        }
     }
 
 

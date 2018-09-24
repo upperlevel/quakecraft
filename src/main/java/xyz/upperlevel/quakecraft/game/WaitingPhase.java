@@ -1,8 +1,7 @@
-package xyz.upperlevel.quakecraft.game.waiting;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,27 +10,24 @@ import org.bukkit.event.Listener;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.QuakePhase;
-import xyz.upperlevel.quakecraft.game.countdown.CountdownPhase;
+import xyz.upperlevel.uppercore.board.Board;
+import xyz.upperlevel.uppercore.board.BoardManager;
+import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
+import xyz.upperlevel.uppercore.config.ConfigUtil;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.io.File;
 import java.util.List;
 
-import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 @Data
 public class WaitingPhase implements QuakePhase, Listener {
     private static Hotbar sampleHotbar;
-    private static WaitingBoard sampleBoard;
+    private static Board board;
 
     private static List<PlaceholderValue<String>> signLines;
 
@@ -39,13 +35,11 @@ public class WaitingPhase implements QuakePhase, Listener {
     private final LobbyPhase parent;
 
     private Hotbar hotbar;
-    private WaitingBoard board;
 
     public WaitingPhase(LobbyPhase parent) {
         this.game = parent.getGame();
         this.parent = parent;
         this.hotbar = sampleHotbar;
-        this.board = new WaitingBoard(this, sampleBoard);
     }
 
     private void setup(Player player) {
@@ -77,6 +71,8 @@ public class WaitingPhase implements QuakePhase, Listener {
     }
 
     private void update(Player player) {
+        BoardManager.update(player, )
+
         boards().view(player).render();
     }
 
@@ -128,15 +124,11 @@ public class WaitingPhase implements QuakePhase, Listener {
     }
 
     public static void loadConfig() {
-        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.wrap(ConfigUtils.loadConfig(
+        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.wrap(ConfigUtil.loadConfig(
                 getPhaseFolder(),
                 "waiting_hotbar.yml"
         )));
-        sampleBoard = WaitingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                getPhaseFolder(),
-                "waiting_board.yml"
-        )));
-
+        board = SimpleConfigBoard.create(new File(getPhaseFolder(), "waiting_board.yml"));
         signLines = Quakecraft.get().getMessages().getConfig().getConfig("game").getMessageStrList("waiting-sign");
     }
 }

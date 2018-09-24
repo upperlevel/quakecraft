@@ -1,9 +1,8 @@
-package xyz.upperlevel.quakecraft.game.countdown;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,20 +10,12 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.events.GameJoinEvent;
-import xyz.upperlevel.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.QuakePhase;
-import xyz.upperlevel.quakecraft.game.waiting.WaitingPhase;
-import xyz.upperlevel.uppercore.board.BoardView;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.uppercore.board.Board;
+import xyz.upperlevel.uppercore.board.BoardManager;
+import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
-import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
@@ -42,7 +33,7 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 @Data
 public class CountdownPhase implements QuakePhase, Listener {
     private static Hotbar sampleHotbar;
-    private static CountdownBoard sampleBoard;
+    private static Board board;
 
     private static List<PlaceholderValue<String>> signLines;
 
@@ -50,11 +41,8 @@ public class CountdownPhase implements QuakePhase, Listener {
 
     private static Map<String, Message> countdownMsg;
 
-    private final Game game;
-    private final LobbyPhase parent;
-
-    private Hotbar hotbar;
-    private CountdownBoard board;
+    private final QuakeArena arena;
+    private final PlaceholderRegistry placeholderRegistry;
 
     private int timer;
     private final BukkitRunnable task = new BukkitRunnable() {
@@ -80,11 +68,10 @@ public class CountdownPhase implements QuakePhase, Listener {
         }
     };
 
-    public CountdownPhase(LobbyPhase parent) {
-        this.game = parent.getGame();
-        this.parent = parent;
-        this.hotbar = sampleHotbar;
-        this.board = new CountdownBoard(this, sampleBoard);
+    public CountdownPhase(QuakeArena arena) {
+        this.arena = arena;
+        placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholderRegistry())
+                .set("countdown", timer);
     }
 
     private void setup(Player player) {
@@ -153,8 +140,9 @@ public class CountdownPhase implements QuakePhase, Listener {
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
-        for (Player player : game.getPlayers())
-            setup(player);
+        for (Player player : arena.getPlayers()) {
+            BoardManager.open(player, board, placeholderRegistry);
+        }
         timer = Quakecraft.get().getConfig().getInt("lobby.countdown"); // todo parse before game
         task.runTaskTimer(get(), 0, 20);
         updateSigns();
@@ -168,8 +156,8 @@ public class CountdownPhase implements QuakePhase, Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onGameJoin(GameJoinEvent e) {
-        if (e.getGame().equals(game)) {
+    public void onArenaJoin(ArenaEvent.PlayerJoin e) {
+        if (arena.equals(e.getArena())) {
             setup(e.getPlayer());
             update();
             updateSigns();
@@ -177,8 +165,8 @@ public class CountdownPhase implements QuakePhase, Listener {
     }
 
     @EventHandler
-    public void onGameQuit(GameQuitEvent e) {
-        if (e.getGame().equals(game)) {
+    public void onArenaQuit(ArenaEvent.PlayerQuit e) {
+        if (arena.equals(e.getArena())) {
             clear(e.getPlayer());
             if (!tryStopCountdown()) {
                 updateSigns();
@@ -194,12 +182,7 @@ public class CountdownPhase implements QuakePhase, Listener {
                 getPhaseFolder(),
                 "countdown_hotbar.yml"
         )));
-
-        sampleBoard = CountdownBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                getPhaseFolder(),
-                "countdown_board.yml"
-        )));
-
+        board = SimpleConfigBoard.create(new File(getPhaseFolder(), "countdown_board.yml"));
         signLines = get().getMessages().getConfig().getConfig("game").getMessageStrList("countdown-sign");
     }
 }

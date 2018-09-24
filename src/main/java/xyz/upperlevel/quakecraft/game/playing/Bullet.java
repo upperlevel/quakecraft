@@ -3,7 +3,6 @@ package xyz.upperlevel.quakecraft.game.playing;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -16,7 +15,6 @@ import xyz.upperlevel.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.uppercore.math.RayTrace;
 import xyz.upperlevel.uppercore.particle.Particle;
-import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.sound.PlaySound;
 
 import java.util.*;

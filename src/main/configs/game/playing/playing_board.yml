@@ -1,12 +1,12 @@
 title: '&e&lQUAKECRAFT'
 update-interval: 10
 header:
-  - ''
-  - '&fTime left: &a%countdown%'
-  - ''
-ranking:
-  text: '&7%player_name%: &a%kills%'
-  size: 10
+- ''
+- '&fTime left: &a%countdown%'
+- ''
+line:
+  text:
+  maxLines: 10
 footer:
-  - ''
-  - '&ewww.upperlevel.xyz'
+- ''
+- '&ewww.upperlevel.xyz'
