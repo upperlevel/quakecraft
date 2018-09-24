@@ -1,0 +1,23 @@
+timer:
+  from: 10
+  messages:
+    40: '&eThe game is starting within &b40&e seconds!'
+    20: '&eThe game is starting within 20 seconds!'
+    # 30: 'At 30 seconds it would write this message! But it does not because it is commented out'
+    10: '&eThe game starts in &610&e seconds!'
+    5:  '&eThe game starts in &c5&e seconds!'
+    4:  '&eThe game starts in &c4&e seconds!'
+    3:  '&eThe game starts in &c3&e seconds!'
+    2:  '&eThe game starts in &c2&e seconds!'
+    1:  '&eThe game starts in &c1&e second!'
+
+board:
+  title: '&e&lQUAKECRAFT'
+  lines:
+  - ''
+  - '&fMap: &a%arena_name%'
+  - '&fPlayers: &a%players%/%max_players%'
+  - ''
+  - '&fStarting in &a%countdown%s'
+  - ''
+  - '&eupperlevel.github.io'

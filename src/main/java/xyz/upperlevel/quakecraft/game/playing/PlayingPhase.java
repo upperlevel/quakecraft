@@ -26,7 +26,7 @@ import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
+import xyz.upperlevel.quakecraft.game.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.board.BoardView;

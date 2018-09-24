@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.game.WaitingPhase;
+import xyz.upperlevel.quakecraft.game.lobby.WaitingPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.config.Config;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class QuakeArena extends Arena {
     public static Message ARENA_JOIN_MESSAGE;
     public static Message ARENA_QUIT_MESSAGE;
-    public static Message ERROR_MAX_PLAYERS_REACHED;
+    public static Message MAX_PLAYERS_REACHED_ERROR;
 
     @Getter
     @Setter
@@ -112,6 +112,9 @@ public class QuakeArena extends Arena {
     }
 
     public static void loadConfig(Config config) {
-        ERROR_MAX_PLAYERS_REACHED = config.getMessageStr("cannot-join-max-reached");
+        ARENA_JOIN_MESSAGE = config.getMessage("arena-join");
+        ARENA_QUIT_MESSAGE = config.getMessage("arena-quit");
+
+        MAX_PLAYERS_REACHED_ERROR = config.getMessage("cannot-join-max-reached");
     }
 }
