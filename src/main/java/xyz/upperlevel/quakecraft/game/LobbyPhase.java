@@ -15,11 +15,15 @@ import xyz.upperlevel.quakecraft.events.GameJoinEvent;
 import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
 public class LobbyPhase extends PhaseManager implements QuakePhase, Listener {
+    private static Message joinMsg;
+    private static Message quitMsg;
+
     @Getter
     private final QuakeArena arena;
 

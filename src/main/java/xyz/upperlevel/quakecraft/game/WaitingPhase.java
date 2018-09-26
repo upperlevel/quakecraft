@@ -14,7 +14,6 @@ import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardManager;
 import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtil;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
@@ -124,7 +123,7 @@ public class WaitingPhase implements QuakePhase, Listener {
     }
 
     public static void loadConfig() {
-        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.wrap(ConfigUtil.loadConfig(
+        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.fromYaml(new File(
                 getPhaseFolder(),
                 "waiting_hotbar.yml"
         )));

@@ -8,7 +8,7 @@ import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.PlayerDashCooldownEnd;
 import xyz.upperlevel.quakecraft.events.PlayerDashEvent;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 import java.util.HashMap;
 import java.util.Map;

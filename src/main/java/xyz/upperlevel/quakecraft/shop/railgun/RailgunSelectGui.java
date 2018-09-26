@@ -13,9 +13,9 @@ import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.ChestGui;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 
 import java.util.*;
 import java.util.stream.Collectors;

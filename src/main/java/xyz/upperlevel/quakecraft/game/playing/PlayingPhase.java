@@ -26,18 +26,17 @@ import xyz.upperlevel.quakecraft.events.LaserSpreadEvent;
 import xyz.upperlevel.quakecraft.events.LaserStabEvent;
 import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.task.Timer;
 import xyz.upperlevel.uppercore.task.UpdaterTask;
 import xyz.upperlevel.uppercore.util.TextUtil;
@@ -49,7 +48,6 @@ import java.util.*;
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 import static xyz.upperlevel.uppercore.Uppercore.boards;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
-import static xyz.upperlevel.uppercore.Uppercore.messages;
 
 @Data
 public class PlayingPhase implements QuakePhase, Listener {
@@ -317,7 +315,7 @@ public class PlayingPhase implements QuakePhase, Listener {
 
         gunSlot = Quakecraft.get().getCustomConfig().getIntRequired("playing-hotbar.gun.slot");
 
-        sampleHotbar = PlayingHotbar.deserialize("playing-solo", Config.wrap(ConfigUtils.loadConfig(
+        sampleHotbar = PlayingHotbar.deserialize("playing-solo", Config.fromYaml(new File(
                 getPhaseFolder(),
                 "playing_hotbar.yml"
         )));

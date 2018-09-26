@@ -22,13 +22,12 @@ import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.quakecraft.game.LobbyPhase;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.game.Phase;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.util.nms.impl.MessageNms;
 
 import java.io.File;
@@ -220,8 +219,9 @@ public class EndingPhase implements QuakePhase, Listener {
 
         MessageManager endRanking = manager.getSection("end-ranking");
         endRankingHeader = endRanking.get("header");
+        // TODO: Transcribe this to the new config, this is painful to look at
         endRankingBody =  endRanking.getConfig()
-                .getSectionRequired("body")
+                .getMapRequired("body")
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(
@@ -235,12 +235,12 @@ public class EndingPhase implements QuakePhase, Listener {
         autoJoin = Quakecraft.get().getCustomConfig().getBoolRequired("auto-join");
         rejoinMessage = Quakecraft.get().getCustomConfig().getMessageRequired("rejoin-message");
 
-        sampleHotbar = EndingHotbar.deserialize(get(), Config.wrap(ConfigUtils.loadConfig(
+        sampleHotbar = EndingHotbar.deserialize(get(), Config.fromYaml(new File(
                 getPhaseFolder(),
                 "ending_hotbar.yml"
         )));
 
-        sampleBoard = EndingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
+        sampleBoard = EndingBoard.deserialize(Config.fromYaml(new File(
                 getPhaseFolder(),
                 "ending_board.yml"
         )));

@@ -18,6 +18,8 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
@@ -178,7 +180,7 @@ public class CountdownPhase implements QuakePhase, Listener {
     public static void loadConfig() {
         MessageManager msg = get().getMessages().getSection("lobby");
         countdownMsg = msg.load("countdown");
-        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.wrap(ConfigUtils.loadConfig(
+        sampleHotbar = Hotbar.deserialize(Quakecraft.get(), Config.fromYaml(new File(
                 getPhaseFolder(),
                 "countdown_hotbar.yml"
         )));

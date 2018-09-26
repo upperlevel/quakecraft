@@ -6,16 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.ArenaManager;
 import xyz.upperlevel.quakecraft.commands.QuakecraftCommand;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.GameManager;
-import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.game.args.GameArgParser;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.quakecraft.game.gains.GainNotifier;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
-import xyz.upperlevel.quakecraft.game.CountdownPhase;
-import xyz.upperlevel.quakecraft.game.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.WaitingPhase;
 import xyz.upperlevel.quakecraft.game.playing.Bullet;
 import xyz.upperlevel.quakecraft.game.playing.Dash;
 import xyz.upperlevel.quakecraft.game.playing.KillStreak;
@@ -29,20 +24,26 @@ import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
+import xyz.upperlevel.uppercore.Uppercore;
+import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardRegistry;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.database.Store;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
+import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.gui.GuiRegistry;
 import xyz.upperlevel.uppercore.gui.link.Link;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
-import xyz.upperlevel.uppercore.message.MessageManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
+import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
 import xyz.upperlevel.uppercore.update.UpdateChecker;
 import xyz.upperlevel.uppercore.util.CrashUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import static xyz.upperlevel.uppercore.Uppercore.guis;
@@ -125,7 +126,7 @@ public class Quakecraft extends JavaPlugin {
     }
 
     public void loadConfig() {
-        customConfig = Config.wrap(getConfig());
+        customConfig = Config.fromYaml(new File(getDataFolder(), "config.yml"));
         messages = MessageManager.load(this);
 
         loadSafe("commands", QuakecraftCommand::loadConfig);

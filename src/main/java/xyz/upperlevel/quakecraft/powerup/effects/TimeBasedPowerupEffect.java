@@ -3,22 +3,16 @@ package xyz.upperlevel.quakecraft.powerup.effects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.message.MessageManager;
-import xyz.upperlevel.uppercore.util.nms.impl.TagNms;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public abstract class TimeBasedPowerupEffect extends BasePowerupEffect {

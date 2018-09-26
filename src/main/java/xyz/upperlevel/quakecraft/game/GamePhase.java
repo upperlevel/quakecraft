@@ -18,8 +18,8 @@ import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.command.Optional;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.game.PhaseManager;
-import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 import java.util.*;
 
