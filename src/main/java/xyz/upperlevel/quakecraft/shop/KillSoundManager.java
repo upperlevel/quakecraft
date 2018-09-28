@@ -12,6 +12,7 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.sound.PlaySound;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
 public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.KillSound> {
@@ -56,7 +57,7 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
 
         public KillSound(String id, Config config) {
             super(KillSoundManager.this, id, config);
-            sound = config.getPlaySound("sound", PlaySound.SILENT);
+            sound = config.getBukkitSound("sound", PlaySound.SILENT);
         }
 
         public void play(Location loc) {

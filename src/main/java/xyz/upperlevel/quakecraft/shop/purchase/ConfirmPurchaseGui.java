@@ -1,13 +1,13 @@
 package xyz.upperlevel.quakecraft.shop.purchase;
 
-import com.google.common.primitives.Ints;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.ConfigConstructor;
+import xyz.upperlevel.uppercore.config.ConfigProperty;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
@@ -18,6 +18,7 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.io.File;
+import java.util.Optional;
 
 public class ConfirmPurchaseGui extends ChestGui {
     private Purchase<?> purchase;
@@ -66,7 +67,7 @@ public class ConfirmPurchaseGui extends ChestGui {
 
     public static Options load() {
         File file = new File(Quakecraft.get().getDataFolder(), "shop/confirm_gui.yml");
-        return new Options(Config.wrap(YamlConfiguration.loadConfiguration(file)));
+        return Config.fromYaml(file).get(Options.class, null);
     }
 
     public void onBuy(Player player) {
@@ -92,36 +93,27 @@ public class ConfirmPurchaseGui extends ChestGui {
         private int[] cancelSlots;
         private CustomItem cancelItem;
 
-        public Options(Config config) {
-            this.title = config.getMessageStrRequired("title");
-            this.size = config.getInt("size", -1);
-            if(size < 0) {
-                type = config.getEnum("type", InventoryType.class);
-                if(type == null)
-                    throw new InvalidConfigurationException("Both 'size' and 'type' ar empty in Confirm GUI!");
-            } else
-                type = null;
-            itemSlot = config.getIntRequired("item-slot");
-            {
-                Config confirm = config.getConfig("confirm");
-                if(confirm.has("slot"))
-                    confirmSlots = new int[]{confirm.getIntRequired("slot")};
-                else if(confirm.has("slots"))
-                    confirmSlots = Ints.toArray(confirm.getList("slots"));
-                else
-                    throw new InvalidConfigurationException("Both 'slot' and 'slots' are empty in confirm section of Confirm GUI!");
-                confirmItem = confirm.getCustomItemRequired("item");
+        @ConfigConstructor
+        public Options(
+                @ConfigProperty("title") PlaceholderValue<String> title,
+                @ConfigProperty("size") Optional<Integer> size,
+                @ConfigProperty("type") Optional<InventoryType> type,
+                @ConfigProperty("item-slot") int itemSlot,
+                @ConfigProperty("confirm.slots") int[] confirmSlots,
+                @ConfigProperty("confirm.item") CustomItem confirmItem,
+                @ConfigProperty("cancel.slots") int[] cancelSlots,
+                @ConfigProperty("cancel.item") CustomItem cancelItem
+        ) {
+            if (!size.isPresent() && !type.isPresent()) {
+                throw new InvalidConfigException("Both 'size' and 'type' aren't specified");
             }
-            {
-                Config cancel = config.getConfig("cancel");
-                if(cancel.has("slot"))
-                    cancelSlots = new int[]{cancel.getIntRequired("slot")};
-                else if(cancel.has("slots"))
-                    confirmSlots = Ints.toArray(cancel.getList("slots"));
-                else
-                    throw new InvalidConfigurationException("Both 'slot' and 'slots' are empty in cancel section of Confirm GUI!");
-                cancelItem = cancel.getCustomItemRequired("item");
-            }
+            this.size = size.orElse(-1);
+            this.type = type.orElse(null);
+            this.itemSlot = itemSlot;
+            this.confirmSlots = confirmSlots;
+            this.confirmItem = confirmItem;
+            this.cancelSlots = cancelSlots;
+            this.cancelItem = cancelItem;
         }
     }
 }

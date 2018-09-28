@@ -57,4 +57,9 @@ public class GunCategory extends Category {
     public String getGuiLoc() {
         return "gun/gun_gui";
     }
+
+    @Override
+    public String getGuiRegistryName() {
+        return "gun";
+    }
 }

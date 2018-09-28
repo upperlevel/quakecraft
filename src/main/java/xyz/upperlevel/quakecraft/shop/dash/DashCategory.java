@@ -40,6 +40,11 @@ public class DashCategory extends UnitCategory {
         return "dash/dash_upgrades_gui";
     }
 
+    @Override
+    public String getGuiRegistryName() {
+        return "dash_upgrades";
+    }
+
     public void load() {
         final Logger logger = Quakecraft.get().getLogger();
         logger.info("Init loading dash");

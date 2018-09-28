@@ -11,7 +11,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.QuakePlayerManager;
@@ -20,15 +19,19 @@ import xyz.upperlevel.quakecraft.shop.event.PurchaseBuyEvent;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseSelectEvent;
 import xyz.upperlevel.quakecraft.shop.require.Require;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.ConfigConstructor;
+import xyz.upperlevel.uppercore.config.ConfigProperty;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.economy.Balance;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
+import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.gui.GuiAction;
+import xyz.upperlevel.uppercore.gui.GuiSize;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
-import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.EnchantGlow;
 
 import java.util.*;
@@ -55,8 +58,19 @@ public class PurchaseGui extends ChestGui {
         super(type, title);
     }
 
-    public PurchaseGui(Plugin plugin, Config config) {
-        super(plugin, config);
+    public PurchaseGui(Config config) {
+        super(Quakecraft.get(), config);
+    }
+
+    @ConfigConstructor
+    public PurchaseGui(
+            @ConfigProperty("type") Optional<InventoryType> type,
+            @ConfigProperty("size") Optional<GuiSize> size,
+            @ConfigProperty("update-interval") Optional<Integer> updateInteval,
+            @ConfigProperty("title") PlaceholderValue<String> title,
+            @ConfigProperty(value = "icons", optional = true) List<ConfigIcon> icons
+    ) {
+        super(type, size, updateInteval, title, icons);
     }
 
     public void update() {
@@ -266,7 +280,7 @@ public class PurchaseGui extends ChestGui {
         }
     }
 
-    public void add(PurchaseManager<?> manager, int[] slots) {
+    public void addPurchase(PurchaseManager<?> manager, int[] slots) {
         adapters.add(new PurchaseAdapter(manager, slots));
     }
 
@@ -292,27 +306,18 @@ public class PurchaseGui extends ChestGui {
     }
 
     @SuppressWarnings("unchecked")
-    public static PurchaseGui deserialize(Plugin plugin, String id, Config config, PurchaseManager manager) {
+    public static PurchaseGui deserialize(String id, Config config, PurchaseManager manager) {
         try {
-            PurchaseGui gui = new PurchaseGui(plugin, config);
-            gui.add(
+            PurchaseGui gui = new PurchaseGui(config);
+            gui.addPurchase(
                     manager,
-                    deserializeSlots(config.getCollectionRequired("slots"))
+                    config.get("slots", int[].class, null)
             );
             return gui;
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in gui " + id);
+        } catch (InvalidConfigException e) {
+            e.addLocation("in gui " + id);
             throw e;
         }
-    }
-
-    public static int[] deserializeSlots(Collection<?> slots) {
-        return slots.stream().mapToInt(o -> {
-            if (o instanceof Number)
-                return ((Number) o).intValue();
-            else
-                throw new InvalidConfigurationException("Only numbers in the slots field!");
-        }).toArray();
     }
 
     @AllArgsConstructor

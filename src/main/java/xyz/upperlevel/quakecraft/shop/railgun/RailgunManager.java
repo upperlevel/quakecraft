@@ -3,16 +3,12 @@ package xyz.upperlevel.quakecraft.shop.railgun;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import lombok.Getter;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.shop.gun.GunCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.gui.GuiId;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 
 import java.io.File;
 import java.util.*;
@@ -56,8 +52,8 @@ public class RailgunManager {
         for (Map.Entry<String, Config> entry : config.entrySet()) {
             try {
                 register(new Railgun(entry.getKey(), gunProvider, entry.getValue()));
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in gun '" + entry.getKey() + "'");
+            } catch (InvalidConfigException e) {
+                e.addLocation("in gun '" + entry.getKey() + "'");
                 throw e;
             }
         }
@@ -66,37 +62,36 @@ public class RailgunManager {
     }
 
     public void loadConfig() {
-        loadConfig(ConfigUtils.loadConfigMap(
-                Quakecraft.get(),
-                "shop" + File.separator + "gun" + File.separator + "guns" + File.separator + "guns.yml",
-                "gun"
+        Config config = Config.fromYaml(new File(
+                Quakecraft.get().getDataFolder(),
+                "shop/gun/guns/guns.yml"
         ));
+        loadConfig(config.asConfigMap());
     }
 
 
-    public void loadGui(Plugin plugin, Config config) {
+    public void loadGui(Config config) {
         RailgunSelectGui gui;
         try {
             gui = new RailgunSelectGui(config, this);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in gun gui");
+        } catch (InvalidConfigException e) {
+            e.addLocation("in gun gui");
             throw e;
         }
         this.gui = gui;
-        Quakecraft.get().getGuis().register(new GuiId(plugin, "guns_gui", gui));
+        Quakecraft.get().getGuis().register("guns_gui", gui);
         gui.print();
     }
 
-    public void loadGui(Plugin plugin) {
-        FileConfiguration config = ConfigUtils.loadConfig(
-                Quakecraft.get(),
-                "shop" + File.separator + "gun" + File.separator + "guns" + File.separator + "guns_gui.yml"
-        );
-        loadGui(plugin, Config.wrap(config));
+    public void loadGui() {
+        loadGui(Config.fromYaml(new File(
+                Quakecraft.get().getDataFolder(),
+                "shop/gun/guns/guns_gui.yml"
+        )));
     }
 
     public void load() {
         loadConfig();
-        loadGui(Quakecraft.get());
+        loadGui();
     }
 }

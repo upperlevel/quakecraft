@@ -62,9 +62,10 @@ public class Quakecraft extends JavaPlugin {
     private ShopCategory shop;
 
     // core
-    private BoardRegistry boards;
-    private GuiRegistry guis;
-    private HotbarRegistry hotbars;
+    private Registry<?> registryRoot;
+    private Registry<Board> boards;
+    private Registry<Gui> guis;
+    private Registry<Hotbar> hotbars;
     private Store store;
 
     private MessageManager messages;
@@ -85,9 +86,10 @@ public class Quakecraft extends JavaPlugin {
             loadConfig();
 
             //Load command messages
-            guis = new GuiRegistry(this);
-            hotbars = new HotbarRegistry(this);
-            boards = new BoardRegistry(this);
+            registryRoot = Uppercore.registry().register(this);
+            guis = registryRoot.registerChild("guis", Gui.class);
+            hotbars = registryRoot.registerChild("hotbars", Hotbar.class);
+            boards = registryRoot.registerChild("boards", Board.class);
             store = new Store(this);
 
             arenaManager = new ArenaManager();

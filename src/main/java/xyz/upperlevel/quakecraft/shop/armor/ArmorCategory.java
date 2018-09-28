@@ -46,4 +46,9 @@ public class ArmorCategory extends Category {
     public String getGuiLoc() {
         return "armor/armor_gui";
     }
+
+    @Override
+    public String getGuiRegistryName() {
+        return "armor";
+    }
 }

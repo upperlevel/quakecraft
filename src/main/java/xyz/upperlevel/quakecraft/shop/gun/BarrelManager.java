@@ -3,12 +3,10 @@ package xyz.upperlevel.quakecraft.shop.gun;
 import lombok.Getter;
 import org.bukkit.FireworkEffect;
 import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
+import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-
-import static xyz.upperlevel.uppercore.config.ConfigUtils.parseFireworkEffectType;
 
 public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
 
@@ -53,7 +51,7 @@ public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
 
         protected Barrel(String id, Config config) {
             super(BarrelManager.this, id, config);
-            this.fireworkType = parseFireworkEffectType(config.getStringRequired("firework-type"));
+            this.fireworkType = config.getRequired("firework-type", FireworkEffect.Type.class, null);
         }
     }
 }

@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 @Getter
 public class ShopCategory extends Category {
-
     private GunCategory guns;
     private ArmorCategory armors;
     private KillSoundManager killSounds;
@@ -46,5 +45,10 @@ public class ShopCategory extends Category {
     @Override
     public String getGuiLoc() {
         return "shop_gui";
+    }
+
+    @Override
+    public String getGuiRegistryName() {
+        return "shop";
     }
 }
