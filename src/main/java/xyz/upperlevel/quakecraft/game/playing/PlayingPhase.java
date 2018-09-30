@@ -31,7 +31,6 @@ import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.board.BoardView;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -321,10 +320,10 @@ public class PlayingPhase implements QuakePhase, Listener {
                 "playing_hotbar.yml"
         )));
 
-        sampleBoard = PlayingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
+        sampleBoard = Config.fromYaml(new File(
                 getPhaseFolder(),
                 "playing_board.yml"
-        )));
+        )).get(PlayingBoard.class, null);
 
         signLines = messages.getConfig().getMessageStrList("playing-sign");
         cannotRunCommands = messages.getConfig().getMessage("cannot-run-command-during-game");

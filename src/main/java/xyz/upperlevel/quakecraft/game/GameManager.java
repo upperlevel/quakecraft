@@ -60,8 +60,8 @@ public class GameManager {
 
     public void load() {
         if (file.exists()) {
-            FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-            for (Config game_cfg : Config.wrap(cfg).getConfigList("games")) {
+            Config cfg = Config.fromYaml(file);
+            for (Config game_cfg : cfg.getConfigList("games")) {
                 String arena_id = game_cfg.getString("id");
                 Arena arena = Quakecraft.get().getArenaManager().getArena(arena_id);
                 if (arena == null)

@@ -8,12 +8,12 @@ import xyz.upperlevel.quakecraft.events.ParticipantGainMoneyEvent;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.message.Message;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,8 +91,8 @@ public class GainType {
                 continue;
             try {
                 type.load(config.getConfigRequired(type.id));
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in gain " + type.id);
+            } catch (InvalidConfigException e) {
+                e.addLocation("in gain " + type.id);
                 throw e;
             }
         }
@@ -105,6 +105,6 @@ public class GainType {
     }
 
     public static void loadConfig() {
-        loadConfig(Config.wrap(ConfigUtils.loadConfig(Quakecraft.get(), "game/gains.yml")));
+        loadConfig(Config.fromYaml(new File(Quakecraft.get().getDataFolder(), "game/gains.yml")));
     }
 }
