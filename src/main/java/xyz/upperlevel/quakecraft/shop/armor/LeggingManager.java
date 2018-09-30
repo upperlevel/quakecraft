@@ -1,7 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -30,12 +30,12 @@ public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging
     }
 
     @Override
-    public void setSelected(QuakePlayer player, Legging purchase) {
+    public void setSelected(QuakeAccount player, Legging purchase) {
         player.setSelectedLegging(purchase);
     }
 
     @Override
-    public Legging getSelected(QuakePlayer player) {
+    public Legging getSelected(QuakeAccount player) {
         return player.getSelectedLegging();
     }
 

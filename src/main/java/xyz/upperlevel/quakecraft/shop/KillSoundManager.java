@@ -2,18 +2,12 @@ package xyz.upperlevel.quakecraft.shop;
 
 import lombok.Getter;
 import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.sound.PlaySound;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
 
 public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.KillSound> {
 
@@ -37,12 +31,12 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
     }
 
     @Override
-    public void setSelected(QuakePlayer player, KillSound purchase) {
+    public void setSelected(QuakeAccount player, KillSound purchase) {
         player.setSelectedKillSound(purchase);
     }
 
     @Override
-    public KillSound getSelected(QuakePlayer player) {
+    public KillSound getSelected(QuakeAccount player) {
         return player.getSelectedKillSound();
     }
 

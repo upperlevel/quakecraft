@@ -2,9 +2,8 @@ package xyz.upperlevel.quakecraft.shop.railgun;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.bukkit.ChatColor;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.shop.gun.*;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
@@ -86,7 +85,7 @@ public class Railgun {
         processPlaceholders(placeholders);
     }
 
-    public boolean canSelect(QuakePlayer player) {
+    public boolean canSelect(QuakeAccount player) {
         Set<Purchase<?>> purchases = player.getPurchases();
         for (Purchase<?> p : getComponents()) {
             if(p.getCost() > 0 && !purchases.contains(p))
@@ -105,11 +104,11 @@ public class Railgun {
         );
     }
 
-    public void select(QuakePlayer player) {
+    public void select(QuakeAccount player) {
         player.setGunComponents(getComponents());
     }
 
-    public boolean isSelected(QuakePlayer player) {
+    public boolean isSelected(QuakeAccount player) {
         return  player.getSelectedCase() == gcase &&
                 player.getSelectedLaser() == laser &&
                 player.getSelectedBarrel() == barrel &&
@@ -131,6 +130,6 @@ public class Railgun {
     }
 
     public static void loadConfig() {
-        CUSTOM_NAME = Quakecraft.get().getCustomConfig().getMessageStr("game.custom-gun");
+        CUSTOM_NAME = Quake.get().getCustomConfig().getMessageStr("game.custom-gun");
     }
 }

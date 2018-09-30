@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.game.lobby;
+package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -8,9 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
@@ -22,10 +21,8 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
 
-import java.io.File;
-
 import static java.lang.String.valueOf;
-import static xyz.upperlevel.quakecraft.Quakecraft.get;
+import static xyz.upperlevel.quakecraft.Quake.get;
 
 public class CountdownPhase implements Phase, Listener {
     private static int COUNTDOWN_TIMER;
@@ -71,23 +68,12 @@ public class CountdownPhase implements Phase, Listener {
         clearTick(player);
     }
 
-    private boolean tryStopCountdown() {
-        if (arena.getPlayers().size() < arena.getMinPlayers()) {
-            return true;
-        }
-        return false;
-    }
-
     private void updateBoard(Player player) {
         BoardManager.update(player, placeholderRegistry);
     }
 
     private void updateBoards() {
         arena.getPlayers().forEach(this::updateBoard);
-    }
-
-    private static File getPhaseFolder() {
-        return new File(Quakecraft.get().getDataFolder(), "game/countdown");
     }
 
     @Override
@@ -98,7 +84,7 @@ public class CountdownPhase implements Phase, Listener {
         }
         // Starts countdown
         countdown = new Countdown();
-        countdown.runTaskTimer(Quakecraft.get(), 0, 20);
+        countdown.runTaskTimer(Quake.get(), 0, 20);
     }
 
     @Override

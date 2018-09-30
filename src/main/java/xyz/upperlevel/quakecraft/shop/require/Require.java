@@ -1,7 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.require;
 
 import org.bukkit.ChatColor;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 
 public interface Require {
     String DONE = ChatColor.GREEN + "✔";
@@ -12,17 +12,17 @@ public interface Require {
     ChatColor PROGRESS_VALUE = ChatColor.DARK_AQUA;
 
 
-    default String getRequires(QuakePlayer player) {
+    default String getRequires(QuakeAccount player) {
         return "Requires \"" + name(player) + "\" " + type() + "!";
     }
 
-    String name(QuakePlayer player);
+    String name(QuakeAccount player);
 
     String type();
 
     String description();
 
-    boolean test(QuakePlayer player);
+    boolean test(QuakeAccount player);
 
     String getProgress();
 }

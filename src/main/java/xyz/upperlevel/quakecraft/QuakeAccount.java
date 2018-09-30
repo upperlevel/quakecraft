@@ -21,11 +21,11 @@ import xyz.upperlevel.uppercore.util.PlayerBackup;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static xyz.upperlevel.quakecraft.Quakecraft.get;
+import static xyz.upperlevel.quakecraft.Quake.get;
 
 @Getter
 @Setter
-public class QuakePlayer {
+public class QuakeAccount {
 
     private final Player player;
 
@@ -55,7 +55,7 @@ public class QuakePlayer {
 
     private PlayerBackup preJoinItems;
 
-    public QuakePlayer(Player player) {
+    public QuakeAccount(Player player) {
         this.player = player;
 
         ShopCategory shop = get().getShop();
@@ -180,7 +180,7 @@ public class QuakePlayer {
         }
         Purchase<?> obj = manager.get(selectedId);
         if (obj == null) {
-            Quakecraft.get().getLogger().warning("Cannot find " + managerName + ": '" + selectedId + "', id changed?");
+            Quake.get().getLogger().warning("Cannot find " + managerName + ": '" + selectedId + "', id changed?");
             return manager.getDefault();
         }
         return obj;

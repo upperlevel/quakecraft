@@ -2,27 +2,23 @@ package xyz.upperlevel.quakecraft.game.gains;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.events.ParticipantGainMoneyEvent;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.message.Message;
-import xyz.upperlevel.uppercore.util.nms.impl.entity.PlayerNms;
+import xyz.upperlevel.uppercore.nms.impl.entity.PlayerNms;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class GainNotifier {
     public static final long MESSAGE_TIME = 4500L;
     private static Message GAIN;
     @Getter
-    private final QuakePlayer player;
+    private final QuakeAccount player;
     private long lastGainTime = -1;
     private float lastGain = -1;
 
@@ -47,15 +43,15 @@ public class GainNotifier {
 
     public static void setup() {
         if(!EconomyManager.isEnabled()) {
-            Quakecraft.get().getLogger().warning("Economy not found, disabling gain notifier");
+            Quake.get().getLogger().warning("Economy not found, disabling gain notifier");
         }
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler
             public void onGain(ParticipantGainMoneyEvent event) {
-                QuakePlayer player = Quakecraft.get().getPlayerManager().getPlayer(event.getPlayer().getPlayer());
+                QuakeAccount player = Quake.get().getPlayerManager().getPlayer(event.getPlayer().getPlayer());
                 player.getGainNotifier().onGain(event.getGain());
             }
-        }, Quakecraft.get());
-        GAIN = Quakecraft.get().getMessages().get("game.on-gain");
+        }, Quake.get());
+        GAIN = Quake.get().getMessages().get("game.on-gain");
     }
 }

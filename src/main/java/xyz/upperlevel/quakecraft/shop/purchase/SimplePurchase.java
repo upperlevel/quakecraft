@@ -1,7 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.purchase;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.require.Require;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
@@ -24,7 +24,7 @@ public abstract class SimplePurchase<T extends SimplePurchase<T>> extends Purcha
     }
 
     @Override
-    public CustomItem getIcon(QuakePlayer player) {
+    public CustomItem getIcon(QuakeAccount player) {
         return icon;
     }
 

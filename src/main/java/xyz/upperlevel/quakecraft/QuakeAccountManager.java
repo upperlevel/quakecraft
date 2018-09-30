@@ -10,50 +10,50 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuakePlayerManager implements Listener {
+public class QuakeAccountManager implements Listener {
 
-    private final Map<Player, QuakePlayer> players = new HashMap<>();
+    private final Map<Player, QuakeAccount> players = new HashMap<>();
 
-    public QuakePlayerManager() {
+    public QuakeAccountManager() {
         Bukkit.getOnlinePlayers().forEach(this::onJoin);
-        Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
+        Bukkit.getPluginManager().registerEvents(this, Quake.get());
     }
 
     /**
      * Registers player and loads it async from the configured db.
      */
     private void onJoin(Player player) {
-        QuakePlayer qp = new QuakePlayer(player);
+        QuakeAccount qp = new QuakeAccount(player);
         register(qp);
-        Bukkit.getScheduler().runTaskAsynchronously(Quakecraft.get(), qp::load);
+        Bukkit.getScheduler().runTaskAsynchronously(Quake.get(), qp::load);
     }
 
     /**
      * Unregisters the player and saves it async.
      */
     private void onQuit(Player player) {
-        QuakePlayer qp = getPlayer(player);
+        QuakeAccount qp = getPlayer(player);
         if (qp != null) {
             unregister(qp);
-            Bukkit.getScheduler().runTaskAsynchronously(Quakecraft.get(), qp::save);
+            Bukkit.getScheduler().runTaskAsynchronously(Quake.get(), qp::save);
         }
     }
 
-    public void register(QuakePlayer player) {
+    public void register(QuakeAccount player) {
         if(player != null) {
             players.put(player.getPlayer(), player);
         }
     }
 
-    public QuakePlayer unregister(Player player) {
+    public QuakeAccount unregister(Player player) {
         return players.remove(player);
     }
 
-    public QuakePlayer unregister(QuakePlayer player) {
+    public QuakeAccount unregister(QuakeAccount player) {
         return players.remove(player.getPlayer());
     }
 
-    public QuakePlayer getPlayer(Player player) {
+    public QuakeAccount getPlayer(Player player) {
         return players.get(player);
     }
 
@@ -61,7 +61,7 @@ public class QuakePlayerManager implements Listener {
      * Saves all the players sync and unregisters them all.
      */
     public void close() {
-        players.values().forEach(QuakePlayer::save);
+        players.values().forEach(QuakeAccount::save);
         players.clear();
     }
 
@@ -75,7 +75,7 @@ public class QuakePlayerManager implements Listener {
         onQuit(e.getPlayer());
     }
 
-    public static QuakePlayerManager get() {
-        return Quakecraft.get().getPlayerManager();
+    public static QuakeAccountManager get() {
+        return Quake.get().getPlayerManager();
     }
 }

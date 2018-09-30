@@ -6,9 +6,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.QuakePlayerManager;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.QuakeAccountManager;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.ChestGui;
@@ -37,7 +37,7 @@ public class RailgunSelectGui extends ChestGui {
     private int slots[];
 
     protected RailgunSelectGui(Config config, RailgunManager manager) {
-        super(Quakecraft.get(), config);
+        super(Quake.get(), config);
         this.manager = manager;
         loadConfig(config);
     }
@@ -49,7 +49,7 @@ public class RailgunSelectGui extends ChestGui {
         Collection<Railgun> guns = manager.getRailguns();
         int i = 0;
         if(guns.size() > slots.length) {
-            Quakecraft.get().getLogger().severe("Cannot fill gun's inventory: too many guns!");
+            Quake.get().getLogger().severe("Cannot fill gun's inventory: too many guns!");
             return;
         }
         for (Railgun gun : guns) {
@@ -60,21 +60,21 @@ public class RailgunSelectGui extends ChestGui {
     @Override
     public Inventory create(Player player) {
         Inventory inv = super.create(player);
-        QuakePlayer qp = QuakePlayerManager.get().getPlayer(player);
+        QuakeAccount qp = QuakeAccountManager.get().getPlayer(player);
         if(qp == null) {
-            Quakecraft.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
+            Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
         }
         printPurchases(inv, qp);
         return inv;
     }
 
-    public void printPurchases(Inventory inv, QuakePlayer player) {
+    public void printPurchases(Inventory inv, QuakeAccount player) {
         for (Map.Entry<Integer, Railgun> p : gunMap.entrySet())
             inv.setItem(p.getKey(), getIcon(p.getValue(), player));
     }
 
-    protected ItemStack getIcon(Railgun gun, QuakePlayer player) {
+    protected ItemStack getIcon(Railgun gun, QuakeAccount player) {
         CustomItem icon = gun.getCase().getIcon();
         Player p = player.getPlayer();
 
@@ -87,7 +87,7 @@ public class RailgunSelectGui extends ChestGui {
         return item;
     }
 
-    public void processMeta(QuakePlayer player, Railgun gun, ItemMeta meta) {
+    public void processMeta(QuakeAccount player, Railgun gun, ItemMeta meta) {
         Player p = player.getPlayer();
         boolean selected = player.getGun() == gun;
         boolean selectable = selected || gun.canSelect(player);
@@ -136,7 +136,7 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Railgun gun) {
-        QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
+        QuakeAccount p = QuakeAccountManager.get().getPlayer(player);
         if(p.getGun() == gun) {
             GUN_ALREADY_SELECTED.send(player);
             //You already have that gun equipped
@@ -158,7 +158,7 @@ public class RailgunSelectGui extends ChestGui {
         }
     }
 
-    private void selectAndReload(QuakePlayer p, int slot, Railgun gun) {
+    private void selectAndReload(QuakeAccount p, int slot, Railgun gun) {
         Railgun old = p.getGun();
         gun.select(p);
 
@@ -188,7 +188,7 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     public static void loadConfig() {
-        MessageManager manager = Quakecraft.get().getMessages().getSection("shop.railgun");
+        MessageManager manager = Quake.get().getMessages().getSection("shop.railgun");
         GUN_ALREADY_SELECTED = manager.get("already-selected");
         GUN_SELECTED = manager.get("selected");
         MessageManager missing = manager.getSection("parts-missing");

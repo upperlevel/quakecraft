@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.shop;
 
 import lombok.Getter;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.shop.armor.ArmorCategory;
 import xyz.upperlevel.quakecraft.shop.dash.DashCategory;
 import xyz.upperlevel.quakecraft.shop.gun.GunCategory;
@@ -27,7 +27,7 @@ public class ShopCategory extends Category {
     }
 
     public void load() {
-        final Logger logger = Quakecraft.get().getLogger();
+        final Logger logger = Quake.get().getLogger();
         logger.info("Init loading shop");
 
         //Load gui

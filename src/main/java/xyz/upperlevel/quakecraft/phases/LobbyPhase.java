@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.game.lobby;
+package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.Phase;
@@ -20,7 +20,7 @@ import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
-import static xyz.upperlevel.quakecraft.Quakecraft.get;
+import static xyz.upperlevel.quakecraft.Quake.get;
 
 public class LobbyPhase implements Phase, Listener {
     private static Hotbar hotbar;
@@ -56,7 +56,7 @@ public class LobbyPhase implements Phase, Listener {
         Bukkit.getPluginManager().registerEvents(this, get());
         arena.getPlayers().forEach(this::setupPlayer);
         phaseManager.setPhase(new WaitingPhase(this));
-        Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
+        Bukkit.getPluginManager().registerEvents(this, Quake.get());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class LobbyPhase implements Phase, Listener {
         HandlerList.unregisterAll(this);
         phaseManager.setPhase(null);
         arena.getPlayers().forEach(this::clearPlayer);
-        // Player restore to original inventory/stats will be done by Uppercore
+        // player restore to original inventory/stats will be done by Uppercore
         HandlerList.unregisterAll(this);
     }
 
@@ -90,6 +90,6 @@ public class LobbyPhase implements Phase, Listener {
     }
 
     public static void loadConfig(Config config) {
-        hotbar = config.getConfigRequired("board").get(Quakecraft.get(), Hotbar.class);
+        hotbar = config.get("hotbar", Hotbar.class, Quake.get());
     }
 }

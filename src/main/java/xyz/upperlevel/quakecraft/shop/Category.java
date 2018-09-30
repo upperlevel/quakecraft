@@ -9,7 +9,7 @@ import xyz.upperlevel.uppercore.gui.Gui;
 
 import java.io.File;
 
-import static xyz.upperlevel.quakecraft.Quakecraft.get;
+import static xyz.upperlevel.quakecraft.Quake.get;
 
 @RequiredArgsConstructor
 public abstract class Category {

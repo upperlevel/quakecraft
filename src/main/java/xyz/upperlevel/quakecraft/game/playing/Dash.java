@@ -3,8 +3,8 @@ package xyz.upperlevel.quakecraft.game.playing;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.PlayerDashCooldownEnd;
 import xyz.upperlevel.quakecraft.events.PlayerDashEvent;
 import xyz.upperlevel.uppercore.config.Config;
@@ -16,16 +16,17 @@ import java.util.Map;
 public class Dash {
     public static final int MILLIS_IN_TICK = 50;
     private static float BASE_POWER = 2f;
+
     private static Message COOLDOWN_MESSAGE;
 
     private static final Map<Player, Dash> dashing = new HashMap<>();
 
-    private final QuakePlayer player;
+    private final QuakeAccount player;
 
     private long startTime;
     private long endTime;
 
-    public Dash(QuakePlayer player) {
+    public Dash(QuakeAccount player) {
         this.player = player;
     }
 
@@ -43,7 +44,7 @@ public class Dash {
         BukkitScheduler scheduler = Bukkit.getScheduler();
 
         dashing.put(player.getPlayer(), this);
-        scheduler.runTaskLater(Quakecraft.get(), this::cooldownEnd, cooldownTicks);
+        scheduler.runTaskLater(Quake.get(), this::cooldownEnd, cooldownTicks);
         player.getPlayer().setVelocity(player.getPlayer().getLocation().getDirection().multiply(power * BASE_POWER));
 
         startTime = System.currentTimeMillis();
@@ -55,20 +56,20 @@ public class Dash {
         dashing.remove(player.getPlayer());
     }
 
-    public static void dash(Player p) {
+    public static void swish(Player p) {
         Dash dash = dashing.get(p);
         if (dash != null) {
             COOLDOWN_MESSAGE.send(p, "remaining_secs", String.valueOf((int)Math.ceil((dash.endTime - System.currentTimeMillis())/1000f)));
             return;
         }
 
-        QuakePlayer player = Quakecraft.get().getPlayerManager().getPlayer(p);
+        QuakeAccount player = Quake.get().getPlayerManager().getPlayer(p);
         new Dash(player).swish();
     }
 
     public static void loadConfig() {
-        Config config = Quakecraft.get().getCustomConfig().getConfigRequired("dash");
+        Config config = Quake.get().getCustomConfig().getConfigRequired("dash");
         BASE_POWER = config.getIntRequired("base-power");
-        COOLDOWN_MESSAGE = Quakecraft.get().getMessages().get("game.dash.cooldown");
+        COOLDOWN_MESSAGE = Quake.get().getMessages().get("game.dash.cooldown");
     }
 }

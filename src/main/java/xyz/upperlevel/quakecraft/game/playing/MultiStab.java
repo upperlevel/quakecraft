@@ -2,10 +2,11 @@ package xyz.upperlevel.quakecraft.game.playing;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.BulletMultiStabEvent;
-import xyz.upperlevel.quakecraft.game.GamePhase;
+import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.phases.Laser;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
@@ -19,10 +20,13 @@ public class MultiStab {
 
     @Getter
     private final String id;
+
     @Getter
     private final int kills;
+
     @Getter
     private final Message message;
+
     @Getter
     private final GainType gain;
 
@@ -41,12 +45,12 @@ public class MultiStab {
         gain.setAmount(config.getFloatRequired("gain"));
     }
 
-    public void reach(GamePhase phase, Bullet bullet) {
-        BulletMultiStabEvent event = new BulletMultiStabEvent(phase, bullet, this, message);
+    public void reach(GamePhase phase, Laser laser) {
+        BulletMultiStabEvent event = new BulletMultiStabEvent(phase, laser, this, message);
         Bukkit.getPluginManager().callEvent(event);
         if(!event.isCancelled()){
-            event.getMessage().broadcast(phase.getGame().getPlayers(),"killer_name", bullet.getPlayer().getName(), "kills", String.valueOf(bullet.getKilled().size()));
-            gain.grant(bullet.getParticipant());
+            event.getMessage().broadcast(phase.getGame().getPlayers(),"killer_name", laser.getPlayer().getName(), "kills", String.valueOf(laser.getKilled().size()));
+            gain.grant(laser.getParticipant());
         }
     }
 
@@ -55,10 +59,10 @@ public class MultiStab {
         return entry == null ? null : entry.getValue();
     }
 
-    public static void tryReach(GamePhase phase, Bullet bullet) {
-        MultiStab stab = getFor(bullet.getKilled().size());
+    public static void tryReach(GamePhase phase, Laser laser) {
+        MultiStab stab = getFor(laser.getKilled().size());
         if(stab != null)
-            stab.reach(phase, bullet);
+            stab.reach(phase, laser);
     }
 
     public static void loadConfig(Map<String, Config> config) {

@@ -1,7 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -30,12 +30,12 @@ public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
     }
 
     @Override
-    public void setSelected(QuakePlayer player, Hat purchase) {
+    public void setSelected(QuakeAccount player, Hat purchase) {
         player.setSelectedHat(purchase);
     }
 
     @Override
-    public Hat getSelected(QuakePlayer player) {
+    public Hat getSelected(QuakeAccount player) {
         return player.getSelectedHat();
     }
 

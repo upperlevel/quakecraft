@@ -2,10 +2,9 @@ package xyz.upperlevel.quakecraft.placeholders;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
-import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.game.Game;
-import xyz.upperlevel.quakecraft.game.lobby.LobbyPhase;
-import xyz.upperlevel.quakecraft.game.lobby.CountdownPhase;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.phases.LobbyPhase;
+import xyz.upperlevel.quakecraft.phases.CountdownPhase;
 import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.placeholder.Placeholder;
 
@@ -21,7 +20,7 @@ public class QuakePlaceholders implements Placeholder {
     @Override
     public String resolve(Player player, String id) {
         // plugin
-        PluginDescriptionFile desc = Quakecraft.get().getDescription();
+        PluginDescriptionFile desc = Quake.get().getDescription();
         switch (id) {
             case "name":
                 return desc.getName();
@@ -31,7 +30,7 @@ public class QuakePlaceholders implements Placeholder {
                 return desc.getDescription();
         }
         // game
-        Game game = Quakecraft.get().getGameManager().getGame(player);
+        Game game = Quake.get().getGameManager().getGame(player);
         if (game != null) {
             switch (id) {
                 case "game_id":

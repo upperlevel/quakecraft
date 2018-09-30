@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.game;
 import lombok.Data;
 import lombok.Getter;
 import org.bukkit.entity.Player;
+import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.FixBoardSection;
 import xyz.upperlevel.uppercore.board.BoardSection;

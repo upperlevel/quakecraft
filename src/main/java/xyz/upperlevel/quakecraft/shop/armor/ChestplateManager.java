@@ -1,7 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -30,12 +30,12 @@ public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.C
     }
 
     @Override
-    public void setSelected(QuakePlayer player, Chestplate purchase) {
+    public void setSelected(QuakeAccount player, Chestplate purchase) {
         player.setSelectedChestplate(purchase);
     }
 
     @Override
-    public Chestplate getSelected(QuakePlayer player) {
+    public Chestplate getSelected(QuakeAccount player) {
         return player.getSelectedChestplate();
     }
 

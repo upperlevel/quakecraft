@@ -5,8 +5,8 @@ import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.phases.GamePhase;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.game.playing.KillStreak;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
@@ -16,13 +16,13 @@ public class KillStreakReachEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final GamePhase phase;
-    private final Participant player;
+    private final Gamer player;
     private final KillStreak streak;
     private Message message;
 
     private boolean cancelled;
 
-    public KillStreakReachEvent(GamePhase phase, Participant player, KillStreak streak, Message message) {
+    public KillStreakReachEvent(GamePhase phase, Gamer player, KillStreak streak, Message message) {
         this.phase = phase;
         this.player = player;
         this.streak = streak;

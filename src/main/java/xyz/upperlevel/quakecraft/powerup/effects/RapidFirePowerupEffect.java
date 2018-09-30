@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.powerup.effects;
 
 import lombok.Getter;
 import lombok.Setter;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 
 public class RapidFirePowerupEffect extends TimeBasedPowerupEffect {
@@ -15,12 +15,12 @@ public class RapidFirePowerupEffect extends TimeBasedPowerupEffect {
     }
 
     @Override
-    public void start(Participant player) {
+    public void start(Gamer player) {
         player.setGunCooldownBase(multiplier);
     }
 
     @Override
-    public void end(Participant player) {
+    public void end(Gamer player) {
         player.setGunCooldownBase(1.0f);
     }
 

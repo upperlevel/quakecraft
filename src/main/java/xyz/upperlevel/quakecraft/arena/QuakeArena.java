@@ -4,8 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.game.lobby.WaitingPhase;
+import org.bukkit.event.HandlerList;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.phases.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.config.Config;
@@ -41,7 +42,7 @@ public class QuakeArena extends Arena {
 
         // Register protection listener
         listener = new QuakeArenaListener(this);
-        Bukkit.getPluginManager().registerEvents(listener, Quakecraft.get());
+        Bukkit.getPluginManager().registerEvents(listener, Quake.get());
     }
 
     public void addSpawn(Location spawn) {
@@ -82,7 +83,13 @@ public class QuakeArena extends Arena {
     @Override
     public void start() {
         super.start();
-        setPhase(new WaitingPhase());
+        Bukkit.getPluginManager().registerEvents(listener, Quake.get());
+        getPhaseManager().setPhase(new LobbyPhase(this));
+    }
+
+    @Override
+    public void stop() {
+        HandlerList.unregisterAll(listener);
     }
 
     @Override

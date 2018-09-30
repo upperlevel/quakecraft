@@ -3,7 +3,7 @@ package xyz.upperlevel.quakecraft.shop.purchase;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigProperty;
@@ -52,7 +52,7 @@ public class ConfirmPurchaseGui extends ChestGui {
         placeholders.set("item_name", purchaseName);
         Inventory inv = super.create(player);
 
-        CustomItem item = purchase.getIcon(Quakecraft.get().getPlayerManager().getPlayer(player));
+        CustomItem item = purchase.getIcon(Quake.get().getPlayerManager().getPlayer(player));
         item.setDisplayName(PlaceholderValue.fake(purchaseName));
 
         inv.setItem(itemSlot, item.resolve(player));
@@ -73,7 +73,7 @@ public class ConfirmPurchaseGui extends ChestGui {
     public void onBuy(Player player) {
         Balance balance = EconomyManager.get(player);
         if(balance == null) {
-            Quakecraft.get().getLogger().severe("No economy found!");
+            Quake.get().getLogger().severe("No economy found!");
             return;
         }
         if(balance.take(purchase.getCost()))

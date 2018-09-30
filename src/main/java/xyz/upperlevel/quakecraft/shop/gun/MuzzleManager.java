@@ -1,7 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -33,12 +33,12 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
     }
 
     @Override
-    public void setSelected(QuakePlayer player, Muzzle purchase) {
+    public void setSelected(QuakeAccount player, Muzzle purchase) {
         player.setSelectedMuzzle(purchase);
     }
 
     @Override
-    public Muzzle getSelected(QuakePlayer player) {
+    public Muzzle getSelected(QuakeAccount player) {
         return player.getSelectedMuzzle();
     }
 

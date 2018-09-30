@@ -3,10 +3,9 @@ package xyz.upperlevel.quakecraft.game.gains;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.events.ParticipantGainMoneyEvent;
-import xyz.upperlevel.quakecraft.game.Participant;
-import xyz.upperlevel.quakecraft.game.ending.EndingPhase;
+import xyz.upperlevel.quakecraft.phases.Gamer;
+import xyz.upperlevel.quakecraft.phases.EndingPhase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
@@ -55,7 +54,7 @@ public class GainType {
         amount = config.getIntRequired("amount");
     }
 
-    public void grant(Participant player) {
+    public void grant(Gamer player) {
         ParticipantGainMoneyEvent event = new ParticipantGainMoneyEvent(player, this);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
@@ -100,7 +99,7 @@ public class GainType {
     }
 
     public static void loadChildren() {
-        Participant.loadGains();
+        Gamer.loadGains();
         EndingPhase.loadGains();
     }
 

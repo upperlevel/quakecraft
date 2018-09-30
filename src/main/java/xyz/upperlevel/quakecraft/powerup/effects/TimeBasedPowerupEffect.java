@@ -28,12 +28,12 @@ public abstract class TimeBasedPowerupEffect extends BasePowerupEffect {
     }
 
     @Override
-    public void apply(Participant player) {
+    public void apply(Gamer player) {
         start(player);
         Collection<Player> messageReceivers = player.getPhase().getGame().getPlayers();
         activeMessage.broadcast(messageReceivers, "name", player.getName());
         final BukkitTask task = Bukkit.getScheduler().runTaskLater(
-                Quakecraft.get(),
+                Quake.get(),
                 () -> {
                     tasks.remove(player.getPlayer());
                     end(player);
@@ -46,13 +46,13 @@ public abstract class TimeBasedPowerupEffect extends BasePowerupEffect {
             old.cancel();
     }
 
-    public abstract void start(Participant player);
+    public abstract void start(Gamer player);
 
-    public abstract void end(Participant player);
+    public abstract void end(Gamer player);
 
     @Override
-    public void clear(Collection<Participant> players) {
-        for(Participant p : players) {
+    public void clear(Collection<Gamer> players) {
+        for(Gamer p : players) {
             BukkitTask task = tasks.remove(p.getPlayer());
             if(task != null) {
                 task.cancel();

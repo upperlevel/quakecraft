@@ -12,9 +12,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.QuakePlayerManager;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.QuakeAccountManager;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseBuyEvent;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseSelectEvent;
 import xyz.upperlevel.quakecraft.shop.require.Require;
@@ -85,7 +85,7 @@ public class PurchaseGui extends ChestGui {
             int[] slots = adapter.slots;
             int i = 0;
             if(purchases.size() > slots.length) {
-                Quakecraft.get().getLogger().severe("Cannot fill " + adapter.manager.getPurchaseName() + "'s inventory: too many items!");
+                Quake.get().getLogger().severe("Cannot fill " + adapter.manager.getPurchaseName() + "'s inventory: too many items!");
                 return;
             }
 
@@ -101,16 +101,16 @@ public class PurchaseGui extends ChestGui {
         if (dirty)
             reprint();
         Inventory inv = super.create(player);
-        QuakePlayer qp = QuakePlayerManager.get().getPlayer(player);
+        QuakeAccount qp = QuakeAccountManager.get().getPlayer(player);
         if(qp == null) {
-            Quakecraft.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
+            Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
         }
         printPurchases(inv, qp);
         return inv;
     }
 
-    public void printPurchases(Inventory inv, QuakePlayer player) {
+    public void printPurchases(Inventory inv, QuakeAccount player) {
         for (Map.Entry<Integer, Purchase<?>> p : purchaseMap.entrySet())
             inv.setItem(p.getKey(), getIcon(p.getValue(), player, p.getValue().isSelected(player)));
     }
@@ -125,7 +125,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Purchase<?> purchase) {
-        QuakePlayer p = QuakePlayerManager.get().getPlayer(player);
+        QuakeAccount p = QuakeAccountManager.get().getPlayer(player);
         Set<Purchase<?>> purchases = p.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test
@@ -135,11 +135,11 @@ public class PurchaseGui extends ChestGui {
             if(purchase.getCost() > 0) {
                 Balance b = EconomyManager.get(player);
                 if (b == null) {
-                    Quakecraft.get().getLogger().severe("Economy not found!");
+                    Quake.get().getLogger().severe("Economy not found!");
                     return;
                 }
                 if (b.has(purchase.getCost())) {
-                    Quakecraft.get().openConfirmPurchase(
+                    Quake.get().openConfirmPurchase(
                             player,
                             purchase,
                             ((Link) n -> onPurchaseSucceed(p, purchase)).and(GuiAction.back()),
@@ -157,7 +157,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     @SuppressWarnings("unchecked")
-    public void onPurchaseSucceed(QuakePlayer player, Purchase purchase) {
+    public void onPurchaseSucceed(QuakeAccount player, Purchase purchase) {
         PluginManager eventManager = Bukkit.getPluginManager();
 
         PurchaseBuyEvent buyEvent = new PurchaseBuyEvent(player, purchase);
@@ -172,11 +172,11 @@ public class PurchaseGui extends ChestGui {
         }
     }
 
-    protected ItemStack getIcon(Purchase<?> purchase, QuakePlayer player, boolean selected) {
+    protected ItemStack getIcon(Purchase<?> purchase, QuakeAccount player, boolean selected) {
         CustomItem icon = purchase.getIcon(player);
         Player p = player.getPlayer();
         if (icon == null) {
-            Quakecraft.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
+            Quake.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
             return null;
         }
         ItemStack item = icon.resolve(p);
@@ -188,7 +188,7 @@ public class PurchaseGui extends ChestGui {
         return item;
     }
 
-    public void processMeta(QuakePlayer player, Purchase<?> purchase, ItemMeta meta, boolean selected) {
+    public void processMeta(QuakeAccount player, Purchase<?> purchase, ItemMeta meta, boolean selected) {
         Player p = player.getPlayer();
         boolean purchased = selected || purchase.getCost() == 0 || player.getPurchases().contains(purchase);
 
@@ -215,7 +215,7 @@ public class PurchaseGui extends ChestGui {
         meta.setLore(metaLore);
     }
 
-    public List<String> processRequires(Purchase<?> purchase, QuakePlayer player) {
+    public List<String> processRequires(Purchase<?> purchase, QuakeAccount player) {
         List<String> lore = new ArrayList<>();
         List<Require> requires = purchase.getRequires();
         for(Require require : requires) {
@@ -267,7 +267,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     @SuppressWarnings("unchecked")
-    protected void reloadSelection(QuakePlayer player, int slot, Purchase<?> sel) {
+    protected void reloadSelection(QuakeAccount player, int slot, Purchase<?> sel) {
         PurchaseManager purchaseManager = sel.getManager();
         Purchase<?> old = purchaseManager.getSelected(player);
         if(old != sel) {
@@ -286,7 +286,7 @@ public class PurchaseGui extends ChestGui {
 
     @SuppressWarnings("unchecked")
     public static void loadConfig() {
-        Config config = Quakecraft.get().getCustomConfig().getConfigRequired("purchase-gui");
+        Config config = Quake.get().getCustomConfig().getConfigRequired("purchase-gui");
         Config lores = config.getConfigRequired("lore");
         buyingLores = lores.getMessageStrListRequired("buying");
         boughtLores = lores.getMessageStrListRequired("bought");
@@ -296,7 +296,7 @@ public class PurchaseGui extends ChestGui {
         prefixSelected = processColors(prefixes.getStringRequired("selected"));
         prefixSelectable = processColors(prefixes.getStringRequired("selectable"));
         prefixBuying = processColors(prefixes.getStringRequired("buying"));
-        Quakecraft.get().getLogger().info("PurchaseGui's config loaded!");
+        Quake.get().getLogger().info("PurchaseGui's config loaded!");
 
         notEnoughMoney = config.getMessageRequired("not-enough-money");
     }

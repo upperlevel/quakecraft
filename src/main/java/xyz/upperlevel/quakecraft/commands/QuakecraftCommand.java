@@ -2,9 +2,8 @@ package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.Arena;
-import xyz.upperlevel.quakecraft.game.Game;
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.PermissionUser;
 import xyz.upperlevel.uppercore.command.SenderType;
@@ -54,12 +53,12 @@ public class QuakecraftCommand extends NodeCommand {
     )
     protected void join(CommandSender sender, Arena arena) {
         Player player = (Player) sender;
-        Game game = Quakecraft.get().getGameManager().getGame(player);
+        Game game = Quake.get().getGameManager().getGame(player);
         if (game != null) {
             ALREADY_PLAYING.send(player, game.getPlaceholders());
             return;
         }
-        game = Quakecraft.get().getGameManager().getGame(arena);
+        game = Quake.get().getGameManager().getGame(arena);
         if (game == null) {
             NO_GAME_FOUND.send(player, "game", arena.getId());
             return;
@@ -80,7 +79,7 @@ public class QuakecraftCommand extends NodeCommand {
             user = PermissionUser.AVAILABLE
     )
     protected void leave(CommandSender sender) {
-        Game game = Quakecraft.get().getGameManager().getGame((Player) sender);
+        Game game = Quake.get().getGameManager().getGame((Player) sender);
         if (game == null) {
             NO_GAME.send(sender);
             return;
@@ -96,7 +95,7 @@ public class QuakecraftCommand extends NodeCommand {
             sender = SenderType.PLAYER
     )
     protected void shop(CommandSender sender) {
-        GuiId gui = Quakecraft.get().getGuis().get("shop_gui");
+        GuiId gui = Quake.get().getGuis().get("shop_gui");
         if (gui == null) {
             NO_GUI.send((Player) sender);
             return;
@@ -113,7 +112,7 @@ public class QuakecraftCommand extends NodeCommand {
             e.addLocation("in commands messages");
             throw e;
         }
-        MessageManager manager = Quakecraft.get().getMessages().getSection("commands.join");
+        MessageManager manager = Quake.get().getMessages().getSection("commands.join");
         ALREADY_PLAYING = manager.get("already-playing");
         NO_GAME_FOUND = manager.get("no-game-found");
 

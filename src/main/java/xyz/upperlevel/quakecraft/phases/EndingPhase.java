@@ -1,9 +1,6 @@
-package xyz.upperlevel.quakecraft.game.ending;
+package xyz.upperlevel.quakecraft.phases;
 
-import lombok.Data;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -16,30 +13,23 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.events.GameQuitEvent;
-import xyz.upperlevel.quakecraft.game.*;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
-import xyz.upperlevel.quakecraft.game.lobby.LobbyPhase;
+import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.game.Phase;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
-import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
-import xyz.upperlevel.uppercore.util.nms.impl.MessageNms;
 
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static xyz.upperlevel.quakecraft.Quakecraft.get;
-import static xyz.upperlevel.uppercore.Uppercore.boards;
+import static xyz.upperlevel.quakecraft.Quake.get;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
-@Data
-public class EndingPhase implements QuakePhase, Listener {
+public class EndingPhase implements Phase, Listener {
     private static final Random random = new Random();
 
     private static Message endGainMessage;
@@ -55,18 +45,15 @@ public class EndingPhase implements QuakePhase, Listener {
     private static boolean autoJoin;
     private static Message rejoinMessage;
 
-    private static EndingHotbar sampleHotbar;
-    private static EndingBoard sampleBoard;
+    private static EndingPhase hotbar;
 
     private static List<PlaceholderValue<String>> signLines;
 
-    private Participant winner;
+    @Getter
+    private Gamer winner;
 
-    private final Game game;
-    private final GamePhase parent;
-
-    private final EndingHotbar hotbar;
-    private final EndingBoard board;
+    @Getter
+    private final GamePhase gamePhase;
 
     private final BukkitRunnable fireworksTask = new BukkitRunnable() {
         @Override
@@ -94,18 +81,16 @@ public class EndingPhase implements QuakePhase, Listener {
         }
     };
 
-    public EndingPhase(GamePhase parent) {
-        this.game = parent.getGame();
-        this.parent = parent;
-        this.hotbar = sampleHotbar;
-        this.board = new EndingBoard(this, sampleBoard);
+    public EndingPhase(GamePhase gamePhase, Gamer winner) {
+        this.gamePhase = gamePhase;
+        this.winner = winner;
     }
 
     public void giveGains() {
-        for (Participant p : parent.getParticipants())
+        for (Gamer p : parent.getParticipants())
             baseGain.grant(p);
 
-        Iterator<Participant> ranking = parent.getRanking().iterator();
+        Iterator<Gamer> ranking = parent.getRanking().iterator();
         if (ranking.hasNext()) {
             firstGain.grant(ranking.next());
             if (ranking.hasNext()) {
@@ -115,7 +100,7 @@ public class EndingPhase implements QuakePhase, Listener {
             }
         }
         if (EconomyManager.isEnabled()) {
-            for (Participant p : parent.getParticipants()) {
+            for (Gamer p : parent.getParticipants()) {
                 EconomyManager.get(p.getPlayer()).give(p.coins);
                 endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
             }
@@ -130,7 +115,7 @@ public class EndingPhase implements QuakePhase, Listener {
         lines.addAll(endRankingHeader.filter(reg).getLines());
         Map.Entry<Integer, Message> bodyEntry = endRankingBody.floorEntry(getParent().getRanking().size());
         if(bodyEntry == null) {
-            Quakecraft.get().getLogger().severe("ERROR: cannot find ending ranking body for: " + getParent().getRanking().size() + ", indexes " + endRankingBody.keySet());
+            Quake.get().getLogger().severe("ERROR: cannot find ending ranking body for: " + getParent().getRanking().size() + ", indexes " + endRankingBody.keySet());
         } else {
             lines.addAll(bodyEntry.getValue().filter(reg).getLines());
         }
@@ -160,18 +145,9 @@ public class EndingPhase implements QuakePhase, Listener {
         game.getPlayers().forEach(this::clear);
     }
 
-    private static File getPhaseFolder() {
-        return new File(get().getDataFolder(), "game/ending");
-    }
-
-    @Override
-    public void updateSigns() {
-        game.setSignLines(signLines, getParent().getPlaceholders());
-    }
-
     @Override
     public void onEnable(Phase previous) {
-        Bukkit.getPluginManager().registerEvents(this, Quakecraft.get());
+        Bukkit.getPluginManager().registerEvents(this, Quake.get());
         winner = parent.getWinner();
         printRanking();
 
@@ -190,7 +166,7 @@ public class EndingPhase implements QuakePhase, Listener {
         endingTask.cancel();
         clear();
         if(!autoJoin) {
-            Location lobby = Quakecraft.get().getArenaManager().getLobby();
+            Location lobby = Quake.get().getArenaManager().getLobby();
             if(lobby != null) {
                 for (Player player : new ArrayList<>(getGame().getPlayers())) {
                     getGame().leave(player);
@@ -201,7 +177,7 @@ public class EndingPhase implements QuakePhase, Listener {
                     MessageNms.sendJson(player, comps);
                 }
             } else {
-                Quakecraft.get().getLogger().severe("autoJoin enabled but lobby location not set, use '/quake lobby set' to set the global lobby location");
+                Quake.get().getLogger().severe("autoJoin enabled but lobby location not set, use '/quake lobby set' to set the global lobby location");
             }
         }
     }
@@ -219,9 +195,8 @@ public class EndingPhase implements QuakePhase, Listener {
 
         MessageManager endRanking = manager.getSection("end-ranking");
         endRankingHeader = endRanking.get("header");
-        // TODO: Transcribe this to the new config, this is painful to look at
         endRankingBody =  endRanking.getConfig()
-                .getMapRequired("body")
+                .getSectionRequired("body")
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(
@@ -232,15 +207,15 @@ public class EndingPhase implements QuakePhase, Listener {
                 );
         endRankingFooter = endRanking.get("footer");
 
-        autoJoin = Quakecraft.get().getCustomConfig().getBoolRequired("auto-join");
-        rejoinMessage = Quakecraft.get().getCustomConfig().getMessageRequired("rejoin-message");
+        autoJoin = Quake.get().getCustomConfig().getBoolRequired("auto-join");
+        rejoinMessage = Quake.get().getCustomConfig().getMessageRequired("rejoin-message");
 
-        sampleHotbar = EndingHotbar.deserialize(get(), Config.fromYaml(new File(
+        sampleHotbar = EndingHotbar.deserialize(get(), Config.wrap(ConfigUtils.loadConfig(
                 getPhaseFolder(),
                 "ending_hotbar.yml"
         )));
 
-        sampleBoard = EndingBoard.deserialize(Config.fromYaml(new File(
+        sampleBoard = EndingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
                 getPhaseFolder(),
                 "ending_board.yml"
         )));

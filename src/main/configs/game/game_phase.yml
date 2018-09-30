@@ -1,0 +1,69 @@
+################################################################
+# GAME PHASE
+# The GAME PHASE contains the PLAYING PHASE and the ENDING PHASE
+################################################################
+
+game-countdown: 600  # in seconds (600 = 10 minutes)
+game-board:
+  title: '&e&lQUAKECRAFT'
+  update-interval: 10
+  header:
+  - ''
+  - '&fTime left: &a%game_countdown%'
+  - ''
+  ranking:
+    text: '&7%player_name%: &a%kills%'
+    size: 12
+  footer:
+  - ''
+  - '&ewww.upperlevel.xyz'
+
+
+################################################################
+# PLAYING PHASE
+# The PLAYING PHASE is when players fights
+################################################################
+
+default-kill-message: ''
+shot-message: ''
+headshot-message: ''
+
+sneak-disabled: true
+sneak-disabled-message: 'Sneak is disabled peace of ass!'
+
+kills-to-win: 20
+
+playing-hotbar:
+  gun:
+    slot: 0
+  item:
+    name: '&7Railgun'
+    lore:
+    - '&7Case: &a%case%'
+    - '&7Laser: &a%laser%'
+    - '&7Barrel: &a%barrel%'
+    - '&7Muzzle: &a%muzzle%'
+    - '&7Trigger: &a%trigger%'
+    - ''
+    - '&eRight-click to shoot!'
+    - '&eLeft-click to dash forward!'
+  tracker:
+    slot: 1
+    item:
+      name: '&aTracking Device'
+      lore:
+      - '&7Points the closest enemy!'
+
+################################################################
+# ENDING PHASE
+# The ENDING PHASE is when a winner is found
+################################################################
+
+ending-hotbar:
+  icons:
+  - slot: 8
+    item:
+      type: bed
+      name: '&c&lReturn to Lobby'
+      lore:
+      - '&7Right-click to leave to the lobby!'

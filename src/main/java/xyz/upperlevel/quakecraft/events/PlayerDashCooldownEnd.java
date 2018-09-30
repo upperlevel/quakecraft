@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 
 @RequiredArgsConstructor
 public class PlayerDashCooldownEnd extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     @Getter
-    private final QuakePlayer player;
+    private final QuakeAccount player;
 
     @Override
     public HandlerList getHandlers() {

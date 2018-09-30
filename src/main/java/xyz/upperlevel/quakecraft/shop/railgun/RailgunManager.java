@@ -3,8 +3,7 @@ package xyz.upperlevel.quakecraft.shop.railgun;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.gun.GunCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
@@ -35,7 +34,7 @@ public class RailgunManager {
             bySingleComponent.put(p, railgun);
     }
 
-    public Railgun computeSelected(QuakePlayer player) {
+    public Railgun computeSelected(QuakeAccount player) {
         return byComponents.get(player.getGunComponents());
     }
 

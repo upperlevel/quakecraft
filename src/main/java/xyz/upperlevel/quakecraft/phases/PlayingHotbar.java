@@ -1,10 +1,10 @@
-package xyz.upperlevel.quakecraft.game.playing;
+package xyz.upperlevel.quakecraft.phases;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
@@ -19,7 +19,7 @@ import java.util.List;
 public class PlayingHotbar extends Hotbar {
 
     public PlayingHotbar(Config config) {
-        super(Quakecraft.get(), config);
+        super(Quake.get(), config);
         Config sub;
         sub = config.getConfigRequired("gun");
         setIcon(sub.getIntRequired("slot"), new ConfigIcon(Gun.deserialize(sub.getConfigRequired("item"))));
@@ -40,7 +40,7 @@ public class PlayingHotbar extends Hotbar {
 
         @Override
         public ItemStack resolve(Player player) {
-            QuakePlayer quake = Quakecraft.get().getPlayerManager().getPlayer(player);
+            QuakeAccount quake = Quake.get().getPlayerManager().getPlayer(player);
             CustomItem item = quake.getSelectedCase().getItem();
             item.setDisplayName(name);
             item.setLore(lore);

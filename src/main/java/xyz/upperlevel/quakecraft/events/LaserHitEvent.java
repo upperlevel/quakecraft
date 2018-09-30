@@ -1,30 +1,43 @@
 package xyz.upperlevel.quakecraft.events;
 
+
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.bukkit.entity.Player;
+import lombok.Setter;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.game.playing.PlayingPhase;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 
-import java.util.List;
+public class LaserHitEvent extends Event implements Cancellable {
+    @Getter
+    private final QuakeArena arena;
 
-@Getter
-@RequiredArgsConstructor
-public class LaserHitEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+    @Getter
+    private final Gamer shooter;
 
-    private final PlayingPhase phase;
-    private final QuakePlayer shooter;
-    private final List<Player> victims;
+    @Getter
+    private final Gamer hit;
+
+    @Getter
+    private final boolean headshot;
+
+    @Getter
+    @Setter
+    private boolean cancelled;
+
+    public LaserHitEvent(QuakeArena arena,
+                         Gamer shooter,
+                         Gamer hit,
+                         boolean headshot) {
+        this.arena = arena;
+        this.shooter = shooter;
+        this.hit = hit;
+        this.headshot = headshot;
+    }
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+        return null;
     }
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 
 @Getter
@@ -13,14 +13,14 @@ import xyz.upperlevel.quakecraft.game.gains.GainType;
 public class ParticipantGainMoneyEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private final Participant player;
+    private final Gamer player;
     private final GainType type;
     private float gain;
 
     private boolean cancelled;
 
 
-    public ParticipantGainMoneyEvent(Participant player, GainType type) {
+    public ParticipantGainMoneyEvent(Gamer player, GainType type) {
         this.player = player;
         this.type = type;
         this.gain = type.getAmount();

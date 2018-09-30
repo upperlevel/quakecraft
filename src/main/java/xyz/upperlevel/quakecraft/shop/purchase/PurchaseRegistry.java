@@ -1,6 +1,6 @@
 package xyz.upperlevel.quakecraft.shop.purchase;
 
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class PurchaseRegistry {
         return p;
     }
 
-    public boolean hasPurchase(QuakePlayer player, String fullId) {
+    public boolean hasPurchase(QuakeAccount player, String fullId) {
         return player.getPurchases().contains(getPurchase(fullId));
     }
 }

@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
 import org.bukkit.FireworkEffect;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -30,12 +30,12 @@ public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
     }
 
     @Override
-    public void setSelected(QuakePlayer player, Barrel purchase) {
+    public void setSelected(QuakeAccount player, Barrel purchase) {
         player.setSelectedBarrel(purchase);
     }
 
     @Override
-    public Barrel getSelected(QuakePlayer player) {
+    public Barrel getSelected(QuakeAccount player) {
         return player.getSelectedBarrel();
     }
 

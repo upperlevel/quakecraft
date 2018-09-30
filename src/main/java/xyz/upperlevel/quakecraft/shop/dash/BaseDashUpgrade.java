@@ -3,7 +3,7 @@ package xyz.upperlevel.quakecraft.shop.dash;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import xyz.upperlevel.quakecraft.QuakePlayer;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
@@ -25,7 +25,7 @@ public class BaseDashUpgrade<P extends BaseDashUpgrade<P>> extends Purchase<P> {
     }
 
     @Override
-    public CustomItem getIcon(QuakePlayer player) {
+    public CustomItem getIcon(QuakeAccount player) {
         item.setData(player.getPurchases().contains(this) ? GOT : MISSING);
         return item;
     }

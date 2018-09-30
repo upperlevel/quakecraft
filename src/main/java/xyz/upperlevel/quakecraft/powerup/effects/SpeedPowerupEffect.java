@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.powerup.effects;
 
 import lombok.Getter;
 import lombok.Setter;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 
 public class SpeedPowerupEffect extends TimeBasedPowerupEffect {
@@ -16,12 +16,12 @@ public class SpeedPowerupEffect extends TimeBasedPowerupEffect {
     }
 
     @Override
-    public void start(Participant player) {
+    public void start(Gamer player) {
         player.getPlayer().setWalkSpeed(speed);
     }
 
     @Override
-    public void end(Participant player) {
+    public void end(Gamer player) {
         player.getPlayer().setWalkSpeed(DEF_WALK_VALUE);
     }
 

@@ -2,10 +2,10 @@ package xyz.upperlevel.quakecraft.game.playing;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.KillStreakReachEvent;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.phases.GamePhase;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
@@ -46,7 +46,7 @@ public class KillStreak {
         gain.setAmount(config.getFloatRequired("gain"));
     }
 
-    public KillStreak reach(GamePhase phase, Participant p) {
+    public KillStreak reach(GamePhase phase, Gamer p) {
         KillStreakReachEvent event = new KillStreakReachEvent(phase, p, this, message);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled())

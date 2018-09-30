@@ -2,8 +2,8 @@ package xyz.upperlevel.quakecraft.shop.purchase;
 
 import lombok.Getter;
 import lombok.Setter;
-import xyz.upperlevel.quakecraft.QuakePlayer;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.uppercore.config.Config;
 
 import java.util.Collections;
@@ -29,7 +29,7 @@ public abstract class PurchaseManager<P extends Purchase<P>> {
         purchases.put(item.getId(), item);
         if(item.isDef()) {
             if(def != null)
-                Quakecraft.get().getLogger().warning("Multiple default values in " + getPurchaseName());
+                Quake.get().getLogger().warning("Multiple default values in " + getPurchaseName());
             def = item;
         }
         if(gui != null)
@@ -42,9 +42,9 @@ public abstract class PurchaseManager<P extends Purchase<P>> {
 
     public abstract P deserialize(String id, Config config);
 
-    public abstract void setSelected(QuakePlayer player, P purchase);
+    public abstract void setSelected(QuakeAccount player, P purchase);
 
-    public abstract P getSelected(QuakePlayer player);
+    public abstract P getSelected(QuakeAccount player);
 
     public abstract String getPurchaseName();
 

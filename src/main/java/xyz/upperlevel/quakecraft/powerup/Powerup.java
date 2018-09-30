@@ -14,12 +14,12 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.events.PowerupPickupEvent;
-import xyz.upperlevel.quakecraft.game.GamePhase;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.phases.GamePhase;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.util.ItemDemerger;
@@ -68,7 +68,7 @@ public class Powerup {
         Location spawnLoc = location.clone().add(0.0, SPAWN_HEIGHT, 0.0);
         spawned = location.getWorld().dropItem(spawnLoc, display);
         spawned.setVelocity(new Vector());
-        if(NmsVersion.MINOR >= 10) {
+        if (NmsVersion.MINOR >= 10) {
             spawned.setGravity(false);
         } else {
             if (NmsVersion.RELEASE == 1) {
@@ -86,11 +86,11 @@ public class Powerup {
         drops.put(spawned, this);
     }
 
-    private void onPickup(Participant player) {
+    private void onPickup(Gamer player) {
         effect.apply(player);
         spawned.remove();
         spawned = null;
-        if(support != null) {
+        if (support != null) {
             support.remove();
             support = null;
         }
@@ -103,7 +103,7 @@ public class Powerup {
     }
 
     public void onGameEnd() {
-        if(spawned != null) {
+        if (spawned != null) {
             spawned.remove();
         } else {
             spawner.cancel();
@@ -112,7 +112,7 @@ public class Powerup {
 
     protected void beginSpawnTask() {
         spawner = Bukkit.getScheduler().runTaskLater(
-                Quakecraft.get(),
+                Quake.get(),
                 this::spawn,
                 respawnTicks
         );
@@ -136,27 +136,27 @@ public class Powerup {
         @EventHandler
         public void onPlayerPickup(PlayerPickupItemEvent event) {
             Powerup box = drops.remove(event.getItem());
-            if(box != null) {
+            if (box != null) {
                 event.setCancelled(true);
-                Participant p = box.phase.getParticipant(event.getPlayer());
-                if(p == null) {
+                Gamer p = box.phase.getParticipant(event.getPlayer());
+                if (p == null) {
                     drops.put(event.getItem(), box);
                     return;
                 }
                 PowerupPickupEvent e = new PowerupPickupEvent(box, p);
-                if(!e.isCancelled())
+                if (!e.isCancelled())
                     box.onPickup(p);
             }
         }
 
         @EventHandler(ignoreCancelled = true)
         public void onItemDespawnEvent(ItemDespawnEvent event) {
-            if(drops.containsKey(event.getEntity()))
+            if (drops.containsKey(event.getEntity()))
                 event.setCancelled(true);
         }
     }
 
     public static void load() {
-        Bukkit.getPluginManager().registerEvents(new EventListener(), Quakecraft.get());
+        Bukkit.getPluginManager().registerEvents(new EventListener(), Quake.get());
     }
 }
