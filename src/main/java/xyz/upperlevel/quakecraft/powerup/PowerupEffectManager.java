@@ -1,10 +1,15 @@
 package xyz.upperlevel.quakecraft.powerup;
 
+import org.yaml.snakeyaml.nodes.Tag;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.quakecraft.powerup.effects.RapidFirePowerupEffect;
 import xyz.upperlevel.quakecraft.powerup.effects.SpeedPowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.ConfigConstructor;
+import xyz.upperlevel.uppercore.config.ConfigExternalDeclarator;
+import xyz.upperlevel.uppercore.config.ConfigProperty;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
+import xyz.upperlevel.uppercore.config.parser.ConfigParserRegistry;
 
 import java.util.*;
 
@@ -13,6 +18,15 @@ public class PowerupEffectManager {
 
     static {
         registerDef();
+        ConfigParserRegistry.getStandard().registerFromDeclarator(new ConfigExternalDeclarator() {
+            @ConfigConstructor(inlineable = true)
+            public PowerupEffect parseEffect(@ConfigProperty String id) {
+                PowerupEffect effect =  fromId(id);
+                if (effect != null) return effect;
+                throw new InvalidConfigException("Invalid powerup effect '" + id + "'");
+            }
+        });
+        ConfigParserRegistry.getStandard().register(PowerupEffect.class, PowerupEffectManager::fromId, Tag.STR);
     }
 
 
@@ -46,8 +60,8 @@ public class PowerupEffectManager {
         for(PowerupEffect effect : effects.values()) {
             try {
                 effect.load(config.getConfigRequired(effect.getId()));
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in itembox '" + effect.getId() + "'");
+            } catch (InvalidConfigException e) {
+                e.addLocation("in itembox '" + effect.getId() + "'");
                 throw e;
             }
         }

@@ -8,10 +8,10 @@ import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -67,8 +67,8 @@ public class KillStreak {
         for(Map.Entry<String, Config> kill : config.entrySet()) {
             try {
                 streaks.add(new KillStreak(kill.getKey(), kill.getValue()));
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in killstreak " + kill.getKey());
+            } catch (InvalidConfigException e) {
+                e.addLocation("in killstreak " + kill.getKey());
                 throw e;
             }
         }
@@ -80,10 +80,9 @@ public class KillStreak {
     }
 
     public static void loadConfig() {
-        loadConfig(ConfigUtils.loadConfigMap(
-                Quakecraft.get(),
-                "game/playing/killstreak.yml",
-                "killstreak"
-        ));
+        loadConfig(Config.fromYaml(new File(
+                Quakecraft.get().getDataFolder(),
+                "game/playing/killstreak.yml"
+        )).asConfigMap());
     }
 }

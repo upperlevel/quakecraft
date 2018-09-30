@@ -8,7 +8,6 @@ import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.shop.gun.*;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.util.TextUtil;
@@ -64,16 +63,22 @@ public class Railgun {
         this.muzzle = cat.getMuzzles().get(muzzleName);
         this.trigger = cat.getTriggers().get(triggerName);
 
-        if (barrel == null)
-            throw new InvalidConfigurationException("Cannot find barrel \"" + barrelName + "\"");
-        if (gcase == null)
-            throw new InvalidConfigurationException("Cannot find case \"" + caseName + "\"");
-        if (laser == null)
-            throw new InvalidConfigurationException("Cannot find laser \"" + laserName + "\"");
-        if (muzzle == null)
-            throw new InvalidConfigurationException("Cannot find muzzle \"" + muzzleName + "\"");
-        if (trigger == null)
-            throw new InvalidConfigurationException("Cannot find trigger \"" + triggerName + "\"");
+
+        if (barrel == null) {
+            throw config.invalidConfigException("barrel", "Cannot find barrel \"" + barrelName + "\"");
+        }
+        if (gcase == null) {
+            throw config.invalidConfigException("case", "Cannot find case \"" + caseName + "\"");
+        }
+        if (laser == null) {
+            throw config.invalidConfigException("laser", "Cannot find laser \"" + laserName + "\"");
+        }
+        if (muzzle == null) {
+            throw config.invalidConfigException("muzzle", "Cannot find muzzle \"" + muzzleName + "\"");
+        }
+        if (trigger == null) {
+            throw config.invalidConfigException("trigger", "Cannot find trigger \"" + triggerName + "\"");
+        }
 
         String rawMessage = config.getString("message");
         this.killMessage = rawMessage == null ? null : TextUtil.translatePlain(rawMessage);

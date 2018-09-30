@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.game.ending;
 
 import xyz.upperlevel.quakecraft.game.GameBoard;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 
 public class EndingBoard extends GameBoard {
     public EndingBoard(Config config) {
@@ -16,8 +16,8 @@ public class EndingBoard extends GameBoard {
     public static EndingBoard deserialize(Config config) {
         try {
             return new EndingBoard(config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in ending phase");
+        } catch (InvalidConfigException e) {
+            e.addLocation("in ending phase");
             throw e;
         }
     }

@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.game.ending;
 
 import org.bukkit.plugin.Plugin;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 
 public class EndingHotbar extends Hotbar {
@@ -15,8 +15,8 @@ public class EndingHotbar extends Hotbar {
     public static EndingHotbar deserialize(Plugin plugin, Config config) {
         try {
             return new EndingHotbar(plugin, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in ending hotbar");
+        } catch (InvalidConfigException e) {
+            e.addLocation("in ending hotbar");
             throw e;
         }
     }

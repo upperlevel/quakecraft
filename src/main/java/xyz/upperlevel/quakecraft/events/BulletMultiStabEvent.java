@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.playing.Bullet;
 import xyz.upperlevel.quakecraft.game.playing.MultiStab;
-import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 @Getter
 @Setter

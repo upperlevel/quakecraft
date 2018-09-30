@@ -7,8 +7,8 @@ import xyz.upperlevel.quakecraft.shop.require.Require;
 public class RequirePermission implements Require {
     private String permission;
 
-    public RequirePermission(Purchase<?> parent, Object par) {
-        this.permission = String.valueOf(par);
+    public RequirePermission(Purchase<?> parent, String par) {
+        this.permission = par;
     }
 
     @Override

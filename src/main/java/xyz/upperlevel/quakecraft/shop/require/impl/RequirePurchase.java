@@ -10,9 +10,9 @@ public class RequirePurchase implements Require {
     private String requiredId;
     private Purchase<?> required;//Lazy initialization to avoid initialization errors
 
-    public RequirePurchase(Purchase<?> parent, Object par) {
+    public RequirePurchase(Purchase<?> parent, String par) {
         this.parent = parent;
-        this.requiredId = String.valueOf(par);
+        this.requiredId = par;
     }
 
     @Override

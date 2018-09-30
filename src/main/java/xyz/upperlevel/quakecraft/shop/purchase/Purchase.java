@@ -39,7 +39,7 @@ public abstract class Purchase<T extends Purchase<T>> {
         this.def = config.getBool("default", false);
         this.placeholders = PlaceholderRegistry.create();
         fillPlaceholderSession(placeholders);
-        this.requires = RequireSystem.loadAll(this, config.get("requires"));
+        this.requires = RequireSystem.loadAll(this, config.get("requires", RequireSystem.requireConfType, null));
     }
 
     public String getFullId() {

@@ -7,10 +7,10 @@ import xyz.upperlevel.quakecraft.events.BulletMultiStabEvent;
 import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtils;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
-import xyz.upperlevel.uppercore.message.Message;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 
+import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -67,8 +67,8 @@ public class MultiStab {
             MultiStab stab;
             try {
                 stab = new MultiStab(kill.getKey(), kill.getValue());
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in multistab " + kill.getKey());
+            } catch (InvalidConfigException e) {
+                e.addLocation("in multistab " + kill.getKey());
                 throw e;
             }
             values.put(stab.kills, stab);
@@ -76,10 +76,9 @@ public class MultiStab {
     }
 
     public static void loadConfig() {
-        loadConfig(ConfigUtils.loadConfigMap(
-                Quakecraft.get(),
-                "game/playing/multistab.yml",
-                "multistab"
-        ));
+        loadConfig(Config.fromYaml(new File(
+                Quakecraft.get().getDataFolder(),
+                "game/playing/multistab.yml"
+        )).asConfigMap());
     }
 }

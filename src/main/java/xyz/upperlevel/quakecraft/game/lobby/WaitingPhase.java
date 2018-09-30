@@ -4,13 +4,10 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.events.GameJoinEvent;
-import xyz.upperlevel.quakecraft.events.GameQuitEvent;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
@@ -18,15 +15,11 @@ import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardManager;
 import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtil;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-import java.io.File;
 import java.util.List;
-
-import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 public class WaitingPhase implements Phase, Listener {
     private static Hotbar hotbar;
@@ -107,6 +100,6 @@ public class WaitingPhase implements Phase, Listener {
 
     public static void loadConfig(Config config) {
         board = SimpleConfigBoard.create(config.getConfigRequired("board"));
-        hotbar = config.getConfigRequired("hotbar").get(Quakecraft.get(), Hotbar.class);
+        hotbar = config.getConfigRequired("hotbar").get(Hotbar.class, Quakecraft.get());
     }
 }

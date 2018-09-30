@@ -6,7 +6,6 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.ConfigUtil;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 
 import java.io.File;
@@ -36,11 +35,10 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
     }
 
     public void loadConfig() {
-        loadConfig(ConfigUtil.loadConfigMap(
-                Quakecraft.get(),
-                "shop/" + getConfigLoc() + ".yml",
-                getPurchaseName()
-        ));
+        loadConfig(Config.fromYaml(new File(
+                Quakecraft.get().getDataFolder(),
+                "shop/" + getConfigLoc() + ".yml"
+        )).asConfigMap());
     }
 
 

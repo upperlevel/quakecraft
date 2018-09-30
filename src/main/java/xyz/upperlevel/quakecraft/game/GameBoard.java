@@ -7,7 +7,7 @@ import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.FixBoardSection;
 import xyz.upperlevel.uppercore.board.BoardSection;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
@@ -47,8 +47,8 @@ public class GameBoard extends Board {
     public static GameBoard deserialize(GamePhase phase, Config config) {
         try {
             return new GameBoard(phase, config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in game board");
+        } catch (InvalidConfigException e) {
+            e.addLocation("in game board");
             throw e;
         }
     }
@@ -63,8 +63,8 @@ public class GameBoard extends Board {
             try {
                 size = config.getInt("size", -1);
                 text = config.getMessageStrRequired("text");
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in ranking");
+            } catch (InvalidConfigException e) {
+                e.addLocation("in ranking");
                 throw e;
             }
         }

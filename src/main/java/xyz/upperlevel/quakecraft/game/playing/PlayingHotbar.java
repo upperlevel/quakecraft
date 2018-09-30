@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
@@ -56,8 +56,8 @@ public class PlayingHotbar extends Hotbar {
         public static Gun deserialize(Config config) {
             try {
                 return new Gun(config);
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in gun");
+            } catch (InvalidConfigException e) {
+                e.addLocation("in gun");
                 throw e;
             }
         }
@@ -84,8 +84,8 @@ public class PlayingHotbar extends Hotbar {
         public static Tracker deserialize(Config config) {
             try {
                 return new Tracker(config);
-            } catch (InvalidConfigurationException e) {
-                e.addLocalizer("in tracker");
+            } catch (InvalidConfigException e) {
+                e.addLocation("in tracker");
                 throw e;
             }
         }
@@ -94,8 +94,8 @@ public class PlayingHotbar extends Hotbar {
     public static PlayingHotbar deserialize(String id, Config config) {
         try {
             return new PlayingHotbar(config);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in hotbar " + id);
+        } catch (InvalidConfigException e) {
+            e.addLocation("in hotbar " + id);
             throw e;
         }
     }

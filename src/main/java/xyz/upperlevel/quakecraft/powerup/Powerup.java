@@ -22,7 +22,6 @@ import xyz.upperlevel.quakecraft.game.GamePhase;
 import xyz.upperlevel.quakecraft.game.Participant;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigurationException;
 import xyz.upperlevel.uppercore.util.ItemDemerger;
 import xyz.upperlevel.uppercore.util.LocUtil;
 import xyz.upperlevel.uppercore.util.nms.NmsVersion;
@@ -129,10 +128,7 @@ public class Powerup {
 
     public void load(Config config) {
         this.location = LocUtil.deserialize(config.getConfigRequired("loc"));
-        String effectId = config.getStringRequired("effect");
-        this.effect = PowerupEffectManager.fromId(effectId);
-        if(effect == null)
-            throw new InvalidConfigurationException("Invalid powerup effect '" + effectId + "'");
+        this.effect = config.getRequired("effect", PowerupEffect.class, null);
         this.respawnTicks = config.getIntRequired("respawn-ticks");
     }
 

@@ -11,6 +11,7 @@ import xyz.upperlevel.uppercore.command.SenderType;
 import xyz.upperlevel.uppercore.command.functional.AsCommand;
 import xyz.upperlevel.uppercore.command.functional.FunctionalCommand;
 import xyz.upperlevel.uppercore.command.functional.WithPermission;
+import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 
@@ -108,8 +109,8 @@ public class QuakecraftCommand extends NodeCommand {
             loadSafe("join", JoinGameCommand::loadConfig);
             loadSafe("leave", LeaveGameCommand::loadConfig);
             loadSafe("arena", ArenaCommand::loadConfig);
-        } catch (InvalidConfigurationException e) {
-            e.addLocalizer("in commands messages");
+        } catch (InvalidConfigException e) {
+            e.addLocation("in commands messages");
             throw e;
         }
         MessageManager manager = Quakecraft.get().getMessages().getSection("commands.join");
