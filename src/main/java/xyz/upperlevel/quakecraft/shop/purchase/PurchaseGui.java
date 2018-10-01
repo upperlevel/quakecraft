@@ -42,7 +42,9 @@ import java.util.stream.Collectors;
 public class PurchaseGui extends ChestGui {
     public static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     public static String prefixSelected, prefixSelectable, prefixBuying;
-    public static Message notEnoughMoney, usedToMake;
+    public static Message notEnoughMoney;
+    public static PlaceholderValue<String> usedToMake, requireMissing, requireFound;
+
     @Getter
     private List<PurchaseAdapter> adapters = new ArrayList<>();
     private Map<Integer, Purchase<?>> purchaseMap = new LinkedHashMap<>();
@@ -223,13 +225,19 @@ public class PurchaseGui extends ChestGui {
         List<String> lore = new ArrayList<>();
         List<Require> requires = purchase.getRequires();
         for(Require require : requires) {
-            String req = require.getRequires(player);
             boolean pass = require.test(player);
-            String pre = pass ? Require.DONE : Require.MISSING;
+
+            PlaceholderValue<String> fmt = pass ? requireFound : requireMissing;
+
+            String reqStr = fmt.resolve(player.getPlayer(),
+                    PlaceholderRegistry.create()
+                            .set("require_name", require.getName(player))
+                            .set("require_type", require.getType())
+            );
             String description = require.getDescription();
-            if(description != null)//If there's no description nor progress the require is displayed as a one-line require
+            if (description != null)// If there's no description nor progress the require is displayed as a one-line require
                 lore.add("");
-            lore.add(ChatColor.RESET + " " + pre + " " + req);
+            lore.add(ChatColor.RESET + " " + reqStr);
 
             if(description != null) {
                 lore.add(ChatColor.RESET + "   " + description);
@@ -252,7 +260,7 @@ public class PurchaseGui extends ChestGui {
                     .set("gun_id", gun.getId());
 
 
-            lore.add(ChatColor.RESET + " " + usedToMake.get(player.getPlayer(), reg));
+            lore.add(ChatColor.RESET + " " + usedToMake.resolve(player.getPlayer(), reg));
         }
         return lore;
     }
@@ -317,7 +325,9 @@ public class PurchaseGui extends ChestGui {
         Quake.get().getLogger().info("PurchaseGui's config loaded!");
 
         notEnoughMoney = config.getMessageRequired("not-enough-money");
-        usedToMake = config.getMessageRequired("used-to-make");
+        usedToMake = config.getMessageStr("used-to-make");
+        requireMissing = config.getMessageStr("missing-requires");
+        requireFound = config.getMessageStr("found-requires");
     }
 
     private static String processColors(String selected) {

@@ -59,3 +59,5 @@ purchase-gui:
     buying: '&c'
   not-enough-money: '&cNot enough money!'
   used-to-make: '&7Used to make &a%gun_name%'
+  missing-requires: '&c✖ Requires %require_name% %require_type%'
+  found-requires:   '&a✔ Requires %require_name% %require_type%'
