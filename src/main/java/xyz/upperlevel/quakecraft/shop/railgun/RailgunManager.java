@@ -30,8 +30,10 @@ public class RailgunManager {
         railguns.add(railgun);
         List<? extends Purchase<?>> components = railgun.getComponents();
         byComponents.put(components, railgun);
-        for (Purchase<?> p : components)
+        for (Purchase<?> p : components) {
+            p.getUsedToMake().add(railgun);
             bySingleComponent.put(p, railgun);
+        }
     }
 
     public Railgun computeSelected(QuakeAccount player) {

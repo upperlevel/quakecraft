@@ -17,6 +17,7 @@ import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.QuakeAccountManager;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseBuyEvent;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseSelectEvent;
+import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.require.Require;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
@@ -30,6 +31,7 @@ import xyz.upperlevel.uppercore.gui.GuiAction;
 import xyz.upperlevel.uppercore.gui.GuiSize;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.EnchantGlow;
@@ -40,7 +42,7 @@ import java.util.stream.Collectors;
 public class PurchaseGui extends ChestGui {
     public static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     public static String prefixSelected, prefixSelectable, prefixBuying;
-    public static Message notEnoughMoney;
+    public static Message notEnoughMoney, usedToMake;
     @Getter
     private List<PurchaseAdapter> adapters = new ArrayList<>();
     private Map<Integer, Purchase<?>> purchaseMap = new LinkedHashMap<>();
@@ -211,6 +213,8 @@ public class PurchaseGui extends ChestGui {
 
         // Add requires
         metaLore.addAll(processRequires(purchase, player));
+        // Add "used to make %gun%" fields
+        metaLore.addAll(processUsedToMake(purchase, player));
 
         meta.setLore(metaLore);
     }
@@ -235,6 +239,20 @@ public class PurchaseGui extends ChestGui {
                         lore.add(ChatColor.RESET + "   " + progress);
                 }
             }
+        }
+        return lore;
+    }
+
+    public List<String> processUsedToMake(Purchase<?> purchase, QuakeAccount player) {
+        List<String> lore = new ArrayList<>();
+        List<Railgun> makes = purchase.getUsedToMake();
+        for(Railgun gun : makes) {
+            PlaceholderRegistry reg = PlaceholderRegistry.create()
+                    .set("gun_name", gun.getName())
+                    .set("gun_id", gun.getId());
+
+
+            lore.add(ChatColor.RESET + " " + usedToMake.get(player.getPlayer(), reg));
         }
         return lore;
     }
@@ -299,6 +317,7 @@ public class PurchaseGui extends ChestGui {
         Quake.get().getLogger().info("PurchaseGui's config loaded!");
 
         notEnoughMoney = config.getMessageRequired("not-enough-money");
+        usedToMake = config.getMessageRequired("used-to-make");
     }
 
     private static String processColors(String selected) {

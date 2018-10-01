@@ -58,3 +58,4 @@ purchase-gui:
     selectable: '&a'
     buying: '&c'
   not-enough-money: '&cNot enough money!'
+  used-to-make: '&7Used to make &a%gun_name%'

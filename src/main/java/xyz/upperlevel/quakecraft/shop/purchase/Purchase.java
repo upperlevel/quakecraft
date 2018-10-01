@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.shop.purchase;
 
 import lombok.Getter;
 import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.require.Require;
 import xyz.upperlevel.quakecraft.shop.require.RequireSystem;
 import xyz.upperlevel.uppercore.config.Config;
@@ -10,6 +11,7 @@ import xyz.upperlevel.uppercore.itemstack.CustomItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,6 +23,7 @@ public abstract class Purchase<T extends Purchase<T>> {
     private final boolean def;
     private PlaceholderRegistry placeholders;
     private List<Require> requires;
+    private List<Railgun> usedToMake = new ArrayList<>();
 
     public Purchase(PurchaseManager<T> manager, String id, PlaceholderValue<String> name, float cost, boolean def, List<Require> requires) {
         this.manager = manager;
