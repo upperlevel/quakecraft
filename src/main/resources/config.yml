@@ -9,6 +9,12 @@ game:
     pitch: 1.9 # Sound pitch
     volume: 0.7 # Sound volume
 
+  # ---- Advanced! ----
+  # A spigot bug re-clicks a slot twice if there is too much lag, this behaviour
+  # might cause the lobby-leave hotbar button to press instantly after joining.
+  # This is a cooldown that prevents the player from leaving the lobby before x milliseconds after joining
+  join-leave-cooldown: 1000
+
 playing-hotbar:
   gun:
     slot: 0 # The slot in which the gun is stored

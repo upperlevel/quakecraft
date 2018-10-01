@@ -38,8 +38,10 @@ public class LeaveGameCommand extends Command {
             NO_GAME.send(sender);
             return;
         }
-        game.leave((Player) sender);
-        SUCCESS.send((Player) sender, game.getPlaceholders());
+        if (game.isJoinCooldownOver((Player)sender)) {
+            game.leave((Player) sender);
+            SUCCESS.send((Player) sender, game.getPlaceholders());
+        }
     }
 
     public static void loadConfig() {

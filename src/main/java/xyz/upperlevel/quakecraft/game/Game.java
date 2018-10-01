@@ -20,7 +20,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import xyz.upperlevel.quakecraft.QuakePlayer;
 import xyz.upperlevel.quakecraft.Quakecraft;
 import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.quakecraft.events.GameJoinEvent;
@@ -34,18 +33,18 @@ import xyz.upperlevel.uppercore.util.LocUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static xyz.upperlevel.quakecraft.Quakecraft.get;
 
 @Data
 public class Game implements Listener {
     private static Message CANNOT_JOIN_MAX_REACHED;
+    private static long JOIN_LEAVE_COOLDOWN = 1000;
 
     private final String id;
     private final Arena arena;
     private final PhaseManager phaseManager = new PhaseManager();
-    private final Set<Player> players = new HashSet<>();
+    private final Map<Player, Long> joinTimes = new HashMap<>();
     private Map<Block, Sign> signs = new HashMap<>();
 
     @Getter
@@ -76,7 +75,7 @@ public class Game implements Listener {
         reg.set("game_name", arena::getName);
         reg.set("game_min_players", () -> String.valueOf(getMinPlayers()));
         reg.set("game_max_players", () -> String.valueOf(getMinPlayers()));
-        reg.set("game_players", () -> String.valueOf(players.size()));
+        reg.set("game_players", () -> String.valueOf(getPlayers().size()));
         reg.set("game_winner", () -> getWinner() != null ? getWinner().getName() : "");
     }
 
@@ -106,6 +105,10 @@ public class Game implements Listener {
      */
     public int getMaxPlayers() {
         return getArena().getMaxPlayers();
+    }
+
+    public Set<Player> getPlayers() {
+        return Collections.unmodifiableSet(joinTimes.keySet());
     }
 
     public void start() {
@@ -146,13 +149,13 @@ public class Game implements Listener {
     }
 
     public boolean join(Player player) {
-        if (players.add(player)) {
+        if (joinTimes.putIfAbsent(player, System.currentTimeMillis()) == null) {
             Quakecraft.get().getPlayerManager().getPlayer(player).saveItems();
             player.setExp(0f);
             GameJoinEvent e = new GameJoinEvent(this, player);
             Bukkit.getPluginManager().callEvent(e);
             if (e.isCancelled()) {
-                players.remove(player);
+                joinTimes.remove(player);
                 if (e.getKickReason() != null)
                     player.sendMessage(e.getKickReason().toArray(new String[0]));
                 return false;
@@ -163,11 +166,11 @@ public class Game implements Listener {
     }
 
     public boolean isPlaying(Player player) {
-        return players.contains(player);
+        return getPlayers().contains(player);
     }
 
     public boolean leave(Player player) {
-        if (players.remove(player)) {
+        if (joinTimes.remove(player) != null) {
             Bukkit.getPluginManager().callEvent(new GameQuitEvent(this, player));
             Location lobby = Quakecraft.get().getArenaManager().getLobby();
             if (lobby != null) {
@@ -181,16 +184,20 @@ public class Game implements Listener {
         return false;
     }
 
+    public boolean isJoinCooldownOver(Player player) {
+        return joinTimes.getOrDefault(player, 0L) + JOIN_LEAVE_COOLDOWN < System.currentTimeMillis();
+    }
+
     public void broadcast(String msg) {
-        players.forEach(player -> player.sendMessage(msg));
+        getPlayers().forEach(player -> player.sendMessage(msg));
     }
 
     public void broadcast(Message msg) {
-        msg.broadcast(players, placeholders);
+        msg.broadcast(getPlayers(), placeholders);
     }
 
     public void broadcast(Message msg, PlaceholderRegistry placeholders) {
-        msg.broadcast(players, placeholders);
+        msg.broadcast(getPlayers(), placeholders);
     }
 
 
@@ -206,14 +213,14 @@ public class Game implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(GameJoinEvent e) {
-        if (e.getGame() == this && players.size() > arena.getMaxPlayers()) {
+        if (e.getGame() == this && getPlayers().size() > arena.getMaxPlayers()) {
             e.cancel(CANNOT_JOIN_MAX_REACHED.get(e.getPlayer(), getPlaceholders()));
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        if (players.contains(e.getPlayer()))
+        if (getPlayers().contains(e.getPlayer()))
             leave(e.getPlayer());
     }
 
@@ -221,7 +228,7 @@ public class Game implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player && players.contains(e.getEntity())) {
+        if (e.getEntity() instanceof Player && getPlayers().contains(e.getEntity())) {
             e.setCancelled(true);
             if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
                 ((Player) e.getEntity()).setHealth(0);
@@ -230,7 +237,7 @@ public class Game implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onFood(FoodLevelChangeEvent e) {
-        if (e.getEntity() instanceof Player && players.contains(e.getEntity()))
+        if (e.getEntity() instanceof Player && getPlayers().contains(e.getEntity()))
             e.setCancelled(true);
     }
 
@@ -238,13 +245,13 @@ public class Game implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPickup(PlayerPickupItemEvent e) {
-        if (players.contains(e.getPlayer()))
+        if (getPlayers().contains(e.getPlayer()))
             e.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent e) {
-        if (players.contains(e.getPlayer()))
+        if (getPlayers().contains(e.getPlayer()))
             e.setCancelled(true);
     }
 
@@ -252,7 +259,7 @@ public class Game implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent e) {
-        if (players.contains(e.getPlayer())) {
+        if (getPlayers().contains(e.getPlayer())) {
             e.setCancelled(true);
         } else {
             Sign s = signs.get(e.getClickedBlock());
@@ -264,7 +271,7 @@ public class Game implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent e) {
-        if (players.contains(e.getPlayer())) {
+        if (getPlayers().contains(e.getPlayer())) {
             e.setCancelled(true);
         } else if (signs.remove(e.getBlock()) != null)
             e.getBlock().setType(Material.AIR);
@@ -272,7 +279,7 @@ public class Game implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        if (players.contains(e.getPlayer())) {
+        if (getPlayers().contains(e.getPlayer())) {
             e.setCancelled(true);
             e.setBuild(false);
         }
@@ -281,5 +288,6 @@ public class Game implements Listener {
 
     public static void loadConfig() {
         CANNOT_JOIN_MAX_REACHED = Quakecraft.get().getMessages().get("game.cannot-join.max-players");
+        JOIN_LEAVE_COOLDOWN = Quakecraft.get().getCustomConfig().getLong("game.join-leave-cooldown", JOIN_LEAVE_COOLDOWN);
     }
 }
