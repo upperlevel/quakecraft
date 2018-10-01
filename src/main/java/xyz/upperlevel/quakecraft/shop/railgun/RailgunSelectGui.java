@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui.deserializeSlots;
 import static xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui.getPrefix;
 
 public class RailgunSelectGui extends ChestGui {
@@ -184,7 +183,7 @@ public class RailgunSelectGui extends ChestGui {
         selectableLore = lores.getMessageRequired("selectable").getLines();
         missingPartsLore = lores.getMessageRequired("missing-parts").getLines();
 
-        slots = deserializeSlots(config.getCollectionRequired("slots"));
+        slots = config.getRequired("slots", int[].class, null);
     }
 
     public static void loadConfig() {

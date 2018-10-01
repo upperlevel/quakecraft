@@ -1,6 +1,6 @@
 package xyz.upperlevel.quakecraft.shop.purchase.multi;
 
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.shop.Category;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
@@ -30,12 +30,12 @@ public abstract class UnitCategory extends Category {
             );
         }
 
-        Quakecraft.get().getGuis().register(id, gui);
+        Quake.get().getGuis().register(id, gui);
     }
 
     public void loadConfig() {
         loadConfig(Config.fromYaml(new File(
-                Quakecraft.get().getDataFolder(),
+                Quake.get().getDataFolder(),
                 "shop/" + getConfigLoc() + ".yml"
         )));
     }

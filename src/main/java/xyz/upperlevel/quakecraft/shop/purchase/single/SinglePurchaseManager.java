@@ -1,6 +1,6 @@
 package xyz.upperlevel.quakecraft.shop.purchase.single;
 
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
@@ -36,7 +36,7 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
 
     public void loadConfig() {
         loadConfig(Config.fromYaml(new File(
-                Quakecraft.get().getDataFolder(),
+                Quake.get().getDataFolder(),
                 "shop/" + getConfigLoc() + ".yml"
         )).asConfigMap());
     }
@@ -52,14 +52,14 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
             throw e;
         }
         setGui(gui);
-        Quakecraft.get().getGuis().register(id, gui);
+        Quake.get().getGuis().register(id, gui);
     }
 
     public void loadGui() {
         String guiLoc = getGuiLoc();
         if(guiLoc == null) return;
         Config config = Config.fromYaml(new File(
-                Quakecraft.get().getDataFolder(),
+                Quake.get().getDataFolder(),
                 "shop/" + guiLoc + ".yml"
         ));
         loadGui(guiLoc.replaceFirst(".+[/\\\\]", ""), config);

@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.shop.railgun;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import lombok.Getter;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.gun.GunCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
@@ -64,7 +65,7 @@ public class RailgunManager {
 
     public void loadConfig() {
         Config config = Config.fromYaml(new File(
-                Quakecraft.get().getDataFolder(),
+                Quake.get().getDataFolder(),
                 "shop/gun/guns/guns.yml"
         ));
         loadConfig(config.asConfigMap());
@@ -80,13 +81,13 @@ public class RailgunManager {
             throw e;
         }
         this.gui = gui;
-        Quakecraft.get().getGuis().register("guns_gui", gui);
+        Quake.get().getGuis().register("guns_gui", gui);
         gui.print();
     }
 
     public void loadGui() {
         loadGui(Config.fromYaml(new File(
-                Quakecraft.get().getDataFolder(),
+                Quake.get().getDataFolder(),
                 "shop/gun/guns/guns_gui.yml"
         )));
     }

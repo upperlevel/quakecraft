@@ -24,17 +24,19 @@ import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
+import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
-import xyz.upperlevel.uppercore.board.BoardRegistry;
+import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.database.Store;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.gui.GuiRegistry;
+import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.hotbar.HotbarRegistry;
-import xyz.upperlevel.uppercore.message.MessageManager;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
+import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
 import xyz.upperlevel.uppercore.update.UpdateChecker;
 import xyz.upperlevel.uppercore.util.CrashUtil;
@@ -57,9 +59,10 @@ public class Quake extends JavaPlugin {
     private ShopCategory shop;
 
     // core
-    private BoardRegistry boards;
-    private GuiRegistry guis;
-    private HotbarRegistry hotbars;
+    private Registry<?> pluginRegistry;
+    private Registry<Board> boards;
+    private Registry<Gui> guis;
+    private Registry<Hotbar> hotbars;
     private Store store;
 
     private MessageManager messages;
@@ -80,9 +83,11 @@ public class Quake extends JavaPlugin {
             loadConfig();
 
             //Load command messages
-            guis = new GuiRegistry(this);
-            hotbars = new HotbarRegistry(this);
-            boards = new BoardRegistry(this);
+
+            pluginRegistry = Uppercore.registry().register(this);
+            guis = pluginRegistry.registerChild("guis", Gui.class);
+            hotbars = pluginRegistry.registerChild("hotbars", Hotbar.class);
+            boards = pluginRegistry.registerChild("boards", Board.class);
             store = new Store(this);
 
             arenaManager = new ArenaManager();
