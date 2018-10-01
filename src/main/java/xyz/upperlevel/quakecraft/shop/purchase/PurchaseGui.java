@@ -59,7 +59,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public PurchaseGui(Config config) {
-        super(Quakecraft.get(), config);
+        super(Quake.get(), config);
     }
 
     @ConfigConstructor
@@ -222,7 +222,7 @@ public class PurchaseGui extends ChestGui {
             String req = require.getRequires(player);
             boolean pass = require.test(player);
             String pre = pass ? Require.DONE : Require.MISSING;
-            String description = require.description();
+            String description = require.getDescription();
             if(description != null)//If there's no description nor progress the require is displayed as a one-line require
                 lore.add("");
             lore.add(ChatColor.RESET + " " + pre + " " + req);

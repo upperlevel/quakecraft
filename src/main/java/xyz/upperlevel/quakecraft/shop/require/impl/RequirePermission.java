@@ -12,17 +12,17 @@ public class RequirePermission implements Require {
     }
 
     @Override
-    public String name(QuakeAccount player) {
+    public String getName(QuakeAccount player) {
         return permission;
     }
 
     @Override
-    public String type() {
+    public String getType() {
         return "permission";
     }
 
     @Override
-    public String description() {
+    public String getDescription() {
         return null;
     }
 

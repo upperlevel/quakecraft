@@ -13,14 +13,14 @@ public interface Require {
 
 
     default String getRequires(QuakeAccount player) {
-        return "Requires \"" + name(player) + "\" " + type() + "!";
+        return "Requires \"" + getName(player) + "\" " + getType() + "!";
     }
 
-    String name(QuakeAccount player);
+    String getName(QuakeAccount player);
 
-    String type();
+    String getType();
 
-    String description();
+    String getDescription();
 
     boolean test(QuakeAccount player);
 

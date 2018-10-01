@@ -16,17 +16,17 @@ public class RequirePurchase implements Require {
     }
 
     @Override
-    public String name(QuakeAccount player) {
+    public String getName(QuakeAccount player) {
         return getRequired().getName().resolve(player.getPlayer());
     }
 
     @Override
-    public String type() {
+    public String getType() {
         return "purchase";
     }
 
     @Override
-    public String description() {
+    public String getDescription() {
         return null;
     }
 
