@@ -20,16 +20,21 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.sound.CompatibleSound;
+import xyz.upperlevel.uppercore.sound.PlaySound;
+
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.lang.String.valueOf;
 import static xyz.upperlevel.quakecraft.Quake.get;
 
 public class CountdownPhase implements Phase, Listener {
-    private static int COUNTDOWN_TIMER;
-    private static Config COUNTDOWN_MESSAGES; // Each countdown second corresponds to a message
+    private static int countdownTimer;
+    private static Map<String, Message> countdownMessages; // Each countdown second corresponds to a message
+    private static Map<String, PlaySound> countdownSounds; // Each countdown second corresponds to a sound
 
-    private static Board COUNTDOWN_BOARD;
-    private static Sound ORB_PICKUP = CompatibleSound.getRaw("ENTITY_EXPERIENCE_ORB_PICKUP");
+    private static Board countdownBoard;
 
     @Getter
     private final LobbyPhase lobbyPhase;
@@ -60,7 +65,7 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     private void setupPlayer(Player player) {
-        BoardManager.open(player, COUNTDOWN_BOARD, placeholderRegistry);
+        BoardManager.open(player, countdownBoard, placeholderRegistry);
     }
 
     private void clearPlayer(Player player) {
@@ -80,7 +85,7 @@ public class CountdownPhase implements Phase, Listener {
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, get());
         for (Player player : arena.getPlayers()) {
-            BoardManager.open(player, COUNTDOWN_BOARD, placeholderRegistry);
+            BoardManager.open(player, countdownBoard, placeholderRegistry);
         }
         // Starts countdown
         countdown = new Countdown();
@@ -121,19 +126,23 @@ public class CountdownPhase implements Phase, Listener {
         private int timer;
 
         public Countdown() {
-            timer = COUNTDOWN_TIMER;
+            timer = countdownTimer;
         }
 
         @Override
         public void run() {
+            Message msg = countdownMessages.get(valueOf(timer));
+            PlaySound sound = countdownSounds.get(valueOf(timer));
+
             for (Player player : arena.getPlayers()) {
                 player.setLevel(timer);
-                player.playSound(player.getLocation(), ORB_PICKUP, 0, 100f);
                 BoardManager.update(player, placeholderRegistry);
 
-                Message msg = COUNTDOWN_MESSAGES.getMessage(valueOf(timer));
                 if (msg != null) {
                     msg.send(player);
+                }
+                if (sound != null) {
+                    sound.play(player);
                 }
             }
             // updateSigns();
@@ -147,8 +156,14 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     public static void loadConfig(Config config) {
-        COUNTDOWN_TIMER = config.getIntRequired("timer");
-        COUNTDOWN_MESSAGES = config.getConfigRequired("messages");
-        COUNTDOWN_BOARD = SimpleConfigBoard.create(config.getConfigRequired("board"));
+        countdownTimer = config.getIntRequired("countdown-timer");
+        // Load messages
+        Config mexConf = config.getConfigRequired("countdown-messages");
+        countdownMessages = mexConf.keys().collect(Collectors.toMap(Function.identity(), mexConf::getMessageRequired));
+        // Load sounds
+        Config soundConf = config.getConfigRequired("countdown-sounds");
+        countdownSounds = soundConf.keys().collect(Collectors.toMap(Function.identity(), soundConf::getPlaySound));
+
+        countdownBoard = SimpleConfigBoard.create(config.getConfigRequired("countdown-board"));
     }
 }

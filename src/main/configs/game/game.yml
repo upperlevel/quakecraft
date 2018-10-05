@@ -36,6 +36,14 @@ countdown-messages:
   3:  '&eThe game starts in &c3&e seconds!'
   2:  '&eThe game starts in &c2&e seconds!'
   1:  '&eThe game starts in &c1&e second!'
+  0: # The 0th second is when the game starts
+
+countdown-sounds:
+  5: 'BLOCK_DISPENSER_FAIL'
+  4: 'BLOCK_DISPENSER_FAIL'
+  3: 'BLOCK_DISPENSER_FAIL'
+  2: 'BLOCK_DISPENSER_FAIL'
+  1: 'BLOCK_DISPENSER_FAIL'
 
 countdown-board:
   title: '&e&lQUAKECRAFT'
@@ -49,6 +57,18 @@ countdown-board:
   - '&eupperlevel.github.io'
 
 ################################################################################################ Game
+
+start-message:
+- '^a'
+- '^|&fQuakecraft'
+- ''
+- '^|Right-click with your Railgun to shoot'
+- '^|the enemy before they shoot you!'
+- '^|Left-click with it to Dash and dodge!'
+- ''
+- '^a'
+
+start-sound: 'ENTITY_PLAYER_LEVELUP'
 
 dash-power: 1.5 # basic dash power that'll be multiplied with the upgrades
 dash-cooldown-message: '&cDash cooling down! %remaining_secs%s remaining!'

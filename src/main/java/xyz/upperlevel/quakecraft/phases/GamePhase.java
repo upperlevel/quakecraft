@@ -18,6 +18,8 @@ import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.board.BoardManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.sound.PlaySound;
 import xyz.upperlevel.uppercore.task.Countdown;
 
 import java.util.*;
@@ -26,6 +28,8 @@ import java.util.*;
 public class GamePhase extends NodePhase implements Listener {
     private static int gameCountdown = 0;
     private static GameBoard board;
+    private static Message startMessage;
+    private static PlaySound startSound;
 
     @Getter
     private final QuakeArena arena;
@@ -105,6 +109,13 @@ public class GamePhase extends NodePhase implements Listener {
 
         // setup
         player.setGameMode(GameMode.ADVENTURE);
+
+        if (startMessage != null) {
+            startMessage.send(player);
+        }
+        if (startSound != null) {
+            startSound.play(player);
+        }
     }
 
     public boolean isGamer(Player player) {
@@ -180,6 +191,8 @@ public class GamePhase extends NodePhase implements Listener {
 
     public static void loadConfig(Config config) {
         gameCountdown = config.getInt("game-countdown", 600);
-        board = config.get("game-board", GameBoard.class, null);
+        board = config.getRequired("game-board", GameBoard.class, null);
+        startMessage = config.getMessage("start-message");
+        startSound = config.getPlaySound("start-sound");
     }
 }
