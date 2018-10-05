@@ -1,18 +1,17 @@
-package xyz.upperlevel.quakecraft.game.gains;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import xyz.upperlevel.quakecraft.events.ParticipantGainMoneyEvent;
-import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.phases.EndingPhase;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +22,11 @@ public class GainType {
 
     @Getter
     private final String id;
+
     @Getter
     @Setter
     private PlaceholderValue<String> name;
+
     @Getter
     @Setter
     private float amount;
@@ -82,6 +83,11 @@ public class GainType {
         return new GainType();
     }
 
+    public static void loadChildren() {
+        Gamer.loadGains();
+        EndingPhase.loadGains();
+    }
+
     public static void loadConfig(Config config) {
         message = config.getMessageRequired("message");
         loadChildren();
@@ -96,14 +102,5 @@ public class GainType {
             }
         }
         initialized = true;
-    }
-
-    public static void loadChildren() {
-        Gamer.loadGains();
-        EndingPhase.loadGains();
-    }
-
-    public static void loadConfig() {
-        loadConfig(Config.fromYaml(new File(Quakecraft.get().getDataFolder(), "game/gains.yml")));
     }
 }

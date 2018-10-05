@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.game.playing;
+package xyz.upperlevel.quakecraft.game;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -63,13 +63,12 @@ public class Dash {
             return;
         }
 
-        QuakeAccount player = Quake.get().getPlayerManager().getPlayer(p);
+        QuakeAccount player = Quake.get().getPlayerManager().getAccount(p);
         new Dash(player).swish();
     }
 
-    public static void loadConfig() {
-        Config config = Quake.get().getCustomConfig().getConfigRequired("dash");
-        BASE_POWER = config.getIntRequired("base-power");
-        COOLDOWN_MESSAGE = Quake.get().getMessages().get("game.dash.cooldown");
+    public static void loadConfig(Config config) {
+        BASE_POWER = config.getFloatRequired("dash-power");
+        COOLDOWN_MESSAGE = config.getMessage("dash-cooldown-message");
     }
 }

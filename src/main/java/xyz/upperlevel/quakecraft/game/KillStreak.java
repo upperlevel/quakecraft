@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.game.playing;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -6,7 +6,6 @@ import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.KillStreakReachEvent;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
-import xyz.upperlevel.quakecraft.game.gains.GainType;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
@@ -22,12 +21,16 @@ public class KillStreak {
 
     @Getter
     private int index;
+
     @Getter
     private final String id;
+
     @Getter
     private final int kills;
+
     @Getter
     private final Message message;
+
     @Getter
     private final GainType gain;
 
@@ -52,7 +55,7 @@ public class KillStreak {
         if(event.isCancelled())
             return this;
         else {
-            event.getMessage().broadcast(phase.getGame().getPlayers(), "killer_name", p.getName());
+            event.getMessage().broadcast(phase.getArena().getPlayers(), "killer_name", p.getName());
             gain.grant(p);
             return get(index + 1);
         }
@@ -81,8 +84,8 @@ public class KillStreak {
 
     public static void loadConfig() {
         loadConfig(Config.fromYaml(new File(
-                Quakecraft.get().getDataFolder(),
-                "game/playing/killstreak.yml"
+                Quake.get().getDataFolder(),
+                "game/playing/killstreaks.yml"
         )).asConfigMap());
     }
 }

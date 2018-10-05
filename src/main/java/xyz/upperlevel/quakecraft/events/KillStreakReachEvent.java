@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
-import xyz.upperlevel.quakecraft.game.playing.KillStreak;
+import xyz.upperlevel.quakecraft.game.KillStreak;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 @Getter

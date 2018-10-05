@@ -18,11 +18,10 @@ import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.board.BoardManager;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
-import xyz.upperlevel.uppercore.task.Timer;
+import xyz.upperlevel.uppercore.task.Countdown;
 
 import java.util.*;
 
-import static xyz.upperlevel.quakecraft.Quake.get;
 
 public class GamePhase extends NodePhase implements Listener {
     private static int gameCountdown = 0;
@@ -40,14 +39,14 @@ public class GamePhase extends NodePhase implements Listener {
     private final PlaceholderRegistry<?> placeholderRegistry;
 
     @Getter
-    private final Timer countdown;
+    private final Countdown countdown;
 
     public GamePhase(QuakeArena arena) {
         this.arena = arena;
         this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholderRegistry());
         buildPlaceholders();
-        this.countdown = new Timer(get(), gameCountdown * 20, 20,
-                () -> {
+        this.countdown = new Countdown(Quake.get(), gameCountdown * 20, 20,
+                tick -> {
                     for (Player player : arena.getPlayers()) {
                         BoardManager.update(player, placeholderRegistry);
                     }
@@ -55,7 +54,7 @@ public class GamePhase extends NodePhase implements Listener {
                 () -> {
                     // if there is at least one player left the winner is him
                     if (gamers.size() > 0) {
-                        setPhase(new EndingPhase(this, gamers.get(0)));
+                        setPhase(new EndingPhase(this, gamers.get(0).getPlayer()));
                     } else {
                         // otherwise since we have no-one playing we can skip to LobbyPhase (should never reach this point)
                         arena.getPhaseManager().setPhase(new LobbyPhase(arena));
@@ -76,14 +75,14 @@ public class GamePhase extends NodePhase implements Listener {
         });
         placeholderRegistry.set("ranking_kills", (p, s) -> {
             try {
-                return String.valueOf(gamers.get(Integer.parseInt(s) - 1).kills);
+                return String.valueOf(gamers.get(Integer.parseInt(s) - 1).getKills());
             } catch (Exception e) {
                 return null;
             }
         });
         placeholderRegistry.set("ranking_gun", (p, s) -> {
             try {
-                QuakeAccount player = get().getPlayerManager().getPlayer(gamers.get(Integer.parseInt(s) - 1).getPlayer());
+                QuakeAccount player = Quake.get().getPlayerManager().getAccount(gamers.get(Integer.parseInt(s) - 1).getPlayer());
                 return player.getGun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getGun().getName().resolve(p);
             } catch (Exception e) {
                 return null;
@@ -135,9 +134,17 @@ public class GamePhase extends NodePhase implements Listener {
         return Collections.unmodifiableSet(spectators);
     }
 
+    /**
+     * Gets all the players in the arena (spectators + gamers).
+     */
+    public Set<Player> getPlayers() {
+        return arena.getPlayers();
+    }
+
     @Override
     public void onEnable(Phase previous) {
         Bukkit.getPluginManager().registerEvents(this, Quake.get());
+
         arena.getPlayers().forEach(this::addGamer);
         setPhase(new PlayingPhase(this));
     }
@@ -145,6 +152,7 @@ public class GamePhase extends NodePhase implements Listener {
     @Override
     public void onDisable(Phase next) {
         HandlerList.unregisterAll(this);
+
         setPhase(null);
     }
 

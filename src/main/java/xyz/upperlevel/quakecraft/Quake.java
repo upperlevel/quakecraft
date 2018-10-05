@@ -6,16 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.commands.QuakecraftCommand;
+import xyz.upperlevel.quakecraft.game.Dash;
+import xyz.upperlevel.quakecraft.game.GainNotifier;
+import xyz.upperlevel.quakecraft.game.GainType;
+import xyz.upperlevel.quakecraft.game.KillStreak;
 import xyz.upperlevel.quakecraft.game.args.GameArgParser;
 import xyz.upperlevel.quakecraft.phases.EndingPhase;
-import xyz.upperlevel.quakecraft.game.gains.GainNotifier;
-import xyz.upperlevel.quakecraft.game.gains.GainType;
-import xyz.upperlevel.quakecraft.phases.Laser;
-import xyz.upperlevel.quakecraft.game.playing.Dash;
-import xyz.upperlevel.quakecraft.game.playing.KillStreak;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
-import xyz.upperlevel.quakecraft.placeholders.QuakePlaceholders;
+import xyz.upperlevel.quakecraft.phases.Laser;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
@@ -26,17 +25,18 @@ import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
-import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.database.Store;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.registry.Registry;
+import xyz.upperlevel.uppercore.storage.Database;
+import xyz.upperlevel.uppercore.storage.Storage;
+import xyz.upperlevel.uppercore.storage.StorageConnector;
 import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
 import xyz.upperlevel.uppercore.update.UpdateChecker;
 import xyz.upperlevel.uppercore.util.CrashUtil;
@@ -52,18 +52,14 @@ public class Quake extends JavaPlugin {
     //public static final long SPIGET_ID = 45928;
     private static Quake instance;
 
-    // impl
     private ArenaManager arenaManager;
-    private GameManager gameManager;
-    private QuakeAccountManager playerManager;
+    private AccountManager playerManager;
     private ShopCategory shop;
 
-    // core
     private Registry<?> pluginRegistry;
-    private Registry<Board> boards;
     private Registry<Gui> guis;
-    private Registry<Hotbar> hotbars;
-    private Store store;
+
+    private Database remoteDatabase;
 
     private MessageManager messages;
 
@@ -84,16 +80,13 @@ public class Quake extends JavaPlugin {
 
             //Load command messages
 
-            pluginRegistry = Uppercore.registry().register(this);
-            guis = pluginRegistry.registerChild("guis", Gui.class);
-            hotbars = pluginRegistry.registerChild("hotbars", Hotbar.class);
-            boards = pluginRegistry.registerChild("boards", Board.class);
-            store = new Store(this);
+            this.pluginRegistry = Uppercore.registry().register(this);
+            this.guis = pluginRegistry.registerChild("guis", Gui.class);
 
-            arenaManager = new ArenaManager();
-            arenaManager.load();
-            gameManager = new GameManager();
-            gameManager.load();
+            this.remoteDatabase = StorageConnector.read(this).database("quake");
+
+            this.arenaManager = ArenaManager.load(this);
+
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {
@@ -116,7 +109,7 @@ public class Quake extends JavaPlugin {
 
             GainNotifier.setup();
 
-            playerManager = new QuakeAccountManager();
+            playerManager = new AccountManager();
 
             updater = new SpigotUpdateChecker(this, SPIGOT_ID);
         } catch (Throwable t) {
@@ -138,6 +131,7 @@ public class Quake extends JavaPlugin {
         loadSafe("bullet", Laser::loadConfig);
         loadSafe("railgun", Railgun::loadConfig);
         loadSafe("game", Game::loadConfig);
+        
         //---phase configs---
         loadSafe("waiting phase", WaitingPhase::loadConfig);
         loadSafe("game phase", GamePhase::loadConfig);
@@ -156,14 +150,14 @@ public class Quake extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            if(playerManager != null)
+            if (playerManager != null)
                 playerManager.close();
-            if(gameManager != null)
+            if (gameManager != null)
                 gameManager.save();
-            if(arenaManager != null)
+            if (arenaManager != null)
                 arenaManager.save();
 
-            if(gameManager != null)
+            if (gameManager != null)
                 gameManager.stop();
         } catch (IOException e) {
             getLogger().severe("Cannot save game/arena settings: " + e);
@@ -179,7 +173,7 @@ public class Quake extends JavaPlugin {
     }
 
     public static QuakeAccount getAccount(Player player) {
-        return instance.playerManager.getPlayer(player);
+        return instance.playerManager.getAccount(player);
     }
 
     public static QuakeAccount getAccount(Gamer gamer) {

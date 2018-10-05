@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
-import xyz.upperlevel.quakecraft.QuakeAccountManager;
+import xyz.upperlevel.quakecraft.AccountManager;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseBuyEvent;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseSelectEvent;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
@@ -105,7 +105,7 @@ public class PurchaseGui extends ChestGui {
         if (dirty)
             reprint();
         Inventory inv = super.create(player);
-        QuakeAccount qp = QuakeAccountManager.get().getPlayer(player);
+        QuakeAccount qp = AccountManager.get().getAccount(player);
         if(qp == null) {
             Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
@@ -129,7 +129,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Purchase<?> purchase) {
-        QuakeAccount p = QuakeAccountManager.get().getPlayer(player);
+        QuakeAccount p = AccountManager.get().getAccount(player);
         Set<Purchase<?>> purchases = p.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test

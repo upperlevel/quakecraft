@@ -16,8 +16,8 @@ import java.util.List;
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
 
-public class QuakeArenaCommand {
-    public QuakeArenaCommand() {
+public class QuakeArenaCommands {
+    public QuakeArenaCommands() {
     }
 
     @AsCommand(

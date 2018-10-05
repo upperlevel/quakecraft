@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
-import xyz.upperlevel.quakecraft.QuakeAccountManager;
+import xyz.upperlevel.quakecraft.AccountManager;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.ChestGui;
@@ -59,7 +59,7 @@ public class RailgunSelectGui extends ChestGui {
     @Override
     public Inventory create(Player player) {
         Inventory inv = super.create(player);
-        QuakeAccount qp = QuakeAccountManager.get().getPlayer(player);
+        QuakeAccount qp = AccountManager.get().getAccount(player);
         if(qp == null) {
             Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
@@ -135,7 +135,7 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Railgun gun) {
-        QuakeAccount p = QuakeAccountManager.get().getPlayer(player);
+        QuakeAccount p = AccountManager.get().getAccount(player);
         if(p.getGun() == gun) {
             GUN_ALREADY_SELECTED.send(player);
             //You already have that gun equipped

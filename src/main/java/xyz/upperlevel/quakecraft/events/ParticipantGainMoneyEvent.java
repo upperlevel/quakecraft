@@ -6,7 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.phases.Gamer;
-import xyz.upperlevel.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.game.GainType;
 
 @Getter
 @Setter

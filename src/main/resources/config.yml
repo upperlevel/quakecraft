@@ -15,9 +15,6 @@ playing-hotbar:
   tracker:
     slot: 1 # The slot in which the tracker is stored
 
-dash:
-  base-power: 1.5 # The base power of the dash (left-click), that will be multiplied by the upgrades
-
 # If set to true the players at the end of a game will rejoin automatically the lobby they were in
 auto-join: false
 # Clickable message displayed at the end of a game that, when clicked, will make the players rejoin the lobby

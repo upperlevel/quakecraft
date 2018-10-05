@@ -40,7 +40,7 @@ public class PlayingHotbar extends Hotbar {
 
         @Override
         public ItemStack resolve(Player player) {
-            QuakeAccount quake = Quake.get().getPlayerManager().getPlayer(player);
+            QuakeAccount quake = Quake.get().getPlayerManager().getAccount(player);
             CustomItem item = quake.getSelectedCase().getItem();
             item.setDisplayName(name);
             item.setLore(lore);

@@ -2,9 +2,8 @@ package xyz.upperlevel.quakecraft.shop;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import xyz.upperlevel.quakecraft.Quakecraft;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
-import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.gui.Gui;
 
 import java.io.File;
@@ -19,7 +18,7 @@ public abstract class Category {
     protected Gui gui;
 
     protected void loadGui(String name, File file) {
-        gui = Quakecraft.get().getGuis().register(name, gui);
+        gui = Quake.get().getGuis().register(name, gui);
     }
 
     public void loadGui() {

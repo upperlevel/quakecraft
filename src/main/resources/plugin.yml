@@ -1,6 +1,6 @@
 name: Quakecraft
 version: @project.version@
-main: xyz.upperlevel.quakecraft.Quakecraft
+main: xyz.upperlevel.quakecraft.Quake
 
 depend: [Uppercore]
 

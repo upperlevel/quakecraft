@@ -1,15 +1,14 @@
-package xyz.upperlevel.quakecraft.game.playing;
+package xyz.upperlevel.quakecraft.game;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.BulletMultiStabEvent;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
-import xyz.upperlevel.quakecraft.game.gains.GainType;
-import xyz.upperlevel.quakecraft.phases.Laser;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.util.Laser;
 
 import java.io.File;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class MultiStab {
         BulletMultiStabEvent event = new BulletMultiStabEvent(phase, laser, this, message);
         Bukkit.getPluginManager().callEvent(event);
         if(!event.isCancelled()){
-            event.getMessage().broadcast(phase.getGame().getPlayers(),"killer_name", laser.getPlayer().getName(), "kills", String.valueOf(laser.getKilled().size()));
+            event.getMessage().broadcast(phase.getPlayers(),"killer_name", laser.getPlayer().getName(), "kills", String.valueOf(laser.getKilled().size()));
             gain.grant(laser.getParticipant());
         }
     }
@@ -81,8 +80,8 @@ public class MultiStab {
 
     public static void loadConfig() {
         loadConfig(Config.fromYaml(new File(
-                Quakecraft.get().getDataFolder(),
-                "game/playing/multistab.yml"
+                Quake.get().getDataFolder(),
+                "game/playing/multistabs.yml"
         )).asConfigMap());
     }
 }

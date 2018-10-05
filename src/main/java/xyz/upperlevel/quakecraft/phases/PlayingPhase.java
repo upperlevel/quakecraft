@@ -2,6 +2,8 @@ package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,8 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.events.LaserHitEvent;
-import xyz.upperlevel.quakecraft.game.playing.Dash;
+import xyz.upperlevel.quakecraft.game.Dash;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
@@ -23,9 +24,14 @@ import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.task.Countdown;
 import xyz.upperlevel.uppercore.task.UpdaterTask;
+import xyz.upperlevel.uppercore.util.FireworkUtil;
+import xyz.upperlevel.uppercore.util.Laser;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
@@ -36,6 +42,7 @@ public class PlayingPhase implements Phase, Listener {
     private static boolean sneakDisabled;
     private static Message sneakDisabledMessage;
     private static int killsToWin;
+
     private static PlayingHotbar hotbar;
 
     private static int gunSlot;
@@ -47,6 +54,8 @@ public class PlayingPhase implements Phase, Listener {
     private final GamePhase gamePhase;
 
     private final UpdaterTask compassUpdater;
+
+    private final Set<Player> shooters = new HashSet<>(); // the players that have shot
 
     private Player getNearbyPlayer(Player player) {
         Player res = null;
@@ -151,13 +160,82 @@ public class PlayingPhase implements Phase, Listener {
             switch (gamers.size()) {
                 case 1:
                     // if one gamer is left, he won
-                    gamePhase.setPhase(new EndingPhase(gamePhase, gamers.get(0)));
+                    gamePhase.setPhase(new EndingPhase(gamePhase, gamers.get(0).getPlayer()));
                     break;
                 case 0:
                     // already handled by GamePhase
                     break;
             }
         }
+    }
+
+    private void onKill(Player shooter, Player hit, boolean headshot) {
+        Gamer s = gamePhase.getGamer(shooter);
+        s.onKill(headshot);
+
+        gamePhase.getGamer(hit).die();
+
+        if (s.getKills() >= killsToWin) {
+            gamePhase.setPhase(new EndingPhase(gamePhase, shooter));
+        }
+    }
+
+    private void onShoot(Player player) {
+        if (shooters.contains(player)) {
+            QuakeAccount account = Quake.getAccount(player);
+            shooters.add(player);
+
+            new Laser(Quake.get(), player.getEyeLocation(), 150, 0.25,
+                    (step, hits) -> {
+                        account.getSelectedMuzzle().getParticles().forEach(particle -> {
+                            particle.display(step, gamePhase.getArena().getPlayers());
+                        });
+
+                        for (Player hit : hits) {
+                            if (gamePhase.isGamer(hit)) {
+                                boolean headshot = step.getY() - hit.getLocation().getY() > 1.4; // head height
+
+                                Railgun gun = account.getGun();
+                                Message message = headshot ? headshotMessage : shotMessage;
+                                message = message.filter(
+                                        "killer", player.getName(),
+                                        "killed", hit.getName(),
+                                        "kill_message", (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage()
+                                );
+                                arena.broadcast(message);
+
+                                onKill(player, hit, headshot);
+
+                                account.getSelectedKillSound().play(step);
+                                FireworkEffect.Type type = account.getSelectedBarrel().getFireworkType();
+                                Color color = account.getSelectedLaser().getFireworkColor();
+                                FireworkUtil.instantFirework(
+                                        step,
+                                        FireworkEffect.builder()
+                                                .with(type)
+                                                .withColor(color)
+                                                .build());
+                            }
+                        }
+                    },
+                    () -> {
+                    }
+            ).shoot();
+
+            player.setExp(1.0f);
+            long from = (long) account.getSelectedTrigger().getFiringSpeed();
+            new Countdown(Quake.get(), from, 1,
+                    tick -> player.setExp((float) (tick / from)),
+                    () -> {
+                        player.setExp(0.0f); // to be sure
+                        shooters.remove(player);
+                    }
+            ).start();
+        }
+    }
+
+    private void onDash(Player player) {
+        Dash.swish(player); // todo code clean up like above?
     }
 
     @EventHandler
@@ -167,40 +245,13 @@ public class PlayingPhase implements Phase, Listener {
             if (p.getInventory().getHeldItemSlot() == gunSlot) { // if the player is holding the gun item (checked by slot)
                 // right click: shoot
                 if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    Laser.shoot(this, p);
+                    onShoot(p);
                 }
                 // left click: dash
                 if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                    Dash.swish(p);
+                    onDash(p);
                 }
             }
-        }
-    }
-
-    @EventHandler
-    public void onLaserHit(LaserHitEvent e) {
-        Gamer shooter = e.getShooter();
-        Gamer hit = e.getHit();
-
-        Railgun gun = Quake.getAccount(shooter).getGun();
-
-        Message message = e.isHeadshot() ? headshotMessage : shotMessage;
-        message = message.filter(
-                "killer", shooter.getName(),
-                "killed", hit.getName(),
-                "kill_message", (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage()
-        );
-        arena.broadcast(message);
-
-        // update game statistics
-        hit.onDeath();
-        hit.respawn();
-
-        shooter.onKill(e.isHeadshot());
-
-        // if the shooter has won
-        if (shooter.getKills() >= killsToWin) {
-            gamePhase.setPhase(new EndingPhase(gamePhase, shooter));
         }
     }
 
@@ -213,19 +264,15 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     public static void loadConfig(Config config) {
-        defaultKillMessage = config.getMessageRequired("default-kill-message");
-        shotMessage = config.getMessageRequired("shot");
-        headshotMessage = config.getMessageRequired("headshot");
+        defaultKillMessage = config.getString("default-kill-message");
+        shotMessage = config.getMessageRequired("shot-message");
+        headshotMessage = config.getMessageRequired("headshot-message");
 
         sneakDisabled = config.getBoolRequired("sneak-disabled");
         sneakDisabledMessage = config.getMessageRequired("sneak-disabled-message");
 
-        hotbar = config.get("playing-hotbar", PlayingHotbar.class, null);
-        // todo gunSlot =
+        killsToWin = config.getIntRequired("kills-to-win");
 
-        sampleBoard = GameBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                getPhaseFolder(),
-                "playing_board.yml"
-        )));
+        hotbar = config.get("playing-hotbar", PlayingHotbar.class, null);
     }
 }

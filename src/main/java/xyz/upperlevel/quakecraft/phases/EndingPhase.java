@@ -8,25 +8,29 @@ import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.game.gains.GainType;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.game.GainType;
 import xyz.upperlevel.uppercore.arena.Phase;
+import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
+import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
+import xyz.upperlevel.uppercore.hotbar.Hotbar;
+import xyz.upperlevel.uppercore.nms.impl.MessageNms;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
-import java.io.File;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import static xyz.upperlevel.quakecraft.Quake.get;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 public class EndingPhase implements Phase, Listener {
@@ -45,76 +49,81 @@ public class EndingPhase implements Phase, Listener {
     private static boolean autoJoin;
     private static Message rejoinMessage;
 
-    private static EndingPhase hotbar;
-
-    private static List<PlaceholderValue<String>> signLines;
+    private static Hotbar hotbar;
 
     @Getter
-    private Gamer winner;
+    private final QuakeArena arena;
+
+    @Getter
+    private Player winner;
 
     @Getter
     private final GamePhase gamePhase;
 
-    private final BukkitRunnable fireworksTask = new BukkitRunnable() {
-        @Override
-        public void run() {
-            Firework f = winner.getPlayer().getWorld().spawn(winner.getPlayer().getLocation(), Firework.class);
-            FireworkMeta fm = f.getFireworkMeta();
-            fm.addEffect(FireworkEffect.builder()
-                    .withColor(Color.fromRGB(
-                            random.nextInt(255),
-                            random.nextInt(255),
-                            random.nextInt(255)
-                    ))
-                    .build());
-            fm.setPower(1);
-            f.setFireworkMeta(fm);
-        }
-    };
+    private final BukkitRunnable fireworksTask, endingTask;
 
-    private final BukkitRunnable endingTask = new BukkitRunnable() {
-        @Override
-        public void run() {
-            fireworksTask.cancel();
-            giveGains();
-            game.getPhaseManager().setPhase(new LobbyPhase(game));
-        }
-    };
-
-    public EndingPhase(GamePhase gamePhase, Gamer winner) {
+    public EndingPhase(GamePhase gamePhase, Player winner) {
         this.gamePhase = gamePhase;
+        this.arena = gamePhase.getArena();
         this.winner = winner;
+
+        this.fireworksTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                Firework f = winner.getPlayer().getWorld().spawn(winner.getPlayer().getLocation(), Firework.class);
+                FireworkMeta fm = f.getFireworkMeta();
+                fm.addEffect(FireworkEffect.builder()
+                        .withColor(Color.fromRGB(
+                                random.nextInt(255),
+                                random.nextInt(255),
+                                random.nextInt(255)
+                        ))
+                        .build());
+                fm.setPower(1);
+                f.setFireworkMeta(fm);
+            }
+        };
+        this.endingTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                fireworksTask.cancel();
+                giveGains();
+                arena.getPhaseManager().setPhase(new LobbyPhase(arena));
+            }
+        };
     }
 
     public void giveGains() {
-        for (Gamer p : parent.getParticipants())
+        for (Gamer p : gamePhase.getGamers()) {
             baseGain.grant(p);
-
-        Iterator<Gamer> ranking = parent.getRanking().iterator();
+        }
+        Iterator<Gamer> ranking = gamePhase.getGamers().iterator();
         if (ranking.hasNext()) {
             firstGain.grant(ranking.next());
             if (ranking.hasNext()) {
                 secondGain.grant(ranking.next());
-                if (ranking.hasNext())
+                if (ranking.hasNext()) {
                     thirdGain.grant(ranking.next());
+                }
             }
         }
         if (EconomyManager.isEnabled()) {
-            for (Gamer p : parent.getParticipants()) {
+            for (Gamer p : gamePhase.getGamers()) {
                 EconomyManager.get(p.getPlayer()).give(p.coins);
                 endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
             }
-        } else
-            get().getLogger().warning("Vault not found, no money given!");
+        } else {
+            Quake.get().getLogger().warning("Vault not found, no money given!");
+        }
     }
 
     public void printRanking() {
-        PlaceholderRegistry<?> reg = getParent().getPlaceholders();
+        PlaceholderRegistry<?> reg = gamePhase.getPlaceholderRegistry();
         List<PlaceholderValue<String>> lines = new ArrayList<>();
 
         lines.addAll(endRankingHeader.filter(reg).getLines());
         Map.Entry<Integer, Message> bodyEntry = endRankingBody.floorEntry(getParent().getRanking().size());
-        if(bodyEntry == null) {
+        if (bodyEntry == null) {
             Quake.get().getLogger().severe("ERROR: cannot find ending ranking body for: " + getParent().getRanking().size() + ", indexes " + endRankingBody.keySet());
         } else {
             lines.addAll(bodyEntry.getValue().filter(reg).getLines());
@@ -127,36 +136,24 @@ public class EndingPhase implements Phase, Listener {
             filtered.send(player, reg);
     }
 
-    public void setup(Player player) {
+    private void setupPlayer(Player player) {
         hotbars().view(player).addHotbar(hotbar);
-        boards().view(player).setBoard(board);
     }
 
-    public void setup() {
-        game.getPlayers().forEach(this::setup);
-    }
-
-    public void clear(Player player) {
+    private void clearPlayer(Player player) {
         hotbars().view(player).removeHotbar(hotbar);
-        boards().view(player).clear();
-    }
-
-    public void clear() {
-        game.getPlayers().forEach(this::clear);
+        // board now is on GamePhase
     }
 
     @Override
-    public void onEnable(Phase previous) {
+    public void onEnable(Phase prev) {
         Bukkit.getPluginManager().registerEvents(this, Quake.get());
-        winner = parent.getWinner();
         printRanking();
 
-        setup();
+        gamePhase.getGamers().forEach(g -> setupPlayer(g.getPlayer()));
 
-        fireworksTask.runTaskTimer(get(), 0, 20);
-        endingTask.runTaskLater(get(), 20 * 10);
-
-        updateSigns();
+        fireworksTask.runTaskTimer(Quake.get(), 0, 20); // one firework per second
+        endingTask.runTaskLater(Quake.get(), 20 * 10);
     }
 
     @Override
@@ -164,15 +161,17 @@ public class EndingPhase implements Phase, Listener {
         HandlerList.unregisterAll(this);
         fireworksTask.cancel();
         endingTask.cancel();
-        clear();
-        if(!autoJoin) {
+
+        gamePhase.getGamers().forEach(g -> clearPlayer(g.getPlayer()));
+
+        if (!autoJoin) {
             Location lobby = Quake.get().getArenaManager().getLobby();
-            if(lobby != null) {
-                for (Player player : new ArrayList<>(getGame().getPlayers())) {
-                    getGame().leave(player);
+            if (lobby != null) {
+                for (Player player : arena.getPlayers()) {
+                    arena.quit(player);
                     BaseComponent[] comps = TextComponent.fromLegacyText(rejoinMessage.get(player).stream().collect(Collectors.joining("\n")));
                     ClickEvent event = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quake join " + getGame().getArena().getId());
-                    for(BaseComponent comp : comps)
+                    for (BaseComponent comp : comps)
                         comp.setClickEvent(event);
                     MessageNms.sendJson(player, comps);
                 }
@@ -182,11 +181,28 @@ public class EndingPhase implements Phase, Listener {
         }
     }
 
+    @EventHandler
+    public void onArenaJoin(ArenaJoinEvent e) {
+        if (arena.equals(e.getArena())) {
+            // already handled in GamePhase
+        }
+    }
+
+    @EventHandler
+    public void onArenaQuit(ArenaQuitEvent e) {
+        if (arena.equals(e.getArena())) {
+            clearPlayer(e.getPlayer());
+            if (e.getPlayer() == winner.getPlayer()) {
+                fireworksTask.cancel(); // if the winner exits we have to stop the fireworks
+            }
+        }
+    }
+
     public static void loadGains() {
-        baseGain = GainType.create("base");
-        firstGain = GainType.create("1-place");
-        secondGain = GainType.create("2-place");
-        thirdGain = GainType.create("3-place");
+        baseGain = GainType.create("base-gain");
+        firstGain = GainType.create("1-place-gain");
+        secondGain = GainType.create("2-place-gain");
+        thirdGain = GainType.create("3-place-gain");
     }
 
     public static void loadConfig() {
@@ -195,7 +211,7 @@ public class EndingPhase implements Phase, Listener {
 
         MessageManager endRanking = manager.getSection("end-ranking");
         endRankingHeader = endRanking.get("header");
-        endRankingBody =  endRanking.getConfig()
+        endRankingBody = endRanking.getConfig()
                 .getSectionRequired("body")
                 .entrySet()
                 .stream()
@@ -221,16 +237,5 @@ public class EndingPhase implements Phase, Listener {
         )));
 
         signLines = manager.getConfig().getMessageStrList("ending-sign");
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onGameQuit(GameQuitEvent e) {
-        if (game.equals(e.getGame())) {
-            clear(e.getPlayer());
-            if(e.getPlayer() == winner.getPlayer()) {
-                fireworksTask.cancel();
-            }
-            updateSigns();
-        }
     }
 }

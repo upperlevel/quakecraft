@@ -30,12 +30,8 @@ game:
     max-players: '&cCannot join game "%game_name%": Max players reached'
     in-game: '&cCannot join game "%game_name%": Already playing'
 
-  dash:
-    cooldown: '&cDash cooling down! %remaining_secs%s remaining!'
-
   shot: '&7%killer% %kill_message% &7%killed%'
   headshot: '&7%killer% %kill_message% &7%killed% &e&lHEADSHOT'
-  def-kill-message: '&7shot'
 
   snake-disabled: '&cSneaking is disabled! Your name is still visible'
 

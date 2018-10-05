@@ -4,8 +4,8 @@ import org.bukkit.command.CommandSender;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParser;
-import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.command.argument.exceptions.ParseException;
+import xyz.upperlevel.uppercore.command.functional.parser.ArgumentParserManager;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +31,6 @@ public class PowerupEffectArgumentParser implements ArgumentParser {
 
     @Override
     public List<String> onTabCompletion(CommandSender sender, Class<?> type, List<String> args) {
-        return ArgumentParserSystem.tabComplete(PowerupEffectManager.getById().keySet(), args);
+        return ArgumentParserManager.tabComplete(PowerupEffectManager.getById().keySet(), args);
     }
 }

@@ -51,7 +51,7 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
 
         public KillSound(String id, Config config) {
             super(KillSoundManager.this, id, config);
-            sound = config.getBukkitSound("sound", PlaySound.SILENT);
+            sound = config.getPlaySound("sound", PlaySound.SILENT);
         }
 
         public void play(Location loc) {

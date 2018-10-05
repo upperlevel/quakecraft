@@ -4,8 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.quakecraft.game.gains.GainType;
-import xyz.upperlevel.quakecraft.game.playing.KillStreak;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.game.GainType;
+import xyz.upperlevel.quakecraft.game.KillStreak;
 
 import java.util.List;
 import java.util.Random;
@@ -16,6 +17,9 @@ public class Gamer {
 
     @Getter
     private final GamePhase gamePhase;
+
+    @Getter
+    private final QuakeArena arena;
 
     @Getter
     private final Player player;
@@ -32,12 +36,14 @@ public class Gamer {
     private KillStreak nextKillStreak = KillStreak.get(0);
 
     @Getter
+    @Setter
     private float gunCooldownBase = 1.0f;
 
     public float coins = 0f;
 
     public Gamer(GamePhase gamePhase, Player player) {
         this.gamePhase = gamePhase;
+        this.arena = gamePhase.getArena();
         this.player = player;
     }
 
@@ -61,22 +67,17 @@ public class Gamer {
         gamePhase.updateRanking(); // that will update boards
     }
 
-    /**
-     * When the player die the kill-streak is reset.
-     */
-    public void onDeath() {
+    public void die() {
         killsSinceDeath = 0;
         nextKillStreak = KillStreak.get(0);
-    }
 
-    public void respawn() {
         List<Location> s = gamePhase.getArena().getSpawns();
         player.teleport(s.get(new Random().nextInt(s.size())));
     }
 
     public static void loadGains() {
-        killGain = GainType.create("kill");
-        headshotGain = GainType.create("headshot");
+        killGain = GainType.create("kill-gain");
+        headshotGain = GainType.create("headshot-gain");
     }
 
     @Override

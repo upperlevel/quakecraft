@@ -4,6 +4,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.Arena;
+import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.arena.QuakeArenaCommands;
+import xyz.upperlevel.uppercore.arena.ArenaCommands;
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.PermissionUser;
 import xyz.upperlevel.uppercore.command.SenderType;
@@ -35,10 +38,9 @@ public class QuakecraftCommand extends NodeCommand {
         description("Main commands of Quakecraft plugin.");
         aliases("quake");
 
-        append(
-                new ArenaCommand(),
-                new LobbyCommand()
-        );
+        FunctionalCommand.inject(this, new ArenaCommands(Quake.get().getArenaManager(), QuakeArena::new));
+        FunctionalCommand.inject(this, new QuakeArenaCommands());
+
         FunctionalCommand.inject(this, this);
     }
 
@@ -51,16 +53,12 @@ public class QuakecraftCommand extends NodeCommand {
     @WithPermission(
             user = PermissionUser.AVAILABLE
     )
-    protected void join(CommandSender sender, Arena arena) {
+    protected void join(CommandSender sender, QuakeArena arena) {
         Player player = (Player) sender;
-        Game game = Quake.get().getGameManager().getGame(player);
-        if (game != null) {
-            ALREADY_PLAYING.send(player, game.getPlaceholders());
-            return;
-        }
-        game = Quake.get().getGameManager().getGame(arena);
-        if (game == null) {
-            NO_GAME_FOUND.send(player, "game", arena.getId());
+
+
+        if (arena != null && arena.isPlaying()) {
+            ALREADY_PLAYING.send(player, arena.getPlaceholderRegistry());
             return;
         }
         if (game.join(player)) {

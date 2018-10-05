@@ -19,7 +19,6 @@ import static xyz.upperlevel.quakecraft.arena.QuakeArena.ARENA_QUIT_MESSAGE;
 import static xyz.upperlevel.quakecraft.arena.QuakeArena.MAX_PLAYERS_REACHED_ERROR;
 
 public class QuakeArenaListener implements Listener {
-
     private final QuakeArena arena;
 
     public QuakeArenaListener(QuakeArena arena) {

@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Laser;
-import xyz.upperlevel.quakecraft.game.playing.MultiStab;
+import xyz.upperlevel.quakecraft.game.MultiStab;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 @Getter

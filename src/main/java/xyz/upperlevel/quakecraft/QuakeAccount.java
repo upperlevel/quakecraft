@@ -3,7 +3,7 @@ package xyz.upperlevel.quakecraft;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.quakecraft.game.gains.GainNotifier;
+import xyz.upperlevel.quakecraft.game.GainNotifier;
 import xyz.upperlevel.quakecraft.shop.KillSoundManager;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.armor.*;
@@ -23,37 +23,78 @@ import java.util.stream.Collectors;
 
 import static xyz.upperlevel.quakecraft.Quake.get;
 
-@Getter
-@Setter
 public class QuakeAccount {
-
+    @Getter
     private final Player player;
 
+    /* Game */
+
+    @Getter
+    @Setter
     public long kills, deaths;
+
+    @Getter
+    @Setter
     public long wonMatches, playedMatches;
 
+    @Getter
     private Set<Purchase<?>> purchases = new HashSet<>();
 
+    /* Gun */
+
+    @Getter
     private BarrelManager.Barrel selectedBarrel;
+
+    @Getter
     private CaseManager.Case selectedCase;
+
+    @Getter
     private LaserManager.Laser selectedLaser;
+
+    @Getter
     private MuzzleManager.Muzzle selectedMuzzle;
+
+    @Getter
     private TriggerManager.Trigger selectedTrigger;
+
+    @Getter
     private Railgun gun;
 
+    /* Armor */
+
+    @Getter
+    @Setter
     private BootManager.Boot selectedBoot;
+
+    @Getter
+    @Setter
     private LeggingManager.Legging selectedLegging;
+
+    @Getter
+    @Setter
     private ChestplateManager.Chestplate selectedChestplate;
+
+    @Getter
+    @Setter
     private HatManager.Hat selectedHat;
 
+    /* Others */
+
+    @Getter
+    @Setter
     private KillSoundManager.KillSound selectedKillSound;
 
+    @Getter
+    @Setter
     private DashPowerManager.DashPower selectedDashPower;
+
+    @Getter
+    @Setter
     private DashCooldownManager.DashCooldown selectedDashCooldown;
 
-    private GainNotifier gainNotifier = new GainNotifier(this);
-
-    private PlayerBackup preJoinItems;
+    @Getter
+    private GainNotifier gainNotifier = new GainNotifier(this); // TODO why is it here!?
+    // private PlayerBackup preJoinItems;
 
     public QuakeAccount(Player player) {
         this.player = player;
@@ -170,12 +211,12 @@ public class QuakeAccount {
         if (manager == null)
             throw new IllegalArgumentException("Cannot find purchase manager " + managerName);
         String selectedId = in.getString(managerName);
-        if(selectedId == null) {
+        if (selectedId == null) {
             for (String alias : aliases) {
                 selectedId = in.getString(alias);
             }
         }
-        if(selectedId == null) {
+        if (selectedId == null) {
             return manager.getDefault();
         }
         Purchase<?> obj = manager.get(selectedId);
@@ -189,7 +230,7 @@ public class QuakeAccount {
     public void load() {
         long startedAt = System.currentTimeMillis();
 
-        Config data = Config.wrap(get().getStore().connection()
+        Config data = Config.wrap(get().getStore(). ()
                 .database()
                 .table("players")
                 .document(player.getUniqueId().toString())
@@ -294,14 +335,5 @@ public class QuakeAccount {
                 .send(data);
 
         get().getLogger().info("It took " + (System.currentTimeMillis() - startedAt) + " ms to send data to db for player: \"" + player.getName() + "\"");
-    }
-
-    public void saveItems() {
-       preJoinItems = new PlayerBackup(player);
-    }
-
-    public void restoreItems() {
-        preJoinItems.restore(player);
-        preJoinItems = null;
     }
 }

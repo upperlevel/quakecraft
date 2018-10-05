@@ -15,18 +15,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.arena.Arena;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.events.PowerupPickupEvent;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.nms.NmsVersion;
+import xyz.upperlevel.uppercore.nms.impl.TagNms;
+import xyz.upperlevel.uppercore.nms.impl.entity.EntityNms;
 import xyz.upperlevel.uppercore.util.ItemDemerger;
 import xyz.upperlevel.uppercore.util.LocUtil;
-import xyz.upperlevel.uppercore.util.nms.NmsVersion;
-import xyz.upperlevel.uppercore.util.nms.impl.TagNms;
-import xyz.upperlevel.uppercore.util.nms.impl.entity.EntityNms;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,9 +76,9 @@ public class Powerup {
             }
             support = location.getWorld().spawn(spawnLoc, ArmorStand.class);
             EntityNms.editTag(support, tag -> {
-                TagNms.setBool(tag, "Invisible", true);
-                TagNms.setBool(tag, "Marker", true);
-                TagNms.setBool(tag, "NoGravity", true);
+                TagNms.setBoolean(tag, "Invisible", true);
+                TagNms.setBoolean(tag, "Marker", true);
+                TagNms.setBoolean(tag, "NoGravity", true);
             });
             support.setPassenger(spawned);
         }
@@ -138,7 +137,7 @@ public class Powerup {
             Powerup box = drops.remove(event.getItem());
             if (box != null) {
                 event.setCancelled(true);
-                Gamer p = box.phase.getParticipant(event.getPlayer());
+                Gamer p = box.phase.getGamer(event.getPlayer());
                 if (p == null) {
                     drops.put(event.getItem(), box);
                     return;

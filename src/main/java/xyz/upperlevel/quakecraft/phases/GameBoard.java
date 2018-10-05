@@ -45,7 +45,7 @@ public class GameBoard implements Board {
     }
 
     private List<String> getRanking(Player player, PlaceholderRegistry placeholders) { // TODO inherit PlaceholderRegistry
-        Arena arena = Quake.get().getArenaManager().getArena(player);
+        Arena arena = Quake.getArena(player);
         Stream<String> ranking = ((GamePhase) arena.getPhaseManager().getPhase()).getGamers()
                 .stream()
                 .map(gamer -> rankingLine.resolve(player, PlaceholderRegistry.wrap(

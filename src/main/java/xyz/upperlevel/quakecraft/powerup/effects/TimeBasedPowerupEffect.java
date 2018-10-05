@@ -5,8 +5,8 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-import xyz.upperlevel.quakecraft.Quakecraft;
-import xyz.upperlevel.quakecraft.game.Participant;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
@@ -30,7 +30,7 @@ public abstract class TimeBasedPowerupEffect extends BasePowerupEffect {
     @Override
     public void apply(Gamer player) {
         start(player);
-        Collection<Player> messageReceivers = player.getPhase().getGame().getPlayers();
+        Collection<Player> messageReceivers = player.getArena().getPlayers();
         activeMessage.broadcast(messageReceivers, "name", player.getName());
         final BukkitTask task = Bukkit.getScheduler().runTaskLater(
                 Quake.get(),
