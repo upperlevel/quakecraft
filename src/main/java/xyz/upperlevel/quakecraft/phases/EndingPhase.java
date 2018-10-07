@@ -1,6 +1,9 @@
 package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -25,11 +28,10 @@ import xyz.upperlevel.uppercore.nms.impl.MessageNms;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
+import xyz.upperlevel.uppercore.util.TypeUtil;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
@@ -122,9 +124,10 @@ public class EndingPhase implements Phase, Listener {
         List<PlaceholderValue<String>> lines = new ArrayList<>();
 
         lines.addAll(endRankingHeader.filter(reg).getLines());
-        Map.Entry<Integer, Message> bodyEntry = endRankingBody.floorEntry(getParent().getRanking().size());
+        int playerCount = arena.getPlayers().size();
+        Map.Entry<Integer, Message> bodyEntry = endRankingBody.floorEntry(playerCount);
         if (bodyEntry == null) {
-            Quake.get().getLogger().severe("ERROR: cannot find ending ranking body for: " + getParent().getRanking().size() + ", indexes " + endRankingBody.keySet());
+            Quake.get().getLogger().severe("ERROR: cannot find ending ranking body for: " + playerCount + ", indexes " + endRankingBody.keySet());
         } else {
             lines.addAll(bodyEntry.getValue().filter(reg).getLines());
         }
@@ -132,8 +135,9 @@ public class EndingPhase implements Phase, Listener {
 
         Message filtered = new Message(lines);
 
-        for (Player player : getParent().getGame().getPlayers())
+        for (Player player : arena.getPlayers()) {
             filtered.send(player, reg);
+        }
     }
 
     private void setupPlayer(Player player) {
@@ -169,8 +173,8 @@ public class EndingPhase implements Phase, Listener {
             if (lobby != null) {
                 for (Player player : arena.getPlayers()) {
                     arena.quit(player);
-                    BaseComponent[] comps = TextComponent.fromLegacyText(rejoinMessage.get(player).stream().collect(Collectors.joining("\n")));
-                    ClickEvent event = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quake join " + getGame().getArena().getId());
+                    BaseComponent[] comps = TextComponent.fromLegacyText(String.join("\n", rejoinMessage.get(player)));
+                    ClickEvent event = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quake join " + arena.getId());
                     for (BaseComponent comp : comps)
                         comp.setClickEvent(event);
                     MessageNms.sendJson(player, comps);
@@ -206,21 +210,13 @@ public class EndingPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        MessageManager manager = get().getMessages().getSection("game");
+        MessageManager manager = Quake.get().getMessages().getSection("game");
         endGainMessage = manager.get("end-gain");
 
         MessageManager endRanking = manager.getSection("end-ranking");
         endRankingHeader = endRanking.get("header");
-        endRankingBody = endRanking.getConfig()
-                .getSectionRequired("body")
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        e -> Integer.parseInt(e.getKey()),
-                        (Map.Entry<String, Object> e) -> Message.fromConfig(e.getValue()),
-                        (a, b) -> b,
-                        TreeMap::new)
-                );
+        endRankingBody = endRanking.getConfig().get("body", TypeUtil.typeOf(NavigableMap.class, Integer.class, Message.class), null);
+
         endRankingFooter = endRanking.get("footer");
 
         autoJoin = Quake.get().getCustomConfig().getBoolRequired("auto-join");

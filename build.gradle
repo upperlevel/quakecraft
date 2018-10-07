@@ -24,6 +24,9 @@ repositories {
     maven {
         url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }
+    maven {
+        url "http://maven.elmakers.com/repository/" // EffectLib
+    }
 }
 
 dependencies {

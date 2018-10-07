@@ -5,13 +5,15 @@ import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
-import xyz.upperlevel.uppercore.particle.Particle;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.particle.CustomParticle;
+import xyz.upperlevel.uppercore.util.TypeUtil;
 
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
+    private static final Type particleListType = TypeUtil.typeOf(List.class, CustomParticle.class);
 
     public MuzzleManager(PurchaseRegistry registry) {
         super(registry);
@@ -50,15 +52,13 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
 
     @Getter
     public class Muzzle extends SimplePurchase<Muzzle> {
-        private final List<Particle> particles;
+        private final List<CustomParticle> particles;
 
 
         protected Muzzle(String id, Config config) {
             super(MuzzleManager.this, id, config);
-            this.particles = config.getConfigListRequired("particles")
-                    .stream()
-                    .map(Particle::deserialize)
-                    .collect(Collectors.toList());
+            // Magic :3
+            this.particles = config.get("particles", particleListType, null);
         }
     }
 }

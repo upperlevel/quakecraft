@@ -29,6 +29,7 @@ import xyz.upperlevel.uppercore.task.UpdaterTask;
 import xyz.upperlevel.uppercore.util.FireworkUtil;
 import xyz.upperlevel.uppercore.util.Laser;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -187,9 +188,9 @@ public class PlayingPhase implements Phase, Listener {
 
             new Laser(Quake.get(), player.getEyeLocation(), 150, 0.25,
                     (step, hits) -> {
-                        account.getSelectedMuzzle().getParticles().forEach(particle -> {
-                            particle.display(step, gamePhase.getArena().getPlayers());
-                        });
+                        List<Player> players = new ArrayList<>(gamePhase.getArena().getPlayers());
+                        account.getSelectedMuzzle().getParticles()
+                                .forEach(particle -> particle.display(step, players));
 
                         for (Player hit : hits) {
                             if (gamePhase.isGamer(hit)) {
@@ -218,8 +219,7 @@ public class PlayingPhase implements Phase, Listener {
                             }
                         }
                     },
-                    () -> {
-                    }
+                    () -> {}
             ).shoot();
 
             player.setExp(1.0f);

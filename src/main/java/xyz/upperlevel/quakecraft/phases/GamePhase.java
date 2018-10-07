@@ -94,6 +94,7 @@ public class GamePhase extends NodePhase implements Listener {
         });
         placeholderRegistry.set("game_countdown", (p, s) -> countdown.toString());
     }
+
     /**
      * Sorts ranking to the player with the highest number of
      * kills to the one with lowest number of kills.
