@@ -36,17 +36,17 @@ dependencies {
 }
 
 shadowJar {
-    baseName = 'QuakeCraft'
+    baseName = 'Quake'
     classifier = null
     version = null
 }
 
 distributions {
     main {
-        baseName = 'Quakecraft'
-        version = ''
+        baseName = 'Quake'
         contents {
-            from { 'build/libs/' + shadowJar.baseName + '.jar' }
+            from { jar.archivePath }
+            rename(jar.archiveName, "Quake.jar")
             if (projects.hasProperty('upperCoreLocation')) {
                 from { upperCoreLocation }
             }
@@ -59,6 +59,8 @@ distributions {
         }
     }
 }
+distTar.dependsOn(jar)
+distZip.dependsOn(jar)
 
 import org.apache.tools.ant.filters.*
 processResources {

@@ -99,7 +99,7 @@ public class Quake extends JavaPlugin {
             defConfirmOptions = ConfirmPurchaseGui.load();
 
             // Firstly registers the argument parsers then registers quake command.
-            ArgumentParserManager.defParsers.addAll(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
+            ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
             CommandRegistry commands = CommandRegistry.create(this);
             commands.register(new QuakeCommand());
 
