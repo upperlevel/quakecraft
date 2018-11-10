@@ -27,7 +27,7 @@ public class GameBoard implements Board {
     public GameBoard(
             @ConfigProperty("title") PlaceholderValue<String> title,
             @ConfigProperty("header") List<PlaceholderValue<String>> header,
-            @ConfigProperty("ranking.line") PlaceholderValue<String> rankingLine,
+            @ConfigProperty("ranking.text") PlaceholderValue<String> rankingLine,
             @ConfigProperty("ranking.max-size") int rankingMaxSize,
             @ConfigProperty("footer") List<PlaceholderValue<String>> footer
     ) {

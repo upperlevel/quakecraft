@@ -85,7 +85,7 @@ public class KillStreak {
     public static void loadConfig() {
         loadConfig(Config.fromYaml(new File(
                 Quake.get().getDataFolder(),
-                "game/playing/killstreaks.yml"
+                "game/killstreaks.yml"
         )).asConfigMap());
     }
 }

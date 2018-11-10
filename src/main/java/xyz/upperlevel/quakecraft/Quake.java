@@ -73,10 +73,9 @@ public class Quake extends JavaPlugin {
         instance = this;
 
         try {
-            saveDefaultConfig();
+            // Quake configuration should be present in the plugin folder.
+            // The plugin will not take care of saving its JAR included resources.
             loadConfig();
-
-            //Load command messages
 
             this.pluginRegistry = Uppercore.registry().register(this);
             this.guis = pluginRegistry.registerChild("guis", Gui.class);
@@ -113,8 +112,9 @@ public class Quake extends JavaPlugin {
     }
 
     public void loadConfig() {
-        customConfig = Config.fromYaml(new File("config.yml"));
-        gameConfig = Config.fromYaml(new File("game.yml"));
+        File folder = getDataFolder();
+        customConfig = Config.fromYaml(new File(folder, "config.yml"));
+        gameConfig = Config.fromYaml(new File(folder, "game/game.yml"));
         messages = MessageManager.load(this);
 
         loadSafe("commands", QuakeCommand::loadConfig);
@@ -124,9 +124,8 @@ public class Quake extends JavaPlugin {
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
         loadSafe("railgun", Railgun::loadConfig);
-        GainNotifier.setup(customConfig.getConfigRequired("game"));
-        
-        //---phase configs---
+        GainNotifier.setup(gameConfig);
+
         loadSafe("waiting phase", WaitingPhase::loadConfig);
         loadSafe("game phase", GamePhase::loadConfig);
         loadSafe("playing phase", PlayingPhase::loadConfig);

@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.ConfigConstructor;
+import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
@@ -17,29 +19,33 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.List;
 
 public class PlayingHotbar extends Hotbar {
-
+    @ConfigConstructor
     public PlayingHotbar(Config config) {
         super(Quake.get(), config);
-        Config sub;
-        sub = config.getConfigRequired("gun");
-        setIcon(sub.getIntRequired("slot"), new ConfigIcon(Gun.deserialize(sub.getConfigRequired("item"))));
+
+        Config sub = config.getConfigRequired("gun");
+        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.get("item", Gun.class, null)));
 
         sub = config.getConfigRequired("tracker");
-        setIcon(sub.getIntRequired("slot"), new ConfigIcon(Tracker.deserialize(sub.getConfigRequired("item"))));
+        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.get("item", Tracker.class, null)));
     }
 
-    // GUN
     public static class Gun implements ItemResolver {
         private final PlaceholderValue<String> name;
         private final List<PlaceholderValue<String>> lore;
 
-        public Gun(Config config) {
-            name = config.getMessageStrRequired("name");
-            lore = config.getMessageStrList("lore");
+        @ConfigConstructor
+        public Gun(
+                @ConfigProperty("name") PlaceholderValue<String> name,
+                @ConfigProperty("lore") List<PlaceholderValue<String>> lore) {
+            this.name = name;
+            this.lore = lore;
         }
 
         @Override
         public ItemStack resolve(Player player) {
+            // The gun is particular: name and lore are both configurable but can have some
+            // extra placeholders, such as gun's components name.
             QuakeAccount quake = Quake.get().getPlayerManager().getAccount(player);
             CustomItem item = quake.getSelectedCase().getItem();
             item.setDisplayName(name);
@@ -52,25 +58,18 @@ public class PlayingHotbar extends Hotbar {
                     .set("trigger", quake.getSelectedTrigger().getName().resolve(player)));
             return item.resolve(player);
         }
-
-        public static Gun deserialize(Config config) {
-            try {
-                return new Gun(config);
-            } catch (InvalidConfigException e) {
-                e.addLocation("in gun");
-                throw e;
-            }
-        }
     }
 
-    // TRACKER
     public static class Tracker implements ItemResolver {
         private final PlaceholderValue<String> name;
         private final List<PlaceholderValue<String>> lore;
 
-        public Tracker(Config config) {
-            name = config.getMessageStr("name");
-            lore = config.getMessageStrList("lore");
+        @ConfigConstructor
+        public Tracker(
+                @ConfigProperty("name") PlaceholderValue<String> name,
+                @ConfigProperty("lore") List<PlaceholderValue<String>> lore) {
+            this.name = name;
+            this.lore = lore;
         }
 
         @Override
@@ -79,24 +78,6 @@ public class PlayingHotbar extends Hotbar {
             item.setDisplayName(name);
             item.setLore(lore);
             return item.resolve(player);
-        }
-
-        public static Tracker deserialize(Config config) {
-            try {
-                return new Tracker(config);
-            } catch (InvalidConfigException e) {
-                e.addLocation("in tracker");
-                throw e;
-            }
-        }
-    }
-
-    public static PlayingHotbar deserialize(String id, Config config) {
-        try {
-            return new PlayingHotbar(config);
-        } catch (InvalidConfigException e) {
-            e.addLocation("in hotbar " + id);
-            throw e;
         }
     }
 }

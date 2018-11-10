@@ -20,11 +20,9 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.sound.PlaySound;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static java.lang.String.valueOf;
 import static xyz.upperlevel.quakecraft.Quake.get;
 
 public class CountdownPhase implements Phase, Listener {
@@ -129,15 +127,16 @@ public class CountdownPhase implements Phase, Listener {
 
         @Override
         public void run() {
-            Message msg = countdownMessages.get(valueOf(timer));
-            PlaySound sound = countdownSounds.get(valueOf(timer));
+            // Each second tries to get a message and a sound. If they have been
+            // found in configuration, they are printed foreach player.
+            Message message = countdownMessages.get(String.valueOf(timer));
+            PlaySound sound = countdownSounds.get(String.valueOf(timer));
 
             for (Player player : arena.getPlayers()) {
                 player.setLevel(timer);
                 BoardManager.update(player, placeholderRegistry);
-
-                if (msg != null) {
-                    msg.send(player);
+                if (message != null) {
+                    message.send(player);
                 }
                 if (sound != null) {
                     sound.play(player);
@@ -156,12 +155,16 @@ public class CountdownPhase implements Phase, Listener {
     public static void loadConfig() {
         Config config = Quake.get().getGameConfig();
         countdownTimer = config.getIntRequired("countdown-timer");
-        // Load messages
-        Config mexConf = config.getConfigRequired("countdown-messages");
-        countdownMessages = mexConf.keys().collect(Collectors.toMap(Function.identity(), mexConf::getMessageRequired));
-        // Load sounds
-        Config soundConf = config.getConfigRequired("countdown-sounds");
-        countdownSounds = soundConf.keys().collect(Collectors.toMap(Function.identity(), soundConf::getPlaySound));
+
+        // Loads countdown messages: a message per each countdown second.
+        countdownMessages = new HashMap<>();
+        Config messages = config.getConfigRequired("countdown-messages");
+        messages.keys().forEach(seconds -> countdownMessages.put(seconds, messages.getMessage(seconds)));
+
+        // Loads countdown sounds: a sound per each countdown second.
+        countdownSounds = new HashMap<>();
+        Config sounds = config.getConfigRequired("countdown-sounds");
+        sounds.keys().forEach(seconds -> countdownSounds.put(seconds, sounds.getPlaySound(seconds)));
 
         countdownBoard = SimpleConfigBoard.create(config.getConfigRequired("countdown-board"));
     }

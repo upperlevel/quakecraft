@@ -36,8 +36,8 @@ powerups: # Here's all the powerup configs
     duration: 200 # In ticks
     cooldown: 0.2 # The multiplier that will be applied to the cooldown
     messages:
-          active: '%name% &6activated &c&lRapid Fire&6!'
-          deactive: []
+      active: '%name% &6activated &c&lRapid Fire&6!'
+      deactive: []
 
 purchase-gui:
   lore:

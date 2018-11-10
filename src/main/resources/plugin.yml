@@ -1,4 +1,4 @@
-name: Quakecraft
+name: Quake
 version: @project.version@
 main: xyz.upperlevel.quakecraft.Quake
 

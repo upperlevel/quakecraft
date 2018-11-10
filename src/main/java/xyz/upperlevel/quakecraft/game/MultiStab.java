@@ -47,7 +47,7 @@ public class MultiStab {
     public void reach(GamePhase phase, Gamer shooter, int killCount) {
         BulletMultiStabEvent event = new BulletMultiStabEvent(phase, this, message);
         Bukkit.getPluginManager().callEvent(event);
-        if(!event.isCancelled()){
+        if (!event.isCancelled()) {
             event.getMessage().broadcast(
                     phase.getPlayers(),
                     "killer_name", shooter.getPlayer().getName(),
@@ -58,19 +58,19 @@ public class MultiStab {
     }
 
     public static MultiStab getFor(int kills) {
-        Map.Entry<Integer, MultiStab> entry =  values.floorEntry(kills);
+        Map.Entry<Integer, MultiStab> entry = values.floorEntry(kills);
         return entry == null ? null : entry.getValue();
     }
 
     public static void tryReach(GamePhase phase, Gamer gamer, int killCount) {
         MultiStab stab = getFor(killCount);
-        if(stab == null) return;
+        if (stab == null) return;
         stab.reach(phase, gamer, killCount);
     }
 
     public static void loadConfig(Map<String, Config> config) {
         values.clear();
-        for(Map.Entry<String, Config> kill : config.entrySet()) {
+        for (Map.Entry<String, Config> kill : config.entrySet()) {
             MultiStab stab;
             try {
                 stab = new MultiStab(kill.getKey(), kill.getValue());
@@ -83,9 +83,8 @@ public class MultiStab {
     }
 
     public static void loadConfig() {
-        loadConfig(Config.fromYaml(new File(
-                Quake.get().getDataFolder(),
-                "game/playing/multistabs.yml"
-        )).asConfigMap());
+        loadConfig(Config.fromYaml(
+                new File(Quake.get().getDataFolder(), "game/multistabs.yml")
+        ).asConfigMap());
     }
 }
