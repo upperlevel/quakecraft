@@ -21,7 +21,6 @@ import xyz.upperlevel.quakecraft.game.GainType;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
-import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.nms.impl.MessageNms;
@@ -223,16 +222,8 @@ public class EndingPhase implements Phase, Listener {
         autoJoin = Quake.get().getCustomConfig().getBoolRequired("auto-join");
         rejoinMessage = Quake.get().getCustomConfig().getMessageRequired("rejoin-message");
 
-        sampleHotbar = EndingHotbar.deserialize(get(), Config.wrap(ConfigUtils.loadConfig(
-                getPhaseFolder(),
-                "ending_hotbar.yml"
-        )));
+        hotbar = Quake.get().getGameConfig().get("ending-hotbar", Hotbar.class, Quake.get());
 
-        sampleBoard = EndingBoard.deserialize(Config.wrap(ConfigUtils.loadConfig(
-                getPhaseFolder(),
-                "ending_board.yml"
-        )));
-
-        signLines = manager.getConfig().getMessageStrList("ending-sign");
+        //signLines = manager.getConfig().getMessageStrList("ending-sign");
     }
 }

@@ -269,7 +269,8 @@ public class PlayingPhase implements Phase, Listener {
         }
     }
 
-    public static void loadConfig(Config config) {
+    public static void loadConfig() {
+        Config config = Quake.get().getGameConfig();
         defaultKillMessage = config.getString("default-kill-message");
         shotMessage = config.getMessageRequired("shot-message");
         headshotMessage = config.getMessageRequired("headshot-message");

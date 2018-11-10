@@ -11,11 +11,7 @@ import xyz.upperlevel.quakecraft.game.Dash;
 import xyz.upperlevel.quakecraft.game.GainNotifier;
 import xyz.upperlevel.quakecraft.game.GainType;
 import xyz.upperlevel.quakecraft.game.KillStreak;
-import xyz.upperlevel.quakecraft.game.args.GameArgParser;
-import xyz.upperlevel.quakecraft.phases.EndingPhase;
-import xyz.upperlevel.quakecraft.phases.GamePhase;
-import xyz.upperlevel.quakecraft.phases.Gamer;
-import xyz.upperlevel.quakecraft.phases.WaitingPhase;
+import xyz.upperlevel.quakecraft.phases.*;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.ConfirmPurchaseGui;
@@ -25,16 +21,14 @@ import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
-import xyz.upperlevel.uppercore.command.CommandRegistry;
 import xyz.upperlevel.uppercore.arena.Game;
-import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
+import xyz.upperlevel.uppercore.command.CommandRegistry;
 import xyz.upperlevel.uppercore.command.functional.parser.ArgumentParserManager;
 import xyz.upperlevel.uppercore.command.functional.parser.FunctionalArgumentParser;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.storage.Database;
@@ -105,7 +99,7 @@ public class Quake extends JavaPlugin {
             defConfirmOptions = ConfirmPurchaseGui.load();
 
             // Firstly registers the argument parsers then registers quake command.
-            ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
+            ArgumentParserManager.defParsers.addAll(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
             CommandRegistry commands = CommandRegistry.create(this);
             commands.register(new QuakeCommand());
 
@@ -145,6 +139,10 @@ public class Quake extends JavaPlugin {
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {
         guis().open(player, new ConfirmPurchaseGui(purchase, defConfirmOptions, onAccept, onDecline));
+    }
+
+    public ArenaManager getArenaManager() {
+        return game.getArenaManager();
     }
 
     @Override

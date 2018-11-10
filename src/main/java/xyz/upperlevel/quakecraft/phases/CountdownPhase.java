@@ -2,7 +2,6 @@ package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -19,7 +18,6 @@ import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
-import xyz.upperlevel.uppercore.sound.CompatibleSound;
 import xyz.upperlevel.uppercore.sound.PlaySound;
 
 import java.util.Map;
@@ -155,7 +153,8 @@ public class CountdownPhase implements Phase, Listener {
         }
     }
 
-    public static void loadConfig(Config config) {
+    public static void loadConfig() {
+        Config config = Quake.get().getGameConfig();
         countdownTimer = config.getIntRequired("countdown-timer");
         // Load messages
         Config mexConf = config.getConfigRequired("countdown-messages");
