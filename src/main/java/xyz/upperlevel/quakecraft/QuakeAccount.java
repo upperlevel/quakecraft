@@ -16,12 +16,13 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.util.PlayerBackup;
+import xyz.upperlevel.uppercore.storage.DuplicatePolicy;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static xyz.upperlevel.quakecraft.Quake.get;
+import static xyz.upperlevel.uppercore.storage.DuplicatePolicy.REPLACE;
 
 public class QuakeAccount {
     @Getter
@@ -230,11 +231,12 @@ public class QuakeAccount {
     public void load() {
         long startedAt = System.currentTimeMillis();
 
-        Config data = Config.wrap(get().getStore(). ()
-                .database()
+        Config data = get()
+                .getRemoteDatabase()
                 .table("players")
-                .document(player.getUniqueId().toString())
-                .ask());
+                .element(player.getUniqueId().toString())
+                .asConfig();
+
         // ------------------ general
         kills = data.getLong("kills", 0);
         deaths = data.getLong("deaths", 0);
@@ -328,11 +330,10 @@ public class QuakeAccount {
         data.put("selected", selected);
 
         // UPDATE DB
-        get().getStore().connection()
-                .database()
+        get().getRemoteDatabase()
                 .table("players")
-                .document(player.getUniqueId().toString())
-                .send(data);
+                .element(player.getUniqueId().toString())
+                .insert(data, REPLACE);
 
         get().getLogger().info("It took " + (System.currentTimeMillis() - startedAt) + " ms to send data to db for player: \"" + player.getName() + "\"");
     }

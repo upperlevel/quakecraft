@@ -27,7 +27,6 @@ import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.database.Store;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.gui.link.Link;
@@ -35,12 +34,12 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderUtil;
 import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.storage.Database;
-import xyz.upperlevel.uppercore.storage.Storage;
 import xyz.upperlevel.uppercore.storage.StorageConnector;
 import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
 import xyz.upperlevel.uppercore.update.UpdateChecker;
 import xyz.upperlevel.uppercore.util.CrashUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import static xyz.upperlevel.uppercore.Uppercore.guis;
@@ -119,7 +118,7 @@ public class Quake extends JavaPlugin {
     }
 
     public void loadConfig() {
-        customConfig = Config.wrap(getConfig());
+        customConfig = Config.fromYaml(new File("config.yml"));
         messages = MessageManager.load(this);
 
         loadSafe("commands", QuakecraftCommand::loadConfig);
