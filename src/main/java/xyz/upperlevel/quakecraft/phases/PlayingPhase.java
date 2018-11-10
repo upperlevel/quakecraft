@@ -17,6 +17,7 @@ import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.game.Dash;
+import xyz.upperlevel.quakecraft.game.MultiStab;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
@@ -192,8 +193,11 @@ public class PlayingPhase implements Phase, Listener {
                         account.getSelectedMuzzle().getParticles()
                                 .forEach(particle -> particle.display(step, players));
 
+                        int killCount = 0;
+
                         for (Player hit : hits) {
                             if (gamePhase.isGamer(hit)) {
+                                killCount++;
                                 boolean headshot = step.getY() - hit.getLocation().getY() > 1.4; // head height
 
                                 Railgun gun = account.getGun();
@@ -218,6 +222,8 @@ public class PlayingPhase implements Phase, Listener {
                                                 .build());
                             }
                         }
+
+                        MultiStab.tryReach(gamePhase, gamePhase.getGamer(player), killCount);
                     },
                     () -> {}
             ).shoot();

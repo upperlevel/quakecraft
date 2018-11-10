@@ -5,10 +5,10 @@ import org.bukkit.Bukkit;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.BulletMultiStabEvent;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
+import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
-import xyz.upperlevel.uppercore.util.Laser;
 
 import java.io.File;
 import java.util.Map;
@@ -44,12 +44,16 @@ public class MultiStab {
         gain.setAmount(config.getFloatRequired("gain"));
     }
 
-    public void reach(GamePhase phase, Laser laser) {
-        BulletMultiStabEvent event = new BulletMultiStabEvent(phase, laser, this, message);
+    public void reach(GamePhase phase, Gamer shooter, int killCount) {
+        BulletMultiStabEvent event = new BulletMultiStabEvent(phase, this, message);
         Bukkit.getPluginManager().callEvent(event);
         if(!event.isCancelled()){
-            event.getMessage().broadcast(phase.getPlayers(),"killer_name", laser.getPlayer().getName(), "kills", String.valueOf(laser.getKilled().size()));
-            gain.grant(laser.getParticipant());
+            event.getMessage().broadcast(
+                    phase.getPlayers(),
+                    "killer_name", shooter.getPlayer().getName(),
+                    "kills", String.valueOf(killCount)
+            );
+            gain.grant(shooter);
         }
     }
 
@@ -58,10 +62,10 @@ public class MultiStab {
         return entry == null ? null : entry.getValue();
     }
 
-    public static void tryReach(GamePhase phase, Laser laser) {
-        MultiStab stab = getFor(laser.getKilled().size());
-        if(stab != null)
-            stab.reach(phase, laser);
+    public static void tryReach(GamePhase phase, Gamer gamer, int killCount) {
+        MultiStab stab = getFor(killCount);
+        if(stab == null) return;
+        stab.reach(phase, gamer, killCount);
     }
 
     public static void loadConfig(Map<String, Config> config) {
