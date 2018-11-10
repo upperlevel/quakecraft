@@ -56,6 +56,10 @@ countdown-board:
   - ''
   - '&eupperlevel.github.io'
 
+arena-not-found: 'No arena found for this id.'
+arena-joined: 'You joined the arena %arena_name%.'
+arena-quit: 'Arena %arena_name% successfully quit.'
+
 ################################################################################################ Game
 
 start-message:

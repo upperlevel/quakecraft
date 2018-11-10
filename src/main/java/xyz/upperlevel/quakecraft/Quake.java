@@ -5,7 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.commands.QuakecraftCommand;
+import xyz.upperlevel.quakecraft.commands.QuakeArgumentParsers;
+import xyz.upperlevel.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.quakecraft.game.Dash;
 import xyz.upperlevel.quakecraft.game.GainNotifier;
 import xyz.upperlevel.quakecraft.game.GainType;
@@ -16,7 +17,6 @@ import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.phases.Laser;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
-import xyz.upperlevel.quakecraft.powerup.arguments.PowerupEffectArgumentParser;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.ConfirmPurchaseGui;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
@@ -25,7 +25,10 @@ import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
+import xyz.upperlevel.uppercore.command.CommandRegistry;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
+import xyz.upperlevel.uppercore.command.functional.parser.ArgumentParserManager;
+import xyz.upperlevel.uppercore.command.functional.parser.FunctionalArgumentParser;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.Gui;
@@ -99,12 +102,10 @@ public class Quake extends JavaPlugin {
 
             defConfirmOptions = ConfirmPurchaseGui.load();
 
-            PlaceholderUtil.register(this, new QuakePlaceholders());
-            ArgumentParserSystem.register(new ArenaArgumentParser());
-            ArgumentParserSystem.register(new GameArgParser());
-            ArgumentParserSystem.register(new PowerupEffectArgumentParser());
-
-            new QuakecraftCommand().subscribe();
+            // Firstly registers the argument parsers then registers quake command.
+            ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
+            CommandRegistry commands = CommandRegistry.create(this);
+            commands.register(new QuakeCommand());
 
             GainNotifier.setup();
 
@@ -121,7 +122,7 @@ public class Quake extends JavaPlugin {
         customConfig = Config.fromYaml(new File("config.yml"));
         messages = MessageManager.load(this);
 
-        loadSafe("commands", QuakecraftCommand::loadConfig);
+        loadSafe("commands", QuakeCommand::loadConfig);
         loadSafe("killstreak", KillStreak::loadConfig);
         loadSafe("dash", Dash::loadConfig);
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
@@ -156,8 +157,6 @@ public class Quake extends JavaPlugin {
             if (arenaManager != null)
                 arenaManager.save();
 
-            if (gameManager != null)
-                gameManager.stop();
         } catch (IOException e) {
             getLogger().severe("Cannot save game/arena settings: " + e);
         }
