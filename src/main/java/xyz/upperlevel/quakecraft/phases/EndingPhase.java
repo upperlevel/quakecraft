@@ -169,8 +169,8 @@ public class EndingPhase implements Phase, Listener {
         gamePhase.getGamers().forEach(g -> clearPlayer(g.getPlayer()));
 
         if (!autoJoin) {
-            Location lobby = Quake.get().getArenaManager().getLobby();
-            if (lobby != null) {
+            Location hub = Quake.get().getGame().getHub();
+            if (hub != null) {
                 for (Player player : arena.getPlayers()) {
                     arena.quit(player);
                     BaseComponent[] comps = TextComponent.fromLegacyText(String.join("\n", rejoinMessage.get(player)));
@@ -178,9 +178,10 @@ public class EndingPhase implements Phase, Listener {
                     for (BaseComponent comp : comps)
                         comp.setClickEvent(event);
                     MessageNms.sendJson(player, comps);
+                    player.teleport(hub);
                 }
             } else {
-                Quake.get().getLogger().severe("autoJoin enabled but lobby location not set, use '/quake lobby set' to set the global lobby location");
+                Quake.get().getLogger().severe("autoJoin disabled but hub location not set, use '/quake lobby set' to set the global lobby location");
             }
         }
     }

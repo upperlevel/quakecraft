@@ -15,7 +15,7 @@ import xyz.upperlevel.quakecraft.game.args.GameArgParser;
 import xyz.upperlevel.quakecraft.phases.EndingPhase;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
-import xyz.upperlevel.quakecraft.phases.Laser;
+import xyz.upperlevel.quakecraft.phases.WaitingPhase;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.ConfirmPurchaseGui;
@@ -26,6 +26,7 @@ import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
 import xyz.upperlevel.uppercore.command.CommandRegistry;
+import xyz.upperlevel.uppercore.arena.Game;
 import xyz.upperlevel.uppercore.command.argument.ArgumentParserSystem;
 import xyz.upperlevel.uppercore.command.functional.parser.ArgumentParserManager;
 import xyz.upperlevel.uppercore.command.functional.parser.FunctionalArgumentParser;
@@ -54,7 +55,7 @@ public class Quake extends JavaPlugin {
     //public static final long SPIGET_ID = 45928;
     private static Quake instance;
 
-    private ArenaManager arenaManager;
+    private Game game;
     private AccountManager playerManager;
     private ShopCategory shop;
 
@@ -66,6 +67,7 @@ public class Quake extends JavaPlugin {
     private MessageManager messages;
 
     private Config customConfig;
+    private Config gameConfig;
 
     private UpdateChecker updater;
 
@@ -87,7 +89,7 @@ public class Quake extends JavaPlugin {
 
             this.remoteDatabase = StorageConnector.read(this).database("quake");
 
-            this.arenaManager = ArenaManager.load(this);
+            this.game = Game.load(this, QuakeArena::new);
 
 
             shop = new ShopCategory();
@@ -107,8 +109,6 @@ public class Quake extends JavaPlugin {
             CommandRegistry commands = CommandRegistry.create(this);
             commands.register(new QuakeCommand());
 
-            GainNotifier.setup();
-
             playerManager = new AccountManager();
 
             updater = new SpigotUpdateChecker(this, SPIGOT_ID);
@@ -120,6 +120,7 @@ public class Quake extends JavaPlugin {
 
     public void loadConfig() {
         customConfig = Config.fromYaml(new File("config.yml"));
+        gameConfig = Config.fromYaml(new File("game.yml"));
         messages = MessageManager.load(this);
 
         loadSafe("commands", QuakeCommand::loadConfig);
@@ -128,9 +129,8 @@ public class Quake extends JavaPlugin {
         loadSafe("purchase-gui", PurchaseGui::loadConfig);
         loadSafe("railgun", RailgunSelectGui::loadConfig);
         loadSafe("gain", GainType::loadConfig);
-        loadSafe("bullet", Laser::loadConfig);
         loadSafe("railgun", Railgun::loadConfig);
-        loadSafe("game", Game::loadConfig);
+        GainNotifier.setup(customConfig.getConfigRequired("game"));
         
         //---phase configs---
         loadSafe("waiting phase", WaitingPhase::loadConfig);
@@ -152,18 +152,11 @@ public class Quake extends JavaPlugin {
         try {
             if (playerManager != null)
                 playerManager.close();
-            if (gameManager != null)
-                gameManager.save();
-            if (arenaManager != null)
-                arenaManager.save();
-
+            if (game != null)
+                game.save();
         } catch (IOException e) {
             getLogger().severe("Cannot save game/arena settings: " + e);
         }
-    }
-
-    public GameManager getGameManager() {
-        return gameManager;
     }
 
     public static Quake get() {
@@ -187,6 +180,6 @@ public class Quake extends JavaPlugin {
     }
 
     public static QuakeArena getArena(Player player) {
-        return (QuakeArena) instance.arenaManager.getArena(player);
+        return (QuakeArena) instance.game.getArenaManager().getArena(player);
     }
 }

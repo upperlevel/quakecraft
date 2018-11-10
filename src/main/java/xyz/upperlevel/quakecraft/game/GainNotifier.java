@@ -48,6 +48,7 @@ public class GainNotifier {
     public static void setup(Config config) {
         if (!EconomyManager.isEnabled()) {
             Quake.get().getLogger().warning("Economy not found, disabling gain notifier");
+            return;
         }
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler

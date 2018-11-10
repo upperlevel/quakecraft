@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.game;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.ParticipantGainMoneyEvent;
 import xyz.upperlevel.quakecraft.phases.EndingPhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
@@ -88,8 +89,9 @@ public class GainType {
         EndingPhase.loadGains();
     }
 
-    public static void loadConfig(Config config) {
-        message = config.getMessageRequired("message");
+    public static void loadConfig() {
+        Config config = Quake.get().getGameConfig();
+        message = config.getMessageRequired("gain-message");
         loadChildren();
         for (GainType type : gains) {
             if (type.id == null)
