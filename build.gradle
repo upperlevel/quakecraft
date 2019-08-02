@@ -1,7 +1,8 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'distribution'
+    id "io.freefair.lombok" version "3.8.1"
 }
 
 group = 'xyz.upperlevel.quakecraft'
@@ -13,7 +14,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 project.ext {
-    mcVersion = '1.12-R0.1-SNAPSHOT'
+    mcVersion = '1.13-R0.1-SNAPSHOT'
     coreVersion = '2.0'
 }
 
@@ -27,10 +28,12 @@ repositories {
     maven {
         url "http://maven.elmakers.com/repository/" // EffectLib
     }
+    maven {
+        url "http://repo.extendedclip.com/content/repositories/placeholderapi/" // PlaceholderAPI
+    }
 }
 
 dependencies {
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
     compileOnly group: 'org.spigotmc', name: 'spigot-api', version: mcVersion
     compileOnly group: 'xyz.upperlevel.uppercore', name: 'uppercore', version: coreVersion
 }
