@@ -35,13 +35,11 @@ repositories {
 
 dependencies {
     compileOnly group: 'org.spigotmc', name: 'spigot-api', version: mcVersion
-    compileOnly group: 'xyz.upperlevel.uppercore', name: 'uppercore', version: coreVersion
+    compile group: 'xyz.upperlevel.uppercore', name: 'uppercore', version: coreVersion
 }
 
 shadowJar {
-    baseName = 'Quake'
-    classifier = null
-    version = null
+    relocate "xyz.upperlevel.uppercore", "xyz.upperlevel.quakecraft.uppercore"
 }
 
 distributions {
@@ -62,8 +60,10 @@ distributions {
         }
     }
 }
-distTar.dependsOn(jar)
-distZip.dependsOn(jar)
+
+build.dependsOn(shadowJar)
+//distTar.dependsOn(jar)
+//distZip.dependsOn(jar)
 
 import org.apache.tools.ant.filters.*
 processResources {
