@@ -6,7 +6,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 
 public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
@@ -46,11 +46,11 @@ public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
     @Getter
     public class Hat extends SimplePurchase<Hat> {
-        private final CustomItem item;
+        private final UItem item;
 
         protected Hat(String id, Config config) {
             super(HatManager.this, id, config);
-            this.item = config.getCustomItem("item", CustomItem.AIR);
+            this.item = config.getUItem("item", UItem.AIR);
         }
     }
 }

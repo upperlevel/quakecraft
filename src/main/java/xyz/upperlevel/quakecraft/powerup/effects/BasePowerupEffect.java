@@ -16,6 +16,6 @@ public abstract class BasePowerupEffect implements PowerupEffect {
 
     @Override
     public void load(Config config) {
-        this.display = config.getCustomItemRequired("display").resolve(null);
+        this.display = config.getUItemRequired("display").resolve(null);
     }
 }

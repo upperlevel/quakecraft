@@ -30,11 +30,11 @@ import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.gui.GuiAction;
 import xyz.upperlevel.uppercore.gui.GuiSize;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
-import xyz.upperlevel.uppercore.util.EnchantGlow;
+import xyz.upperlevel.uppercore.util.EnchantUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -177,7 +177,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     protected ItemStack getIcon(Purchase<?> purchase, QuakeAccount player, boolean selected) {
-        CustomItem icon = purchase.getIcon(player);
+        UItem icon = purchase.getIcon(player);
         Player p = player.getPlayer();
         if (icon == null) {
             Quake.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
@@ -198,8 +198,9 @@ public class PurchaseGui extends ChestGui {
 
         meta.setDisplayName(ChatColor.RESET + getPrefix(purchased, selected) + purchase.getName().resolve(p));
 
-        if(selected && enchantSelected)
+        if(selected && enchantSelected) {
             addGlow(meta);
+        }
 
         //Lore processing (additional lore + requires)
         List<String> metaLore = meta.getLore();
@@ -266,7 +267,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     protected void addGlow(ItemMeta meta) {
-        EnchantGlow.addGlow(meta);
+        EnchantUtil.glow(meta);
     }
 
     protected List<PlaceholderValue<String>> getLore(boolean purchased, boolean selected) {

@@ -6,7 +6,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 
 public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
@@ -53,11 +53,11 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
     @Getter
     public class Case extends SimplePurchase<Case> {
-        private final CustomItem item;
+        private final UItem item;
 
         protected Case(String id, Config config) {
             super(CaseManager.this, id, config);
-            this.item = CustomItem.deserialize(config.getConfigRequired("item"));
+            this.item = UItem.deserialize(config.getConfigRequired("item"));
         }
     }
 }

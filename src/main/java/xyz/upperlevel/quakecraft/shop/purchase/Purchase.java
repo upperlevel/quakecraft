@@ -7,7 +7,7 @@ import xyz.upperlevel.quakecraft.shop.require.Require;
 import xyz.upperlevel.quakecraft.shop.require.RequireSystem;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
@@ -49,7 +49,7 @@ public abstract class Purchase<T extends Purchase<T>> {
         return manager.getPurchaseName() + ":" + id;
     }
 
-    public abstract CustomItem getIcon(QuakeAccount player);
+    public abstract UItem getIcon(QuakeAccount player);
 
     protected void fillPlaceholderSession(PlaceholderRegistry session) {
         session.set("cost", getCostFormatted());

@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.itemstack.ItemResolver;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
@@ -47,7 +47,7 @@ public class PlayingHotbar extends Hotbar {
             // The gun is particular: name and lore are both configurable but can have some
             // extra placeholders, such as gun's components name.
             QuakeAccount quake = Quake.get().getPlayerManager().getAccount(player);
-            CustomItem item = quake.getSelectedCase().getItem();
+            UItem item = quake.getSelectedCase().getItem();
             item.setDisplayName(name);
             item.setLore(lore);
             item.setPlaceholders(PlaceholderRegistry.create()
@@ -74,7 +74,7 @@ public class PlayingHotbar extends Hotbar {
 
         @Override
         public ItemStack resolve(Player player) {
-            CustomItem item = new CustomItem(new ItemStack(Material.COMPASS));
+            UItem item = new UItem(new ItemStack(Material.COMPASS));
             item.setDisplayName(name);
             item.setLore(lore);
             return item.resolve(player);

@@ -6,7 +6,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 
 public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.Chestplate> {
 
@@ -46,11 +46,11 @@ public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.C
 
     @Getter
     public class Chestplate extends SimplePurchase<Chestplate> {
-        private final CustomItem item;
+        private final UItem item;
 
         protected Chestplate(String id, Config config) {
             super(ChestplateManager.this, id, config);
-            this.item = config.getCustomItem("item", CustomItem.AIR);
+            this.item = config.getUItem("item", UItem.AIR);
         }
     }
 }

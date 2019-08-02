@@ -13,7 +13,7 @@ import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.ChestGui;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
@@ -31,10 +31,10 @@ public class ConfirmPurchaseGui extends ChestGui {
         this.purchase = purchase;
         itemSlot = options.itemSlot;
 
-        CustomItem confirmItem = options.confirmItem.copy();
+        UItem confirmItem = options.confirmItem.copy();
         confirmItem.setPlaceholders(placeholders);
 
-        CustomItem cancelItem = options.cancelItem.copy();
+        UItem cancelItem = options.cancelItem.copy();
         cancelItem.setPlaceholders(placeholders);
 
         this.onAgree = onAgree;
@@ -52,7 +52,7 @@ public class ConfirmPurchaseGui extends ChestGui {
         placeholders.set("item_name", purchaseName);
         Inventory inv = super.create(player);
 
-        CustomItem item = purchase.getIcon(Quake.get().getPlayerManager().getAccount(player));
+        UItem item = purchase.getIcon(Quake.get().getPlayerManager().getAccount(player));
         item.setDisplayName(PlaceholderValue.fake(purchaseName));
 
         inv.setItem(itemSlot, item.resolve(player));
@@ -89,9 +89,9 @@ public class ConfirmPurchaseGui extends ChestGui {
         private InventoryType type;
         private int itemSlot;
         private int[] confirmSlots;
-        private CustomItem confirmItem;
+        private UItem confirmItem;
         private int[] cancelSlots;
-        private CustomItem cancelItem;
+        private UItem cancelItem;
 
         @ConfigConstructor
         public Options(
@@ -100,9 +100,9 @@ public class ConfirmPurchaseGui extends ChestGui {
                 @ConfigProperty("type") Optional<InventoryType> type,
                 @ConfigProperty("item-slot") int itemSlot,
                 @ConfigProperty("confirm.slots") int[] confirmSlots,
-                @ConfigProperty("confirm.item") CustomItem confirmItem,
+                @ConfigProperty("confirm.item") UItem confirmItem,
                 @ConfigProperty("cancel.slots") int[] cancelSlots,
-                @ConfigProperty("cancel.item") CustomItem cancelItem
+                @ConfigProperty("cancel.item") UItem cancelItem
         ) {
             if (!size.isPresent() && !type.isPresent()) {
                 throw new InvalidConfigException("Both 'size' and 'type' aren't specified");

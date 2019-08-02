@@ -4,16 +4,16 @@ import lombok.Getter;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.require.Require;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
 
 @Getter
 public abstract class SimplePurchase<T extends SimplePurchase<T>> extends Purchase<T> {
-    private final CustomItem icon;
+    private final UItem icon;
 
-    public SimplePurchase(PurchaseManager<T> manager, String id, PlaceholderValue<String> name, float cost, CustomItem icon, boolean def, List<Require> requires) {
+    public SimplePurchase(PurchaseManager<T> manager, String id, PlaceholderValue<String> name, float cost, UItem icon, boolean def, List<Require> requires) {
         super(manager, id, name, cost, def, requires);
         this.icon = icon;
 
@@ -24,12 +24,12 @@ public abstract class SimplePurchase<T extends SimplePurchase<T>> extends Purcha
     }
 
     @Override
-    public CustomItem getIcon(QuakeAccount player) {
+    public UItem getIcon(QuakeAccount player) {
         return icon;
     }
 
     public SimplePurchase(PurchaseManager<T> manager, String id, Config config) {
         super(manager, id, config);
-        this.icon = config.getCustomItemRequired("icon", getPlaceholders());
+        this.icon = config.getUItem("icon", getPlaceholders());
     }
 }

@@ -6,7 +6,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 
 public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging> {
 
@@ -46,11 +46,11 @@ public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging
 
     @Getter
     public class Legging extends SimplePurchase<Legging> {
-        private final CustomItem item;
+        private final UItem item;
 
         protected Legging(String id, Config config) {
             super(LeggingManager.this, id, config);
-            this.item = config.getCustomItem("item", CustomItem.AIR);
+            this.item = config.getUItem("item", UItem.AIR);
 
         }
     }

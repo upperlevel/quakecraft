@@ -12,7 +12,7 @@ import xyz.upperlevel.quakecraft.AccountManager;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.ChestGui;
-import xyz.upperlevel.uppercore.itemstack.CustomItem;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
@@ -74,7 +74,7 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     protected ItemStack getIcon(Railgun gun, QuakeAccount player) {
-        CustomItem icon = gun.getCase().getIcon();
+        UItem icon = gun.getCase().getIcon();
         Player p = player.getPlayer();
 
         ItemStack item = icon.resolve(p);
