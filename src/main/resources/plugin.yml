@@ -1,7 +1,7 @@
 name: Quake
 version: @project.version@
 main: xyz.upperlevel.quakecraft.Quake
-
+api-version: 1.13
 commands:
   quake:
     description: 'Main commands of Quakecraft.'
