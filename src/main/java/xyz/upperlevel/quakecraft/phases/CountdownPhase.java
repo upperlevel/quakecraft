@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static xyz.upperlevel.quakecraft.Quake.get;
+import static xyz.upperlevel.uppercore.util.TypeUtil.typeOf;
 
 public class CountdownPhase implements Phase, Listener {
     private static int countdownTimer;
@@ -153,19 +154,15 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        Config config = Quake.get().getGameConfig();
+        Config config = Quake.getConfigSection("game");
         countdownTimer = config.getIntRequired("countdown-timer");
 
         // Loads countdown messages: a message per each countdown second.
-        countdownMessages = new HashMap<>();
-        Config messages = config.getConfigRequired("countdown-messages");
-        messages.keys().forEach(seconds -> countdownMessages.put(seconds, messages.getMessage(seconds)));
+        countdownMessages = config.getRequired("countdown-messages", typeOf(Map.class, String.class, Message.class), null);
 
         // Loads countdown sounds: a sound per each countdown second.
-        countdownSounds = new HashMap<>();
-        Config sounds = config.getConfigRequired("countdown-sounds");
-        sounds.keys().forEach(seconds -> countdownSounds.put(seconds, sounds.getPlaySound(seconds)));
+        Config sounds = config.getRequired("countdown-sounds", typeOf(Map.class, String.class, PlaySound.class), null);
 
-        countdownBoard = SimpleConfigBoard.create(config.getConfigRequired("countdown-board"));
+        countdownBoard = config.getRequired("countdown-board", SimpleConfigBoard.class, null);
     }
 }

@@ -4,11 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
+import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.gui.ChestGui;
 import xyz.upperlevel.uppercore.gui.Gui;
-
-import java.io.File;
-
-import static xyz.upperlevel.quakecraft.Quake.get;
 
 @RequiredArgsConstructor
 public abstract class Category {
@@ -17,16 +15,12 @@ public abstract class Category {
     @Getter
     protected Gui gui;
 
-    protected void loadGui(String name, File file) {
-        gui = Quake.get().getGuis().register(name, gui);
+    protected void loadGui(String name, Config config) {
+        gui = Quake.get().getGuis().register(name, config.get(ChestGui.class, null));
     }
 
     public void loadGui() {
-        File guiFile = new File(
-                get().getDataFolder(),
-                "shop/" + getGuiLoc() + ".yml"
-        );
-        loadGui(getGuiRegistryName(), guiFile);
+        loadGui(getGuiRegistryName(), Quake.getConfigSection("shop." + getGuiLoc()));
     }
 
     public abstract String getGuiLoc();

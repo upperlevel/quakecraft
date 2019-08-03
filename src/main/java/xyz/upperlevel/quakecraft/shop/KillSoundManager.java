@@ -22,12 +22,12 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
 
     @Override
     public String getGuiLoc() {
-        return "kill_sounds/kill_sounds_gui";
+        return "kill-sounds.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "kill_sounds/kill_sounds";
+        return "kill-sounds.types";
     }
 
     @Override

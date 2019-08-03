@@ -44,7 +44,7 @@ public class ArmorCategory extends Category {
 
     @Override
     public String getGuiLoc() {
-        return "armor/armor_gui";
+        return "armor.gui";
     }
 
     @Override

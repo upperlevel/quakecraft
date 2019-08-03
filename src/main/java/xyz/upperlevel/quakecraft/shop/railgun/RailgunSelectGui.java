@@ -6,16 +6,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import xyz.upperlevel.quakecraft.AccountManager;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
-import xyz.upperlevel.quakecraft.AccountManager;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.ChestGui;
 import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
-import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -187,12 +186,12 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     public static void loadConfig() {
-        MessageManager manager = Quake.get().getMessages().getSection("shop.railgun");
-        GUN_ALREADY_SELECTED = manager.get("already-selected");
-        GUN_SELECTED = manager.get("selected");
-        MessageManager missing = manager.getSection("parts-missing");
-        GUN_PART_MISSING_HEADER = missing.get("header");
-        GUN_PART_MISSING_LINE = missing.get("line");
-        GUN_PART_MISSING_FOOTER = missing.get("footer");
+        Config cfg = Quake.getConfigSection("shop.railgun");
+        GUN_ALREADY_SELECTED = cfg.getMessageRequired("already-selected");
+        GUN_SELECTED = cfg.getMessageRequired("selected");
+        Config missing = cfg.getConfigRequired("parts-missing");
+        GUN_PART_MISSING_HEADER = missing.getMessageRequired("header");
+        GUN_PART_MISSING_LINE = missing.getMessageRequired("line");
+        GUN_PART_MISSING_FOOTER = missing.getMessageRequired("footer");
     }
 }

@@ -21,12 +21,12 @@ public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging
 
     @Override
     public String getGuiLoc() {
-        return "armor/leggings/leggings_gui";
+        return "armor.leggings.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "armor/leggings/leggings";
+        return "armor.leggings.types";
     }
 
     @Override

@@ -68,7 +68,7 @@ public class Dash {
     }
 
     public static void loadConfig() {
-        Config conf = Quake.get().getGameConfig();
+        Config conf = Quake.getConfigSection("game");
         BASE_POWER = conf.getFloatRequired("dash-power");
         COOLDOWN_MESSAGE = conf.getMessage("dash-cooldown-message");
     }

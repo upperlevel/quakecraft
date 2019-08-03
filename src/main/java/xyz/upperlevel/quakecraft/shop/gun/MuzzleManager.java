@@ -26,12 +26,12 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
 
     @Override
     public String getGuiLoc() {
-        return "gun/muzzles/muzzles_gui";
+        return "gun.muzzles.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "gun/muzzles/muzzles";
+        return "gun.muzzles.types";
     }
 
     @Override

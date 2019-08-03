@@ -44,7 +44,7 @@ public class ShopCategory extends Category {
 
     @Override
     public String getGuiLoc() {
-        return "shop_gui";
+        return "main-gui";
     }
 
     @Override

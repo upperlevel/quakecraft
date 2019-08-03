@@ -130,6 +130,6 @@ public class Railgun {
     }
 
     public static void loadConfig() {
-        CUSTOM_NAME = Quake.get().getCustomConfig().getMessageStr("game.custom-gun");
+        CUSTOM_NAME = Quake.get().getCustomConfig().getMessageStrRequired("game.custom-gun");
     }
 }

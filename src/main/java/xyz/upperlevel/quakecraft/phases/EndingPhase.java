@@ -21,6 +21,7 @@ import xyz.upperlevel.quakecraft.game.GainType;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
+import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.nms.impl.MessageNms;
@@ -210,19 +211,19 @@ public class EndingPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        MessageManager manager = Quake.get().getMessages().getSection("game");
-        endGainMessage = manager.get("end-gain");
+        Config cfg = Quake.getConfigSection("messages.game");
+        endGainMessage = cfg.getMessageRequired("end-gain");
 
-        MessageManager endRanking = manager.getSection("end-ranking");
-        endRankingHeader = endRanking.get("header");
-        endRankingBody = endRanking.getConfig().get("body", TypeUtil.typeOf(NavigableMap.class, Integer.class, Message.class), null);
+        Config endRanking = cfg.getConfigRequired("end-ranking");
+        endRankingHeader = endRanking.getMessageRequired("header");
+        endRankingBody = endRanking.getRequired("body", TypeUtil.typeOf(NavigableMap.class, Integer.class, Message.class), null);
 
-        endRankingFooter = endRanking.get("footer");
+        endRankingFooter = endRanking.getMessageRequired("footer");
 
         autoJoin = Quake.get().getCustomConfig().getBoolRequired("auto-join");
         rejoinMessage = Quake.get().getCustomConfig().getMessageRequired("rejoin-message");
 
-        hotbar = Quake.get().getGameConfig().get("ending-hotbar", Hotbar.class, Quake.get());
+        hotbar = Quake.get().getCustomConfig().getRequired("game.ending-hotbar", Hotbar.class, Quake.get());
 
         //signLines = manager.getConfig().getMessageStrList("ending-sign");
     }

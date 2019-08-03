@@ -21,12 +21,12 @@ public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
 
     @Override
     public String getGuiLoc() {
-        return "gun/lasers/lasers_gui";
+        return "gun.lasers.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "gun/lasers/lasers";
+        return "gun.lasers.types";
     }
 
     @Override

@@ -313,7 +313,7 @@ public class PurchaseGui extends ChestGui {
 
     @SuppressWarnings("unchecked")
     public static void loadConfig() {
-        Config config = Quake.get().getCustomConfig().getConfigRequired("purchase-gui");
+        Config config = Quake.getConfigSection("purchase-gui");
         Config lores = config.getConfigRequired("lore");
         buyingLores = lores.getMessageStrListRequired("buying");
         boughtLores = lores.getMessageStrListRequired("bought");
@@ -341,7 +341,7 @@ public class PurchaseGui extends ChestGui {
             PurchaseGui gui = new PurchaseGui(config);
             gui.addPurchase(
                     manager,
-                    config.get("slots", int[].class, null)
+                    config.getRequired("slots", int[].class, null)
             );
             return gui;
         } catch (InvalidConfigException e) {

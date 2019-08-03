@@ -27,12 +27,12 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
     @Override
     public String getGuiLoc() {
-        return "gun/cases/cases_gui";
+        return "gun.cases.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "gun/cases/cases";
+        return "gun.cases.types";
     }
 
     @Override

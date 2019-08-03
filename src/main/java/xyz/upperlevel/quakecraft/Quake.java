@@ -58,10 +58,7 @@ public class Quake extends JavaPlugin {
 
     private Database remoteDatabase;
 
-    private MessageManager messages;
-
     private Config customConfig;
-    private Config gameConfig;
 
     private UpdateChecker updater;
 
@@ -115,25 +112,25 @@ public class Quake extends JavaPlugin {
 
     public void loadConfig() {
         File folder = getDataFolder();
+
+        saveResource("config.tml", false);
         customConfig = Config.fromYaml(new File(folder, "config.yml"));
-        gameConfig = Config.fromYaml(new File(folder, "game/game.yml"));
-        messages = MessageManager.load(this);
 
-        loadSafe("commands", QuakeCommand::loadConfig);
-        loadSafe("killstreak", KillStreak::loadConfig);
-        loadSafe("dash", Dash::loadConfig);
-        loadSafe("purchase-gui", PurchaseGui::loadConfig);
-        loadSafe("railgun", RailgunSelectGui::loadConfig);
-        loadSafe("gain", GainType::loadConfig);
-        loadSafe("railgun", Railgun::loadConfig);
-        GainNotifier.setup(gameConfig);
+        QuakeCommand.loadConfig();
+        KillStreak.loadConfig();
+        Dash.loadConfig();
+        PurchaseGui.loadConfig();
+        RailgunSelectGui.loadConfig();
+        GainType.loadConfig();
+        Railgun.loadConfig();
+        GainNotifier.setup(customConfig.getConfigRequired("game"));
 
-        loadSafe("waiting phase", WaitingPhase::loadConfig);
-        loadSafe("game phase", GamePhase::loadConfig);
-        loadSafe("playing phase", PlayingPhase::loadConfig);
-        loadSafe("countdown phase", CountdownPhase::loadConfig);
-        loadSafe("ending phase", EndingPhase::loadConfig);
-        loadSafe("lobby phase", LobbyPhase::loadConfig);
+        WaitingPhase.loadConfig();
+        GamePhase.loadConfig();
+        PlayingPhase.loadConfig();
+        CountdownPhase.loadConfig();
+        EndingPhase.loadConfig();
+        LobbyPhase.loadConfig();
 
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
     }
@@ -180,5 +177,9 @@ public class Quake extends JavaPlugin {
 
     public static QuakeArena getArena(Player player) {
         return (QuakeArena) instance.game.getArenaManager().getArena(player);
+    }
+
+    public static Config getConfigSection(String path) {
+        return instance.customConfig.getConfigRequired(path);
     }
 }

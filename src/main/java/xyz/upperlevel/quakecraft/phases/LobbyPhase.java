@@ -90,7 +90,7 @@ public class LobbyPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        Config config = Quake.get().getGameConfig();
+        Config config = Quake.getConfigSection("game");
         hotbar = config.get("lobby-hotbar", Hotbar.class, Quake.get());
     }
 }

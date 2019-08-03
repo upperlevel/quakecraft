@@ -199,6 +199,7 @@ public class PlayingPhase implements Phase, Listener {
                             if (gamePhase.isGamer(hit)) {
                                 killCount++;
                                 boolean headshot = step.getY() - hit.getLocation().getY() > 1.4; // head height
+                                // TODO: make headshot height configurable
 
                                 Railgun gun = account.getGun();
                                 Message message = headshot ? headshotMessage : shotMessage;
@@ -270,7 +271,7 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        Config config = Quake.get().getGameConfig();
+        Config config = Quake.getConfigSection("game");
         defaultKillMessage = config.getString("default-kill-message");
         shotMessage = config.getMessageRequired("shot-message");
         headshotMessage = config.getMessageRequired("headshot-message");
@@ -280,6 +281,6 @@ public class PlayingPhase implements Phase, Listener {
 
         killsToWin = config.getIntRequired("kills-to-win");
 
-        hotbar = config.get("playing-hotbar", PlayingHotbar.class, null);
+        hotbar = config.getRequired("playing-hotbar", PlayingHotbar.class, null);
     }
 }

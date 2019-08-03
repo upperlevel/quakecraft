@@ -52,7 +52,6 @@ distributions {
                 from { upperCoreLocation }
             }
             into(shadowJar.baseName) {
-                from { 'src/main/configs' }
                 from ('src/main/resources') {
                     exclude 'plugin.yml'
                 }

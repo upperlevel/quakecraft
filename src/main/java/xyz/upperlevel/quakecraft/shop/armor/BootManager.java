@@ -21,12 +21,12 @@ public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
 
     @Override
     public String getGuiLoc() {
-        return "armor/boots/boots_gui";
+        return "armor.boots.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "armor/boots/boots";
+        return "armor.boots.types";
     }
 
     @Override

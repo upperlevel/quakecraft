@@ -21,12 +21,12 @@ public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
     @Override
     public String getGuiLoc() {
-        return "armor/hats/hats_gui";
+        return "armor.hats.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "armor/hats/hats";
+        return "armor.hats.types";
     }
 
     @Override

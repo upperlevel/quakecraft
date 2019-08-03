@@ -90,7 +90,7 @@ public class GainType {
     }
 
     public static void loadConfig() {
-        Config config = Quake.get().getGameConfig();
+        Config config = Quake.getConfigSection("game");
         message = config.getMessageRequired("gain-message");
         loadChildren();
         for (GainType type : gains) {

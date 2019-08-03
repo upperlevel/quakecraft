@@ -21,12 +21,12 @@ public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.C
 
     @Override
     public String getGuiLoc() {
-        return "armor/kits/kits_gui";
+        return "armor.kits.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "armor/kits/kits";
+        return "armor.kits.types";
     }
 
     @Override

@@ -20,12 +20,12 @@ public class TriggerManager extends SinglePurchaseManager<TriggerManager.Trigger
 
     @Override
     public String getGuiLoc() {
-        return "gun/triggers/triggers_gui";
+        return "gun.triggers.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "gun/triggers/triggers";
+        return "gun.triggers.types";
     }
 
     @Override

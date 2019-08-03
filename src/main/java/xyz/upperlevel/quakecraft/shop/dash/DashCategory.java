@@ -32,12 +32,12 @@ public class DashCategory extends UnitCategory {
 
     @Override
     public String getConfigLoc() {
-        return "dash/dash_upgrades";
+        return "dash.upgrades";
     }
 
     @Override
     public String getGuiLoc() {
-        return "dash/dash_upgrades_gui";
+        return "dash/.gui";
     }
 
     @Override

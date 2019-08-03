@@ -191,8 +191,8 @@ public class GamePhase extends NodePhase implements Listener {
     }
 
     public static void loadConfig() {
-        Config config = Quake.get().getGameConfig();
-        gameCountdown = config.getInt("game-countdown", 600);
+        Config config = Quake.getConfigSection("game");
+        gameCountdown = config.getIntRequired("duration");
         board = config.getRequired("game-board", GameBoard.class, null);
         startMessage = config.getMessage("start-message");
         startSound = config.getPlaySound("start-sound");

@@ -10,7 +10,6 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
-import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -83,8 +82,6 @@ public class MultiStab {
     }
 
     public static void loadConfig() {
-        loadConfig(Config.fromYaml(
-                new File(Quake.get().getDataFolder(), "game/multistabs.yml")
-        ).asConfigMap());
+        loadConfig(Quake.getConfigSection("game.multistabs").asConfigMap());
     }
 }

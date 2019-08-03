@@ -21,12 +21,12 @@ public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
 
     @Override
     public String getGuiLoc() {
-        return "gun/barrels/barrels_gui";
+        return "gun.barrels.gui";
     }
 
     @Override
     public String getConfigLoc() {
-        return "gun/barrels/barrels";
+        return "gun.barrels.types";
     }
 
     @Override

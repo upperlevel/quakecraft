@@ -95,9 +95,9 @@ public class QuakeCommand extends NodeCommand {
     }
 
     public static void loadConfig() {
-        Config config = Quake.get().getGameConfig();
-        ARENA_NOT_FOUND = config.getMessage("arena-not-found");
-        ARENA_JOINED = config.getMessage("arena-joined");
-        ARENA_QUIT = config.getMessage("arena-quit");
+        Config mex = Quake.getConfigSection("messages.commands.arena");
+        ARENA_NOT_FOUND = mex.getMessageRequired("join.arena-not-found");
+        ARENA_JOINED = mex.getMessageRequired("join.success");
+        ARENA_QUIT = mex.getMessageRequired("leave.success");
     }
 }
