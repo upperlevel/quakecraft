@@ -9,7 +9,6 @@ import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
-import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -64,8 +63,9 @@ public abstract class TimeBasedPowerupEffect extends BasePowerupEffect {
     public void load(Config config) {
         super.load(config);
         this.duration = config.getIntRequired("duration");
-        MessageManager messages = MessageManager.load(config.getConfigRequired("messages"));
-        activeMessage = messages.get("active");
-        deactiveMessage = messages.get("deactive");
+
+        Config messages = config.getConfigRequired("messages");
+        activeMessage = messages.getMessageRequired("active");
+        deactiveMessage = messages.getMessageRequired("deactive");
     }
 }

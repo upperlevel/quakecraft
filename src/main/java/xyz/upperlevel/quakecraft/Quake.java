@@ -28,7 +28,6 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.placeholder.message.MessageManager;
 import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.storage.Database;
 import xyz.upperlevel.uppercore.storage.StorageConnector;
@@ -39,7 +38,6 @@ import xyz.upperlevel.uppercore.util.CrashUtil;
 import java.io.File;
 
 import static xyz.upperlevel.uppercore.Uppercore.guis;
-import static xyz.upperlevel.uppercore.util.CrashUtil.loadSafe;
 
 @Getter
 public class Quake extends JavaPlugin {
