@@ -6,7 +6,6 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 
-import java.io.File;
 import java.util.List;
 
 
@@ -16,11 +15,7 @@ public abstract class UnitCategory extends Category {
     }
 
     @Override
-    protected void loadGui(String name, File file) {
-        loadGui(name, Config.fromYaml(file));
-    }
-
-    private void loadGui(String id, Config config) {
+    public void loadGui(String id, Config config) {
         PurchaseGui gui = new PurchaseGui(config);
         this.gui = gui;
         for(MultiPurchaseManager manager : getChildren()) {
@@ -34,10 +29,9 @@ public abstract class UnitCategory extends Category {
     }
 
     public void loadConfig() {
-        loadConfig(Config.fromYaml(new File(
-                Quake.get().getDataFolder(),
-                "shop/" + getConfigLoc() + ".yml"
-        )));
+        loadConfig(Quake.getConfigSection(
+                "shop." + getConfigLoc()
+        ));
     }
 
     private void loadConfig(Config config) {
