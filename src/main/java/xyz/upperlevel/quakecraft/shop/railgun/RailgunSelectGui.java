@@ -186,7 +186,7 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     public static void loadConfig() {
-        Config cfg = Quake.getConfigSection("shop.railgun");
+        Config cfg = Quake.getConfigSection("messages.shop.railgun");
         GUN_ALREADY_SELECTED = cfg.getMessageRequired("already-selected");
         GUN_SELECTED = cfg.getMessageRequired("selected");
         Config missing = cfg.getConfigRequired("parts-missing");

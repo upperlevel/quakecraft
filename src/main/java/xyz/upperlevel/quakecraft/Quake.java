@@ -87,7 +87,7 @@ public class Quake extends JavaPlugin {
                 }
             });
 
-            defConfirmOptions = ConfirmPurchaseGui.load();
+            defConfirmOptions = ConfirmPurchaseGui.load(customConfig);
 
             // Firstly registers the argument parsers then registers quake command.
             ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
@@ -106,7 +106,7 @@ public class Quake extends JavaPlugin {
     public void loadConfig() {
         File folder = getDataFolder();
 
-        saveResource("config.tml", false);
+        saveResource("config.yml", false);
         customConfig = Config.fromYaml(new File(folder, "config.yml"));
 
         QuakeCommand.loadConfig();
@@ -116,7 +116,7 @@ public class Quake extends JavaPlugin {
         RailgunSelectGui.loadConfig();
         GainType.loadConfig();
         Railgun.loadConfig();
-        GainNotifier.setup(customConfig.getConfigRequired("game"));
+        GainNotifier.loadConfig();
 
         WaitingPhase.loadConfig();
         GamePhase.loadConfig();

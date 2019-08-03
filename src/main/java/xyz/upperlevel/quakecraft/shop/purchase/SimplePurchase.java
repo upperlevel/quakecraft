@@ -30,6 +30,6 @@ public abstract class SimplePurchase<T extends SimplePurchase<T>> extends Purcha
 
     public SimplePurchase(PurchaseManager<T> manager, String id, Config config) {
         super(manager, id, config);
-        this.icon = config.getUItem("icon", getPlaceholders());
+        this.icon = config.getUItemRequired("icon");
     }
 }

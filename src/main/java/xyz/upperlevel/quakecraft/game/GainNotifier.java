@@ -45,7 +45,7 @@ public class GainNotifier {
             return String.format("%.2f", f);
     }
 
-    public static void setup(Config config) {
+    public static void loadConfig() {
         if (!EconomyManager.isEnabled()) {
             Quake.get().getLogger().warning("Economy not found, disabling gain notifier");
             return;
@@ -57,6 +57,6 @@ public class GainNotifier {
                 player.getGainNotifier().onGain(event.getGain());
             }
         }, Quake.get());
-        GAIN = config.getMessageRequired("on-gain");
+        GAIN = Quake.getConfigSection("messages.game").getMessage("on-gain");
     }
 }

@@ -212,10 +212,9 @@ public class EndingPhase implements Phase, Listener {
 
         endRankingFooter = endRanking.getMessageRequired("footer");
 
-        autoJoin = Quake.get().getCustomConfig().getBoolRequired("auto-join");
-        rejoinMessage = Quake.get().getCustomConfig().getMessageRequired("rejoin-message");
-
-        hotbar = Quake.get().getCustomConfig().getRequired("game.ending-hotbar", Hotbar.class);
+        autoJoin = Quake.getConfigSection("game").getBoolRequired("auto-join");
+        rejoinMessage = Quake.getConfigSection("game").getMessageRequired("rejoin-message");
+        hotbar = Quake.getConfigSection("game").getRequired("ending-hotbar", Hotbar.class);
 
         //signLines = manager.getConfig().getMessageStrList("ending-sign");
     }

@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -27,8 +28,8 @@ import static xyz.upperlevel.uppercore.util.TypeUtil.typeOf;
 
 public class CountdownPhase implements Phase, Listener {
     private static int countdownTimer;
-    private static Map<String, Message> countdownMessages; // Each countdown second corresponds to a message
-    private static Map<String, PlaySound> countdownSounds; // Each countdown second corresponds to a sound
+    private static Map<Integer, Message> countdownMessages; // Each countdown second corresponds to a message
+    private static Map<Integer, String> countdownSounds; // Each countdown second corresponds to a sound
 
     private static Board countdownBoard;
 
@@ -129,8 +130,8 @@ public class CountdownPhase implements Phase, Listener {
         public void run() {
             // Each second tries to get a message and a sound. If they have been
             // found in configuration, they are printed foreach player.
-            Message message = countdownMessages.get(String.valueOf(timer));
-            PlaySound sound = countdownSounds.get(String.valueOf(timer));
+            Message message = countdownMessages.get(timer);
+            Sound sound = Sound.valueOf(countdownSounds.get(timer));
 
             for (Player player : arena.getPlayers()) {
                 player.setLevel(timer);
@@ -139,7 +140,7 @@ public class CountdownPhase implements Phase, Listener {
                     message.send(player);
                 }
                 if (sound != null) {
-                    sound.play(player);
+                    player.playSound(player.getLocation(), sound, 100.0f, 100.0f);
                 }
             }
             // updateSigns();
@@ -153,14 +154,14 @@ public class CountdownPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        Config config = Quake.getConfigSection("game");
+        Config config = Quake.getConfigSection("lobby");
         countdownTimer = config.getIntRequired("countdown-timer");
 
         // Loads countdown messages: a message per each countdown second.
-        countdownMessages = config.getRequired("countdown-messages", typeOf(Map.class, String.class, Message.class));
+        countdownMessages = config.getRequired("countdown-messages", typeOf(Map.class, Integer.class, Message.class));
 
         // Loads countdown sounds: a sound per each countdown second.
-        Config sounds = config.getRequired("countdown-sounds", typeOf(Map.class, String.class, PlaySound.class));
+        countdownSounds = config.getRequired("countdown-sounds", typeOf(Map.class, Integer.class, String.class));
 
         countdownBoard = config.getRequired("countdown-board", SimpleConfigBoard.class);
     }

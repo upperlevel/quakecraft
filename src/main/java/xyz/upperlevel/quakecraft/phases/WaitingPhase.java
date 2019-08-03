@@ -89,6 +89,6 @@ public class WaitingPhase implements Phase, Listener {
     }
 
     public static void loadConfig() {
-        board = SimpleConfigBoard.create(Quake.getConfigSection("game.waiting-board"));
+        board = SimpleConfigBoard.create(Quake.getConfigSection("lobby.waiting-board"));
     }
 }

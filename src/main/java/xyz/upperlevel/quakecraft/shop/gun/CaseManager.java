@@ -57,7 +57,7 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
         protected Case(String id, Config config) {
             super(CaseManager.this, id, config);
-            this.item = UItem.deserialize(config.getConfigRequired("item"));
+            this.item = config.getUItemRequired("item");
         }
     }
 }

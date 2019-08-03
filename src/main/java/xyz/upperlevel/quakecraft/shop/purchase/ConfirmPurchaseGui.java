@@ -65,9 +65,8 @@ public class ConfirmPurchaseGui extends ChestGui {
         return getTitle().resolve(player, placeholders);
     }
 
-    public static Options load() {
-        File file = new File(Quake.get().getDataFolder(), "shop/confirm_gui.yml");
-        return Config.fromYaml(file).get(Options.class);
+    public static Options load(Config config) {
+        return config.get("confirm-gui", Options.class);
     }
 
     public void onBuy(Player player) {

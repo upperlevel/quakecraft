@@ -7,7 +7,7 @@ lobby:
     icons:
       - slot: 8
         item:
-          type: bed
+          type: RED_BED
           name: '&c&lReturn to Lobby'
           lore:
             - '&7Right-click to leave to the lobby!'
@@ -39,7 +39,7 @@ lobby:
     3:  '&eThe game starts in &c3&e seconds!'
     2:  '&eThe game starts in &c2&e seconds!'
     1:  '&eThe game starts in &c1&e second!'
-    0: # The 0th second is when the game starts
+    # 0: The 0th second is when the game starts
 
   countdown-sounds:
     5: 'BLOCK_DISPENSER_FAIL'
@@ -234,7 +234,7 @@ game:
     icons:
       - slot: 8
         item:
-          type: bed
+          type: RED_BED
           name: '&c&lReturn to Lobby'
           lore:
             - '&7Right-click to leave to the lobby!'
@@ -254,7 +254,7 @@ shop:
     icons:
       - slot: 13
         item:
-          type: 'wood hoe'
+          type: 'wooden hoe'
           name: '&aGun Menu'
           lore:
             - '&7Build your own gun by'
@@ -377,7 +377,7 @@ shop:
               - open-gui: 'triggers_gui'
         - slot: 31
           item:
-            type: 'wood hoe'
+            type: 'wooden hoe'
             name: '&aRailguns'
             lore:
               - '&7See all the railguns you can use.'
@@ -2850,15 +2850,15 @@ confirm-gui:
   item-slot: 13
 
   confirm:
-    slot: 29
+    slots: [29]
     item:
-      type: 'wool'
+      type: 'green wool'
       data: 13
       name: '&aConfirm'
   cancel:
-    slot: 33
+    slots: [33]
     item:
-      type: 'wool'
+      type: 'red wool'
       data: 14
       name: '&cCancel'
 
@@ -2892,6 +2892,8 @@ messages:
 
   game:
     cannot-run-command-during-game: '&cCannot run commands during game! Only /quake quit is runnable.'
+
+    gain-message: "&aYou gained %gain_amount% because %gain_name%."
 
     cannot-join:
       max-players: '&cCannot join game "%game_name%": Max players reached'
@@ -3099,7 +3101,7 @@ messages:
 powerups: # Here's all the powerup configs
   speed:
     display:
-      type: gold boots
+      type: golden boots
     duration: 200 # In ticks
     value: 0.6 # The speed value (from -1 to  1)
     messages:
@@ -3117,14 +3119,14 @@ powerups: # Here's all the powerup configs
 purchase-gui:
   lore:
     buying:
-    - ''
-    - "&7Cost: &6%cost%"
+      - ''
+      - "&7Cost: &6%cost%"
     bought:
-    - ''
-    - "&eClick to select"
+      - ''
+      - "&eClick to select"
     selected:
-    - ''
-    - "&aSELECTED"
+      - ''
+      - "&aSELECTED"
   name-prefix:
     selected: '&a'
     selectable: '&a'

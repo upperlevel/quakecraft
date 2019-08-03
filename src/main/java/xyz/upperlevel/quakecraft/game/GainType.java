@@ -90,14 +90,14 @@ public class GainType {
     }
 
     public static void loadConfig() {
-        Config config = Quake.getConfigSection("game");
+        Config config = Quake.getConfigSection("messages.game");
         message = config.getMessageRequired("gain-message");
         loadChildren();
         for (GainType type : gains) {
             if (type.id == null)
                 continue;
             try {
-                type.load(config.getConfigRequired(type.id));
+                type.load(Quake.getConfigSection("game.gain." + type.id));
             } catch (InvalidConfigException e) {
                 e.addLocation("in gain " + type.id);
                 throw e;
