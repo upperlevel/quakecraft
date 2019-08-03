@@ -39,7 +39,7 @@ dependencies {
 }
 
 shadowJar {
-    relocate "xyz.upperlevel.uppercore", "xyz.upperlevel.quakecraft.uppercore"
+    relocate "xyz.upperlevel.uppercore", "${project.group}.uppercore"
 }
 
 distributions {

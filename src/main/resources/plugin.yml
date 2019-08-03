@@ -2,8 +2,6 @@ name: Quake
 version: @project.version@
 main: xyz.upperlevel.quakecraft.Quake
 
-depend: [Uppercore]
-
 commands:
   quake:
     description: 'Main commands of Quakecraft.'

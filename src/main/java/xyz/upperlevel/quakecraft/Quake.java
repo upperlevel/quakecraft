@@ -72,6 +72,9 @@ public class Quake extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        // This will initialize Uppercore.
+        Uppercore.hook(this);
+
         try {
             // Quake configuration should be present in the plugin folder.
             // The plugin will not take care of saving its JAR included resources.
@@ -83,7 +86,6 @@ public class Quake extends JavaPlugin {
             this.remoteDatabase = StorageConnector.read(this).database("quake");
 
             this.game = Game.load(this, QuakeArena::new);
-
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {
