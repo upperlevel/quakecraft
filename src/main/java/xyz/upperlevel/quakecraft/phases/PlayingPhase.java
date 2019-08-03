@@ -21,8 +21,6 @@ import xyz.upperlevel.quakecraft.game.MultiStab;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
-import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
-import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.task.Countdown;
@@ -147,27 +145,20 @@ public class PlayingPhase implements Phase, Listener {
                 .forEach(e -> e.clear(gamePhase.getGamers()));
     }
 
-    @EventHandler
-    public void onArenaJoin(ArenaJoinEvent e) {
-        if (arena.equals(e.getArena())) {
-            // spectators handled by GamePhase
-        }
+    public void onPlayerJoin(Player player) {
     }
 
-    @EventHandler
-    public void onArenaQuit(ArenaQuitEvent e) {
-        if (arena.equals(e.getArena())) {
-            clearPlayer(e.getPlayer()); // removes hotbar
-            List<Gamer> gamers = gamePhase.getGamers();
-            switch (gamers.size()) {
-                case 1:
-                    // if one gamer is left, he won
-                    gamePhase.setPhase(new EndingPhase(gamePhase, gamers.get(0).getPlayer()));
-                    break;
-                case 0:
-                    // already handled by GamePhase
-                    break;
-            }
+    public void onPlayerQuit(Player player) {
+        clearPlayer(player); // removes hotbar
+        List<Gamer> gamers = gamePhase.getGamers();
+        switch (gamers.size()) {
+            case 1:
+                // if one gamer is left, he won
+                gamePhase.setPhase(new EndingPhase(gamePhase, gamers.get(0).getPlayer()));
+                break;
+            case 0:
+                // already handled by GamePhase
+                break;
         }
     }
 
@@ -208,7 +199,7 @@ public class PlayingPhase implements Phase, Listener {
                                         "killed", hit.getName(),
                                         "kill_message", (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage()
                                 );
-                                arena.broadcast(message);
+                                arena.broadcast(message, arena.getPlaceholderRegistry());
 
                                 onKill(player, hit, headshot);
 

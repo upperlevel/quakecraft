@@ -4,12 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.phases.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.arena.Arena;
+import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.ConfigConstructor;
+import xyz.upperlevel.uppercore.config.ConfigProperty;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.LocUtil;
 
@@ -25,24 +30,45 @@ public class QuakeArena extends Arena {
     public static Message MAX_PLAYERS_REACHED_ERROR;
 
     @Getter
+    private String name;
+
+    @Getter
     @Setter
     private int minPlayers = -1, maxPlayers = -1;
 
     private List<Location> spawns = new ArrayList<>();
     private List<Powerup> powerups = new ArrayList<>();
 
-    private final QuakeArenaListener listener;
+    private QuakeArenaListener listener;
 
     public QuakeArena(String id) {
         super(id);
-        getPlaceholderRegistry()
-                .set("arena_min_players", minPlayers)
-                .set("arena_max_players", maxPlayers)
-                .set("arena_spawns", spawns.size());
-
         // Register protection listener
+        init();
+    }
+
+    @ConfigConstructor
+    public QuakeArena(
+            @ConfigProperty("id") String id,
+            @ConfigProperty("name") String name,
+            @ConfigProperty("lobby") Location lobby,
+            @ConfigProperty("spawns") List<Location> spawns,
+            @ConfigProperty("powerups") List<Powerup> powerups
+    ) {
+        super(id, lobby);
+        this.name = name;
+        this.spawns = spawns;
+        this.powerups = powerups;
+        init();
+    }
+
+    private void init() {
         listener = new QuakeArenaListener(this);
         Bukkit.getPluginManager().registerEvents(listener, Quake.get());
+    }
+
+    public PlaceholderRegistry getPlaceholderRegistry() {
+        return PlaceholderRegistry.def();
     }
 
     public void addSpawn(Location spawn) {
@@ -81,15 +107,47 @@ public class QuakeArena extends Arena {
     }
 
     @Override
-    public void start() {
-        super.start();
-        Bukkit.getPluginManager().registerEvents(listener, Quake.get());
-        getPhaseManager().setPhase(new LobbyPhase(this));
+    public void decorate() {
+        super.decorate();
     }
 
     @Override
-    public void stop() {
-        HandlerList.unregisterAll(listener);
+    public void vacate() {
+        super.vacate();
+    }
+
+    @Override
+    public Phase getEntryPhase() {
+        return new LobbyPhase(this);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (enabled) {
+            Bukkit.getPluginManager().registerEvents(listener, Quake.get());
+        } else {
+            HandlerList.unregisterAll(listener);
+        }
+    }
+
+    @Override
+    public boolean join(Player player) {
+        if (getPlayers().size() > maxPlayers) {
+            MAX_PLAYERS_REACHED_ERROR.send(player, PlaceholderRegistry.def());
+            return false;
+        } else {
+            getPlayers().forEach(mate -> ARENA_JOIN_MESSAGE.send(player, PlaceholderRegistry.def()));
+            return super.join(player);
+        }
+    }
+
+    @Override
+    public void quit(Player player) {
+        getPlayers().forEach(other -> ARENA_QUIT_MESSAGE.send(player,
+                PlaceholderRegistry.create()
+                        .set("player_name", player.getName())
+        ));
     }
 
     @Override
@@ -101,21 +159,9 @@ public class QuakeArena extends Arena {
                 .map(LocUtil::serialize)
                 .collect(Collectors.toList()));
         data.put("powerups", powerups.stream()
-                .map(Powerup::save)
+                .map(Powerup::serialize)
                 .collect(Collectors.toList()));
         return data;
-    }
-
-    @Override
-    public void deserialize(Map<String, Object> data) {
-        Config config = Config.from(data);
-        minPlayers = config.getInt("min-players");
-        maxPlayers = config.getInt("max-players");
-        spawns = config.getLocationList("spawns");
-        powerups = config.getConfigList("powerups", Collections.emptyList())
-                .stream()
-                .map(sub -> new Powerup(this, sub))
-                .collect(Collectors.toList());
     }
 
     public static void loadConfig(Config config) {

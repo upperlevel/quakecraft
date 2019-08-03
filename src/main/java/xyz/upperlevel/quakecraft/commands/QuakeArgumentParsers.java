@@ -16,7 +16,7 @@ public final class QuakeArgumentParsers {
             consumeCount = 1
     )
     public QuakeArena parseArena(List<String> args) throws ArgumentParseException {
-        QuakeArena arena = (QuakeArena) Quake.get().getArenaManager().getArena(args.get(0));
+        QuakeArena arena = (QuakeArena) Quake.get().getArenaManager().get(args.get(0));
         if (arena == null) {
             throw new ArgumentParseException(QuakeArena.class, args);
         }

@@ -31,7 +31,7 @@ public class QuakeCommand extends NodeCommand {
         aliases("q");
 
         // Registers all command used for arena editing, either from the game-api or not.
-        FunctionalCommand.inject(this, new ArenaCommands(Quake.get().getArenaManager(), QuakeArena::new));
+        FunctionalCommand.inject(this, new ArenaCommands(QuakeArena.class));
         FunctionalCommand.inject(this, new QuakeArenaCommands());
 
         // Registers must used commands as locals: such as join, quit, shop...
@@ -70,7 +70,7 @@ public class QuakeCommand extends NodeCommand {
             user = PermissionUser.AVAILABLE
     )
     protected void leave(CommandSender sender) {
-        QuakeArena arena = (QuakeArena) Quake.get().getArenaManager().getArena((Player) sender);
+        QuakeArena arena = (QuakeArena) Quake.get().getArenaManager().get((Player) sender);
         if (arena == null) {
             ARENA_NOT_FOUND.send(sender);
             return;

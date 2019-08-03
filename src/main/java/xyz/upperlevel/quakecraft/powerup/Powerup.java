@@ -117,7 +117,7 @@ public class Powerup {
         );
     }
 
-    public Map<String, Object> save() {
+    public Map<String, Object> serialize() {
         return ImmutableMap.of(
                 "loc", LocUtil.serialize(location),
                 "effect", effect.getId(),

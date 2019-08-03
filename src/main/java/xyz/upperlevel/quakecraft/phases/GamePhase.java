@@ -11,8 +11,8 @@ import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
-import xyz.upperlevel.uppercore.arena.NodePhase;
 import xyz.upperlevel.uppercore.arena.Phase;
+import xyz.upperlevel.uppercore.arena.PhaseManager;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.board.BoardManager;
@@ -25,7 +25,7 @@ import xyz.upperlevel.uppercore.task.Countdown;
 import java.util.*;
 
 
-public class GamePhase extends NodePhase implements Listener {
+public class GamePhase extends PhaseManager implements Phase, Listener {
     private static int gameCountdown = 0;
     private static GameBoard board;
     private static Message startMessage;
@@ -149,7 +149,7 @@ public class GamePhase extends NodePhase implements Listener {
     /**
      * Gets all the players in the arena (spectators + gamers).
      */
-    public Set<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return arena.getPlayers();
     }
 
