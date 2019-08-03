@@ -8,11 +8,10 @@ import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigProperty;
-import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.itemstack.ItemResolver;
+import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
@@ -24,10 +23,10 @@ public class PlayingHotbar extends Hotbar {
         super(Quake.get(), config);
 
         Config sub = config.getConfigRequired("gun");
-        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.get("item", Gun.class, null)));
+        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.getRequired("item", Gun.class)));
 
         sub = config.getConfigRequired("tracker");
-        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.get("item", Tracker.class, null)));
+        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.getRequired("item", Tracker.class)));
     }
 
     public static class Gun implements ItemResolver {

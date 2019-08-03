@@ -16,7 +16,7 @@ public abstract class Category {
     protected Gui gui;
 
     protected void loadGui(String name, Config config) {
-        gui = Quake.get().getGuis().register(name, config.get(ChestGui.class, null));
+        gui = Quake.get().getGuis().register(name, config.get(ChestGui.class));
     }
 
     public void loadGui() {

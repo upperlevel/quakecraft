@@ -182,7 +182,7 @@ public class RailgunSelectGui extends ChestGui {
         selectableLore = lores.getMessageRequired("selectable").getLines();
         missingPartsLore = lores.getMessageRequired("missing-parts").getLines();
 
-        slots = config.getRequired("slots", int[].class, null);
+        slots = config.getRequired("slots", int[].class);
     }
 
     public static void loadConfig() {

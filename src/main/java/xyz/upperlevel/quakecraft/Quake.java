@@ -72,7 +72,7 @@ public class Quake extends JavaPlugin {
             // The plugin will not take care of saving its JAR included resources.
             loadConfig();
 
-            this.pluginRegistry = Uppercore.registry().register(this);
+            this.pluginRegistry = Uppercore.registry();
             this.guis = pluginRegistry.registerChild("guis", Gui.class);
 
             this.remoteDatabase = StorageConnector.read(this).database("quake");

@@ -272,6 +272,6 @@ public class PlayingPhase implements Phase, Listener {
 
         killsToWin = config.getIntRequired("kills-to-win");
 
-        hotbar = config.getRequired("playing-hotbar", PlayingHotbar.class, null);
+        hotbar = config.getRequired("playing-hotbar", PlayingHotbar.class);
     }
 }

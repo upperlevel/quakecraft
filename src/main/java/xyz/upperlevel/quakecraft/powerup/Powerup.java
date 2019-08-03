@@ -127,7 +127,7 @@ public class Powerup {
 
     public void load(Config config) {
         this.location = LocUtil.deserialize(config.getConfigRequired("loc"));
-        this.effect = config.getRequired("effect", PowerupEffect.class, null);
+        this.effect = config.getRequired("effect", PowerupEffect.class);
         this.respawnTicks = config.getIntRequired("respawn-ticks");
     }
 

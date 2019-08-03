@@ -341,7 +341,7 @@ public class PurchaseGui extends ChestGui {
             PurchaseGui gui = new PurchaseGui(config);
             gui.addPurchase(
                     manager,
-                    config.getRequired("slots", int[].class, null)
+                    config.getRequired("slots", int[].class)
             );
             return gui;
         } catch (InvalidConfigException e) {

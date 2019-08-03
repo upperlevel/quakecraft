@@ -51,7 +51,7 @@ public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
 
         protected Barrel(String id, Config config) {
             super(BarrelManager.this, id, config);
-            this.fireworkType = config.getRequired("firework-type", FireworkEffect.Type.class, null);
+            this.fireworkType = config.getRequired("firework-type", FireworkEffect.Type.class);
         }
     }
 }

@@ -193,7 +193,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     public static void loadConfig() {
         Config config = Quake.getConfigSection("game");
         gameCountdown = config.getIntRequired("duration");
-        board = config.getRequired("game-board", GameBoard.class, null);
+        board = config.getRequired("game-board", GameBoard.class);
         startMessage = config.getMessage("start-message");
         startSound = config.getPlaySound("start-sound");
     }

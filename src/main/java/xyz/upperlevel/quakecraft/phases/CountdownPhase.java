@@ -20,7 +20,6 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.sound.PlaySound;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static xyz.upperlevel.quakecraft.Quake.get;
@@ -158,11 +157,11 @@ public class CountdownPhase implements Phase, Listener {
         countdownTimer = config.getIntRequired("countdown-timer");
 
         // Loads countdown messages: a message per each countdown second.
-        countdownMessages = config.getRequired("countdown-messages", typeOf(Map.class, String.class, Message.class), null);
+        countdownMessages = config.getRequired("countdown-messages", typeOf(Map.class, String.class, Message.class));
 
         // Loads countdown sounds: a sound per each countdown second.
-        Config sounds = config.getRequired("countdown-sounds", typeOf(Map.class, String.class, PlaySound.class), null);
+        Config sounds = config.getRequired("countdown-sounds", typeOf(Map.class, String.class, PlaySound.class));
 
-        countdownBoard = config.getRequired("countdown-board", SimpleConfigBoard.class, null);
+        countdownBoard = config.getRequired("countdown-board", SimpleConfigBoard.class);
     }
 }
