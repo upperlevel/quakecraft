@@ -279,7 +279,7 @@ shop:
             - open-gui: 'armor_gui'
       - slot: 30
         item:
-          type: 'carrot stick'
+          type: 'carrot on a stick'
           name: '&aDash Upgrades'
           lore:
             - '&7Upgrade your dash ability!'
@@ -299,7 +299,7 @@ shop:
             - open-gui: 'kill_sounds_gui'
       - slot: 34
         item:
-          type: 'redstone comparator'
+          type: 'comparator'
           name: '&aSettings'
           lore:
             - '&7Configure your personal'
@@ -326,7 +326,7 @@ shop:
       icons:
         - slot: 11
           item:
-            type: 'fireball'
+            type: 'fire charge'
             name: '&aBarrels'
             lore:
               - '&7Select your firework'
@@ -348,7 +348,7 @@ shop:
               - open-gui: 'cases_gui'
         - slot: 13
           item:
-            type: 'ink sack'
+            type: 'ink sac'
             data: 1
             name: '&aLasers'
             lore:
@@ -358,7 +358,7 @@ shop:
               - open-gui: 'lasers_gui'
         - slot: 14
           item:
-            type: 'wood'
+            type: 'oak wood'
             name: '&aMuzzles'
             lore:
               - '&7Select your particle'
@@ -416,7 +416,7 @@ shop:
           name: 'Large Barrel'
           cost: 9000
           icon:
-            type: 'FIREBALL'
+            type: 'FIRE CHARGE'
             lore:
               - '&7Choose a firework shape!'
           firework-type: 'BALL_LARGE'

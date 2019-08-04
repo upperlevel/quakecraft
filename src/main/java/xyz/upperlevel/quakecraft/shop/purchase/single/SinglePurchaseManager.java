@@ -8,7 +8,6 @@ import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 
-import java.io.File;
 import java.util.Map;
 
 public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends PurchaseManager<P> {
@@ -35,10 +34,9 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
     }
 
     public void loadConfig() {
-        loadConfig(Config.fromYaml(new File(
-                Quake.get().getDataFolder(),
-                "shop/" + getConfigLoc() + ".yml"
-        )).asConfigMap());
+        loadConfig(Quake.getConfigSection(
+                "shop." + getConfigLoc()
+        ).asConfigMap());
     }
 
 

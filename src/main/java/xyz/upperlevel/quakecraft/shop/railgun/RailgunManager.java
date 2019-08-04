@@ -10,7 +10,6 @@ import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 
-import java.io.File;
 import java.util.*;
 
 
@@ -64,11 +63,7 @@ public class RailgunManager {
     }
 
     public void loadConfig() {
-        Config config = Config.fromYaml(new File(
-                Quake.get().getDataFolder(),
-                "shop/gun/guns/guns.yml"
-        ));
-        loadConfig(config.asConfigMap());
+        loadConfig(Quake.getConfigSection("shop.gun.guns.types").asConfigMap());
     }
 
 
@@ -86,10 +81,7 @@ public class RailgunManager {
     }
 
     public void loadGui() {
-        loadGui(Config.fromYaml(new File(
-                Quake.get().getDataFolder(),
-                "shop/gun/guns/guns_gui.yml"
-        )));
+        loadGui(Quake.getConfigSection("shop.gun.guns.gui"));
     }
 
     public void load() {
