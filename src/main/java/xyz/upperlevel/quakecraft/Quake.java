@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.arena.QuakeArenaCommands;
 import xyz.upperlevel.quakecraft.commands.QuakeArgumentParsers;
 import xyz.upperlevel.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.quakecraft.game.Dash;
@@ -20,8 +21,10 @@ import xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
 import xyz.upperlevel.uppercore.Uppercore;
+import xyz.upperlevel.uppercore.arena.ArenaCommands;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
 import xyz.upperlevel.uppercore.command.CommandRegistry;
+import xyz.upperlevel.uppercore.command.functional.FunctionalCommand;
 import xyz.upperlevel.uppercore.command.functional.parser.ArgumentParserManager;
 import xyz.upperlevel.uppercore.command.functional.parser.FunctionalArgumentParser;
 import xyz.upperlevel.uppercore.config.Config;
@@ -89,10 +92,7 @@ public class Quake extends JavaPlugin {
 
             defConfirmOptions = ConfirmPurchaseGui.load(customConfig);
 
-            // Firstly registers the argument parsers then registers quake command.
-            ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
-            CommandRegistry commands = CommandRegistry.create(this);
-            commands.register(new QuakeCommand());
+            registerCommands();
 
             playerManager = new AccountManager();
 
@@ -101,6 +101,11 @@ public class Quake extends JavaPlugin {
             CrashUtil.saveCrash(this, t);
             setEnabled(false);
         }
+    }
+
+    private void registerCommands() {
+        ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
+        CommandRegistry.register(new QuakeCommand());
     }
 
     public void loadConfig() {
