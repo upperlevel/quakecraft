@@ -407,7 +407,7 @@ shop:
           cost: 0
           default: true
           icon:
-            type: 'FIREWORK'
+            type: 'FIREWORK ROCKET'
             lore:
               - '&7Choose a firework shape!'
           firework-type: 'BALL'
@@ -425,7 +425,7 @@ shop:
           name: 'Creeper Barrel'
           cost: 9000
           icon:
-            type: 'SKULL_ITEM'
+            type: 'CREEPER HEAD'
             data: 4
             lore:
               - '&7Choose a firework shape!'
@@ -473,13 +473,13 @@ shop:
           cost: 0
           default: true
           icon:
-            type: 'WOOD_HOE'
+            type: 'wooden_hoe'
             lore:
               - '&7Choose an appearance!'
             flags:
               - hide attributes
           item:
-            type: 'WOOD_HOE'
+            type: 'wooden_hoe'
 
         marbled:
           name: 'Marbled Case'
@@ -497,17 +497,17 @@ shop:
           name: 'Varnished Wood Case'
           cost: 1000
           icon:
-            type: 'WOOD_HOE'
+            type: 'wooden_hoe'
             lore:
               - '&7Choose an appearance!'
             flags:
               - hide attributes
             enchantments:
-              arrow damage: 10
+              power: 10
           item:
-            type: 'WOOD_HOE'
+            type: 'wooden_hoe'
             enchantments:
-              arrow damage: 10
+              power: 10
 
         polished_marbled:
           name: 'Polished Marbled Case'
@@ -519,11 +519,11 @@ shop:
             flags:
               - hide attributes
             enchantments:
-              arrow damage: 10
+              power: 10
           item:
             type: 'STONE_HOE'
             enchantments:
-              arrow damage: 10
+              power: 10
 
         reinforced:
           name: 'Reinforced Case'
@@ -541,13 +541,13 @@ shop:
           name: 'Plated Case'
           cost: 4000
           icon:
-            type: 'GOLD_HOE'
+            type: 'GOLDEN_HOE'
             lore:
               - '&7Choose an appearance!'
             flags:
               - hide attributes
           item:
-            type: 'GOLD_HOE'
+            type: 'GOLDEN_HOE'
 
         bling:
           name: 'Bling Case'
@@ -565,15 +565,15 @@ shop:
           name: 'Polished Plated Case'
           cost: 14000
           icon:
-            type: 'GOLD_HOE'
+            type: 'GOLDEN_HOE'
             lore:
               - '&7Choose an appearance!'
             flags:
               - hide attributes
           item:
-            type: 'GOLD_HOE'
+            type: 'GOLDEN_HOE'
             enchantments:
-              arrow damage: 10
+              power: 10
 
         polished_bling:
           name: 'Polished Bling Case'
@@ -585,11 +585,11 @@ shop:
             flags:
               - hide attributes
             enchantments:
-              arrow damage: 10
+              power: 10
           item:
             type: 'DIAMOND_HOE'
             enchantments:
-              arrow damage: 10
+              power: 10
 
         polished_reinforced:
           name: 'Polished Reinforced Case'
@@ -601,11 +601,11 @@ shop:
             flags:
               - hide attributes
             enchantments:
-              arrow damage: 10
+              power: 10
           item:
             type: 'IRON_HOE'
             enchantments:
-              arrow damage: 10
+              power: 10
 
       gui:
         title: 'Case'
