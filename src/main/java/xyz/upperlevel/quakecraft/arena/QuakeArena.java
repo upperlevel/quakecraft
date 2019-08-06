@@ -30,9 +30,6 @@ public class QuakeArena extends Arena {
     public static Message MAX_PLAYERS_REACHED_ERROR;
 
     @Getter
-    private String name;
-
-    @Getter
     @Setter
     private int minPlayers = -1, maxPlayers = -1;
 
@@ -50,16 +47,22 @@ public class QuakeArena extends Arena {
     @ConfigConstructor
     public QuakeArena(
             @ConfigProperty("id") String id,
-            @ConfigProperty("name") String name,
             @ConfigProperty("lobby") Location lobby,
             @ConfigProperty("spawns") List<Location> spawns,
-            @ConfigProperty("powerups") List<Powerup> powerups
+            @ConfigProperty("powerups") List<Powerup> powerups,
+            @ConfigProperty("min-players") int minPlayers,
+            @ConfigProperty("max-players") int maxPlayers
     ) {
         super(id, lobby);
-        this.name = name;
         this.spawns = spawns;
         this.powerups = powerups;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
         init();
+    }
+
+    public String getName() {
+        return getId();
     }
 
     private void init() {

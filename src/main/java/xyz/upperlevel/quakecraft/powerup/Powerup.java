@@ -21,6 +21,8 @@ import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.config.ConfigConstructor;
+import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.nms.NmsVersion;
 import xyz.upperlevel.uppercore.nms.impl.TagNms;
 import xyz.upperlevel.uppercore.nms.impl.entity.EntityNms;
@@ -36,7 +38,6 @@ public class Powerup {
     private static final double SPAWN_HEIGHT = 1.0;
     private static Map<Item, Powerup> drops = new HashMap<>();
 
-    private final QuakeArena arena;
     private Location location;
     private PowerupEffect effect;
     private int respawnTicks;
@@ -48,16 +49,18 @@ public class Powerup {
     private GamePhase phase;
     private BukkitTask spawner;
 
-    public Powerup(QuakeArena arena, Location location, PowerupEffect effect, int respawnTicks) {
-        this.arena = arena;
+    @ConfigConstructor
+    public Powerup(
+            @ConfigProperty("loc") Location location,
+            @ConfigProperty("effect") String effectId,
+            @ConfigProperty("respawn-ticks") int respawnTicks) {
+        this(location, PowerupEffectManager.fromId(effectId), respawnTicks);
+    }
+
+    public Powerup(Location location, PowerupEffect effect, int respawnTicks) {
         this.location = location;
         this.effect = effect;
         this.respawnTicks = respawnTicks;
-    }
-
-    public Powerup(QuakeArena arena, Config config) {
-        this.arena = arena;
-        load(config);
     }
 
     public void spawn() {

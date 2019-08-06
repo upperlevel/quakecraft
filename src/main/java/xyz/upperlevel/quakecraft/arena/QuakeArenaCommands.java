@@ -128,7 +128,7 @@ public class QuakeArenaCommands {
             player.sendMessage(RED + "This world doesn't hold any arena.");
             return;
         }
-        arena.addPowerup(new Powerup(arena, player.getLocation(), effect, respawnTicks));
+        arena.addPowerup(new Powerup(player.getLocation(), effect, respawnTicks));
         player.sendMessage(GREEN + "Add powerup '" + effect.getId() + "' with respawn rate of " + respawnTicks + " ticks to arena '" + arena.getId() + "'.");
     }
 
