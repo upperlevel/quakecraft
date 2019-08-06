@@ -2798,7 +2798,7 @@ shop:
         name: 'Wither'
         cost: 5000
         icon:
-          type: 'ENDER_PORTAL_FRAME'
+          type: 'END_PORTAL_FRAME'
           lore:
             - '&7Play Wither sound'
             - '&7effect on kill!'
