@@ -358,7 +358,7 @@ shop:
               - open-gui: 'lasers_gui'
         - slot: 14
           item:
-            type: 'oak wood'
+            type: 'oak planks'
             name: '&aMuzzles'
             lore:
               - '&7Select your particle'
@@ -635,7 +635,7 @@ shop:
           cost: 0
           default: true
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 11
             lore:
               - '&7Choose a firework color!'
@@ -645,7 +645,7 @@ shop:
           name: 'Green Laser'
           cost: 4000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 2
             lore:
               - '&7Choose a firework color!'
@@ -655,7 +655,7 @@ shop:
           name: 'White Laser'
           cost: 4000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 15
             lore:
               - '&7Choose a firework color!'
@@ -665,7 +665,7 @@ shop:
           name: 'Red Laser'
           cost: 5000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 1
             lore:
               - '&7Choose a firework color!'
@@ -675,7 +675,7 @@ shop:
           name: 'Blue Laser'
           cost: 7000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 4
             lore:
               - '&7Choose a firework color!'
@@ -685,7 +685,7 @@ shop:
           name: 'Purple Laser'
           cost: 8000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 5
             lore:
               - '&7Choose a firework color!'
@@ -695,7 +695,7 @@ shop:
           name: 'Pink Laser'
           cost: 8000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 9
             lore:
               - '&7Choose a firework color!'
@@ -732,7 +732,7 @@ shop:
           name: 'Gray Laser'
           cost: 50000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 8
             lore:
               - '&7Choose a firework color!'
@@ -742,7 +742,7 @@ shop:
           name: 'Orange Laser'
           cost: 100000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 14
             lore:
               - '&7Choose a firework color!'
@@ -752,7 +752,7 @@ shop:
           name: 'Silver Laser'
           cost: 250000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             data: 7
             lore:
               - '&7Choose a firework color!'
@@ -762,7 +762,7 @@ shop:
           name: 'Black Laser'
           cost: 500000
           icon:
-            type: 'INK_SACK'
+            type: 'INK_SAC'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'BLACK'
@@ -837,13 +837,13 @@ shop:
           name: 'Wooden Muzzle'
           cost: 5000
           icon:
-            type: 'WOOD'
+            type: 'oak planks'
             lore:
               - '&7Choose a particle effect!'
           particles:
             - type: 'BLOCK_DUST'
               block:
-                type: 'WOOD'
+                type: 'oak planks'
 
         gold:
           name: 'Golden Muzzle'
@@ -881,17 +881,17 @@ shop:
               block:
                 type: 'IRON_BLOCK'
 
-        ender_stone:
-          name: 'Ender Stone Muzzle'
+        end_stone:
+          name: 'End Stone Muzzle'
           cost: 8500
           icon:
-            type: 'ENDER_STONE'
+            type: 'END_STONE'
             lore:
               - '&7Choose a particle effect!'
           particles:
             - type: 'BLOCK_DUST'
               block:
-                type: 'ENDER_STONE'
+                type: 'END_STONE'
 
         diamond:
           name: 'Diamond Muzzle'
@@ -909,13 +909,13 @@ shop:
           name: 'Quartz Muzzle'
           cost: 15000
           icon:
-            type: 'QUARTZ_ORE'
+            type: 'NETHER_QUARTZ_ORE'
             lore:
               - '&7Choose a particle effect!'
           particles:
             - type: 'BLOCK_DUST'
               block:
-                type: 'QUARTZ_ORE'
+                type: 'NETHER_QUARTZ_ORE'
 
         emerald:
           name: 'Emerald Muzzle'
@@ -981,13 +981,13 @@ shop:
           name: 'Command Block Muzzle'
           cost: 100000
           icon:
-            type: 'COMMAND'
+            type: 'COMMAND_BLOCK'
             lore:
               - '&7Choose a particle effect!'
           particles:
             - type: 'BLOCK_DUST'
               block:
-                type: 'COMMAND'
+                type: 'COMMAND_BLOCK'
 
         prismarine:
           name: 'Prismarine Muzzle'
@@ -1005,13 +1005,13 @@ shop:
           name: 'Melon Muzzle'
           cost: 125000
           icon:
-            type: 'MELON_BLOCK'
+            type: 'MELON'
             lore:
               - '&7Choose a particle effect!'
           particles:
             - type: 'BLOCK_DUST'
               block:
-                type: 'MELON_BLOCK'
+                type: 'MELON'
 
         pumpkin:
           name: 'Pumpkin Muzzle'
@@ -1434,7 +1434,7 @@ shop:
               - open-gui: 'kits_gui'
         - slot: 23
           item:
-            type: 'gold leggings'
+            type: 'golden leggings'
             name: '&aLeggings'
             lore:
               - '&7Select your leggings!'
@@ -1558,13 +1558,13 @@ shop:
           name: 'Majestic Hat'
           cost: 700
           icon:
-            type: 'GOLD_HELMET'
+            type: 'GOLDEN_HELMET'
             lore:
               - '&7Collect all the hats!'
             flags:
               - hide attributes
           item:
-            type: 'GOLD_HELMET'
+            type: 'GOLDEN_HELMET'
 
         hipster:
           name: 'Hipster Hat'
@@ -1590,34 +1590,34 @@ shop:
           name: 'Control Freak Hat'
           cost: 850
           icon:
-            type: 'COMMAND'
+            type: 'COMMAND_BLOCK'
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'COMMAND'
+            type: 'COMMAND_BLOCK'
 
         walking_dead:
           name: 'Walking Dead Hat'
           cost: 900
           icon:
-            type: 'SKULL_ITEM'
+            type: 'SKELETON_SKULL'
             data: 2
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'SKULL_ITEM'
+            type: 'SKELETON_SKULL'
             data: 2
 
         jeepers_creepers:
           name: 'Jeepers Creepers Hat'
           cost: 900
           icon:
-            type: 'SKULL_ITEM'
+            type: 'SKELETON_SKULL'
             data: 4
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'SKULL_ITEM'
+            type: 'SKELETON_SKULL'
             data: 4
 
         richy_rich:
@@ -1634,22 +1634,22 @@ shop:
           name: 'Engineering Hat'
           cost: 1000
           icon:
-            type: 'PISTON_STICKY_BASE'
+            type: 'STICKY_PISTON'
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'PISTON_STICKY_BASE'
+            type: 'STICKY_PISTON'
 
         classy:
           name: 'Classy Hat'
           cost: 1000
           icon:
-            type: 'STAINED_GLASS'
+            type: 'WHITE_STAINED_GLASS'
             data: 3
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'STAINED_GLASS'
+            type: 'WHITE_STAINED_GLASS'
             data: 3
 
         light:
@@ -1666,11 +1666,11 @@ shop:
           name: 'Ecology Hat'
           cost: 1000
           icon:
-            type: 'LEAVES'
+            type: 'OAK_LEAVES'
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'LEAVES'
+            type: 'OAK_LEAVES'
 
         bob:
           name: 'Bob Hat'
@@ -1686,13 +1686,13 @@ shop:
           name: 'Notch Hat'
           cost: 2000
           icon:
-            type: 'SKULL_ITEM'
+            type: 'SKELETON_SKULL'
             data: 3
             owner: 'Notch'
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'SKULL_ITEM'
+            type: 'SKELETON_SKULL'
             data: 3
             owner: 'Notch'
 
@@ -1720,11 +1720,11 @@ shop:
           name: 'Crafter Hat'
           cost: 15000
           icon:
-            type: 'WORKBENCH'
+            type: 'CRAFTING_TABLE'
             lore:
               - '&7Collect all the hats!'
           item:
-            type: 'WORKBENCH'
+            type: 'CRAFTING_TABLE'
 
         bouncy:
           name: 'Bouncy Hat'
@@ -1992,13 +1992,13 @@ shop:
           name: 'Budder Kit'
           cost: 3375
           icon:
-            type: 'GOLD_CHESTPLATE'
+            type: 'GOLDEN_CHESTPLATE'
             lore:
               - '&7Cosmetic armor'
             flags:
               - hide attributes
           item:
-            type: 'GOLD_CHESTPLATE'
+            type: 'GOLDEN_CHESTPLATE'
 
         sweg:
           name: 'Sweg Kit'
@@ -2248,13 +2248,13 @@ shop:
           name: 'Budder Pants'
           cost: 3375
           icon:
-            type: 'GOLD_LEGGINGS'
+            type: 'GOLDEN_LEGGINGS'
             lore:
               - '&7Cosmetic armor'
             flags:
               - hide attributes
           item:
-            type: 'GOLD_LEGGINGS'
+            type: 'GOLDEN_LEGGINGS'
 
         sweg:
           name: 'Sweg Pants'
@@ -2504,13 +2504,13 @@ shop:
           name: 'Budder Boots'
           cost: 3375
           icon:
-            type: 'GOLD_BOOTS'
+            type: 'GOLDEN_BOOTS'
             lore:
               - '&7Cosmetic armor'
             flags:
               - hide attributes
           item:
-            type: 'GOLD_BOOTS'
+            type: 'GOLDEN_BOOTS'
 
         sweg:
           name: 'Sweg Boots'
@@ -2728,7 +2728,7 @@ shop:
         name: 'Pig Death'
         cost: 2000
         icon:
-          type: 'PORK'
+          type: 'PORKCHOP'
           lore:
             - '&7Play Pig Death sound'
             - '&7effect on kill!'
@@ -2748,7 +2748,7 @@ shop:
         name: 'Creeper Death'
         cost: 4000
         icon:
-          type: 'SULPHUR'
+          type: 'GUNPOWDER'
           lore:
             - '&7Play Creeper Death sound'
             - '&7effect on kill!'
@@ -2808,7 +2808,7 @@ shop:
         name: 'Level Up'
         cost: 10000
         icon:
-          type: 'EXP_BOTTLE'
+          type: 'EXPERIENCE_BOTTLE'
           lore:
             - '&7Play Level Up sound'
             - '&7effect on kill!'

@@ -57,7 +57,7 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
         String guiLoc = getGuiLoc();
         if(guiLoc == null) return;
         Config config = Quake.getConfigSection("shop." + guiLoc);
-        loadGui(guiLoc.replaceFirst(".+[.]", ""), config);
+        loadGui(getPurchaseName(), config);
     }
 
     public void load() {

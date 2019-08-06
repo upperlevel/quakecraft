@@ -37,7 +37,7 @@ public class DashCategory extends UnitCategory {
 
     @Override
     public String getGuiLoc() {
-        return "dash/.gui";
+        return "dash.gui";
     }
 
     @Override
