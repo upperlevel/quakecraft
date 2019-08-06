@@ -76,6 +76,8 @@ public class Quake extends JavaPlugin {
             this.guis = pluginRegistry.registerChild("guis", Gui.class);
 
             this.remoteDatabase = StorageConnector.read(this).database("quake");
+            this.remoteDatabase.create();
+            QuakeAccount.loadTable();
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {

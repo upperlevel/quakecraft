@@ -1,5 +1,5 @@
 storage:
-  type: 'flatfile'
+  type: 'nitritedb'
 
   #host: localhost
   #port: 25565
