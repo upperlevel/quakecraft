@@ -47,7 +47,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     public GamePhase(QuakeArena arena) {
         this.arena = arena;
-        this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholderRegistry());
+        this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders());
         buildPlaceholders();
         this.countdown = new Countdown(Quake.get(), gameCountdown * 20, 20,
                 tick -> {

@@ -48,12 +48,13 @@ public class QuakeArena extends Arena {
     public QuakeArena(
             @ConfigProperty("id") String id,
             @ConfigProperty("lobby") Location lobby,
+            @ConfigProperty("join-signs") List<Location> joinSigns,
             @ConfigProperty("spawns") List<Location> spawns,
             @ConfigProperty("powerups") List<Powerup> powerups,
             @ConfigProperty("min-players") int minPlayers,
             @ConfigProperty("max-players") int maxPlayers
     ) {
-        super(id, lobby);
+        super(id, lobby, joinSigns);
         this.spawns = spawns;
         this.powerups = powerups;
         this.minPlayers = minPlayers;
@@ -61,17 +62,15 @@ public class QuakeArena extends Arena {
         init();
     }
 
-    public String getName() {
-        return getId();
+    public PlaceholderRegistry createPlaceholders() {
+        return super.createPlaceholders()
+                .set("min_players", () -> Integer.toString(minPlayers))
+                .set("max_players", () -> Integer.toString(maxPlayers));
     }
 
     private void init() {
         listener = new QuakeArenaListener(this);
         Bukkit.getPluginManager().registerEvents(listener, Quake.get());
-    }
-
-    public PlaceholderRegistry getPlaceholderRegistry() {
-        return PlaceholderRegistry.def();
     }
 
     public void addSpawn(Location spawn) {

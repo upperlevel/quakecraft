@@ -36,7 +36,7 @@ public class LobbyPhase implements Phase, Listener {
 
     public LobbyPhase(QuakeArena arena) {
         this.arena = arena;
-        this.placeholderRegistry = PlaceholderRegistry.create();
+        this.placeholderRegistry = arena.getPlaceholders();
     }
 
     private void setupPlayer(Player player) {

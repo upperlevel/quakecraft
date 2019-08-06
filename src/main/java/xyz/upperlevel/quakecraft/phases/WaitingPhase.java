@@ -32,7 +32,7 @@ public class WaitingPhase implements Phase, Listener {
     public WaitingPhase(LobbyPhase lobbyPhase) {
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
-        this.placeholderRegistry = PlaceholderRegistry.create();
+        this.placeholderRegistry = arena.getPlaceholders();
     }
 
     private void setupPlayer(Player player) {
@@ -71,11 +71,13 @@ public class WaitingPhase implements Phase, Listener {
     }
 
     @EventHandler
-    public void onArenaJoin(ArenaJoinEvent e) {
-        if (arena.equals(e.getArena()) && arena.getPlayers().size() >= arena.getMaxPlayers()) {
-            setupPlayer(e.getPlayer());
+    public void onArenaJoin(ArenaJoinEvent event) {
+        if (arena.equals(event.getArena())) {
+            Player player = event.getPlayer();
+            setupPlayer(player);
+            player.teleport(arena.getLobby());
             tryStartCountdown();
-            updatePlayers(); // update other players' scoreboard that could contain players count
+            updatePlayers();
         }
     }
 

@@ -16,6 +16,7 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
+import static org.bukkit.ChatColor.LIGHT_PURPLE;
 import static org.bukkit.ChatColor.RED;
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 
@@ -41,21 +42,23 @@ public class QuakeCommand extends NodeCommand {
     /* quake join */
 
     @AsCommand(
-            description = "Join an arena.",
-            sender = SenderType.PLAYER
+            description = "Join an arena."
     )
     @WithPermission(
             user = PermissionUser.AVAILABLE
     )
-    protected void join(CommandSender sender, QuakeArena arena) {
-        Player player = (Player) sender;
+    public void join(Player player, QuakeArena arena) {
         if (arena == null) {
             ARENA_NOT_FOUND.send(player);
             return;
         }
+        if (!arena.isEnabled()) {
+            player.sendMessage(RED + "The arena " + LIGHT_PURPLE + arena.getId() + RED + " isn't enabled.");
+            return;
+        }
         // todo if arena is already playing joins in spectator mode
         if (arena.join(player)) {
-            ARENA_JOINED.send(player, arena.getPlaceholderRegistry());
+            ARENA_JOINED.send(player, arena.getPlaceholders());
         }
     }
 

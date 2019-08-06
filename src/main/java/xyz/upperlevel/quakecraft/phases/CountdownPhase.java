@@ -48,7 +48,7 @@ public class CountdownPhase implements Phase, Listener {
     public CountdownPhase(LobbyPhase lobbyPhase) {
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
-        this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholderRegistry())
+        this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders())
                 .set("countdown", () -> countdown.getTimer());
     }
 

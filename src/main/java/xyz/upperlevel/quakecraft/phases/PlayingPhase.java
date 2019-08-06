@@ -199,7 +199,7 @@ public class PlayingPhase implements Phase, Listener {
                                         "killed", hit.getName(),
                                         "kill_message", (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage()
                                 );
-                                arena.broadcast(message, arena.getPlaceholderRegistry());
+                                arena.broadcast(message, arena.getPlaceholders());
 
                                 onKill(player, hit, headshot);
 
