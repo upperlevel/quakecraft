@@ -5,6 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
+import xyz.upperlevel.uppercore.arena.Arena;
+import xyz.upperlevel.uppercore.arena.ArenaManager;
 import xyz.upperlevel.uppercore.command.PermissionUser;
 import xyz.upperlevel.uppercore.command.SenderType;
 import xyz.upperlevel.uppercore.command.functional.AsCommand;
@@ -20,6 +22,10 @@ public class QuakeArenaCommands {
     public QuakeArenaCommands() {
     }
 
+    // ================================================================================
+    // Limits
+    // ================================================================================
+
     @AsCommand(
             description = "Set min and max players limit.",
             aliases = {"setlimit", "setplayers"}
@@ -27,59 +33,87 @@ public class QuakeArenaCommands {
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void setlimits(CommandSender sender, QuakeArena arena, int min, int max) {
+    protected void setLimits(Player player, int min, int max) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
+        }
         if (min > max) {
-            sender.sendMessage(RED + "Minimum number of players is higher than max (" + min + " > " + max + ").");
+            player.sendMessage(RED + "Minimum number of players is higher than max (" + min + " > " + max + ").");
             return;
         }
         arena.setLimits(min, max);
-        sender.sendMessage(GREEN + "Arena '" + arena.getId() + "' limits changed.");
+        player.sendMessage(GREEN + "Arena '" + arena.getId() + "' limits changed.");
     }
 
+    // ================================================================================
+    // Spawns
+    // ================================================================================
+
     @AsCommand(
-            description = "Add a spawn to the arena.",
+            description = "Adds a spawn to the arena.",
             sender = SenderType.PLAYER
     )
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void addspawn(CommandSender sender, QuakeArena arena) {
-        arena.addSpawn(((Player) sender).getLocation());
-        sender.sendMessage("Arena '" + arena.getId() + "' spawn added.");
-    }
-
-    @AsCommand(
-            description = "List a spawn to the arena."
-    )
-    @WithPermission(
-            user = PermissionUser.OP
-    )
-    protected void spawnslist(CommandSender sender, QuakeArena arena) {
-        List<Location> spawns = arena.getSpawns();
-        if (spawns.size() > 0) {
-            sender.sendMessage(GREEN + "Showing " + spawns.size() + " spawns for '" + arena.getId() + "':");
-            for (int i = 0; i < spawns.size(); i++) {
-                sender.sendMessage(GREEN + "" + (i + 1) + ": " + LocUtil.format(spawns.get(i), true));
-            }
-        } else {
-            sender.sendMessage(GREEN + "No spawn for '" + arena.getId() + "'.");
+    public void addSpawn(Player player) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
         }
+        arena.addSpawn(player.getLocation());
+        player.sendMessage(GREEN + "Spawn added.");
     }
 
     @AsCommand(
-            description = "Remove a spawn from an arena."
+            description = "Removes the last spawn of the arena."
     )
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void removespawn(CommandSender sender, QuakeArena arena, int which) {
+    protected void removeSpawn(Player player, int which) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
+        }
         if (which <= 1 || which > arena.getSpawns().size()) {
-            sender.sendMessage(RED + "'" + arena.getId() + "' spawn index can't be negative or higher than " + arena.getSpawns().size() + ".");
+            player.sendMessage(RED + "'" + arena.getId() + "' spawn index can't be negative or higher than " + arena.getSpawns().size() + ".");
             return;
         }
         arena.getSpawns().remove(which - 1);
-        sender.sendMessage(GREEN + "Spawn " + which + " removed from '" + arena.getId() + "'.");
+        player.sendMessage(GREEN + "Spawn " + which + " removed from '" + arena.getId() + "'.");
     }
+
+    @AsCommand(
+            description = "Lists a spawn to the arena."
+    )
+    @WithPermission(
+            user = PermissionUser.OP
+    )
+    protected void spawnsList(Player player) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
+        }
+        List<Location> spawns = arena.getSpawns();
+        if (spawns.size() > 0) {
+            player.sendMessage(GREEN + "Showing " + spawns.size() + " spawns:");
+            for (int i = 0; i < spawns.size(); i++) {
+                player.sendMessage(GREEN + "" + (i + 1) + ": " + LocUtil.format(spawns.get(i), true));
+            }
+        } else {
+            player.sendMessage(GREEN + "No spawn for '" + arena.getId() + "'.");
+        }
+    }
+
+    // ================================================================================
+    // Powerups
+    // ================================================================================
 
     @AsCommand(
             description = "Add arena powerup to player's position.",
@@ -88,9 +122,14 @@ public class QuakeArenaCommands {
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void addpowerup(CommandSender sender, QuakeArena arena, PowerupEffect effect, int respawnTicks) {
-        arena.getPowerups().add(new Powerup(arena, ((Player) sender).getLocation(), effect, respawnTicks));
-        sender.sendMessage(GREEN + "Add powerup '" + effect.getId() + "' with respawn rate of " + respawnTicks + " ticks to arena '" + arena.getId() + "'.");
+    protected void addPowerup(Player player, PowerupEffect effect, int respawnTicks) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
+        }
+        arena.addPowerup(new Powerup(arena, player.getLocation(), effect, respawnTicks));
+        player.sendMessage(GREEN + "Add powerup '" + effect.getId() + "' with respawn rate of " + respawnTicks + " ticks to arena '" + arena.getId() + "'.");
     }
 
     @AsCommand(
@@ -99,19 +138,24 @@ public class QuakeArenaCommands {
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void powerups(CommandSender sender, QuakeArena arena) {
+    protected void powerupsList(Player player) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
+        }
         List<Powerup> powerups = arena.getPowerups();
         if (powerups.size() > 0) {
-            sender.sendMessage(GREEN + "Showing " + powerups.size() + " powerups for '" + arena.getId() + "':");
+            player.sendMessage(GREEN + "Showing " + powerups.size() + " powerups for '" + arena.getId() + "':");
             for (int i = 0; i < powerups.size(); i++) {
                 Powerup powerup = powerups.get(i);
-                sender.sendMessage(GREEN + "" + (i + 1) + ": " +
+                player.sendMessage(GREEN + "" + (i + 1) + ": " +
                         powerup.getEffect().getId() +
                         " at " + LocUtil.format(powerup.getLocation(), true) +
                         " with respawn of " + powerup.getRespawnTicks() + " ticks.");
             }
         } else {
-            sender.sendMessage(GREEN + "No powerups created for '" + arena.getId() + "'.");
+            player.sendMessage(GREEN + "No powerups created for '" + arena.getId() + "'.");
         }
     }
 
@@ -121,12 +165,17 @@ public class QuakeArenaCommands {
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void removepowerup(CommandSender sender, QuakeArena arena, int which) {
+    protected void removePowerup(Player player, int which) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
+        }
         if (which <= 1 || which > arena.getSpawns().size()) {
-            sender.sendMessage(RED + "'" + arena.getId() + "' powerup index can't be negative or higher than " + arena.getSpawns().size() + ".");
+            player.sendMessage(RED + "'" + arena.getId() + "' powerup index can't be negative or higher than " + arena.getSpawns().size() + ".");
             return;
         }
         arena.getSpawns().remove(which - 1);
-        sender.sendMessage(GREEN + "Powerup " + which + " removed from '" + arena.getId() + "'.");
+        player.sendMessage(GREEN + "Powerup " + which + " removed from '" + arena.getId() + "'.");
     }
 }
