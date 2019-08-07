@@ -76,7 +76,7 @@ public class RailgunManager {
             throw e;
         }
         this.gui = gui;
-        Quake.get().getGuis().register("guns_gui", gui);
+        Quake.get().getGuis().register("gun.guns", gui);
         gui.print();
     }
 

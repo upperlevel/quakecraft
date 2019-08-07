@@ -63,7 +63,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public PurchaseGui(Config config) {
-        super(Quake.get(), config);
+        super(config);
     }
 
     @ConfigConstructor

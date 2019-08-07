@@ -11,13 +11,21 @@ import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import java.util.Map;
 
 public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends PurchaseManager<P> {
-    public SinglePurchaseManager(PurchaseRegistry registry) {
+    private final String guiLoc;
+    private final String configLoc;
+    private final String registryLoc;
+
+
+    public SinglePurchaseManager(PurchaseRegistry registry, String guiLoc, String configLoc, String registryLoc) {
         super(registry);
+        this.guiLoc = guiLoc;
+        this.configLoc = configLoc;
+        this.registryLoc = registryLoc;
     }
 
-    public abstract String getGuiLoc();
-
-    public abstract String getConfigLoc();
+    public SinglePurchaseManager(PurchaseRegistry registry, String loc) {
+        this(registry, loc + ".gui", loc + ".types", loc);
+    }
 
     public void loadConfig(Map<String, Config> config) {
         for (Map.Entry<String, Config> entry : config.entrySet()) {
@@ -35,7 +43,7 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
 
     public void loadConfig() {
         loadConfig(Quake.getConfigSection(
-                "shop." + getConfigLoc()
+                "shop." + this.configLoc
         ).asConfigMap());
     }
 
@@ -54,10 +62,8 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
     }
 
     public void loadGui() {
-        String guiLoc = getGuiLoc();
-        if(guiLoc == null) return;
         Config config = Quake.getConfigSection("shop." + guiLoc);
-        loadGui(getPurchaseName(), config);
+        loadGui(registryLoc, config);
     }
 
     public void load() {

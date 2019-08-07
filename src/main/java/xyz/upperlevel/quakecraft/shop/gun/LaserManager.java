@@ -11,22 +11,12 @@ import xyz.upperlevel.uppercore.config.Config;
 public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
 
     public LaserManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "gun.lasers");
     }
 
     @Override
     public Laser deserialize(String id, Config config) {
         return new Laser(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "gun.lasers.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "gun.lasers.types";
     }
 
     @Override

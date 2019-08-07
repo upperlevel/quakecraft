@@ -264,7 +264,7 @@ shop:
             - hide attributes
         click:
           actions:
-            - open-gui: 'gun_gui'
+            - open-gui: gun.main
       - slot: 28
         item:
           type: 'chainmail chestplate'
@@ -276,7 +276,7 @@ shop:
             - hide attributes
         click:
           actions:
-            - open-gui: 'armor_gui'
+            - open-gui: armor.main
       - slot: 30
         item:
           type: 'carrot on a stick'
@@ -286,7 +286,7 @@ shop:
             - '&7Use your dash by left-clicking your gun!'
         click:
           actions:
-            - open-gui: 'dash_upgrades_gui'
+            - open-gui: dash_upgrades
       - slot: 32
         item:
           type: 'jukebox'
@@ -296,7 +296,7 @@ shop:
             - '&7kill.'
         click:
           actions:
-            - open-gui: 'kill_sounds_gui'
+            - open-gui: kill_sounds
       - slot: 34
         item:
           type: 'comparator'
@@ -306,7 +306,7 @@ shop:
             - '&7settings!'
         click:
           actions:
-            - open-gui: 'settings_gui'
+            - open-gui: settings
       - slot: 48
         item:
           type: 'arrow'
@@ -333,7 +333,7 @@ shop:
               - '&7effect!'
           click:
             actions:
-              - open-gui: 'barrels_gui'
+              - open-gui: barrels
         - slot: 12
           item:
             type: 'iron hoe'
@@ -345,7 +345,7 @@ shop:
               - hide attributes
           click:
             actions:
-              - open-gui: 'cases_gui'
+              - open-gui: cases
         - slot: 13
           item:
             type: 'ink sac'
@@ -355,7 +355,7 @@ shop:
               - '&7Select your firework color!'
           click:
             actions:
-              - open-gui: 'lasers_gui'
+              - open-gui: lasers
         - slot: 14
           item:
             type: 'oak planks'
@@ -365,7 +365,7 @@ shop:
               - '&7effect!'
           click:
             actions:
-              - open-gui: 'muzzles_gui'
+              - open-gui: muzzles
         - slot: 15
           item:
             type: 'stone button'
@@ -374,7 +374,7 @@ shop:
               - '&7Select your firing speed!'
           click:
             actions:
-              - open-gui: 'triggers_gui'
+              - open-gui: triggers
         - slot: 31
           item:
             type: 'wooden hoe'
@@ -387,7 +387,7 @@ shop:
               - hide attributes
           click:
             actions:
-              - open-gui: 'guns_gui'
+              - open-gui: guns
         - slot: 48
           item:
             type: 'arrow'
@@ -1420,7 +1420,7 @@ shop:
               - hide attributes
           click:
             actions:
-              - open-gui: 'hats_gui'
+              - open-gui: hats
         - slot: 21
           item:
             type: 'iron chestplate'
@@ -1431,7 +1431,7 @@ shop:
               - hide attributes
           click:
             actions:
-              - open-gui: 'kits_gui'
+              - open-gui: kits
         - slot: 23
           item:
             type: 'golden leggings'
@@ -1442,7 +1442,7 @@ shop:
               - hide attributes
           click:
             actions:
-              - open-gui: 'leggings_gui'
+              - open-gui: leggings
         - slot: 25
           item:
             type: 'leather boots'
@@ -1453,7 +1453,7 @@ shop:
               - hide attributes
           click:
             actions:
-              - open-gui: 'boots_gui'
+              - open-gui: boots
         - slot: 48
           item:
             type: 'arrow'

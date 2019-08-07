@@ -11,22 +11,12 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging> {
 
     public LeggingManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "armor.leggings");
     }
 
     @Override
     public Legging deserialize(String id, Config config) {
         return new Legging(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "armor.leggings.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "armor.leggings.types";
     }
 
     @Override

@@ -10,22 +10,12 @@ import xyz.upperlevel.uppercore.config.Config;
 public class TriggerManager extends SinglePurchaseManager<TriggerManager.Trigger> {
 
     public TriggerManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "gun.triggers");
     }
 
     @Override
     public Trigger deserialize(String id, Config config) {
         return new Trigger(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "gun.triggers.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "gun.triggers.types";
     }
 
     @Override

@@ -11,22 +11,12 @@ import xyz.upperlevel.uppercore.config.Config;
 public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
 
     public BarrelManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "gun.barrels");
     }
 
     @Override
     public Barrel deserialize(String id, Config config) {
         return new Barrel(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "gun.barrels.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "gun.barrels.types";
     }
 
     @Override

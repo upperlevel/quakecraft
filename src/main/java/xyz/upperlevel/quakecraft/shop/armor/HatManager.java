@@ -11,22 +11,12 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
     public HatManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "armor.hats");
     }
 
     @Override
     public Hat deserialize(String id, Config config) {
         return new Hat(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "armor.hats.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "armor.hats.types";
     }
 
     @Override

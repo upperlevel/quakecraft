@@ -12,22 +12,12 @@ import xyz.upperlevel.uppercore.sound.PlaySound;
 public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.KillSound> {
 
     public KillSoundManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "kill-sounds");
     }
 
     @Override
     public KillSound deserialize(String id, Config config) {
         return new KillSound(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "kill-sounds.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "kill-sounds.types";
     }
 
     @Override

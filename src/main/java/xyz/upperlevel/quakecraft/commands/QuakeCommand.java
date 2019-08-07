@@ -89,9 +89,9 @@ public class QuakeCommand extends NodeCommand {
             sender = SenderType.PLAYER
     )
     protected void shop(CommandSender sender) {
-        Gui gui = Quake.get().getGuis().get("shop_gui");
+        Gui gui = Quake.get().getGuis().get("shop");
         if (gui == null) {
-            sender.sendMessage(RED + "shop_gui not found.");
+            sender.sendMessage(RED + "shop not found.");
             return;
         }
         guis().open((Player) sender, gui);

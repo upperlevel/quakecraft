@@ -49,6 +49,6 @@ public class ArmorCategory extends Category {
 
     @Override
     public String getGuiRegistryName() {
-        return "armor";
+        return "armor.main";
     }
 }

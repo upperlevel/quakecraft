@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.commands.DebugCommand;
 import xyz.upperlevel.quakecraft.commands.QuakeArgumentParsers;
 import xyz.upperlevel.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.quakecraft.game.Dash;
@@ -26,7 +27,6 @@ import xyz.upperlevel.uppercore.command.functional.parser.ArgumentParserManager;
 import xyz.upperlevel.uppercore.command.functional.parser.FunctionalArgumentParser;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.gui.Gui;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.storage.Database;
@@ -48,8 +48,8 @@ public class Quake extends JavaPlugin {
     private AccountManager playerManager;
     private ShopCategory shop;
 
-    private Registry<?> pluginRegistry;
-    private Registry<Gui> guis;
+    private Registry pluginRegistry;
+    private Registry guis;
 
     private Database remoteDatabase;
 
@@ -73,7 +73,7 @@ public class Quake extends JavaPlugin {
             loadConfig();
 
             this.pluginRegistry = Uppercore.registry();
-            this.guis = pluginRegistry.registerChild("guis", Gui.class);
+            this.guis = pluginRegistry.registerFolder("guis");
 
             this.remoteDatabase = StorageConnector.read(this).database("quake");
             this.remoteDatabase.create();
@@ -105,6 +105,7 @@ public class Quake extends JavaPlugin {
     private void registerCommands() {
         ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
         CommandRegistry.register(new QuakeCommand());
+        CommandRegistry.register(new DebugCommand());
     }
 
     public void loadConfig() {

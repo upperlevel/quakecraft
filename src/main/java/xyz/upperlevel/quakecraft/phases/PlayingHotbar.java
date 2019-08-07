@@ -18,9 +18,9 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.List;
 
 public class PlayingHotbar extends Hotbar {
-    @ConfigConstructor
+    @ConfigConstructor// TODO new config
     public PlayingHotbar(Config config) {
-        super(Quake.get(), config);
+        super(config);
 
         Config sub = config.getConfigRequired("gun");
         setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.getRequired("item", Gun.class)));

@@ -17,7 +17,6 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
-import java.io.File;
 import java.util.Optional;
 
 public class ConfirmPurchaseGui extends ChestGui {
@@ -106,6 +105,7 @@ public class ConfirmPurchaseGui extends ChestGui {
             if (!size.isPresent() && !type.isPresent()) {
                 throw new InvalidConfigException("Both 'size' and 'type' aren't specified");
             }
+            this.title = title;
             this.size = size.orElse(-1);
             this.type = type.orElse(null);
             this.itemSlot = itemSlot;

@@ -60,6 +60,6 @@ public class GunCategory extends Category {
 
     @Override
     public String getGuiRegistryName() {
-        return "gun";
+        return "gun.main";
     }
 }

@@ -16,22 +16,12 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
     private static final Type particleListType = TypeUtil.typeOf(List.class, CustomParticle.class);
 
     public MuzzleManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "gun.muzzles");
     }
 
     @Override
     public Muzzle deserialize(String id, Config config) {
         return new Muzzle(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "gun.muzzles.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "gun.muzzles.types";
     }
 
     @Override

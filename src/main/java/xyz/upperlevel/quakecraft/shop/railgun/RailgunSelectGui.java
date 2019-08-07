@@ -35,7 +35,7 @@ public class RailgunSelectGui extends ChestGui {
     private int slots[];
 
     protected RailgunSelectGui(Config config, RailgunManager manager) {
-        super(Quake.get(), config);
+        super(config);
         this.manager = manager;
         loadConfig(config);
     }

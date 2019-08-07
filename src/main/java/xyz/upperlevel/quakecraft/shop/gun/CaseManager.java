@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
     public CaseManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "gun.cases");
     }
 
     @Override
@@ -23,16 +23,6 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
     @Override
     public Case deserialize(String id, Config config) {
         return new Case(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "gun.cases.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "gun.cases.types";
     }
 
     @Override

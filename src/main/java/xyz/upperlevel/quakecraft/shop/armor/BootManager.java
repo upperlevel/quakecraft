@@ -11,22 +11,12 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
 
     public BootManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "armor.boots");
     }
 
     @Override
     public Boot deserialize(String id, Config config) {
         return new Boot(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "armor.boots.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "armor.boots.types";
     }
 
     @Override

@@ -11,22 +11,12 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.Chestplate> {
 
     public ChestplateManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "armor.kits");
     }
 
     @Override
     public Chestplate deserialize(String id, Config config) {
         return new Chestplate(id, config);
-    }
-
-    @Override
-    public String getGuiLoc() {
-        return "armor.kits.gui";
-    }
-
-    @Override
-    public String getConfigLoc() {
-        return "armor.kits.types";
     }
 
     @Override
