@@ -136,10 +136,10 @@ public class QuakeArena extends Arena {
     @Override
     public boolean join(Player player) {
         if (getPlayers().size() > maxPlayers) {
-            MAX_PLAYERS_REACHED_ERROR.send(player, PlaceholderRegistry.def());
+            MAX_PLAYERS_REACHED_ERROR.send(player, getPlaceholders());
             return false;
         } else {
-            getPlayers().forEach(mate -> ARENA_JOIN_MESSAGE.send(player, PlaceholderRegistry.def()));
+            getPlayers().forEach(mate -> ARENA_JOIN_MESSAGE.send(player, getPlaceholders()));
             return super.join(player);
         }
     }
@@ -166,10 +166,10 @@ public class QuakeArena extends Arena {
         return data;
     }
 
-    public static void loadConfig(Config config) {
-        ARENA_JOIN_MESSAGE = config.getMessage("arena-join");
-        ARENA_QUIT_MESSAGE = config.getMessage("arena-quit");
-
-        MAX_PLAYERS_REACHED_ERROR = config.getMessage("cannot-join-max-reached");
+    public static void loadConfig() {
+        Config messages = Quake.getConfigSection("messages.commands");
+        ARENA_JOIN_MESSAGE = messages.getMessage("arena.join.success");
+        ARENA_QUIT_MESSAGE = messages.getMessage("arena.quit.success");
+        MAX_PLAYERS_REACHED_ERROR = messages.getMessage("cannot-join-max-reached");
     }
 }

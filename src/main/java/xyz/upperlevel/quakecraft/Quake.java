@@ -130,6 +130,8 @@ public class Quake extends JavaPlugin {
         EndingPhase.loadConfig();
         LobbyPhase.loadConfig();
 
+        QuakeArena.loadConfig();
+
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
 
         ArenaManager.get().load(QuakeArena.class);
