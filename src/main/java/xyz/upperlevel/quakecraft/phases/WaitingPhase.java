@@ -17,7 +17,7 @@ import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
-public class WaitingPhase implements Phase, Listener {
+public class WaitingPhase extends Phase {
     private static Board board;
 
     @Getter
@@ -30,6 +30,8 @@ public class WaitingPhase implements Phase, Listener {
     private final PlaceholderRegistry placeholderRegistry;
 
     public WaitingPhase(LobbyPhase lobbyPhase) {
+        super("waiting");
+
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
         this.placeholderRegistry = arena.getPlaceholders();
@@ -59,14 +61,14 @@ public class WaitingPhase implements Phase, Listener {
 
     @Override
     public void onEnable(Phase previous) {
-        Bukkit.getPluginManager().registerEvents(this, Quake.get());
+        super.onEnable(previous);
         arena.getPlayers().forEach(this::setupPlayer);
         tryStartCountdown();
     }
 
     @Override
     public void onDisable(Phase next) {
-        HandlerList.unregisterAll(this);
+        super.onDisable(next);
         arena.getPlayers().forEach(this::clearPlayer);
     }
 

@@ -5,16 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.PhaseManager;
-import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
-import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -22,21 +18,20 @@ import xyz.upperlevel.uppercore.util.PlayerUtil;
 
 import static xyz.upperlevel.quakecraft.Quake.get;
 
-public class LobbyPhase implements Phase, Listener {
+public class LobbyPhase extends PhaseManager {
     private static Hotbar hotbar;
 
     @Getter
     private final QuakeArena arena;
 
     @Getter
-    private final PhaseManager phaseManager = new PhaseManager();
-
-    @Getter
-    private final PlaceholderRegistry placeholderRegistry;
+    private final PlaceholderRegistry placeholders;
 
     public LobbyPhase(QuakeArena arena) {
+        super("lobby");
+
         this.arena = arena;
-        this.placeholderRegistry = arena.getPlaceholders();
+        this.placeholders = arena.getPlaceholders();
     }
 
     private void setupPlayer(Player player) {
@@ -52,34 +47,33 @@ public class LobbyPhase implements Phase, Listener {
     }
 
     @Override
-    public void onEnable(Phase prev) {
+    public void onEnable(Phase previousPhase) {
+        super.onEnable(previousPhase);
         Bukkit.getPluginManager().registerEvents(this, get());
-        arena.getPlayers().forEach(this::setupPlayer);
-        phaseManager.setPhase(new WaitingPhase(this));
-        Bukkit.getPluginManager().registerEvents(this, Quake.get());
+        arena.getPlayers().forEach(this::onJoin);
+        setPhase(new WaitingPhase(this));
     }
 
     @Override
-    public void onDisable(Phase next) {
-        HandlerList.unregisterAll(this);
-        phaseManager.setPhase(null);
+    public void onDisable(Phase nextPhase) {
+        super.onDisable(nextPhase);
+        setPhase(null);
         arena.getPlayers().forEach(this::clearPlayer);
-        // player restore to original inventory/stats will be done by Uppercore
-        HandlerList.unregisterAll(this);
+        // TODO player restore to original inventory/stats will be done by Uppercore
     }
 
-    @EventHandler
-    public void onArenaJoin(ArenaJoinEvent e) {
-        if (arena.equals(e.getArena())) {
-            setupPlayer(e.getPlayer());
-        }
+    @Override
+    public boolean onJoin(Player player) {
+        super.onJoin(player);
+        setupPlayer(player);
+        return false;
     }
 
-    @EventHandler
-    public void onArenaQuit(ArenaQuitEvent e) {
-        if (arena.equals(e.getArena())) {
-            clearPlayer(e.getPlayer());
-        }
+    @Override
+    public boolean onQuit(Player player) {
+        super.onQuit(player);
+        clearPlayer(player);
+        return false;
     }
 
     @EventHandler

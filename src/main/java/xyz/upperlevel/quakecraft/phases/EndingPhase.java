@@ -33,7 +33,7 @@ import java.util.*;
 
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
-public class EndingPhase implements Phase, Listener {
+public class EndingPhase extends Phase {
     private static final Random random = new Random();
 
     private static Message endGainMessage;
@@ -63,6 +63,7 @@ public class EndingPhase implements Phase, Listener {
     private final BukkitRunnable fireworksTask, endingTask;
 
     public EndingPhase(GamePhase gamePhase, Player winner) {
+        super("ending");
         this.gamePhase = gamePhase;
         this.arena = gamePhase.getArena();
         this.winner = winner;
@@ -149,7 +150,7 @@ public class EndingPhase implements Phase, Listener {
 
     @Override
     public void onEnable(Phase prev) {
-        Bukkit.getPluginManager().registerEvents(this, Quake.get());
+        super.onEnable(prev);
         printRanking();
 
         gamePhase.getGamers().forEach(g -> setupPlayer(g.getPlayer()));
@@ -160,7 +161,7 @@ public class EndingPhase implements Phase, Listener {
 
     @Override
     public void onDisable(Phase next) {
-        HandlerList.unregisterAll(this);
+        super.onDisable(next);
         fireworksTask.cancel();
         endingTask.cancel();
 

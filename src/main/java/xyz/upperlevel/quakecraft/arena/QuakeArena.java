@@ -145,11 +145,13 @@ public class QuakeArena extends Arena {
     }
 
     @Override
-    public void quit(Player player) {
+    public boolean quit(Player player) {
+        boolean result = super.quit(player);
         getPlayers().forEach(other -> ARENA_QUIT_MESSAGE.send(player,
                 PlaceholderRegistry.create()
                         .set("player_name", player.getName())
         ));
+        return result;
     }
 
     @Override

@@ -1,12 +1,9 @@
 package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
@@ -25,7 +22,7 @@ import xyz.upperlevel.uppercore.task.Countdown;
 import java.util.*;
 
 
-public class GamePhase extends PhaseManager implements Phase, Listener {
+public class GamePhase extends PhaseManager {
     private static int gameCountdown = 0;
     private static GameBoard board;
     private static Message startMessage;
@@ -46,6 +43,8 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
     private final Countdown countdown;
 
     public GamePhase(QuakeArena arena) {
+        super("game");
+
         this.arena = arena;
         this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders());
         buildPlaceholders();
@@ -155,7 +154,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     @Override
     public void onEnable(Phase previous) {
-        Bukkit.getPluginManager().registerEvents(this, Quake.get());
+        super.onEnable(previous);
 
         arena.getPlayers().forEach(this::addGamer);
         setPhase(new PlayingPhase(this));
@@ -163,7 +162,7 @@ public class GamePhase extends PhaseManager implements Phase, Listener {
 
     @Override
     public void onDisable(Phase next) {
-        HandlerList.unregisterAll(this);
+        super.onDisable(next);
 
         setPhase(null);
     }

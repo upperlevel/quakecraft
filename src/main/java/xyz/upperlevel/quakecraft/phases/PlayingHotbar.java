@@ -18,15 +18,14 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.List;
 
 public class PlayingHotbar extends Hotbar {
-    @ConfigConstructor// TODO new config
-    public PlayingHotbar(Config config) {
-        super(config);
 
-        Config sub = config.getConfigRequired("gun");
-        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.getRequired("item", Gun.class)));
-
-        sub = config.getConfigRequired("tracker");
-        setIcon(sub.getIntRequired("slot"), new ConfigIcon(sub.getRequired("item", Tracker.class)));
+    @ConfigConstructor
+    public PlayingHotbar(
+            @ConfigProperty("gun") ConfigIcon gun,
+            @ConfigProperty("tracker") ConfigIcon tracker
+    ) {
+        setIcon(gun.getSlot(), gun);
+        setIcon(tracker.getSlot(), tracker);
     }
 
     public static class Gun implements ItemResolver {

@@ -26,7 +26,7 @@ import java.util.Map;
 import static xyz.upperlevel.quakecraft.Quake.get;
 import static xyz.upperlevel.uppercore.util.TypeUtil.typeOf;
 
-public class CountdownPhase implements Phase, Listener {
+public class CountdownPhase extends Phase {
     private static int countdownTimer;
     private static Map<Integer, Message> countdownMessages; // Each countdown second corresponds to a message
     private static Map<Integer, String> countdownSounds; // Each countdown second corresponds to a sound
@@ -46,6 +46,7 @@ public class CountdownPhase implements Phase, Listener {
     private Countdown countdown;
 
     public CountdownPhase(LobbyPhase lobbyPhase) {
+        super("lobby-countdown");
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
         this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders())
@@ -80,7 +81,7 @@ public class CountdownPhase implements Phase, Listener {
 
     @Override
     public void onEnable(Phase previous) {
-        Bukkit.getPluginManager().registerEvents(this, get());
+        super.onEnable(previous);
         for (Player player : arena.getPlayers()) {
             BoardManager.open(player, countdownBoard, placeholderRegistry);
         }
@@ -91,7 +92,7 @@ public class CountdownPhase implements Phase, Listener {
 
     @Override
     public void onDisable(Phase next) {
-        HandlerList.unregisterAll(this);
+        super.onDisable(next);
         countdown.cancel();
         arena.getPlayers().forEach(this::clearPlayer);
     }

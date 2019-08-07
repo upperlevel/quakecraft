@@ -35,7 +35,7 @@ import java.util.Set;
 
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
-public class PlayingPhase implements Phase, Listener {
+public class PlayingPhase extends Phase {
     private static String defaultKillMessage;
     private static Message shotMessage;
     private static Message headshotMessage;
@@ -73,6 +73,8 @@ public class PlayingPhase implements Phase, Listener {
     }
 
     public PlayingPhase(GamePhase gamePhase) {
+        super("playing");
+
         this.gamePhase = gamePhase;
         this.arena = gamePhase.getArena();
         this.compassUpdater = new UpdaterTask(20 * 5, () -> {
@@ -103,7 +105,7 @@ public class PlayingPhase implements Phase, Listener {
 
     @Override
     public void onEnable(Phase previous) {
-        Bukkit.getPluginManager().registerEvents(this, Quake.get());
+        super.onEnable(previous);
 
         // spawns powerups
         for (Powerup box : arena.getPowerups()) {
@@ -127,7 +129,7 @@ public class PlayingPhase implements Phase, Listener {
 
     @Override
     public void onDisable(Phase next) {
-        HandlerList.unregisterAll(this);
+        super.onDisable(next);
 
         gamePhase.getCountdown().stop();
         compassUpdater.stop();
