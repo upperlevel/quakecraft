@@ -87,14 +87,16 @@ public class PurchaseGui extends ChestGui {
         for(PurchaseAdapter adapter : adapters) {
             Collection<SimplePurchase<?>> purchases = (Collection<SimplePurchase<?>>) adapter.manager.getPurchases().values();
             int[] slots = adapter.slots;
-            int i = 0;
-            if(purchases.size() > slots.length) {
-                Quake.get().getLogger().severe("Cannot fill " + adapter.manager.getPurchaseName() + "'s inventory: too many items!");
-                return;
+            int fillSize = purchases.size();
+
+            if (purchases.size() > slots.length) {
+                Quake.get().getLogger().severe("Cannot fill " + adapter.manager.getPurchaseName() + "'s inventory: too many items! found: " + purchases.size() + ", available slots: " + slots.length);
+                fillSize = slots.length;
             }
 
-            for (Purchase<?> p : purchases) {
-                purchaseMap.put(slots[i++], p);
+            Iterator<SimplePurchase<?>> it = purchases.iterator();
+            for (int i = 0; i < fillSize; i++) {
+                purchaseMap.put(slots[i], it.next());
             }
         }
         dirty = false;

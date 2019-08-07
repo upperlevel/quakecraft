@@ -32,7 +32,7 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
 
     @Override
     public String getPurchaseName() {
-        return "kill_sound";
+        return "kill-sound";
     }
 
     public class KillSound extends SimplePurchase<KillSound> {

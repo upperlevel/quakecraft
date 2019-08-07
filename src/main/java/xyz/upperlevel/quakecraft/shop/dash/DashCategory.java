@@ -42,7 +42,7 @@ public class DashCategory extends UnitCategory {
 
     @Override
     public String getGuiRegistryName() {
-        return "dash_upgrades";
+        return "dash-upgrades";
     }
 
     public void load() {

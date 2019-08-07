@@ -286,7 +286,7 @@ shop:
             - '&7Use your dash by left-clicking your gun!'
         click:
           actions:
-            - open-gui: dash_upgrades
+            - open-gui: dash-upgrades
       - slot: 32
         item:
           type: 'jukebox'
@@ -296,7 +296,7 @@ shop:
             - '&7kill.'
         click:
           actions:
-            - open-gui: kill_sounds
+            - open-gui: kill-sounds
       - slot: 34
         item:
           type: 'comparator'
@@ -635,8 +635,7 @@ shop:
           cost: 0
           default: true
           icon:
-            type: 'INK_SAC'
-            data: 11
+            type: 'YELLOW_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'YELLOW'
@@ -645,8 +644,7 @@ shop:
           name: 'Green Laser'
           cost: 4000
           icon:
-            type: 'INK_SAC'
-            data: 2
+            type: 'GREEN_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'GREEN'
@@ -655,8 +653,7 @@ shop:
           name: 'White Laser'
           cost: 4000
           icon:
-            type: 'INK_SAC'
-            data: 15
+            type: 'WHITE_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'WHITE'
@@ -665,8 +662,7 @@ shop:
           name: 'Red Laser'
           cost: 5000
           icon:
-            type: 'INK_SAC'
-            data: 1
+            type: 'RED_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'RED'
@@ -675,8 +671,7 @@ shop:
           name: 'Blue Laser'
           cost: 7000
           icon:
-            type: 'INK_SAC'
-            data: 4
+            type: 'BLUE_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'BLUE'
@@ -685,8 +680,7 @@ shop:
           name: 'Purple Laser'
           cost: 8000
           icon:
-            type: 'INK_SAC'
-            data: 5
+            type: 'PURPLE_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'PURPLE'
@@ -695,8 +689,7 @@ shop:
           name: 'Pink Laser'
           cost: 8000
           icon:
-            type: 'INK_SAC'
-            data: 9
+            type: 'PINK_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'FUCHSIA'
@@ -732,8 +725,7 @@ shop:
           name: 'Gray Laser'
           cost: 50000
           icon:
-            type: 'INK_SAC'
-            data: 8
+            type: 'GRAY_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'GRAY'
@@ -742,8 +734,7 @@ shop:
           name: 'Orange Laser'
           cost: 100000
           icon:
-            type: 'INK_SAC'
-            data: 14
+            type: 'ORANGE_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'ORANGE'
@@ -752,8 +743,7 @@ shop:
           name: 'Silver Laser'
           cost: 250000
           icon:
-            type: 'INK_SAC'
-            data: 7
+            type: 'LIGHT_GRAY_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'SILVER'
@@ -762,7 +752,7 @@ shop:
           name: 'Black Laser'
           cost: 500000
           icon:
-            type: 'INK_SAC'
+            type: 'BLACK_DYE'
             lore:
               - '&7Choose a firework color!'
           firework-color: 'BLACK'
