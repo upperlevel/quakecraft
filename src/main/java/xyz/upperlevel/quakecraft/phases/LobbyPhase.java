@@ -49,7 +49,6 @@ public class LobbyPhase extends PhaseManager {
     @Override
     public void onEnable(Phase previousPhase) {
         super.onEnable(previousPhase);
-        Bukkit.getPluginManager().registerEvents(this, get());
         arena.getPlayers().forEach(this::onJoin);
         setPhase(new WaitingPhase(this));
     }
