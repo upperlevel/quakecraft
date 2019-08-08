@@ -1,29 +1,24 @@
 package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
-import xyz.upperlevel.uppercore.board.Board;
-import xyz.upperlevel.uppercore.board.BoardManager;
-import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
+import xyz.upperlevel.uppercore.board.BoardContainer;
+import xyz.upperlevel.uppercore.board.BoardModel;
+import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
-import xyz.upperlevel.uppercore.sound.PlaySound;
 
 import java.util.Map;
 
-import static xyz.upperlevel.quakecraft.Quake.get;
 import static xyz.upperlevel.uppercore.util.TypeUtil.typeOf;
 
 public class CountdownPhase extends Phase {
@@ -31,7 +26,7 @@ public class CountdownPhase extends Phase {
     private static Map<Integer, Message> countdownMessages; // Each countdown second corresponds to a message
     private static Map<Integer, String> countdownSounds; // Each countdown second corresponds to a sound
 
-    private static Board countdownBoard;
+    private static BoardModel countdownBoard;
 
     @Getter
     private final LobbyPhase lobbyPhase;
@@ -45,12 +40,15 @@ public class CountdownPhase extends Phase {
     @Getter
     private Countdown countdown;
 
+    private BoardContainer boards;
+
     public CountdownPhase(LobbyPhase lobbyPhase) {
         super("lobby-countdown");
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
         this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders())
                 .set("countdown", () -> countdown.getTimer());
+        this.boards = new BoardContainer(countdownBoard);
     }
 
     private void clearTick(Player player) {
@@ -63,16 +61,16 @@ public class CountdownPhase extends Phase {
     }
 
     private void setupPlayer(Player player) {
-        BoardManager.open(player, countdownBoard, placeholderRegistry);
+        boards.open(player, placeholderRegistry);
     }
 
     private void clearPlayer(Player player) {
-        BoardManager.close(player);
+        boards.close(player);
         clearTick(player);
     }
 
     private void updateBoard(Player player) {
-        BoardManager.update(player, placeholderRegistry);
+        boards.update(player, placeholderRegistry);
     }
 
     private void updateBoards() {
@@ -82,9 +80,7 @@ public class CountdownPhase extends Phase {
     @Override
     public void onEnable(Phase previous) {
         super.onEnable(previous);
-        for (Player player : arena.getPlayers()) {
-            BoardManager.open(player, countdownBoard, placeholderRegistry);
-        }
+        arena.getPlayers().forEach(this::setupPlayer);
         // Starts countdown
         countdown = new Countdown();
         countdown.runTaskTimer(Quake.get(), 0, 20);
@@ -136,7 +132,7 @@ public class CountdownPhase extends Phase {
 
             for (Player player : arena.getPlayers()) {
                 player.setLevel(timer);
-                BoardManager.update(player, placeholderRegistry);
+                updateBoard(player);
                 if (message != null) {
                     message.send(player);
                 }
@@ -164,6 +160,6 @@ public class CountdownPhase extends Phase {
         // Loads countdown sounds: a sound per each countdown second.
         countdownSounds = config.getRequired("countdown-sounds", typeOf(Map.class, Integer.class, String.class));
 
-        countdownBoard = config.getRequired("countdown-board", SimpleConfigBoard.class);
+        countdownBoard = config.getRequired("countdown-board", SimpleBoardModel.class);
     }
 }

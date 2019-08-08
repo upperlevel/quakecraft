@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.board.Board;
+import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GameBoard implements Board {
+public class GameBoard implements BoardModel {
     private final PlaceholderValue<String> title;
     private final List<PlaceholderValue<String>> header;
 
@@ -65,21 +66,15 @@ public class GameBoard implements Board {
     }
 
     @Override
-    public String getTitle(Player player, PlaceholderRegistry placeholders) {
-        return title.resolve(player, placeholders);
-    }
+    public void apply(Board board, Player player) {
+        GamePhase phase = (GamePhase) Quake.get().getArenaManager().get(player).getPhaseManager().getPhase();
+        PlaceholderRegistry placeholders = phase.getPlaceholderRegistry();
 
-    @Override
-    public List<String> getLines(Player player, PlaceholderRegistry placeholders) {
-        List<String> lines = new ArrayList<>();
-        lines.addAll(getHeader(player, placeholders));
-        lines.addAll(getRanking(player, placeholders));
-        lines.addAll(getFooter(player, placeholders));
-        return lines;
-    }
-
-    @Override
-    public int getAutoUpdateInterval() {
-        return -1;
+        board.setTitle(title);
+        board.setLines(new ArrayList<String>() {{
+            addAll(getHeader(player, placeholders));
+            addAll(getRanking(player, placeholders));
+            addAll(getFooter(player, placeholders));
+        }});
     }
 }

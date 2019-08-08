@@ -1,24 +1,22 @@
 package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
-import xyz.upperlevel.uppercore.board.Board;
-import xyz.upperlevel.uppercore.board.BoardManager;
-import xyz.upperlevel.uppercore.board.SimpleConfigBoard;
-import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.board.BoardContainer;
+import xyz.upperlevel.uppercore.board.BoardModel;
+import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
 public class WaitingPhase extends Phase {
-    private static Board board;
+    private static BoardModel board;
+
+    private BoardContainer boards;
 
     @Getter
     private final LobbyPhase lobbyPhase;
@@ -32,21 +30,23 @@ public class WaitingPhase extends Phase {
     public WaitingPhase(LobbyPhase lobbyPhase) {
         super("waiting");
 
+        this.boards = new BoardContainer(board);
+
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
         this.placeholderRegistry = arena.getPlaceholders();
     }
 
     private void setupPlayer(Player player) {
-        BoardManager.open(player, board, placeholderRegistry);
+        boards.open(player, placeholderRegistry);
     }
 
     private void clearPlayer(Player player) {
-        BoardManager.close(player);
+        boards.close(player);
     }
 
     private void updatePlayer(Player player) {
-        BoardManager.update(player, placeholderRegistry);
+        boards.update(player, placeholderRegistry);
     }
 
     private void updatePlayers() {
@@ -93,6 +93,6 @@ public class WaitingPhase extends Phase {
     }
 
     public static void loadConfig() {
-        board = SimpleConfigBoard.create(Quake.getConfigSection("lobby.waiting-board"));
+        board = Quake.getConfigSection("lobby.waiting-board").get(SimpleBoardModel.class);
     }
 }

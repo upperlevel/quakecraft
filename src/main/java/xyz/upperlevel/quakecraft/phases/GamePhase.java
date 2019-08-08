@@ -12,7 +12,8 @@ import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.PhaseManager;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
-import xyz.upperlevel.uppercore.board.BoardManager;
+import xyz.upperlevel.uppercore.board.BoardContainer;
+import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
@@ -42,16 +43,19 @@ public class GamePhase extends PhaseManager {
     @Getter
     private final Countdown countdown;
 
+    private final BoardContainer boards;
+
     public GamePhase(QuakeArena arena) {
         super("game");
 
+        this.boards = new BoardContainer(board);
         this.arena = arena;
         this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders());
         buildPlaceholders();
         this.countdown = new Countdown(Quake.get(), gameCountdown * 20, 20,
                 tick -> {
                     for (Player player : arena.getPlayers()) {
-                        BoardManager.update(player, placeholderRegistry);
+                        boards.update(player, placeholderRegistry);
                     }
                 },
                 () -> {

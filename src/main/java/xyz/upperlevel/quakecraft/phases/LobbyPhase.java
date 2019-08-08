@@ -1,7 +1,6 @@
 package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,8 +14,6 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
-
-import static xyz.upperlevel.quakecraft.Quake.get;
 
 public class LobbyPhase extends PhaseManager {
     private static Hotbar hotbar;
@@ -84,6 +81,6 @@ public class LobbyPhase extends PhaseManager {
 
     public static void loadConfig() {
         Config config = Quake.getConfigSection("lobby");
-        hotbar = config.get("lobby-hotbar", Hotbar.class);
+        hotbar = config.getRequired("lobby-hotbar", Hotbar.class);
     }
 }
