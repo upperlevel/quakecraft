@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
-import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
@@ -21,11 +20,13 @@ public class PlayingHotbar extends Hotbar {
 
     @ConfigConstructor
     public PlayingHotbar(
-            @ConfigProperty("gun") ConfigIcon gun,
-            @ConfigProperty("tracker") ConfigIcon tracker
+            @ConfigProperty("gun.slot") int gunSlot,
+            @ConfigProperty("gun.item") Gun gun,
+            @ConfigProperty("tracker.slot") int trackerSlot,
+            @ConfigProperty("tracker.item") Tracker tracker
     ) {
-        setIcon(gun.getSlot(), gun);
-        setIcon(tracker.getSlot(), tracker);
+        setIcon(gunSlot, new ConfigIcon(gun));
+        setIcon(trackerSlot, new ConfigIcon(tracker));
     }
 
     public static class Gun implements ItemResolver {
