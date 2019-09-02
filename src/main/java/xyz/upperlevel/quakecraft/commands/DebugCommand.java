@@ -1,8 +1,5 @@
 package xyz.upperlevel.quakecraft.commands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.uppercore.Uppercore;
@@ -15,9 +12,6 @@ import xyz.upperlevel.uppercore.command.functional.WithOptional;
 import xyz.upperlevel.uppercore.command.functional.WithPermission;
 import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.registry.RegistryVisitor;
-
-import java.util.Locale;
-import java.util.stream.IntStream;
 
 public class DebugCommand extends NodeCommand {
     public DebugCommand() {

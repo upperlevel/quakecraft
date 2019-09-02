@@ -145,7 +145,7 @@ public class RailgunSelectGui extends ChestGui {
             List<Purchase<?>> missingParts = gun.getComponents()
                     .stream()
                     .filter(s -> s.getCost() > 0)
-                    .filter(p.getPurchases()::contains)
+                    .filter(o -> !p.getPurchases().contains(o))
                     .collect(Collectors.toList());
 
             GUN_PART_MISSING_HEADER.send(player, "parts", String.valueOf(missingParts.size()));

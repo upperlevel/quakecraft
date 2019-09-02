@@ -12,7 +12,7 @@ import xyz.upperlevel.uppercore.sound.PlaySound;
 public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.KillSound> {
 
     public KillSoundManager(PurchaseRegistry registry) {
-        super(registry, "kill-sounds");
+        super(registry, "kill-sound", "kill-sounds");
     }
 
     @Override
@@ -28,11 +28,6 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
     @Override
     public KillSound getSelected(QuakeAccount player) {
         return player.getSelectedKillSound();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "kill-sound";
     }
 
     public class KillSound extends SimplePurchase<KillSound> {

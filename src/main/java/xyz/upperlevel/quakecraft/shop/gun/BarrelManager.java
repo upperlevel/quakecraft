@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.config.Config;
 public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
 
     public BarrelManager(PurchaseRegistry registry) {
-        super(registry, "gun.barrels");
+        super(registry, "barrel", "gun.barrels");
     }
 
     @Override
@@ -27,11 +27,6 @@ public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
     @Override
     public Barrel getSelected(QuakeAccount player) {
         return player.getSelectedBarrel();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "barrel";
     }
 
 

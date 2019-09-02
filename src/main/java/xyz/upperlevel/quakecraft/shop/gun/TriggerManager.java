@@ -10,7 +10,7 @@ import xyz.upperlevel.uppercore.config.Config;
 public class TriggerManager extends SinglePurchaseManager<TriggerManager.Trigger> {
 
     public TriggerManager(PurchaseRegistry registry) {
-        super(registry, "gun.triggers");
+        super(registry, "trigger", "gun.triggers");
     }
 
     @Override
@@ -26,11 +26,6 @@ public class TriggerManager extends SinglePurchaseManager<TriggerManager.Trigger
     @Override
     public Trigger getSelected(QuakeAccount player) {
         return player.getSelectedTrigger();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "trigger";
     }
 
 

@@ -16,15 +16,15 @@ public abstract class SinglePurchaseManager<P extends SimplePurchase<P>> extends
     private final String registryLoc;
 
 
-    public SinglePurchaseManager(PurchaseRegistry registry, String guiLoc, String configLoc, String registryLoc) {
-        super(registry);
+    public SinglePurchaseManager(PurchaseRegistry registry, String purchaseName, String guiLoc, String configLoc, String registryLoc) {
+        super(registry, purchaseName);
         this.guiLoc = guiLoc;
         this.configLoc = configLoc;
         this.registryLoc = registryLoc;
     }
 
-    public SinglePurchaseManager(PurchaseRegistry registry, String loc) {
-        this(registry, loc + ".gui", loc + ".types", loc);
+    public SinglePurchaseManager(PurchaseRegistry registry, String purchaseName, String loc) {
+        this(registry, purchaseName, loc + ".gui", loc + ".types", loc);
     }
 
     public void loadConfig(Map<String, Config> config) {

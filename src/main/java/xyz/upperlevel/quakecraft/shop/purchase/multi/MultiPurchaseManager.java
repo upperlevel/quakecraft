@@ -9,8 +9,8 @@ import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import java.util.Map;
 
 public abstract class MultiPurchaseManager<T extends Purchase<T>> extends PurchaseManager<T> {
-    public MultiPurchaseManager(PurchaseRegistry registry) {
-        super(registry);
+    public MultiPurchaseManager(PurchaseRegistry registry, String purchaseName) {
+        super(registry, purchaseName);
     }
 
     public abstract String getPartName();

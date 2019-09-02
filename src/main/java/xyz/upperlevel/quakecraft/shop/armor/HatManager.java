@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
     public HatManager(PurchaseRegistry registry) {
-        super(registry, "armor.hats");
+        super(registry, "hat", "armor.hats");
     }
 
     @Override
@@ -27,11 +27,6 @@ public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
     @Override
     public Hat getSelected(QuakeAccount player) {
         return player.getSelectedHat();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "hat";
     }
 
     @Getter

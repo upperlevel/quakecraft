@@ -9,7 +9,7 @@ import xyz.upperlevel.uppercore.config.Config;
 public class DashPowerManager extends MultiPurchaseManager<DashPowerManager.DashPower> {
 
     public DashPowerManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "dash-power");
     }
 
     @Override
@@ -30,11 +30,6 @@ public class DashPowerManager extends MultiPurchaseManager<DashPowerManager.Dash
     @Override
     public DashPower getSelected(QuakeAccount player) {
         return player.getSelectedDashPower();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "dash_power";
     }
 
     public class DashPower extends BaseDashUpgrade<DashPower> {

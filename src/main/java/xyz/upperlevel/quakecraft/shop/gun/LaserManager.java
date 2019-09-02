@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.config.Config;
 public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
 
     public LaserManager(PurchaseRegistry registry) {
-        super(registry, "gun.lasers");
+        super(registry, "laser", "gun.lasers");
     }
 
     @Override
@@ -27,11 +27,6 @@ public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
     @Override
     public Laser getSelected(QuakeAccount player) {
         return player.getSelectedLaser();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "laser";
     }
 
 

@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
     public CaseManager(PurchaseRegistry registry) {
-        super(registry, "gun.cases");
+        super(registry, "case", "gun.cases");
     }
 
     @Override
@@ -33,11 +33,6 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
     @Override
     public Case getSelected(QuakeAccount player) {
         return player.getSelectedCase();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "case";
     }
 
 

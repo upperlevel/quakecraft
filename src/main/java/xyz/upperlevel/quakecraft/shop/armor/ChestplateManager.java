@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.Chestplate> {
 
     public ChestplateManager(PurchaseRegistry registry) {
-        super(registry, "armor.kits");
+        super(registry, "chestplate", "armor.kits");
     }
 
     @Override
@@ -27,11 +27,6 @@ public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.C
     @Override
     public Chestplate getSelected(QuakeAccount player) {
         return player.getSelectedChestplate();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "chestplate";
     }
 
     @Getter

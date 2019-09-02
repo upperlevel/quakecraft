@@ -212,8 +212,9 @@ public class QuakeAccount {
 
     private Purchase<?> getPurchase(PurchaseRegistry reg, Config in, String managerName, String... aliases) {
         PurchaseManager<?> manager = reg.getManager(managerName);
-        if (manager == null)
+        if (manager == null) {
             throw new IllegalArgumentException("Cannot find purchase manager " + managerName);
+        }
         String selectedId = in.getString(managerName);
         if (selectedId == null) {
             for (String alias : aliases) {
@@ -241,8 +242,15 @@ public class QuakeAccount {
         // ------------------ general
         kills = data.getLong("kills", 0);
         deaths = data.getLong("deaths", 0);
-        wonMatches = data.getLong("won_matches", 0);
-        playedMatches = data.getLong("played_matches", 0);
+
+        wonMatches = data.getLong("won-matches", -1);
+        if (wonMatches == -1) wonMatches = data.getLong("won_matches", -1);
+        wonMatches = wonMatches != -1 ? wonMatches : 0L;
+
+        playedMatches = data.getLong("played-matches", -1);
+        if (playedMatches == -1) playedMatches = data.getLong("played_matches", -1);
+        playedMatches = playedMatches != -1 ? playedMatches : 0;
+
         purchases.addAll(data.getStringList("purchases", new ArrayList<>())
                 .stream()
                 .map(id -> get().getShop().getRegistry().getPurchase(id))
@@ -271,13 +279,13 @@ public class QuakeAccount {
             // >>>>>>>>>> killsound
             {
                 PurchaseRegistry r = get().getShop().getKillSounds().getRegistry();
-                selectedKillSound = (KillSoundManager.KillSound) getPurchase(r, selected, "kill_sound");
+                selectedKillSound = (KillSoundManager.KillSound) getPurchase(r, selected, "kill-sound", "kill_sound");
             }
             // >>>>>>>>>> dash
             {
                 PurchaseRegistry r = get().getShop().getDashes().getRegistry();
-                selectedDashPower = (DashPowerManager.DashPower) getPurchase(r, selected, "dash_power");
-                selectedDashCooldown = (DashCooldownManager.DashCooldown) getPurchase(r, selected, "dash_cooldown");
+                selectedDashPower = (DashPowerManager.DashPower) getPurchase(r, selected, "dash-power", "dash_power");
+                selectedDashCooldown = (DashCooldownManager.DashCooldown) getPurchase(r, selected, "dash-cooldown", "dash_cooldown");
             }
         }
 
@@ -291,8 +299,8 @@ public class QuakeAccount {
         Map<String, Object> data = new HashMap<>();
         data.put("kills", kills);
         data.put("deaths", deaths);
-        data.put("won_matches", wonMatches);
-        data.put("played_matches", playedMatches);
+        data.put("won-matches", wonMatches);
+        data.put("played-matches", playedMatches);
         data.put("purchases", purchases.stream()
                 .filter(Objects::nonNull)//Don't know why, sometimes the next line gives null pointers
                 .map(Purchase::getFullId)
@@ -321,12 +329,12 @@ public class QuakeAccount {
             selected.put("hat", selectedHat.getId());
         // >>>>>>>>>>> killsound
         if (selectedKillSound != null)
-            selected.put("kill_sound", selectedKillSound.getId());
+            selected.put("kill-sound", selectedKillSound.getId());
         // >>>>>>>>>>> dash
         if (selectedDashPower != null)
-            selected.put("dash_power", selectedDashPower.getId());
+            selected.put("dash-power", selectedDashPower.getId());
         if (selectedDashCooldown != null)
-            selected.put("dash_cooldown", selectedDashCooldown.getId());
+            selected.put("dash-cooldown", selectedDashCooldown.getId());
         // ------------------
         data.put("selected", selected);
 

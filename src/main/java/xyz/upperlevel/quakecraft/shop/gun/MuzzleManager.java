@@ -16,7 +16,7 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
     private static final Type particleListType = TypeUtil.typeOf(List.class, CustomParticle.class);
 
     public MuzzleManager(PurchaseRegistry registry) {
-        super(registry, "gun.muzzles");
+        super(registry, "muzzle", "gun.muzzles");
     }
 
     @Override
@@ -32,11 +32,6 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
     @Override
     public Muzzle getSelected(QuakeAccount player) {
         return player.getSelectedMuzzle();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "muzzle";
     }
 
 

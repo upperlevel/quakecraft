@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging> {
 
     public LeggingManager(PurchaseRegistry registry) {
-        super(registry, "armor.leggings");
+        super(registry, "legging", "armor.leggings");
     }
 
     @Override
@@ -27,11 +27,6 @@ public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging
     @Override
     public Legging getSelected(QuakeAccount player) {
         return player.getSelectedLegging();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "legging";
     }
 
     @Getter

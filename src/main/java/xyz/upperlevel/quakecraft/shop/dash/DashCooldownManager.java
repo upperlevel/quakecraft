@@ -10,7 +10,7 @@ import xyz.upperlevel.uppercore.config.Config;
 public class DashCooldownManager extends MultiPurchaseManager<DashCooldownManager.DashCooldown> {
 
     public DashCooldownManager(PurchaseRegistry registry) {
-        super(registry);
+        super(registry, "dash-cooldown");
     }
 
     @Override
@@ -31,11 +31,6 @@ public class DashCooldownManager extends MultiPurchaseManager<DashCooldownManage
     @Override
     public DashCooldown getSelected(QuakeAccount player) {
         return player.getSelectedDashCooldown();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "dash_cooldown";
     }
 
     public class DashCooldown extends BaseDashUpgrade<DashCooldown> {

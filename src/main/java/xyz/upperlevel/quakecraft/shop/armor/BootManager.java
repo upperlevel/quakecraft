@@ -11,7 +11,7 @@ import xyz.upperlevel.uppercore.itemstack.UItem;
 public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
 
     public BootManager(PurchaseRegistry registry) {
-        super(registry, "armor.boots");
+        super(registry, "boot", "armor.boots");
     }
 
     @Override
@@ -27,11 +27,6 @@ public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
     @Override
     public Boot getSelected(QuakeAccount player) {
         return player.getSelectedBoot();
-    }
-
-    @Override
-    public String getPurchaseName() {
-        return "boot";
     }
 
     @Getter

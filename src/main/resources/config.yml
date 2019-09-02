@@ -104,7 +104,7 @@ game:
           - '&7Points the closest enemy!'
 
   game-board:
-    title: '&e&lQUAKECRAFT'
+    tit_le: '&e&lQUAKECRAFT'
     header:
       - ''
       - '&fTime left: &a%game_countdown%'
@@ -493,7 +493,7 @@ shop:
           item:
             type: 'STONE_HOE'
 
-        varnished_wood:
+        varnished-wood:
           name: 'Varnished Wood Case'
           cost: 1000
           icon:
@@ -509,7 +509,7 @@ shop:
             enchantments:
               power: 10
 
-        polished_marbled:
+        polished-marbled:
           name: 'Polished Marbled Case'
           cost: 1000
           icon:
@@ -561,7 +561,7 @@ shop:
           item:
             type: 'DIAMOND_HOE'
 
-        polished_plated:
+        polished-plated:
           name: 'Polished Plated Case'
           cost: 14000
           icon:
@@ -575,7 +575,7 @@ shop:
             enchantments:
               power: 10
 
-        polished_bling:
+        polished-bling:
           name: 'Polished Bling Case'
           cost: 100000
           icon:
@@ -591,7 +591,7 @@ shop:
             enchantments:
               power: 10
 
-        polished_reinforced:
+        polished-reinforced:
           name: 'Polished Reinforced Case'
           cost: 200000
           icon:
@@ -871,7 +871,7 @@ shop:
               block:
                 type: 'IRON_BLOCK'
 
-        end_stone:
+        end-stone:
           name: 'End Stone Muzzle'
           cost: 8500
           icon:
@@ -955,7 +955,7 @@ shop:
               block:
                 type: 'SPONGE'
 
-        sea_lantern:
+        sea-lantern:
           name: 'Sea Lantern Muzzle'
           cost: 75000
           icon:
@@ -967,7 +967,7 @@ shop:
               block:
                 type: 'SEA_LANTERN'
 
-        command_block:
+        command-block:
           name: 'Command Block Muzzle'
           cost: 100000
           icon:
@@ -1015,7 +1015,7 @@ shop:
               block:
                 type: 'PUMPKIN'
 
-        soul_sand:
+        soul-sand:
           name: 'Soul Sand Muzzle'
           cost: 500000
           icon:
@@ -1046,7 +1046,7 @@ shop:
 
     triggers:
       types:
-        1_5_s:
+        1-5-s:
           name: '1.5s'
           icon:
             type: 'STONE_BUTTON'
@@ -1056,7 +1056,7 @@ shop:
           firing-speed: 30
           default: true
 
-        9_0_s:
+        9-0-s:
           name: '9.0s'
           icon:
             type: 'STONE_BUTTON'
@@ -1066,7 +1066,7 @@ shop:
           firing-speed: 180
           cost: 10000
 
-        5_0_s:
+        5-0-s:
           name: '5.0s'
           icon:
             type: 'STONE_BUTTON'
@@ -1076,7 +1076,7 @@ shop:
           firing-speed: 100
           cost: 5000
 
-        2_5_s:
+        2-5-s:
           name: '2.5s'
           icon:
             type: 'STONE_BUTTON'
@@ -1086,7 +1086,7 @@ shop:
           firing-speed: 50
           cost: 5000
 
-        1_4_s:
+        1-4-s:
           name: '1.4s'
           icon:
             type: 'STONE_BUTTON'
@@ -1096,7 +1096,7 @@ shop:
           firing-speed: 28
           cost: 1800
 
-        1_3_s:
+        1-3-s:
           name: '1.3s'
           icon:
             type: 'STONE_BUTTON'
@@ -1106,7 +1106,7 @@ shop:
           firing-speed: 26
           cost: 3500
 
-        1_2_s:
+        1-2-s:
           name: '1.2s'
           icon:
             type: 'STONE_BUTTON'
@@ -1116,7 +1116,7 @@ shop:
           firing-speed: 24
           cost: 8500
 
-        1_1_s:
+        1-1-s:
           name: '1.1s'
           icon:
             type: 'STONE_BUTTON'
@@ -1126,7 +1126,7 @@ shop:
           firing-speed: 22
           cost: 17000
 
-        1_0_s:
+        1-0-s:
           name: '1.0s'
           icon:
             type: 'STONE_BUTTON'
@@ -1136,7 +1136,7 @@ shop:
           firing-speed: 20
           cost: 100000
 
-        0_9_s:
+        0-9-s:
           name: '0.9s'
           icon:
             type: 'STONE_BUTTON'
@@ -1146,7 +1146,7 @@ shop:
           firing-speed: 18
           cost: 300000
 
-        0_8_5_s:
+        0-8-5-s:
           name: '0.85s'
           icon:
             type: 'STONE_BUTTON'
@@ -1181,7 +1181,7 @@ shop:
           laser: 'yellow'
           barrel: 'small'
           muzzle: 'none'
-          trigger: '1_5_s'
+          trigger: '1-5-s'
 
         superior:
           name: 'Superior Railgun'
@@ -1189,15 +1189,15 @@ shop:
           laser: 'red'
           barrel: 'burst'
           muzzle: 'none'
-          trigger: '1_4_s'
+          trigger: '1-4-s'
 
-        hyper_beam:
+        hyper-beam:
           name: 'Hyper Beam Railgun'
           case: 'plated'
           laser: 'yellow'
           barrel: 'star'
           muzzle: 'none'
-          trigger: '1_3_s'
+          trigger: '1-3-s'
 
         worm:
           name: 'The Worm'
@@ -1205,7 +1205,7 @@ shop:
           laser: 'green'
           barrel: 'small'
           muzzle: 'none'
-          trigger: '5_0_s'
+          trigger: '5-0-s'
           message: 'Wormed'
 
         creeper:
@@ -1214,7 +1214,7 @@ shop:
           laser: 'green'
           barrel: 'creeper'
           muzzle: 'none'
-          trigger: '1_2_s'
+          trigger: '1-2-s'
 
         turtle:
           name: 'The Turtle'
@@ -1222,7 +1222,7 @@ shop:
           laser: 'green'
           barrel: 'large'
           muzzle: 'iron'
-          trigger: '2_5_s'
+          trigger: '2-5-s'
           message: 'Shelled'
 
         snail:
@@ -1231,7 +1231,7 @@ shop:
           laser: 'red'
           barrel: 'creeper'
           muzzle: 'wood'
-          trigger: '9_0_s'
+          trigger: '9-0-s'
           message: 'Slimed'
 
         restoner:
@@ -1240,25 +1240,25 @@ shop:
           laser: 'red'
           barrel: 'burst'
           muzzle: 'redstone'
-          trigger: '1_2_s'
+          trigger: '1-2-s'
           message: '&cRedstoned'
 
-        budder_slapper:
+        budder-slapper:
           name: 'Budder Slapper'
-          case: 'polished_plated'
+          case: 'polished-plated'
           laser: 'yellow'
           barrel: 'small'
           muzzle: 'gold'
-          trigger: '1_5_s'
+          trigger: '1-5-s'
           message: '&6Slapped'
 
         bfg:
           name: 'BFG'
-          case: 'polished_marbled'
+          case: 'polished-marbled'
           laser: 'blue'
           barrel: 'large'
           muzzle: 'none'
-          trigger: '1_1_s'
+          trigger: '1-1-s'
 
         lovegun:
           name: 'Lovegun'
@@ -1266,7 +1266,7 @@ shop:
           laser: 'red'
           barrel: 'star'
           muzzle: 'redstone'
-          trigger: '1_3_s'
+          trigger: '1-3-s'
           message: '&cFell in love with'
 
         harvester:
@@ -1275,88 +1275,88 @@ shop:
           laser: 'green'
           barrel: 'small'
           muzzle: 'melon'
-          trigger: '1_5_s'
+          trigger: '1-5-s'
           message: '&aFarmed'
 
-        blue_lagoon:
+        blue-lagoon:
           name: 'Blue Lagoon'
           case: 'bling'
           laser: 'blue'
           barrel: 'burst'
           muzzle: 'prismarine'
-          trigger: '1_1_s'
+          trigger: '1-1-s'
           message: '&9Drowned'
 
-        cookie_cannon:
+        cookie-cannon:
           name: 'Cookie Cannon'
           case: 'plated'
           laser: 'emerald'
           barrel: 'burst'
-          muzzle: 'command_block'
-          trigger: '1_1_s'
+          muzzle: 'command-block'
+          trigger: '1-1-s'
           message: '&6Baked'
 
-        bling_bling_thing:
+        bling-bling-thing:
           name: 'Bling Bling Thing'
-          case: 'polished_bling'
+          case: 'polished-bling'
           laser: 'purple'
           barrel: 'large'
           muzzle: 'diamond'
-          trigger: '1_0_s'
+          trigger: '1-0-s'
           message: "&9Bazinga'd"
 
-        le_bizzarre:
+        le-bizzarre:
           name: 'Le Bizzarre'
-          case: 'polished_bling'
+          case: 'polished-bling'
           laser: 'orange'
           barrel: 'small'
           muzzle: 'lapis'
-          trigger: '1_4_s'
+          trigger: '1-4-s'
           message: "&3Puzzled"
 
         fabled:
           name: 'Fabled Railgun'
-          case: 'polished_bling'
+          case: 'polished-bling'
           laser: 'diamond'
           barrel: 'star'
           muzzle: 'prismarine'
-          trigger: '1_2_s'
+          trigger: '1-2-s'
           message: '&bMagnified'
 
-        apple_corer:
+        apple-corer:
           name: 'Apple Corer'
-          case: 'polished_reinforced'
+          case: 'polished-reinforced'
           laser: 'gold'
           barrel: 'star'
           muzzle: 'obsidian'
-          trigger: '0_9_s'
+          trigger: '0-9-s'
           message: '&4Pommed'
 
         darkness:
           name: 'Railgun of Darkness'
-          case: 'polished_marbled'
+          case: 'polished-marbled'
           laser: 'black'
           barrel: 'large'
           muzzle: 'obsidian'
-          trigger: '0_9_s'
+          trigger: '0-9-s'
           message: '&5Vaporized'
 
-        platinum_smelter:
+        platinum-smelter:
           name: 'Platinum Smelter'
-          case: 'polished_reinforced'
+          case: 'polished-reinforced'
           laser: 'silver'
           barrel: 'burst'
           muzzle: 'iron'
-          trigger: '0_8_5_s'
+          trigger: '0-8-5-s'
           message: '&fSmelted'
 
         reaper:
           name: 'The Reaper'
-          case: 'polished_bling'
+          case: 'polished-bling'
           laser: 'black'
           barrel: 'large'
           muzzle: 'soul_sand'
-          trigger: '0_8_5_s'
+          trigger: '0-8-5-s'
           message: '&8Consumed'
 
       gui:
@@ -1576,7 +1576,7 @@ shop:
           item:
             type: 'BEDROCK'
 
-        control_freak:
+        control-freak:
           name: 'Control Freak Hat'
           cost: 850
           icon:
@@ -1586,7 +1586,7 @@ shop:
           item:
             type: 'COMMAND_BLOCK'
 
-        walking_dead:
+        walking-dead:
           name: 'Walking Dead Hat'
           cost: 900
           icon:
@@ -1598,7 +1598,7 @@ shop:
             type: 'SKELETON_SKULL'
             data: 2
 
-        jeepers_creepers:
+        jeepers-creepers:
           name: 'Jeepers Creepers Hat'
           cost: 900
           icon:
@@ -1610,7 +1610,7 @@ shop:
             type: 'SKELETON_SKULL'
             data: 4
 
-        richy_rich:
+        richy-rich:
           name: 'Richy Rich Hat'
           cost: 1000
           icon:
@@ -2124,7 +2124,7 @@ shop:
             type: 'LEATHER_LEGGINGS'
             color: 'GRAY'
 
-        spec_ops:
+        spec-ops:
           name: 'Spec Ops Pants'
           cost: 2250
           icon:
@@ -2549,88 +2549,88 @@ shop:
   dash:
     upgrades:
       power:
-        power_I:
+        power-I:
           name: 'Dash Power I'
           default: true
           lore:
             - '&7Power: &a100%'
           power: 1.0
 
-        power_II:
+        power-II:
           name: 'Dash Power II'
           lore:
             - '&7Power: &a125%'
           power: 1.25
           cost: 10000
 
-        power_III:
+        power-III:
           name: 'Dash Power III'
           lore:
             - '&7Power: &a150%'
           power: 1.5
           cost: 50000
           requires:
-            - purchase: 'power_II'
+            - purchase: 'power-II'
 
-        power_IV:
+        power-IV:
           name: 'Dash Power IV'
           lore:
             - '&7Power: &a175%'
           power: 1.75
           cost: 150000
           requires:
-            - purchase: 'power_III'
+            - purchase: 'power-III'
 
-        power_V:
+        power-V:
           name: 'Dash Power V'
           lore:
             - '&7Power: &a200%'
           power: 2.0
           cost: 500000
           requires:
-            - purchase: 'power_IV'
+            - purchase: 'power-IV'
 
       cooldown:
-        cooldown_I:
+        cooldown-I:
           name: 'Dash Cooldown I'
           default: true
           lore:
             - '&7Cooldown: &a4.0s'
           cooldown: 80
 
-        cooldown_II:
+        cooldown-II:
           name: 'Dash Cooldown II'
           lore:
             - '&7Cooldown: &a3.5s'
           cooldown: 70
           cost: 10000
 
-        cooldown_III:
+        cooldown-III:
           name: 'Dash Cooldown III'
           lore:
             - '&7Cooldown: &a3.0s'
           cooldown: 60
           cost: 50000
           requires:
-            - purchase: 'cooldown_II'
+            - purchase: 'cooldown-II'
 
-        cooldown_IV:
+        cooldown-IV:
           name: 'Dash Cooldown IV'
           lore:
             - '&7Cooldown: &a2.5s'
           cooldown: 50
           cost: 150000
           requires:
-            - purchase: 'cooldown_III'
+            - purchase: 'cooldown-III'
 
-        cooldown_V:
+        cooldown-V:
           name: 'Dash Cooldown V'
           lore:
             - '&7Cooldown: &a2.0s'
           cooldown: 40
           cost: 500000
           requires:
-            - purchase: 'cooldown_IV'
+            - purchase: 'cooldown-IV'
 
     gui:
       title: 'Dash Upgrades'
@@ -2664,7 +2664,7 @@ shop:
       # And every name can be written in any case and without underscore
       # "ENTITY_BLAZE_DEATH" is the same as "entity blaze death" or "EnTiTy BlaZE_DeatH"
       # For a list of all available sound: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
-      blaze_death:
+      blaze-death:
         name: 'Blaze Death'
         default: true
         icon:
@@ -2674,7 +2674,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_BLAZE_DEATH
 
-      horse_death:
+      horse-death:
         name: 'Horse Death'
         cost: 2000
         icon:
@@ -2684,7 +2684,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_HORSE_DEATH
 
-      bat_death:
+      bat-death:
         name: 'Bat Death'
         cost: 2000
         icon:
@@ -2694,7 +2694,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_BAT_DEATH
 
-      enderman_death:
+      enderman-death:
         name: 'Enderman Death'
         cost: 2000
         icon:
@@ -2704,7 +2704,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_ENDERMEN_DEATH
 
-      golem_death:
+      golem-death:
         name: 'Golem Death'
         cost: 2000
         icon:
@@ -2714,7 +2714,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_IRONGOLEM_DEATH
 
-      pig_death:
+      pig-death:
         name: 'Pig Death'
         cost: 2000
         icon:
@@ -2724,7 +2724,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_PIG_DEATH
 
-      cow_hurt:
+      cow-hurt:
         name: 'Cow Hurt'
         cost: 4000
         icon:
@@ -2734,7 +2734,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_COW_HURT
 
-      creeper_death:
+      creeper-death:
         name: 'Creeper Death'
         cost: 4000
         icon:
@@ -2744,7 +2744,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_CREEPER_DEATH
 
-      anvil_land:
+      anvil-land:
         name: 'Creeper Death'
         cost: 4000
         icon:
@@ -2754,7 +2754,7 @@ shop:
             - '&7effect on kill!'
         sound: BLOCK_ANVIL_LAND
 
-      ghast_death:
+      ghast-death:
         name: 'Ghast Death'
         cost: 5000
         icon:
@@ -2764,7 +2764,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_GHAST_DEATH
 
-      dragon_growl:
+      dragon-growl:
         name: 'Dragon Growl'
         cost: 5000
         icon:
@@ -2774,7 +2774,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_ENDERDRAGON_GROWL
 
-      villager_mhm:
+      villager-mhm:
         name: 'Villager MHM'
         cost: 5000
         icon:
@@ -2794,7 +2794,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_WITHER_DEATH
 
-      level_up:
+      level-up:
         name: 'Level Up'
         cost: 10000
         icon:
@@ -2804,7 +2804,7 @@ shop:
             - '&7effect on kill!'
         sound: ENTITY_PLAYER_LEVELUP
 
-      zombie_destroy:
+      zombie-destroy:
         name: 'Zombie Destroy'
         cost: 20000
         icon:

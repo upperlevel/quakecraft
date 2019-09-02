@@ -10,23 +10,31 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry.normalizeId;
+
 public abstract class PurchaseManager<P extends Purchase<P>> {
     @Getter
     private final PurchaseRegistry registry;
+    @Getter
+    public final String purchaseName;
+
+
     private Map<String, P> purchases = new LinkedHashMap<>();
     @Getter
     @Setter
     private PurchaseGui gui;
     private P def;
 
-    public PurchaseManager(PurchaseRegistry registry) {
+    public PurchaseManager(PurchaseRegistry registry, String purchaseName) {
         this.registry = registry;
-        if(registry != null)
+        this.purchaseName = normalizeId(purchaseName);
+        if(registry != null) {
             registry.register(this);
+        }
     }
 
     public void add(P item) {
-        purchases.put(item.getId(), item);
+        purchases.put(normalizeId(item.getId()), item);
         if(item.isDef()) {
             if(def != null)
                 Quake.get().getLogger().warning("Multiple default values in " + getPurchaseName());
@@ -46,10 +54,8 @@ public abstract class PurchaseManager<P extends Purchase<P>> {
 
     public abstract P getSelected(QuakeAccount player);
 
-    public abstract String getPurchaseName();
-
     public P get(String name) {
-        return purchases.get(name);
+        return purchases.get(normalizeId(name));
     }
 
     public P getDefault() {
