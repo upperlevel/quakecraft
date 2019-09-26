@@ -104,7 +104,7 @@ game:
           - '&7Points the closest enemy!'
 
   game-board:
-    tit_le: '&e&lQUAKECRAFT'
+    title: '&e&lQUAKECRAFT'
     header:
       - ''
       - '&fTime left: &a%game_countdown%'
