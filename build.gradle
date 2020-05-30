@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'distribution'
-    id "io.freefair.lombok" version "3.8.1"
 }
 
 group = 'xyz.upperlevel.quakecraft'
@@ -14,7 +13,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 project.ext {
-    mcVersion = '1.13-R0.1-SNAPSHOT'
+    mcVersion = '1.15.2-R0.1-SNAPSHOT'
     coreVersion = '2.0'
 }
 
@@ -34,6 +33,9 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
     compileOnly group: 'org.spigotmc', name: 'spigot-api', version: mcVersion
     compile group: 'xyz.upperlevel.uppercore', name: 'uppercore', version: coreVersion
 }
