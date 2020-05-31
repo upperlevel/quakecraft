@@ -64,7 +64,8 @@ build.dependsOn(shadowJar)
 //distTar.dependsOn(jar)
 //distZip.dependsOn(jar)
 
-import org.apache.tools.ant.filters.*
 processResources {
-    filter(ReplaceTokens, tokens: ['project.version': version])
+    filesMatching("plugin.yml") {
+        expand('project': project)
+    }
 }
