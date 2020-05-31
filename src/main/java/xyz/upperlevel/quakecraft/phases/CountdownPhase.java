@@ -35,7 +35,7 @@ public class CountdownPhase extends Phase {
     private final QuakeArena arena;
 
     @Getter
-    private final PlaceholderRegistry placeholderRegistry;
+    private final PlaceholderRegistry<?> placeholderRegistry;
 
     @Getter
     private Countdown countdown;
@@ -47,7 +47,7 @@ public class CountdownPhase extends Phase {
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
         this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders())
-                .set("countdown", () -> countdown.getTimer());
+                .set("countdown", () -> Integer.toString(countdown.getTimer()));
         this.boards = new BoardContainer(countdownBoard);
     }
 
