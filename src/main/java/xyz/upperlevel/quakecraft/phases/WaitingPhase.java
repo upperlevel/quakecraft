@@ -1,6 +1,7 @@
 package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import xyz.upperlevel.quakecraft.Quake;
@@ -13,10 +14,13 @@ import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class WaitingPhase extends Phase {
     private static BoardModel board;
 
-    private BoardContainer boards;
+    private final BoardContainer boards;
 
     @Getter
     private final LobbyPhase lobbyPhase;
@@ -45,14 +49,6 @@ public class WaitingPhase extends Phase {
         boards.close(player);
     }
 
-    private void updatePlayer(Player player) {
-        boards.update(player, placeholderRegistry);
-    }
-
-    private void updatePlayers() {
-        arena.getPlayers().forEach(this::updatePlayer);
-    }
-
     private void tryStartCountdown() {
         if (arena.getPlayers().size() >= arena.getMinPlayers()) {
             lobbyPhase.getPhaseManager().setPhase(new CountdownPhase(lobbyPhase));
@@ -79,7 +75,11 @@ public class WaitingPhase extends Phase {
             setupPlayer(player);
             player.teleport(arena.getLobby());
             tryStartCountdown();
-            updatePlayers();
+
+            // ArenaJoinEvent is called before the player's actually join (to permit cancellation).
+            // For this reason, the board update is called the next tick.
+            Bukkit.getScheduler().runTaskLater(Quake.get(), () ->
+                    arena.getPlayers().forEach(in -> boards.update(in, placeholderRegistry)), 1);
         }
     }
 
@@ -87,8 +87,12 @@ public class WaitingPhase extends Phase {
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
             Player p = e.getPlayer();
-            clearPlayer(p);
-            updatePlayers();
+            boards.close(p);
+
+            // ArenaQuitEvent is called before the player's actually quit (to permit cancellation).
+            // For this reason, the board update is called the next tick.
+            Bukkit.getScheduler().runTaskLater(Quake.get(), () ->
+                    arena.getPlayers().forEach(in -> boards.update(in, placeholderRegistry)), 1);
         }
     }
 
