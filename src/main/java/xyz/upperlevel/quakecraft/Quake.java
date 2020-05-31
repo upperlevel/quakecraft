@@ -43,6 +43,7 @@ import static xyz.upperlevel.uppercore.Uppercore.guis;
 public class Quake extends JavaPlugin {
     public static final String SPIGOT_ID = "quakecraft.45928";
     //public static final long SPIGET_ID = 45928;
+    public static final int BSTATS_ID = 7706;
     private static Quake instance;
 
     private AccountManager playerManager;
@@ -65,7 +66,7 @@ public class Quake extends JavaPlugin {
         instance = this;
 
         // This will initialize Uppercore.
-        Uppercore.hook(this);
+        Uppercore.hook(this, BSTATS_ID);
 
         try {
             // Quake configuration should be present in the plugin folder.
