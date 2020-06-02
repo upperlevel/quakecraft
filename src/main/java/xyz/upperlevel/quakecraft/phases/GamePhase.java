@@ -3,9 +3,13 @@ package xyz.upperlevel.quakecraft.phases;
 import lombok.Getter;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -18,17 +22,14 @@ import xyz.upperlevel.quakecraft.game.Shot;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
-import xyz.upperlevel.uppercore.arena.PhaseManager;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.board.BoardContainer;
-import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.sound.PlaySound;
 import xyz.upperlevel.uppercore.task.Countdown;
-import xyz.upperlevel.uppercore.task.UpdaterTask;
 import xyz.upperlevel.uppercore.util.Dbg;
 
 import java.util.*;
@@ -274,6 +275,29 @@ public class GamePhase extends Phase {
                 Dbg.p(String.format("[%s] Was left empty without players", arena.getName()));
                 getPhaseManager().setPhase(new LobbyPhase(arena));
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        if (arena.equals(Quake.getArena(e.getEntity()))) {
+            e.setDeathMessage(null);
+            e.setKeepInventory(true);
+            e.getEntity().spigot().respawn();
+            Gamer gamer = getGamer(e.getEntity());
+            if (gamer != null) gamer.die();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerDamage(EntityDamageEvent e) {
+        if (e.getEntityType() != EntityType.PLAYER) return;
+
+        Gamer gamer = getGamer((Player) e.getEntity());
+
+        if (gamer != null && e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+            e.setCancelled(true);
+            gamer.die();
         }
     }
 

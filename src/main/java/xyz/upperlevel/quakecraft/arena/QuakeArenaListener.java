@@ -1,5 +1,6 @@
 package xyz.upperlevel.quakecraft.arena;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +11,8 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class QuakeArenaListener implements Listener {
     private final QuakeArena arena;
@@ -22,10 +25,13 @@ public class QuakeArenaListener implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
+        if (e.isCancelled()) return;// Already canceled
         if (e.getEntity() instanceof Player && arena.hasPlayer((Player) e.getEntity())) {
             e.setCancelled(true);
-            if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
-                ((Player) e.getEntity()).setHealth(0);
+            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                Location spawn = arena.getSpawns().get(ThreadLocalRandom.current().nextInt(arena.getSpawns().size()));
+                e.getEntity().teleport(spawn);
+            }
         }
     }
 
