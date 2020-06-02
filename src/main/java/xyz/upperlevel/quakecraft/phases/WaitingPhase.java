@@ -74,12 +74,13 @@ public class WaitingPhase extends Phase {
             Player player = event.getPlayer();
             setupPlayer(player);
             player.teleport(arena.getLobby());
-            tryStartCountdown();
 
             // ArenaJoinEvent is called before the player's actually join (to permit cancellation).
-            // For this reason, the board update is called the next tick.
-            Bukkit.getScheduler().runTaskLater(Quake.get(), () ->
-                    arena.getPlayers().forEach(in -> boards.update(in, placeholderRegistry)), 1);
+            // For this reason, the code that has to read the new arena's players is run one tick later.
+            Bukkit.getScheduler().runTaskLater(Quake.get(), () -> {
+                tryStartCountdown();
+                arena.getPlayers().forEach(in -> boards.update(in, placeholderRegistry));
+            }, 1);
         }
     }
 
@@ -90,7 +91,7 @@ public class WaitingPhase extends Phase {
             boards.close(p);
 
             // ArenaQuitEvent is called before the player's actually quit (to permit cancellation).
-            // For this reason, the board update is called the next tick.
+            // For this reason, the code that has to read the new arena's players is run one tick later.
             Bukkit.getScheduler().runTaskLater(Quake.get(), () ->
                     arena.getPlayers().forEach(in -> boards.update(in, placeholderRegistry)), 1);
         }

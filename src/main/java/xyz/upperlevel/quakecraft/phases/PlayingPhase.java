@@ -1,14 +1,9 @@
 package xyz.upperlevel.quakecraft.phases;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -17,21 +12,18 @@ import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.game.Dash;
-import xyz.upperlevel.quakecraft.game.MultiStab;
+import xyz.upperlevel.quakecraft.game.Shot;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
-import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.task.Countdown;
 import xyz.upperlevel.uppercore.task.UpdaterTask;
-import xyz.upperlevel.uppercore.util.FireworkUtil;
-import xyz.upperlevel.uppercore.util.Laser;
+import xyz.upperlevel.uppercore.util.Dbg;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
@@ -55,7 +47,7 @@ public class PlayingPhase extends Phase {
 
     private final UpdaterTask compassUpdater;
 
-    private final Set<Player> shooters = new HashSet<>(); // the players that have shot
+    private final Map<Player, Shot> shootings = new HashMap<>(); // the players that have shot
 
     private Player getNearbyPlayer(Player player) {
         Player res = null;
@@ -145,9 +137,9 @@ public class PlayingPhase extends Phase {
                 .map(Powerup::getEffect)
                 .distinct()
                 .forEach(e -> e.clear(gamePhase.getGamers()));
-    }
 
-    public void onPlayerJoin(Player player) {
+        shootings.values().forEach(Shot::cancel);
+        shootings.clear();
     }
 
     public void onPlayerQuit(Player player) {
@@ -175,67 +167,41 @@ public class PlayingPhase extends Phase {
         }
     }
 
+    public boolean goOnIfHasWon(Player player) {
+        if (gamePhase.getGamer(player).getKills() >= killsToWin) {
+            Dbg.p(String.format("Game ended, %s has > %d kills", player.getName(), killsToWin));
+            gamePhase.setPhase(new EndingPhase(gamePhase, player));
+            return true;
+        }
+        return false;
+    }
+
     private void onShoot(Player player) {
-        if (shooters.contains(player)) {
-            QuakeAccount account = Quake.getAccount(player);
-            shooters.add(player);
+        if (!shootings.containsKey(player)) {
+            Dbg.p(String.format("%s is shooting", player.getName()));
 
-            new Laser(Quake.get(), player.getEyeLocation(), 150, 0.25,
-                    (step, hits) -> {
-                        List<Player> players = new ArrayList<>(gamePhase.getArena().getPlayers());
-                        account.getSelectedMuzzle().getParticles()
-                                .forEach(particle -> particle.display(step, players));
-
-                        int killCount = 0;
-
-                        for (Player hit : hits) {
-                            if (gamePhase.isGamer(hit)) {
-                                killCount++;
-                                boolean headshot = step.getY() - hit.getLocation().getY() > 1.4; // head height
-                                // TODO: make headshot height configurable
-
-                                Railgun gun = account.getGun();
-                                Message message = headshot ? headshotMessage : shotMessage;
-                                message = message.filter(
-                                        "killer", player.getName(),
-                                        "killed", hit.getName(),
-                                        "kill_message", (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage()
-                                );
-                                arena.broadcast(message, arena.getPlaceholders());
-
-                                onKill(player, hit, headshot);
-
-                                account.getSelectedKillSound().play(step);
-                                FireworkEffect.Type type = account.getSelectedBarrel().getFireworkType();
-                                Color color = account.getSelectedLaser().getFireworkColor();
-                                FireworkUtil.instantFirework(
-                                        step,
-                                        FireworkEffect.builder()
-                                                .with(type)
-                                                .withColor(color)
-                                                .build());
-                            }
-                        }
-
-                        MultiStab.tryReach(gamePhase, gamePhase.getGamer(player), killCount);
-                    },
-                    () -> {}
-            ).shoot();
+            Shot shot = new Shot(this, player);
+            shootings.put(player, shot);
+            shot.start();
 
             player.setExp(1.0f);
-            long from = (long) account.getSelectedTrigger().getFiringSpeed();
+            long from = (long) Quake.getAccount(player).getSelectedTrigger().getFiringSpeed();
             new Countdown(Quake.get(), from, 1,
                     tick -> player.setExp((float) (tick / from)),
                     () -> {
                         player.setExp(0.0f); // to be sure
-                        shooters.remove(player);
+                        shootings.remove(player);
+                        Dbg.p(String.format("%s can re-shoot", player.getName()));
                     }
             ).start();
+        } else {
+            Dbg.p(String.format("%s can't shoot, he's still recharging!", player.getName()));
         }
     }
 
     private void onDash(Player player) {
-        Dash.swish(player); // todo code clean up like above?
+        Dbg.p(String.format("%s is dashing", player));
+        Dash.swish(player);
     }
 
     @EventHandler
@@ -265,15 +231,9 @@ public class PlayingPhase extends Phase {
 
     public static void loadConfig() {
         Config config = Quake.getConfigSection("game");
-        defaultKillMessage = config.getString("default-kill-message");
-        shotMessage = config.getMessageRequired("shot-message");
-        headshotMessage = config.getMessageRequired("headshot-message");
-
         sneakDisabled = config.getBoolRequired("sneak-disabled");
         sneakDisabledMessage = config.getMessageRequired("sneak-disabled-message");
-
         killsToWin = config.getIntRequired("kills-to-win");
-
         hotbar = config.getRequired("playing-hotbar", PlayingHotbar.class);
     }
 }

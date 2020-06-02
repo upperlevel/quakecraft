@@ -8,10 +8,7 @@ import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.commands.DebugCommand;
 import xyz.upperlevel.quakecraft.commands.QuakeArgumentParsers;
 import xyz.upperlevel.quakecraft.commands.QuakeCommand;
-import xyz.upperlevel.quakecraft.game.Dash;
-import xyz.upperlevel.quakecraft.game.GainNotifier;
-import xyz.upperlevel.quakecraft.game.GainType;
-import xyz.upperlevel.quakecraft.game.KillStreak;
+import xyz.upperlevel.quakecraft.game.*;
 import xyz.upperlevel.quakecraft.phases.*;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
@@ -123,6 +120,7 @@ public class Quake extends JavaPlugin {
         GainType.loadConfig();
         Railgun.loadConfig();
         GainNotifier.loadConfig();
+        Shot.loadConfig();
 
         WaitingPhase.loadConfig();
         GamePhase.loadConfig();

@@ -24,7 +24,7 @@ import static xyz.upperlevel.uppercore.util.TypeUtil.typeOf;
 public class CountdownPhase extends Phase {
     private static int countdownTimer;
     private static Map<Integer, Message> countdownMessages; // Each countdown second corresponds to a message
-    private static Map<Integer, String> countdownSounds; // Each countdown second corresponds to a sound
+    private static Map<Integer, Sound> countdownSounds; // Each countdown second corresponds to a sound
 
     private static BoardModel countdownBoard;
 
@@ -35,10 +35,10 @@ public class CountdownPhase extends Phase {
     private final QuakeArena arena;
 
     @Getter
-    private final PlaceholderRegistry<?> placeholderRegistry;
+    private final PlaceholderRegistry<?> placeholders;
 
     @Getter
-    private Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
     private BoardContainer boards;
 
@@ -46,8 +46,8 @@ public class CountdownPhase extends Phase {
         super("lobby-countdown");
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
-        this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders())
-                .set("countdown", () -> Integer.toString(countdown.getTimer()));
+        this.placeholders = PlaceholderRegistry.create(arena.getPlaceholders())
+                .set("countdown", () -> Integer.toString(countdown.getSeconds()));
         this.boards = new BoardContainer(countdownBoard);
     }
 
@@ -61,7 +61,7 @@ public class CountdownPhase extends Phase {
     }
 
     private void setupPlayer(Player player) {
-        boards.open(player, placeholderRegistry);
+        boards.open(player, placeholders);
     }
 
     private void clearPlayer(Player player) {
@@ -70,7 +70,7 @@ public class CountdownPhase extends Phase {
     }
 
     private void updateBoard(Player player) {
-        boards.update(player, placeholderRegistry);
+        boards.update(player, placeholders);
     }
 
     private void updateBoards() {
@@ -81,8 +81,6 @@ public class CountdownPhase extends Phase {
     public void onEnable(Phase previous) {
         super.onEnable(previous);
         arena.getPlayers().forEach(this::setupPlayer);
-        // Starts countdown
-        countdown = new Countdown();
         countdown.runTaskTimer(Quake.get(), 0, 20);
     }
 
@@ -106,7 +104,7 @@ public class CountdownPhase extends Phase {
         if (arena.equals(e.getArena())) {
             clearPlayer(e.getPlayer());
             // If player count is lower than min stops the countdown if started
-            if (arena.getPlayers().size() < arena.getMinPlayers()) {
+            if (arena.getPlayers().size() - 1 < arena.getMinPlayers()) {
                 countdown.cancel();
                 updateBoards();
                 clearTick();
@@ -117,21 +115,21 @@ public class CountdownPhase extends Phase {
 
     public class Countdown extends BukkitRunnable {
         @Getter
-        private int timer;
+        private int seconds;
 
         public Countdown() {
-            timer = countdownTimer;
+            seconds = countdownTimer;
         }
 
         @Override
         public void run() {
-            // Each second tries to get a message and a sound. If they have been
-            // found in configuration, they are printed foreach player.
-            Message message = countdownMessages.get(timer);
-            Sound sound = Sound.valueOf(countdownSounds.get(timer));
+            // Each second tries to get a message and a sound.
+            // If they have been found in configuration, they are sent to the players.
+            Message message = countdownMessages.get(seconds);
+            Sound sound = countdownSounds.get(seconds);
 
             for (Player player : arena.getPlayers()) {
-                player.setLevel(timer);
+                player.setLevel(seconds);
                 updateBoard(player);
                 if (message != null) {
                     message.send(player);
@@ -141,8 +139,8 @@ public class CountdownPhase extends Phase {
                 }
             }
             // updateSigns();
-            if (timer > 0)
-                timer--;
+            if (seconds > 0)
+                seconds--;
             else {
                 cancel();
                 arena.getPhaseManager().setPhase(new GamePhase(arena));
@@ -153,13 +151,8 @@ public class CountdownPhase extends Phase {
     public static void loadConfig() {
         Config config = Quake.getConfigSection("lobby");
         countdownTimer = config.getIntRequired("countdown-timer");
-
-        // Loads countdown messages: a message per each countdown second.
         countdownMessages = config.getRequired("countdown-messages", typeOf(Map.class, Integer.class, Message.class));
-
-        // Loads countdown sounds: a sound per each countdown second.
-        countdownSounds = config.getRequired("countdown-sounds", typeOf(Map.class, Integer.class, String.class));
-
+        countdownSounds = config.getRequired("countdown-sounds", typeOf(Map.class, Integer.class, Sound.class));
         countdownBoard = config.getRequired("countdown-board", SimpleBoardModel.class);
     }
 }
