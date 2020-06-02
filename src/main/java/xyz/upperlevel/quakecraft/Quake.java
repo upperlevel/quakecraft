@@ -124,7 +124,6 @@ public class Quake extends JavaPlugin {
 
         WaitingPhase.loadConfig();
         GamePhase.loadConfig();
-        PlayingPhase.loadConfig();
         CountdownPhase.loadConfig();
         EndingPhase.loadConfig();
         LobbyPhase.loadConfig();

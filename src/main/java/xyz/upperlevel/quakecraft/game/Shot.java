@@ -9,7 +9,6 @@ import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.phases.GamePhase;
-import xyz.upperlevel.quakecraft.phases.PlayingPhase;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.config.Config;
@@ -17,9 +16,7 @@ import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.Dbg;
 import xyz.upperlevel.uppercore.util.FireworkUtil;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Shot extends BukkitRunnable {
@@ -50,7 +47,6 @@ public class Shot extends BukkitRunnable {
 
     private final Arena arena;
     private final GamePhase gamePhase;
-    private final PlayingPhase playingPhase;
 
     private final Player shooter;
     private final QuakeAccount shooterAccount;
@@ -61,10 +57,9 @@ public class Shot extends BukkitRunnable {
 
     private boolean started = false;
 
-    public Shot(PlayingPhase playingPhase, Player shooter) {
-        this.arena = playingPhase.getArena();
-        this.gamePhase = playingPhase.getGamePhase();
-        this.playingPhase = playingPhase; // TODO Is playingPhase really necessary?
+    public Shot(GamePhase gamePhase, Player shooter) {
+        this.arena = gamePhase.getArena();
+        this.gamePhase = gamePhase;
 
         this.shooter = shooter;
         this.shooterAccount = Quake.getAccount(shooter);
@@ -113,7 +108,7 @@ public class Shot extends BukkitRunnable {
 
         MultiStab.tryReach(gamePhase, gamePhase.getGamer(shooter), hits.size());
 
-        playingPhase.goOnIfHasWon(shooter);
+        gamePhase.goOnIfHasWon(shooter);
     }
 
     @Override

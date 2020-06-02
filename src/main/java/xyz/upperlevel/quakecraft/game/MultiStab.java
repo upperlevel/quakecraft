@@ -48,7 +48,7 @@ public class MultiStab {
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             event.getMessage().broadcast(
-                    phase.getPlayers(),
+                    phase.getArena().getPlayers(),
                     "killer_name", shooter.getPlayer().getName(),
                     "kills", String.valueOf(killCount)
             );
