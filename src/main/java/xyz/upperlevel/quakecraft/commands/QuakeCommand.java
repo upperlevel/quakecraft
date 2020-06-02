@@ -79,7 +79,7 @@ public class QuakeCommand extends NodeCommand {
             return;
         }
         arena.quit((Player) sender);
-        ARENA_QUIT.send((Player) sender);
+        ARENA_QUIT.send((Player) sender, arena.getPlaceholders());
     }
 
     /* quake shop */
