@@ -1,16 +1,17 @@
 package xyz.upperlevel.quakecraft.arena;
 
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,9 +24,8 @@ public class QuakeArenaListener implements Listener {
 
     // Player health
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageEvent e) {
-        if (e.isCancelled()) return;// Already canceled
         if (e.getEntity() instanceof Player && arena.hasPlayer((Player) e.getEntity())) {
             e.setCancelled(true);
             if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
@@ -44,10 +44,9 @@ public class QuakeArenaListener implements Listener {
 
     // Item interact
 
-    @SuppressWarnings("deprecation")
     @EventHandler(ignoreCancelled = true)
-    public void onPickup(PlayerPickupItemEvent e) {
-        if (arena.hasPlayer(e.getPlayer())) {
+    public void onPickup(EntityPickupItemEvent e) {
+        if (e.getEntityType() == EntityType.PLAYER && arena.hasPlayer((Player) e.getEntity())) {
             e.setCancelled(true);
         }
     }

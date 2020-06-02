@@ -1,11 +1,9 @@
 package xyz.upperlevel.quakecraft.arena;
 
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
-import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
 import xyz.upperlevel.uppercore.command.PermissionUser;
 import xyz.upperlevel.uppercore.command.SenderType;
@@ -80,11 +78,11 @@ public class QuakeArenaCommands {
             player.sendMessage(RED + "This world doesn't hold any arena.");
             return;
         }
-        if (which <= 1 || which > arena.getSpawns().size()) {
+        if (which <= 0 || which > arena.getSpawns().size()) {
             player.sendMessage(RED + "'" + arena.getId() + "' spawn index can't be negative or higher than " + arena.getSpawns().size() + ".");
             return;
         }
-        arena.getSpawns().remove(which - 1);
+        arena.removeSpawn(which - 1);
         player.sendMessage(GREEN + "Spawn " + which + " removed from '" + arena.getId() + "'.");
     }
 
@@ -171,11 +169,11 @@ public class QuakeArenaCommands {
             player.sendMessage(RED + "This world doesn't hold any arena.");
             return;
         }
-        if (which <= 1 || which > arena.getSpawns().size()) {
+        if (which <= 0 || which > arena.getPowerups().size()) {
             player.sendMessage(RED + "'" + arena.getId() + "' powerup index can't be negative or higher than " + arena.getSpawns().size() + ".");
             return;
         }
-        arena.getSpawns().remove(which - 1);
+        arena.removePowerup(which - 1);
         player.sendMessage(GREEN + "Powerup " + which + " removed from '" + arena.getId() + "'.");
     }
 }
