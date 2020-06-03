@@ -2,7 +2,6 @@ package xyz.upperlevel.quakecraft.phases;
 
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
@@ -13,7 +12,6 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GameBoard implements BoardModel {
     private final PlaceholderValue<String> title;
@@ -39,42 +37,54 @@ public class GameBoard implements BoardModel {
         this.footer = footer;
     }
 
-    private List<String> getHeader(Player player, PlaceholderRegistry placeholders) {
-        return header.stream()
-                .map(line -> line.resolve(player, placeholders))
-                .collect(Collectors.toList());
+    public GamePhase getGamePhase(Player player) {
+        return (GamePhase) Quake.get().getArenaManager().get(player).getPhaseManager().getPhase();
     }
 
-    private List<String> getRanking(Player player, PlaceholderRegistry placeholders) { // TODO inherit PlaceholderRegistry
-        Arena arena = Quake.getArena(player);
-        Stream<String> ranking = ((GamePhase) arena.getPhaseManager().getPhase()).getGamers()
+    private List<String> resolveHeader(Player player, PlaceholderRegistry<?> placeholders) {
+        return header
                 .stream()
-                .map(gamer -> rankingLine.resolve(player, PlaceholderRegistry.wrap(
-                        "player_name", gamer.getName(),
-                        "kills", String.valueOf(gamer.getKills())
-                )));
-        if (rankingMaxSize >= 0) {
-            ranking = ranking.limit(rankingMaxSize);
-        }
-        return ranking.collect(Collectors.toList());
-    }
-
-    private List<String> getFooter(Player player, PlaceholderRegistry placeholders) {
-        return footer.stream()
                 .map(line -> line.resolve(player, placeholders))
                 .collect(Collectors.toList());
     }
+
+    private List<String> resolveRanking(Player player, PlaceholderRegistry<?> placeholders) {
+        return getGamePhase(player).getGamers()
+                .stream()
+                .limit(rankingMaxSize)
+                .map(gamer -> rankingLine.resolve(
+                        player,
+                        PlaceholderRegistry.create(placeholders)
+                                .set("player_name", gamer.getName())
+                                .set("kills", String.valueOf(gamer.getKills()))
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> resolveFooter(Player player, PlaceholderRegistry<?> placeholders) {
+        return footer
+                .stream()
+                .map(line -> line.resolve(player, placeholders))
+                .collect(Collectors.toList());
+    }
+
+    public List<String> resolveLines(Player player, PlaceholderRegistry<?> placeholders) {
+        return new ArrayList<String>() {{
+            addAll(resolveHeader(player, placeholders));
+            addAll(resolveRanking(player, placeholders));
+            addAll(resolveFooter(player, placeholders));
+        }};
+    }
+
 
     @Override
-    public void apply(Board board, Player player) {
-        GamePhase phase = (GamePhase) Quake.get().getArenaManager().get(player).getPhaseManager().getPhase();
-        PlaceholderRegistry placeholders = phase.getPlaceholderRegistry();
+    public void apply(Board board, Player player, PlaceholderRegistry<?> placeholders) {
+        String resTitle = title.resolve(player, placeholders);
+        board.setTitle(resTitle);
+        //Dbg.pf("[GameBoard] Updating for %s - title: %s", player.getName(), resTitle);
 
-        board.setTitle(title);
-        board.setLines(new ArrayList<String>() {{
-            addAll(getHeader(player, placeholders));
-            addAll(getRanking(player, placeholders));
-            addAll(getFooter(player, placeholders));
-        }});
+        List<String> resLines = resolveLines(player, placeholders); // Every second instantiates a new list for players (care about GC perf?).
+        board.setLines(resLines);
+        //Dbg.pf("[GameBoard] Updating for %s - lines: %d", player.getName(), resLines.size());
     }
 }

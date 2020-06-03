@@ -119,7 +119,7 @@ public class EndingPhase extends Phase {
     }
 
     public void printRanking() {
-        PlaceholderRegistry<?> reg = gamePhase.getPlaceholderRegistry();
+        PlaceholderRegistry<?> reg = gamePhase.getPlaceholders();
         List<PlaceholderValue<String>> lines = new ArrayList<>();
 
         lines.addAll(endRankingHeader.filter(reg).getLines());

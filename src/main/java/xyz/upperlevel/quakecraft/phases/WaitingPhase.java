@@ -9,18 +9,16 @@ import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
-import xyz.upperlevel.uppercore.board.BoardContainer;
+import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WaitingPhase extends Phase {
     private static BoardModel board;
-
-    private final BoardContainer boards;
 
     @Getter
     private final LobbyPhase lobbyPhase;
@@ -29,24 +27,22 @@ public class WaitingPhase extends Phase {
     private final QuakeArena arena;
 
     @Getter
-    private final PlaceholderRegistry placeholderRegistry;
+    private final PlaceholderRegistry<?> placeholders;
+
+    private final Map<Player, BoardModel.Hook> boardByPlayer = new HashMap<>();
 
     public WaitingPhase(LobbyPhase lobbyPhase) {
         super("waiting");
 
-        this.boards = new BoardContainer(board);
-
         this.lobbyPhase = lobbyPhase;
         this.arena = lobbyPhase.getArena();
-        this.placeholderRegistry = arena.getPlaceholders();
+        this.placeholders = arena.getPlaceholders();
     }
 
     private void setupPlayer(Player player) {
-        boards.open(player, placeholderRegistry);
-    }
-
-    private void clearPlayer(Player player) {
-        boards.close(player);
+        BoardModel.Hook hooked = board.hook(new Board());
+        boardByPlayer.put(player, hooked);
+        hooked.open(player, placeholders);
     }
 
     private void tryStartCountdown() {
@@ -62,12 +58,6 @@ public class WaitingPhase extends Phase {
         tryStartCountdown();
     }
 
-    @Override
-    public void onDisable(Phase next) {
-        super.onDisable(next);
-        arena.getPlayers().forEach(this::clearPlayer);
-    }
-
     @EventHandler
     public void onArenaJoin(ArenaJoinEvent event) {
         if (arena.equals(event.getArena())) {
@@ -79,7 +69,7 @@ public class WaitingPhase extends Phase {
             // For this reason, the code that has to read the new arena's players is run one tick later.
             Bukkit.getScheduler().runTaskLater(Quake.get(), () -> {
                 tryStartCountdown();
-                arena.getPlayers().forEach(in -> boards.update(in, placeholderRegistry));
+                boardByPlayer.forEach((p, b) -> b.render(p, placeholders));
             }, 1);
         }
     }
@@ -87,13 +77,10 @@ public class WaitingPhase extends Phase {
     @EventHandler
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
-            Player p = e.getPlayer();
-            boards.close(p);
-
             // ArenaQuitEvent is called before the player's actually quit (to permit cancellation).
             // For this reason, the code that has to read the new arena's players is run one tick later.
             Bukkit.getScheduler().runTaskLater(Quake.get(), () ->
-                    arena.getPlayers().forEach(in -> boards.update(in, placeholderRegistry)), 1);
+                    boardByPlayer.forEach((p, b) -> b.render(p, placeholders)), 1);
         }
     }
 

@@ -24,7 +24,8 @@ import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
-import xyz.upperlevel.uppercore.board.BoardContainer;
+import xyz.upperlevel.uppercore.board.Board;
+import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
@@ -38,7 +39,7 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 
 public class GamePhase extends Phase {
-    private static int gameCountdown = 0;
+    private static int gameCountdown;
 
     private static GameBoard gameBoard;
     private static Message startMessage;
@@ -63,12 +64,12 @@ public class GamePhase extends Phase {
     private final Set<Player> spectators = new HashSet<>();
 
     @Getter
-    private final PlaceholderRegistry<?> placeholderRegistry;
+    private final PlaceholderRegistry<?> placeholders;
+
+    private final Map<Player, BoardModel.Hook> boardByPlayer = new HashMap<>();
 
     @Getter
     private final Countdown countdown;
-
-    private final BoardContainer boards;
 
     private final Map<Player, Shot> shootings = new HashMap<>();
     private final CompassTargeter compassTargeter;
@@ -76,31 +77,26 @@ public class GamePhase extends Phase {
     public GamePhase(QuakeArena arena) {
         super("game");
 
-        this.boards = new BoardContainer(gameBoard);
         this.arena = arena;
-        this.placeholderRegistry = PlaceholderRegistry.create(arena.getPlaceholders());
+        this.placeholders = PlaceholderRegistry.create(arena.getPlaceholders());
         buildPlaceholders();
         this.compassTargeter = new CompassTargeter(this);
-        this.countdown = new Countdown(Quake.get(), gameCountdown * 20, 20,
+        this.countdown = Countdown.create(
+                gameCountdown * 20,
+                20,
                 tick -> {
-                    for (Player player : arena.getPlayers()) {
-                        boards.update(player, placeholderRegistry);
-                    }
+                    updateBoards();
                 },
                 () -> {
-                    // if there is at least one player left the winner is him
-                    if (gamers.size() > 0) {
-                        getPhaseManager().setPhase(new EndingPhase(this, gamers.get(0).getPlayer()));
-                    } else {
-                        // otherwise since we have no-one playing we can skip to LobbyPhase (should never reach this point)
-                        arena.getPhaseManager().setPhase(new LobbyPhase(arena));
-                    }
+                    Player winner = gamers.get(0).getPlayer();
+                    getPhaseManager().setPhase(new EndingPhase(this, winner));
+                    Dbg.p(String.format("[%s] Game countdown ended, the first is %s", arena.getName(), winner.getName()));
                 }
         );
     }
 
     private void buildPlaceholders() {
-        placeholderRegistry.set("ranking_name", (p, s) -> {
+        placeholders.set("ranking_name", (p, s) -> {
             if (s == null)
                 return null;
             try {
@@ -109,14 +105,14 @@ public class GamePhase extends Phase {
                 return null;
             }
         });
-        placeholderRegistry.set("ranking_kills", (p, s) -> {
+        placeholders.set("ranking_kills", (p, s) -> {
             try {
                 return String.valueOf(gamers.get(Integer.parseInt(s) - 1).getKills());
             } catch (Exception e) {
                 return null;
             }
         });
-        placeholderRegistry.set("ranking_gun", (p, s) -> {
+        placeholders.set("ranking_gun", (p, s) -> {
             try {
                 QuakeAccount player = Quake.get().getPlayerManager().getAccount(gamers.get(Integer.parseInt(s) - 1).getPlayer());
                 return player.getGun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getGun().getName().resolve(p);
@@ -124,7 +120,11 @@ public class GamePhase extends Phase {
                 return null;
             }
         });
-        placeholderRegistry.set("game_countdown", (p, s) -> Double.toString(countdown.getCurrentTick()));
+        placeholders.set("game_countdown", () -> {
+            String res = countdown.toString("mm:ss");
+            Dbg.pf("[%s] Placeholder countdown request: %s", arena.getName(), res);
+            return res;
+        });
     }
 
     /**
@@ -135,7 +135,20 @@ public class GamePhase extends Phase {
         gamers.sort((prev, next) -> (next.getKills() - prev.getKills()));
     }
 
+    // This function is called by both Gamer & Spectator.
+    private void setupPlayer(Player player) {
+        BoardModel.Hook hooked = gameBoard.hook(new Board());
+        boardByPlayer.put(player, hooked);
+        hooked.open(player, placeholders);
+    }
+
+    public void updateBoards() {
+        boardByPlayer.forEach((p, b) -> b.render(p, placeholders));
+    }
+
     private void addGamer(Player player) {
+        setupPlayer(player);
+
         Gamer g = new Gamer(this, player);
         gamersByPlayer.put(player, g);
         gamers.add(g);
@@ -166,6 +179,7 @@ public class GamePhase extends Phase {
     }
 
     private void addSpectator(Player player) {
+        setupPlayer(player);
         spectators.add(player);
 
         // TODO setup spectator
@@ -203,12 +217,11 @@ public class GamePhase extends Phase {
         // First thing done is to register all the present players as gamers.
         arena.getPlayers().forEach(this::addGamer);
 
-        arena.getPlayers().forEach(player ->
-                boards.open(player, placeholderRegistry));
+        updateBoards();
         compassTargeter.start();
 
         arena.getPlayers().forEach(p -> {
-            startMessage.send(p, placeholderRegistry);
+            startMessage.send(p, placeholders);
             startSound.play(p);
         });
 
@@ -231,7 +244,7 @@ public class GamePhase extends Phase {
     public void onDisable(Phase next) {
         super.onDisable(next);
 
-        countdown.stop();
+        countdown.cancel();
         compassTargeter.cancel();
 
         for (Powerup powerup : arena.getPowerups()) { // Removes the power-ups when the game ends.
@@ -253,7 +266,6 @@ public class GamePhase extends Phase {
     public void onArenaJoin(ArenaJoinEvent e) {
         if (arena.equals(e.getArena())) {
             Player p = e.getPlayer();
-            boards.open(p, placeholderRegistry);
             addSpectator(p);
             Dbg.p(String.format("[%s] %s joined as a spectator", arena.getName(), p.getName()));
         }
@@ -310,9 +322,10 @@ public class GamePhase extends Phase {
             shot.start();
 
             player.setExp(1.0f);
-            long from = (long) Quake.getAccount(player).getSelectedTrigger().getFiringSpeed();
-            new Countdown(Quake.get(), from, 1,
-                    tick -> player.setExp((float) (tick / from)),
+            long firingDelay = (long) Quake.getAccount(player).getSelectedTrigger().getFiringSpeed();
+            Countdown.create(
+                    firingDelay, 1,
+                    tick -> player.setExp((float) (tick / firingDelay)),
                     () -> {
                         player.setExp(0.0f); // to be sure
                         shootings.remove(player);
@@ -359,7 +372,7 @@ public class GamePhase extends Phase {
     public void onPlayerSneak(PlayerToggleSneakEvent e) {
         if (arena.equals(Quake.getArena(e.getPlayer())) && sneakDisabled) {
             e.setCancelled(true);
-            sneakDisabledMessage.send(e.getPlayer(), placeholderRegistry);
+            sneakDisabledMessage.send(e.getPlayer(), placeholders);
         }
     }
 

@@ -88,7 +88,7 @@ public class Shot extends BukkitRunnable {
                     "killed", hit.getName(),
                     "kill_message", (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage()
             );
-            arena.broadcast(message, gamePhase.getPlaceholderRegistry());
+            arena.broadcast(message, gamePhase.getPlaceholders());
 
             gamePhase.getGamer(shooter).onKill(headshot);
             gamePhase.getGamer(hit).die();

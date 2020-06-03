@@ -10,13 +10,14 @@ import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
-import xyz.upperlevel.uppercore.board.BoardContainer;
+import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static xyz.upperlevel.uppercore.util.TypeUtil.typeOf;
@@ -40,7 +41,7 @@ public class CountdownPhase extends Phase {
     @Getter
     private final Countdown countdown = new Countdown();
 
-    private BoardContainer boards;
+    private final Map<Player, BoardModel.Hook> boardByPlayer = new HashMap<>();
 
     public CountdownPhase(LobbyPhase lobbyPhase) {
         super("lobby-countdown");
@@ -48,7 +49,6 @@ public class CountdownPhase extends Phase {
         this.arena = lobbyPhase.getArena();
         this.placeholders = PlaceholderRegistry.create(arena.getPlaceholders())
                 .set("countdown", () -> Integer.toString(countdown.getSeconds()));
-        this.boards = new BoardContainer(countdownBoard);
     }
 
     private void clearTick(Player player) {
@@ -61,16 +61,17 @@ public class CountdownPhase extends Phase {
     }
 
     private void setupPlayer(Player player) {
-        boards.open(player, placeholders);
+        BoardModel.Hook hooked = countdownBoard.hook(new Board());
+        boardByPlayer.put(player, hooked);
+        hooked.open(player, placeholders);
     }
 
     private void clearPlayer(Player player) {
-        boards.close(player);
         clearTick(player);
     }
 
     private void updateBoard(Player player) {
-        boards.update(player, placeholders);
+        boardByPlayer.get(player).render(player, placeholders);
     }
 
     private void updateBoards() {
