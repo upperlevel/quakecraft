@@ -122,7 +122,7 @@ public class GamePhase extends Phase {
         });
         placeholders.set("game_countdown", () -> {
             String res = countdown.toString("mm:ss");
-            Dbg.pf("[%s] Placeholder countdown request: %s", arena.getName(), res);
+            //Dbg.pf("[%s] Placeholder countdown request: %s", arena.getName(), res);
             return res;
         });
     }
