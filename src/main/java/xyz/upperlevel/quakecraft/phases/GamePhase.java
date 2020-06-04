@@ -128,8 +128,7 @@ public class GamePhase extends Phase {
     }
 
     /**
-     * Sorts ranking to the player with the highest number of
-     * kills to the one with lowest number of kills.
+     * Sorts the gamers list based on the player that has the highest number of kills.
      */
     public void updateRanking() {
         gamers.sort((prev, next) -> (next.getKills() - prev.getKills()));

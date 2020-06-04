@@ -64,7 +64,8 @@ public class Gamer {
         if (++killsSinceDeath >= nextKillStreak.getKills()) {
             nextKillStreak = nextKillStreak.reach(gamePhase, this);
         }
-        gamePhase.updateRanking(); // that will update boards
+        gamePhase.updateRanking();
+        gamePhase.updateBoards();
     }
 
     public void die() {
