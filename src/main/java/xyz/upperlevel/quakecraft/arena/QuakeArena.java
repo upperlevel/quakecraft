@@ -7,15 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.phases.LobbyPhase;
+import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.arena.Phase;
-import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
-import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.util.Dbg;
 import xyz.upperlevel.uppercore.util.LocUtil;
 
 import java.util.ArrayList;
@@ -25,10 +24,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class QuakeArena extends Arena {
-    public static Message ARENA_JOIN_MESSAGE;
-    public static Message ARENA_QUIT_MESSAGE;
-    public static Message MAX_PLAYERS_REACHED_ERROR;
-
     @Getter
     @Setter
     private int minPlayers = -1, maxPlayers = -1;
@@ -135,22 +130,23 @@ public class QuakeArena extends Arena {
 
     @Override
     public boolean join(Player player) {
-        if (getPlayers().size() > maxPlayers) {
-            MAX_PLAYERS_REACHED_ERROR.send(player, getPlaceholders());
-            return false;
-        } else {
-            getPlayers().forEach(mate -> ARENA_JOIN_MESSAGE.send(player, getPlaceholders()));
-            return super.join(player);
+        boolean result = super.join(player);
+        if (result) {
+            // The on-join message is managed by below phases.
+            // The player could be a spectator, and if it is, no-one should be notified.
+            Dbg.pf("[%s] %s joined", getName(), player.getName());
         }
+        return result;
     }
 
     @Override
     public boolean quit(Player player) {
         boolean result = super.quit(player);
-        getPlayers().forEach(other -> ARENA_QUIT_MESSAGE.send(player,
-                PlaceholderRegistry.create()
-                        .set("player_name", player.getName())
-        ));
+        if (result) {
+            // The on-quit message is managed by below phases.
+            // The player could be a spectator, and if it is, no-one should be notified.
+            Dbg.pf("[%s] %s quit", getName(), player.getName());
+        }
         return result;
     }
 
@@ -166,12 +162,5 @@ public class QuakeArena extends Arena {
                 .map(Powerup::serialize)
                 .collect(Collectors.toList()));
         return data;
-    }
-
-    public static void loadConfig() {
-        Config messages = Quake.getConfigSection("messages.commands");
-        ARENA_JOIN_MESSAGE = messages.getMessage("arena.join.success");
-        ARENA_QUIT_MESSAGE = messages.getMessage("arena.quit.success");
-        MAX_PLAYERS_REACHED_ERROR = messages.getMessage("cannot-join-max-reached");
     }
 }

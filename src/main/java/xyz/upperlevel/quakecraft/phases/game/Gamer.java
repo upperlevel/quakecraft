@@ -1,12 +1,10 @@
-package xyz.upperlevel.quakecraft.phases;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.game.GainType;
-import xyz.upperlevel.quakecraft.game.KillStreak;
 
 import java.util.List;
 import java.util.Random;

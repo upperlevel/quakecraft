@@ -5,9 +5,9 @@ import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.phases.GamePhase;
-import xyz.upperlevel.quakecraft.phases.Gamer;
-import xyz.upperlevel.quakecraft.game.KillStreak;
+import xyz.upperlevel.quakecraft.phases.game.GamePhase;
+import xyz.upperlevel.quakecraft.phases.game.Gamer;
+import xyz.upperlevel.quakecraft.phases.game.KillStreak;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 @Getter

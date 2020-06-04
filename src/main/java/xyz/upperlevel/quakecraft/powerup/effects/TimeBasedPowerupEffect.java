@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.phases.Gamer;
+import xyz.upperlevel.quakecraft.phases.game.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 

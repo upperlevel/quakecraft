@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.phases;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
 import org.bukkit.GameMode;
@@ -16,9 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.game.CompassTargeter;
-import xyz.upperlevel.quakecraft.game.Dash;
-import xyz.upperlevel.quakecraft.game.Shot;
+import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
@@ -52,7 +50,7 @@ public class GamePhase extends Phase {
     private static Message sneakDisabledMessage;
     private static int killsToWin;
 
-    private static PlayingHotbar hotbar;
+    private static GameHotbar hotbar;
     private static int gunSlot;
 
     @Getter
@@ -384,6 +382,6 @@ public class GamePhase extends Phase {
         sneakDisabled = config.getBoolRequired("sneak-disabled");
         sneakDisabledMessage = config.getMessageRequired("sneak-disabled-message");
         killsToWin = config.getIntRequired("kills-to-win");
-        hotbar = config.getRequired("playing-hotbar", PlayingHotbar.class);
+        hotbar = config.getRequired("playing-hotbar", GameHotbar.class);
     }
 }

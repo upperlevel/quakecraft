@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.phases.Gamer;
+import xyz.upperlevel.quakecraft.phases.game.Gamer;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 
 public class PowerupPickupEvent extends Event implements Cancellable {

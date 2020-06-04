@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.game;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -8,7 +8,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
-import xyz.upperlevel.quakecraft.phases.GamePhase;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.config.Config;

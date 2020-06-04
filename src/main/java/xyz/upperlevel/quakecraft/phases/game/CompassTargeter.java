@@ -1,10 +1,10 @@
-package xyz.upperlevel.quakecraft.game;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.phases.GamePhase;
+import xyz.upperlevel.quakecraft.phases.game.GamePhase;
 import xyz.upperlevel.uppercore.arena.Arena;
 
 public class CompassTargeter extends BukkitRunnable {

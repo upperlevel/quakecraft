@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.game;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;

@@ -3,7 +3,7 @@ package xyz.upperlevel.quakecraft;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
-import xyz.upperlevel.quakecraft.game.GainNotifier;
+import xyz.upperlevel.quakecraft.phases.game.GainNotifier;
 import xyz.upperlevel.quakecraft.shop.KillSoundManager;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.armor.*;

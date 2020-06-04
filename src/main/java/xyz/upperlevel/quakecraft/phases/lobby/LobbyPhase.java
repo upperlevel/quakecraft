@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.phases;
+package xyz.upperlevel.quakecraft.phases.lobby;
 
 import lombok.Getter;
 import org.bukkit.GameMode;
@@ -10,13 +10,19 @@ import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.PhaseManager;
+import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
+import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.util.Dbg;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
 public class LobbyPhase extends PhaseManager {
     private static Hotbar hotbar;
+
+    private static Message maxPlayersReachedError;
 
     @Getter
     private final QuakeArena arena;
@@ -65,11 +71,21 @@ public class LobbyPhase extends PhaseManager {
         return false;
     }
 
-    @Override
-    public boolean onQuit(Player player) {
-        super.onQuit(player);
-        clearPlayer(player);
-        return false;
+    @EventHandler
+    public void onArenaJoin(ArenaJoinEvent e) {
+        if (arena.equals(e.getArena())) {
+            if (arena.getPlayers().size() >= arena.getMaxPlayers()) {
+                e.setCancelled(true);
+                Dbg.pf("[%s] %s tried to join but the game is full!", arena.getName(), e.getPlayer().getName());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onArenaQuit(ArenaQuitEvent e) {
+        if (arena.equals(e.getArena())) {
+            clearPlayer(e.getPlayer());
+        }
     }
 
     @EventHandler
@@ -80,7 +96,8 @@ public class LobbyPhase extends PhaseManager {
     }
 
     public static void loadConfig() {
-        Config config = Quake.getConfigSection("lobby");
-        hotbar = config.getRequired("lobby-hotbar", Hotbar.class);
+        Config cfg = Quake.getConfigSection("lobby");
+        maxPlayersReachedError = Quake.get().getCustomConfig().getMessageRequired("messages.lobby.max-players-reached");
+        hotbar = cfg.getRequired("lobby-hotbar", Hotbar.class);
     }
 }

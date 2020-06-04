@@ -1,12 +1,10 @@
-package xyz.upperlevel.quakecraft.game;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.ParticipantGainMoneyEvent;
-import xyz.upperlevel.quakecraft.phases.EndingPhase;
-import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.economy.EconomyManager;

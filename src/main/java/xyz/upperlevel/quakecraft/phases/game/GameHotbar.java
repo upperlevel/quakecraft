@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.phases;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,10 +16,10 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 
 import java.util.List;
 
-public class PlayingHotbar extends Hotbar {
+public class GameHotbar extends Hotbar {
 
     @ConfigConstructor
-    public PlayingHotbar(
+    public GameHotbar(
             @ConfigProperty("gun.slot") int gunSlot,
             @ConfigProperty("gun.item") Gun gun,
             @ConfigProperty("tracker.slot") int trackerSlot,

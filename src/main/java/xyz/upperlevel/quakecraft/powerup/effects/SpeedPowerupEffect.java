@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.powerup.effects;
 
 import lombok.Getter;
 import lombok.Setter;
-import xyz.upperlevel.quakecraft.phases.Gamer;
+import xyz.upperlevel.quakecraft.phases.game.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 
 public class SpeedPowerupEffect extends TimeBasedPowerupEffect {

@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.phases;
+package xyz.upperlevel.quakecraft.phases.lobby;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.phases.lobby.CountdownPhase;
+import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;

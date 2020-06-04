@@ -7,7 +7,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.phases.Gamer;
+import xyz.upperlevel.quakecraft.phases.game.Gamer;
 
 public class LaserHitEvent extends Event implements Cancellable {
     @Getter

@@ -8,8 +8,10 @@ import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.commands.DebugCommand;
 import xyz.upperlevel.quakecraft.commands.QuakeArgumentParsers;
 import xyz.upperlevel.quakecraft.commands.QuakeCommand;
-import xyz.upperlevel.quakecraft.game.*;
-import xyz.upperlevel.quakecraft.phases.*;
+import xyz.upperlevel.quakecraft.phases.game.*;
+import xyz.upperlevel.quakecraft.phases.lobby.CountdownPhase;
+import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
+import xyz.upperlevel.quakecraft.phases.lobby.WaitingPhase;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.ConfirmPurchaseGui;
@@ -127,8 +129,6 @@ public class Quake extends JavaPlugin {
         CountdownPhase.loadConfig();
         EndingPhase.loadConfig();
         LobbyPhase.loadConfig();
-
-        QuakeArena.loadConfig();
 
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
 

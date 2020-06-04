@@ -1,4 +1,4 @@
-package xyz.upperlevel.quakecraft.phases;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;

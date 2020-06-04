@@ -1,29 +1,18 @@
-package xyz.upperlevel.quakecraft.phases;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.game.GainType;
+import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
-import xyz.upperlevel.uppercore.nms.impl.MessageNms;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
@@ -46,7 +35,6 @@ public class EndingPhase extends Phase {
     private static GainType secondGain;
     private static GainType thirdGain;
 
-    private static boolean autoJoin;
     private static Message rejoinMessage;
 
     private static Hotbar hotbar;
@@ -60,7 +48,8 @@ public class EndingPhase extends Phase {
     @Getter
     private final GamePhase gamePhase;
 
-    private final BukkitRunnable fireworksTask, endingTask;
+    private final WinnerCelebration winnerCelebration;
+    private final BukkitRunnable endingTask;
 
     public EndingPhase(GamePhase gamePhase, Player winner) {
         super("ending");
@@ -68,30 +57,20 @@ public class EndingPhase extends Phase {
         this.arena = gamePhase.getArena();
         this.winner = winner;
 
-        this.fireworksTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                Firework f = winner.getPlayer().getWorld().spawn(winner.getPlayer().getLocation(), Firework.class);
-                FireworkMeta fm = f.getFireworkMeta();
-                fm.addEffect(FireworkEffect.builder()
-                        .withColor(Color.fromRGB(
-                                random.nextInt(255),
-                                random.nextInt(255),
-                                random.nextInt(255)
-                        ))
-                        .build());
-                fm.setPower(1);
-                f.setFireworkMeta(fm);
-            }
-        };
+        this.winnerCelebration = new WinnerCelebration(winner);
         this.endingTask = new BukkitRunnable() {
             @Override
             public void run() {
-                fireworksTask.cancel();
+                winnerCelebration.cancel();
                 giveGains();
-                arena.getPhaseManager().setPhase(new LobbyPhase(arena));
+                resetArena();
             }
         };
+    }
+
+    private void resetArena() {
+        new ArrayList<>(arena.getPlayers()).forEach(arena::quit);
+        arena.getPhaseManager().setPhase(new LobbyPhase(arena));
     }
 
     public void giveGains() {
@@ -151,38 +130,26 @@ public class EndingPhase extends Phase {
     @Override
     public void onEnable(Phase prev) {
         super.onEnable(prev);
-        printRanking();
-
         gamePhase.getGamers().forEach(g -> setupPlayer(g.getPlayer()));
-
-        fireworksTask.runTaskTimer(Quake.get(), 0, 20); // one firework per second
+        printRanking();
+        winnerCelebration.start();
         endingTask.runTaskLater(Quake.get(), 20 * 10);
     }
 
     @Override
     public void onDisable(Phase next) {
         super.onDisable(next);
-        fireworksTask.cancel();
+        winnerCelebration.cancel();
         endingTask.cancel();
 
         gamePhase.getGamers().forEach(g -> clearPlayer(g.getPlayer()));
 
-        if (!autoJoin) {
-            for (Player player : arena.getPlayers()) {
-                arena.quit(player);
-                BaseComponent[] comps = TextComponent.fromLegacyText(String.join("\n", rejoinMessage.get(player)));
-                ClickEvent event = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quake join " + arena.getId());
-                for (BaseComponent comp : comps)
-                    comp.setClickEvent(event);
-                MessageNms.sendJson(player, comps);
-            }
-        }
     }
 
     @EventHandler
     public void onArenaJoin(ArenaJoinEvent e) {
         if (arena.equals(e.getArena())) {
-            // already handled in GamePhase
+            e.setCancelled(true); // Players can't join when the game ends.
         }
     }
 
@@ -190,8 +157,8 @@ public class EndingPhase extends Phase {
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
             clearPlayer(e.getPlayer());
-            if (e.getPlayer() == winner.getPlayer()) {
-                fireworksTask.cancel(); // if the winner exits we have to stop the fireworks
+            if (e.getPlayer() == winner.getPlayer()) { // If the winner exits its celebration stops.
+                winnerCelebration.cancel();
             }
         }
     }
@@ -213,7 +180,6 @@ public class EndingPhase extends Phase {
 
         endRankingFooter = endRanking.getMessageRequired("footer");
 
-        autoJoin = Quake.getConfigSection("game").getBoolRequired("auto-join");
         rejoinMessage = Quake.getConfigSection("game").getMessageRequired("rejoin-message");
         hotbar = Quake.getConfigSection("game").getRequired("ending-hotbar", Hotbar.class);
 

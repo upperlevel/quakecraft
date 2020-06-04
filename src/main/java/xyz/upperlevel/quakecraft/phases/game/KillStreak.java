@@ -1,16 +1,13 @@
-package xyz.upperlevel.quakecraft.game;
+package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.events.KillStreakReachEvent;
-import xyz.upperlevel.quakecraft.phases.GamePhase;
-import xyz.upperlevel.quakecraft.phases.Gamer;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.exceptions.InvalidConfigException;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

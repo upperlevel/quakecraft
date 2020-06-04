@@ -75,7 +75,6 @@ game:
   start-sound: 'ENTITY_PLAYER_LEVELUP'
   duration: 600  # in seconds (600 = 10 minutes) (game duration)
 
-  # TODO: headshot-height: 1.4 # The height (relative to the player) to count the shot as a headshot
   custom-gun: 'Custom Gun' # The name of the gun when no pre-baked gun is matched
   shoot-sound: # The sound used when a player shoots with the gun
     sound: ENTITY_BLAZE_HURT # Sound type
@@ -2886,7 +2885,6 @@ messages:
     gain-message: "&aYou gained %gain_amount% because %gain_name%."
 
     cannot-join:
-      max-players: '&cCannot join game "%game_name%": Max players reached'
       in-game: '&cCannot join game "%game_name%": Already playing'
 
     shot: '&7%killer% %kill_message% &7%killed%'
@@ -2977,6 +2975,7 @@ messages:
   lobby:
     join: '&7%player_name%&e has joined (&b%players%&e/&b%max_players%&e)!'
     quit: '&7%player_name%&e has quit!'
+    max-players-reached: '&cCannot join game "%arena_name%": Max players reached'
     countdown:
       40: '&eThe game is starting within &b40&e seconds!'
       20: '&eThe game is starting within 20 seconds!'
