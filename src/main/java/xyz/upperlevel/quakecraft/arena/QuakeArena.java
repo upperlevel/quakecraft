@@ -11,6 +11,7 @@ import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.arena.Phase;
+import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -140,8 +141,8 @@ public class QuakeArena extends Arena {
     }
 
     @Override
-    public boolean quit(Player player) {
-        boolean result = super.quit(player);
+    public boolean quit(Player player, ArenaQuitReason reason) {
+        boolean result = super.quit(player, reason);
         if (result) {
             // The on-quit message is managed by below phases.
             // The player could be a spectator, and if it is, no-one should be notified.

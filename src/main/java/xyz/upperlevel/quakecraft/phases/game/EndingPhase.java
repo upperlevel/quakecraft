@@ -10,6 +10,7 @@ import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
+import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
@@ -69,7 +70,7 @@ public class EndingPhase extends Phase {
     }
 
     private void resetArena() {
-        new ArrayList<>(arena.getPlayers()).forEach(arena::quit);
+        new ArrayList<>(arena.getPlayers()).forEach(p -> arena.quit(p, ArenaQuitReason.ARENA_END));
         arena.getPhaseManager().setPhase(new LobbyPhase(arena));
     }
 
@@ -99,9 +100,8 @@ public class EndingPhase extends Phase {
 
     public void printRanking() {
         PlaceholderRegistry<?> reg = gamePhase.getPlaceholders();
-        List<PlaceholderValue<String>> lines = new ArrayList<>();
 
-        lines.addAll(endRankingHeader.filter(reg).getLines());
+        List<PlaceholderValue<String>> lines = new ArrayList<>(endRankingHeader.filter(reg).getLines());
         int playerCount = arena.getPlayers().size();
         Map.Entry<Integer, Message> bodyEntry = endRankingBody.floorEntry(playerCount);
         if (bodyEntry == null) {

@@ -6,6 +6,7 @@ import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.arena.QuakeArenaCommands;
 import xyz.upperlevel.uppercore.arena.ArenaCommands;
+import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
 import xyz.upperlevel.uppercore.command.NodeCommand;
 import xyz.upperlevel.uppercore.command.PermissionUser;
 import xyz.upperlevel.uppercore.command.SenderType;
@@ -81,7 +82,7 @@ public class QuakeCommand extends NodeCommand {
             ARENA_NOT_FOUND.send(sender);
             return;
         }
-        arena.quit((Player) sender);
+        arena.quit((Player) sender, ArenaQuitReason.COMMAND);
         ARENA_QUIT.send((Player) sender, arena.getPlaceholders());
     }
 

@@ -18,10 +18,12 @@ import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
+import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
+import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.config.Config;
@@ -249,11 +251,7 @@ public class GamePhase extends Phase {
         }
 
         // Clears the power-ups effect from players.
-        arena.getPowerups()
-                .stream()
-                .map(Powerup::getEffect)
-                .distinct()
-                .forEach(e -> e.clear(gamers));
+        PowerupEffectManager.get().forEach(e -> e.clear(gamers));
 
         shootings.values().forEach(Shot::cancel); // Cancels all tasks related to shots.
         shootings.clear();
@@ -274,7 +272,7 @@ public class GamePhase extends Phase {
             Player p = e.getPlayer();
             onPlayerQuit(p);
 
-            if (gamers.size() == 1) {
+            if (gamers.size() == 1 && e.getReason() != ArenaQuitReason.ARENA_ABORT) {
                 Dbg.p(String.format("[%s] The player %s is the only player left, he won!", arena.getName(), p.getName()));
 
                 // TODO switch to winning state
