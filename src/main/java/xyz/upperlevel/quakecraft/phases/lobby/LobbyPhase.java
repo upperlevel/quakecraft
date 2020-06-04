@@ -64,20 +64,15 @@ public class LobbyPhase extends PhaseManager {
         // TODO player restore to original inventory/stats will be done by Uppercore
     }
 
-    @Override
-    public boolean onJoin(Player player) {
-        super.onJoin(player);
-        setupPlayer(player);
-        return false;
-    }
-
     @EventHandler
     public void onArenaJoin(ArenaJoinEvent e) {
         if (arena.equals(e.getArena())) {
             if (arena.getPlayers().size() >= arena.getMaxPlayers()) {
                 e.setCancelled(true);
                 Dbg.pf("[%s] %s tried to join but the game is full!", arena.getName(), e.getPlayer().getName());
+                return;
             }
+            setupPlayer(e.getPlayer());
         }
     }
 

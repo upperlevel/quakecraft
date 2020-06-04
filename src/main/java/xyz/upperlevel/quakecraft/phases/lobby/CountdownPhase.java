@@ -1,6 +1,7 @@
 package xyz.upperlevel.quakecraft.phases.lobby;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
+import xyz.upperlevel.uppercore.util.Dbg;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,7 +91,6 @@ public class CountdownPhase extends Phase {
     @Override
     public void onDisable(Phase next) {
         super.onDisable(next);
-        countdown.cancel();
         arena.getPlayers().forEach(this::clearPlayer);
     }
 
@@ -104,13 +105,18 @@ public class CountdownPhase extends Phase {
     @EventHandler
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
-            clearPlayer(e.getPlayer());
-            // If player count is lower than min stops the countdown if started
-            if (arena.getPlayers().size() - 1 < arena.getMinPlayers()) {
+            Player p = e.getPlayer();
+            clearPlayer(p);
+
+            int playersSize = arena.getPlayers().size() - 1; // Because the quitting player hasn't been removed yet.
+            int minPlayers = arena.getMinPlayers();
+            Dbg.pf("[%s] %s quit during countdown %d < %d", arena.getName(), p.getName(), playersSize, minPlayers);
+
+            if (playersSize < minPlayers) {
                 countdown.cancel();
                 updateBoards();
                 clearTick();
-                lobbyPhase.getPhaseManager().setPhase(new WaitingPhase(lobbyPhase)); // Back to WaitingPhase
+                Bukkit.getScheduler().runTask(Quake.get(), () -> lobbyPhase.getPhaseManager().setPhase(new WaitingPhase(lobbyPhase)));
             }
         }
     }
