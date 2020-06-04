@@ -56,7 +56,10 @@ public class QuakeCommand extends NodeCommand {
             player.sendMessage(RED + "The arena " + LIGHT_PURPLE + arena.getId() + RED + " isn't enabled.");
             return;
         }
-        // todo if arena is already playing joins in spectator mode
+        if (arena.hasPlayer(player)) {
+            player.sendMessage(RED + "You're already inside another arena, leave it first using" + LIGHT_PURPLE + " /q leave" + RED + ".");
+            return;
+        }
         if (arena.join(player)) {
             ARENA_JOINED.send(player, arena.getPlaceholders());
         }
