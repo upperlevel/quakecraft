@@ -194,6 +194,8 @@ public class GamePhase extends Phase {
     }
 
     public void onPlayerQuit(Player player) {
+        boardByPlayer.remove(player);
+
         // Gamer
         Gamer g = gamersByPlayer.remove(player);
         if (g != null) {
@@ -269,17 +271,17 @@ public class GamePhase extends Phase {
     @EventHandler
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
-            Player p = e.getPlayer();
-            onPlayerQuit(p);
+            onPlayerQuit(e.getPlayer());
 
             if (gamers.size() == 1 && e.getReason() != ArenaQuitReason.ARENA_ABORT) {
-                Dbg.p(String.format("[%s] The player %s is the only player left, he won!", arena.getName(), p.getName()));
-
-                // TODO switch to winning state
+                Player winner = gamers.get(0).getPlayer();
+                getPhaseManager().setPhase(new EndingPhase(this, winner));
+                Dbg.p(String.format("[%s] The player %s is the only player left, he won!", arena.getName(), winner));
+                return;
             }
 
-            if (gamers.isEmpty()) { // If the arena is now empty, just restarts.
-                Dbg.p(String.format("[%s] Was left empty without players", arena.getName()));
+            if (gamers.isEmpty()) { // The game logic should never reach this code since when there's one player is switched to EndingPhase.
+                arena.getPlayers().forEach(p -> arena.quit(p, ArenaQuitReason.ARENA_END));
                 getPhaseManager().setPhase(new LobbyPhase(arena));
             }
         }

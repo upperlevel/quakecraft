@@ -20,12 +20,11 @@ import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.TypeUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 public class EndingPhase extends Phase {
-    private static final Random random = new Random();
-
     private static Message endGainMessage;
     private static Message endRankingHeader;
     private static NavigableMap<Integer, Message> endRankingBody;
@@ -63,7 +62,7 @@ public class EndingPhase extends Phase {
             @Override
             public void run() {
                 winnerCelebration.cancel();
-                giveGains();
+                reward();
                 resetArena();
             }
         };
@@ -74,11 +73,18 @@ public class EndingPhase extends Phase {
         arena.getPhaseManager().setPhase(new LobbyPhase(arena));
     }
 
-    public void giveGains() {
-        for (Gamer p : gamePhase.getGamers()) {
+    private List<Gamer> getGamers() {
+        return gamePhase.getGamers()
+                .stream()
+                .filter(gamer -> gamer.getPlayer().isOnline())
+                .collect(Collectors.toList());
+    }
+
+    private void reward() {
+        for (Gamer p : getGamers()) {
             baseGain.grant(p);
         }
-        Iterator<Gamer> ranking = gamePhase.getGamers().iterator();
+        Iterator<Gamer> ranking = getGamers().iterator();
         if (ranking.hasNext()) {
             firstGain.grant(ranking.next());
             if (ranking.hasNext()) {
@@ -89,7 +95,7 @@ public class EndingPhase extends Phase {
             }
         }
         if (EconomyManager.isEnabled()) {
-            for (Gamer p : gamePhase.getGamers()) {
+            for (Gamer p : getGamers()) {
                 EconomyManager.get(p.getPlayer()).give(p.coins);
                 endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
             }
@@ -130,7 +136,7 @@ public class EndingPhase extends Phase {
     @Override
     public void onEnable(Phase prev) {
         super.onEnable(prev);
-        gamePhase.getGamers().forEach(g -> setupPlayer(g.getPlayer()));
+        getGamers().forEach(g -> setupPlayer(g.getPlayer()));
         printRanking();
         winnerCelebration.start();
         endingTask.runTaskLater(Quake.get(), 20 * 10);
@@ -142,8 +148,7 @@ public class EndingPhase extends Phase {
         winnerCelebration.cancel();
         endingTask.cancel();
 
-        gamePhase.getGamers().forEach(g -> clearPlayer(g.getPlayer()));
-
+        getGamers().forEach(g -> clearPlayer(g.getPlayer()));
     }
 
     @EventHandler

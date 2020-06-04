@@ -71,10 +71,11 @@ public class CountdownPhase extends Phase {
 
     private void clearPlayer(Player player) {
         clearTick(player);
+        boardByPlayer.remove(player);
     }
 
     private void updateBoard(Player player) {
-        boardByPlayer.get(player).render(player, placeholders);
+        boardByPlayer.forEach((p, b) -> b.render(p, placeholders));
     }
 
     private void updateBoards() {

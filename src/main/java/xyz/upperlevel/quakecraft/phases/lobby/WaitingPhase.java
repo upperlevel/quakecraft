@@ -47,6 +47,10 @@ public class WaitingPhase extends Phase {
         hooked.open(player, placeholders);
     }
 
+    private void clearPlayer(Player player) {
+        boardByPlayer.remove(player);
+    }
+
     private void tryStartCountdown() {
         if (arena.getPlayers().size() >= arena.getMinPlayers()) {
             lobbyPhase.getPhaseManager().setPhase(new CountdownPhase(lobbyPhase));
@@ -79,6 +83,8 @@ public class WaitingPhase extends Phase {
     @EventHandler
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
+            clearPlayer(e.getPlayer());
+
             // ArenaQuitEvent is called before the player's actually quit (to permit cancellation).
             // For this reason, the code that has to read the new arena's players is run one tick later.
             Bukkit.getScheduler().runTaskLater(Quake.get(), () ->
