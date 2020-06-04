@@ -2946,8 +2946,9 @@ messages:
         - '^|&e&lWinner &7- %ranking_name_1%'
         - '^|&e&lGun &7- %ranking_gun_1%'
         - ''
-      body: # Here you can change the ranking list depending on how many players there are
-        # the plugin gets the minimum number and displayes that message
+      body:
+        # Here you can change the ranking list depending on how many players there are
+        # the plugin gets the minimum number and displays that message
         # example: 3 players -> 3, 2 players -> 2, 10 players -> 3 (is the lowest)
         3: # Used when there are three or more players (most of the times)
           - '^|&e&l1st Place &r&7- %ranking_name_1% &7- %ranking_kills_1%'

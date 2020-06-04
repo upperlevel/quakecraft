@@ -1,6 +1,7 @@
 package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -275,8 +276,11 @@ public class GamePhase extends Phase {
 
             if (gamers.size() == 1 && e.getReason() != ArenaQuitReason.ARENA_ABORT) {
                 Player winner = gamers.get(0).getPlayer();
-                getPhaseManager().setPhase(new EndingPhase(this, winner));
                 Dbg.p(String.format("[%s] The player %s is the only player left, he won!", arena.getName(), winner));
+                Bukkit.getScheduler().runTask(
+                        Quake.get(),
+                        () -> getPhaseManager().setPhase(new EndingPhase(this, winner))
+                );
                 return;
             }
 

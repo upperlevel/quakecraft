@@ -73,7 +73,10 @@ public class EndingPhase extends Phase {
         arena.getPhaseManager().setPhase(new LobbyPhase(arena));
     }
 
-    private List<Gamer> getGamers() {
+    /**
+     * Gets the gamers that can be rewarded at the very end of the ending-phase.
+     */
+    private List<Gamer> getRewardableGamers() {
         return gamePhase.getGamers()
                 .stream()
                 .filter(gamer -> gamer.getPlayer().isOnline())
@@ -81,10 +84,10 @@ public class EndingPhase extends Phase {
     }
 
     private void reward() {
-        for (Gamer p : getGamers()) {
+        for (Gamer p : getRewardableGamers()) {
             baseGain.grant(p);
         }
-        Iterator<Gamer> ranking = getGamers().iterator();
+        Iterator<Gamer> ranking = getRewardableGamers().iterator();
         if (ranking.hasNext()) {
             firstGain.grant(ranking.next());
             if (ranking.hasNext()) {
@@ -95,7 +98,7 @@ public class EndingPhase extends Phase {
             }
         }
         if (EconomyManager.isEnabled()) {
-            for (Gamer p : getGamers()) {
+            for (Gamer p : getRewardableGamers()) {
                 EconomyManager.get(p.getPlayer()).give(p.coins);
                 endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
             }
@@ -108,7 +111,7 @@ public class EndingPhase extends Phase {
         PlaceholderRegistry<?> reg = gamePhase.getPlaceholders();
 
         List<PlaceholderValue<String>> lines = new ArrayList<>(endRankingHeader.filter(reg).getLines());
-        int playerCount = arena.getPlayers().size();
+        int playerCount = gamePhase.getGamers().size();
         Map.Entry<Integer, Message> bodyEntry = endRankingBody.floorEntry(playerCount);
         if (bodyEntry == null) {
             Quake.get().getLogger().severe("ERROR: cannot find ending ranking body for: " + playerCount + ", indexes " + endRankingBody.keySet());
@@ -136,7 +139,7 @@ public class EndingPhase extends Phase {
     @Override
     public void onEnable(Phase prev) {
         super.onEnable(prev);
-        getGamers().forEach(g -> setupPlayer(g.getPlayer()));
+        getRewardableGamers().forEach(g -> setupPlayer(g.getPlayer()));
         printRanking();
         winnerCelebration.start();
         endingTask.runTaskLater(Quake.get(), 20 * 10);
@@ -148,7 +151,7 @@ public class EndingPhase extends Phase {
         winnerCelebration.cancel();
         endingTask.cancel();
 
-        getGamers().forEach(g -> clearPlayer(g.getPlayer()));
+        getRewardableGamers().forEach(g -> clearPlayer(g.getPlayer()));
     }
 
     @EventHandler
