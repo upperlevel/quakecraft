@@ -13,16 +13,12 @@ import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
-import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.TypeUtil;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 public class EndingPhase extends Phase {
     private static Message endGainMessage;
@@ -36,8 +32,6 @@ public class EndingPhase extends Phase {
     private static GainType thirdGain;
 
     private static Message rejoinMessage;
-
-    private static Hotbar hotbar;
 
     @Getter
     private final QuakeArena arena;
@@ -73,21 +67,11 @@ public class EndingPhase extends Phase {
         arena.getPhaseManager().setPhase(new LobbyPhase(arena));
     }
 
-    /**
-     * Gets the gamers that can be rewarded at the very end of the ending-phase.
-     */
-    private List<Gamer> getRewardableGamers() {
-        return gamePhase.getGamers()
-                .stream()
-                .filter(gamer -> gamer.getPlayer().isOnline())
-                .collect(Collectors.toList());
-    }
-
     private void reward() {
-        for (Gamer p : getRewardableGamers()) {
+        for (Gamer p : gamePhase.getGamers()) {
             baseGain.grant(p);
         }
-        Iterator<Gamer> ranking = getRewardableGamers().iterator();
+        Iterator<Gamer> ranking = gamePhase.getGamers().iterator();
         if (ranking.hasNext()) {
             firstGain.grant(ranking.next());
             if (ranking.hasNext()) {
@@ -98,7 +82,7 @@ public class EndingPhase extends Phase {
             }
         }
         if (EconomyManager.isEnabled()) {
-            for (Gamer p : getRewardableGamers()) {
+            for (Gamer p : gamePhase.getGamers()) {
                 EconomyManager.get(p.getPlayer()).give(p.coins);
                 endGainMessage.send(p.getPlayer(), "money", EconomyManager.format(p.coins));
             }
@@ -127,19 +111,9 @@ public class EndingPhase extends Phase {
         }
     }
 
-    private void setupPlayer(Player player) {
-        hotbars().view(player).addHotbar(hotbar);
-    }
-
-    private void clearPlayer(Player player) {
-        hotbars().view(player).removeHotbar(hotbar);
-        // board now is on GamePhase
-    }
-
     @Override
     public void onEnable(Phase prev) {
         super.onEnable(prev);
-        getRewardableGamers().forEach(g -> setupPlayer(g.getPlayer()));
         printRanking();
         winnerCelebration.start();
         endingTask.runTaskLater(Quake.get(), 20 * 10);
@@ -150,8 +124,7 @@ public class EndingPhase extends Phase {
         super.onDisable(next);
         winnerCelebration.cancel();
         endingTask.cancel();
-
-        getRewardableGamers().forEach(g -> clearPlayer(g.getPlayer()));
+        gamePhase.clearPlayers();
     }
 
     @EventHandler
@@ -164,8 +137,9 @@ public class EndingPhase extends Phase {
     @EventHandler
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
-            clearPlayer(e.getPlayer());
-            if (e.getPlayer() == winner.getPlayer()) { // If the winner exits its celebration stops.
+            Player p = e.getPlayer();
+            gamePhase.clearPlayer(p);
+            if (p == winner.getPlayer()) { // If the winner exits its celebration stops.
                 winnerCelebration.cancel();
             }
         }
@@ -189,7 +163,6 @@ public class EndingPhase extends Phase {
         endRankingFooter = endRanking.getMessageRequired("footer");
 
         rejoinMessage = Quake.getConfigSection("game").getMessageRequired("rejoin-message");
-        hotbar = Quake.getConfigSection("game").getRequired("ending-hotbar", Hotbar.class);
 
         //signLines = manager.getConfig().getMessageStrList("ending-sign");
     }

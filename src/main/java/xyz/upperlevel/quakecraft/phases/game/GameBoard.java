@@ -37,6 +37,10 @@ public class GameBoard implements BoardModel {
         this.footer = footer;
     }
 
+    private boolean isPlaying(Player player) {
+        return Quake.get().getArenaManager().get(player).getPhaseManager().getPhase() instanceof GamePhase;
+    }
+
     public GamePhase getGamePhase(Player player) {
         return (GamePhase) Quake.get().getArenaManager().get(player).getPhaseManager().getPhase();
     }
@@ -79,6 +83,11 @@ public class GameBoard implements BoardModel {
 
     @Override
     public void apply(Board board, Player player, PlaceholderRegistry<?> placeholders) {
+        if (!isPlaying(player)) {
+            // Quick fix: if the player isn't playing because it's in ending-phase just don't update the game-board anymore.
+            return;
+        }
+
         String resTitle = title.resolve(player, placeholders);
         board.setTitle(resTitle);
         //Dbg.pf("[GameBoard] Updating for %s - title: %s", player.getName(), resTitle);

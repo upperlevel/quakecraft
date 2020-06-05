@@ -117,7 +117,7 @@ public class CountdownPhase extends Phase {
                 countdown.cancel();
                 updateBoards();
                 clearTick();
-                Bukkit.getScheduler().runTask(Quake.get(), () -> lobbyPhase.getPhaseManager().setPhase(new WaitingPhase(lobbyPhase)));
+                Bukkit.getScheduler().runTask(Quake.get(), () -> lobbyPhase.setPhase(new WaitingPhase(lobbyPhase)));
             }
         }
     }

@@ -227,17 +227,6 @@ game:
 
   kills-to-win: 20
 
-  # End Game
-
-  ending-hotbar:
-    icons:
-      - slot: 8
-        item:
-          type: RED_BED
-          name: '&c&lReturn to Lobby'
-          lore:
-            - '&7Right-click to leave to the lobby!'
-
   # If set to true the players at the end of a game will rejoin automatically the lobby they were in
   auto-join: false
   # Clickable message displayed at the end of a game that, when clicked, will make the players rejoin the lobby

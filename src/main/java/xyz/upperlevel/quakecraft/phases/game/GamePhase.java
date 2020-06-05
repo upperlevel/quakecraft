@@ -194,7 +194,7 @@ public class GamePhase extends Phase {
         return Collections.unmodifiableSet(spectators);
     }
 
-    public void onPlayerQuit(Player player) {
+    public void clearPlayer(Player player) {
         boardByPlayer.remove(player);
 
         // Gamer
@@ -203,13 +203,23 @@ public class GamePhase extends Phase {
             gamers.remove(g);
             hotbars().view(player).removeHotbar(hotbar);
 
-            Dbg.p(String.format("[%s] The gamer %s left the game", arena.getName(), player.getName()));
+            updateRanking();
+            updateBoards();
         }
 
         // Spectator
-        if (spectators.remove(player)) {
-            Dbg.p(String.format("[%s] The spectator %s left the game", arena.getName(), player.getName()));
-        }
+        spectators.remove(player);
+    }
+
+    /**
+     * This function is called when the game-phase should be canceled.
+     * Actually, it's called when the ending-phase ends, to remove game hotbar and scoreboard.
+     */
+    public void clearPlayers() {
+        arena.getPlayers().forEach(player -> {
+            boardByPlayer.remove(player);
+            hotbars().view(player).removeHotbar(hotbar);
+        });
     }
 
     @Override
@@ -272,7 +282,7 @@ public class GamePhase extends Phase {
     @EventHandler
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
-            onPlayerQuit(e.getPlayer());
+            clearPlayer(e.getPlayer());
 
             if (gamers.size() == 1 && e.getReason() != ArenaQuitReason.ARENA_ABORT) {
                 Player winner = gamers.get(0).getPlayer();

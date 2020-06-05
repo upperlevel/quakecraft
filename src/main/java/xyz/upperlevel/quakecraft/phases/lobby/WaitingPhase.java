@@ -6,8 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.phases.lobby.CountdownPhase;
-import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
@@ -53,7 +51,7 @@ public class WaitingPhase extends Phase {
 
     private void tryStartCountdown() {
         if (arena.getPlayers().size() >= arena.getMinPlayers()) {
-            lobbyPhase.getPhaseManager().setPhase(new CountdownPhase(lobbyPhase));
+            lobbyPhase.setPhase(new CountdownPhase(lobbyPhase));
         }
     }
 
@@ -73,10 +71,10 @@ public class WaitingPhase extends Phase {
 
             // ArenaJoinEvent is called before the player's actually join (to permit cancellation).
             // For this reason, the code that has to read the new arena's players is run one tick later.
-            Bukkit.getScheduler().runTaskLater(Quake.get(), () -> {
+            Bukkit.getScheduler().runTask(Quake.get(), () -> {
                 tryStartCountdown();
                 boardByPlayer.forEach((p, b) -> b.render(p, placeholders));
-            }, 1);
+            });
         }
     }
 
@@ -87,8 +85,10 @@ public class WaitingPhase extends Phase {
 
             // ArenaQuitEvent is called before the player's actually quit (to permit cancellation).
             // For this reason, the code that has to read the new arena's players is run one tick later.
-            Bukkit.getScheduler().runTaskLater(Quake.get(), () ->
-                    boardByPlayer.forEach((p, b) -> b.render(p, placeholders)), 1);
+            Bukkit.getScheduler().runTask(
+                    Quake.get(),
+                    () -> boardByPlayer.forEach((p, b) -> b.render(p, placeholders))
+            );
         }
     }
 

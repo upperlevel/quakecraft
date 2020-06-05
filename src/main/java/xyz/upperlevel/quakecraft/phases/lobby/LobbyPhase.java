@@ -15,14 +15,11 @@ import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.hotbar.Hotbar;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
-import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.Dbg;
 import xyz.upperlevel.uppercore.util.PlayerUtil;
 
 public class LobbyPhase extends PhaseManager {
     private static Hotbar hotbar;
-
-    private static Message maxPlayersReachedError;
 
     @Getter
     private final QuakeArena arena;
@@ -39,6 +36,7 @@ public class LobbyPhase extends PhaseManager {
 
     private void setupPlayer(Player player) {
         PlayerUtil.clearInventory(player);
+
         PlayerUtil.restore(player);
         player.setGameMode(GameMode.ADVENTURE);
 
@@ -61,7 +59,6 @@ public class LobbyPhase extends PhaseManager {
         super.onDisable(nextPhase);
         setPhase(null);
         arena.getPlayers().forEach(this::clearPlayer);
-        // TODO player restore to original inventory/stats will be done by Uppercore
     }
 
     @EventHandler
@@ -83,6 +80,7 @@ public class LobbyPhase extends PhaseManager {
         }
     }
 
+    // Actually the player should never die within a Quake arena.
     @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
         if (arena.hasPlayer(e.getPlayer())) {
@@ -92,7 +90,6 @@ public class LobbyPhase extends PhaseManager {
 
     public static void loadConfig() {
         Config cfg = Quake.getConfigSection("lobby");
-        maxPlayersReachedError = Quake.get().getCustomConfig().getMessageRequired("messages.lobby.max-players-reached");
         hotbar = cfg.getRequired("lobby-hotbar", Hotbar.class);
     }
 }
