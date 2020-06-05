@@ -133,22 +133,24 @@ public class Shot extends BukkitRunnable {
                     .getParticles()
                     .forEach(particle -> particle.display(location, location.getWorld().getPlayers()));
 
-            // Checks if there are intersections with other players.
-            List<Player> hits = location.getWorld()
-                    .getNearbyEntities(location, raySize, raySize, raySize, entity -> entity instanceof Player)
-                    .stream()
-                    .filter(entity -> {
-                        Player player = (Player) entity;
-                        return player != shooter && gamePhase.isGamer(player);
-                    })
-                    .map(entity -> (Player) entity)
-                    .collect(Collectors.toList());
+            if (!gamePhase.isEnding()) {
+                // Checks if there are intersections with other players.
+                List<Player> hits = location.getWorld()
+                        .getNearbyEntities(location, raySize, raySize, raySize, entity -> entity instanceof Player)
+                        .stream()
+                        .filter(entity -> {
+                            Player player = (Player) entity;
+                            return player != shooter && gamePhase.isGamer(player);
+                        })
+                        .map(entity -> (Player) entity)
+                        .collect(Collectors.toList());
 
-            if (!hits.isEmpty()) { // If there are intersections, kills the players and halts the ray.
-                Dbg.p(String.format("[%s] Shot hit %d players, canceling it", shooter.getName(), hits.size()));
-                kill(hits);
-                cancel();
-                break;
+                if (!hits.isEmpty()) { // If there are intersections, kills the players and halts the ray.
+                    Dbg.p(String.format("[%s] Shot hit %d players, canceling it", shooter.getName(), hits.size()));
+                    kill(hits);
+                    cancel();
+                    break;
+                }
             }
 
             pStep += rayStep;

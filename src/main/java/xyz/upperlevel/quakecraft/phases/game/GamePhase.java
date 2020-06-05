@@ -22,6 +22,7 @@ import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
+import xyz.upperlevel.uppercore.arena.PhaseManager;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
@@ -39,7 +40,7 @@ import java.util.*;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 
-public class GamePhase extends Phase {
+public class GamePhase extends PhaseManager {
     private static int gameCountdown;
 
     private static GameBoard gameBoard;
@@ -54,7 +55,7 @@ public class GamePhase extends Phase {
     private static int killsToWin;
 
     private static GameHotbar hotbar;
-    private static int gunSlot;
+    private static int gunSlot = 0;
 
     @Getter
     private final QuakeArena arena;
@@ -90,7 +91,7 @@ public class GamePhase extends Phase {
                 },
                 () -> {
                     Player winner = gamers.get(0).getPlayer();
-                    getPhaseManager().setPhase(new EndingPhase(this, winner));
+                    end(winner);
                     Dbg.p(String.format("[%s] Game countdown ended, the first is %s", arena.getName(), winner.getName()));
                 }
         );
@@ -194,7 +195,7 @@ public class GamePhase extends Phase {
         return Collections.unmodifiableSet(spectators);
     }
 
-    public void clearPlayer(Player player) {
+    public void clearPlayer(Player player, boolean update) {
         boardByPlayer.remove(player);
 
         // Gamer
@@ -203,23 +204,23 @@ public class GamePhase extends Phase {
             gamers.remove(g);
             hotbars().view(player).removeHotbar(hotbar);
 
-            updateRanking();
-            updateBoards();
+            if (update) {
+                updateRanking();
+                updateBoards();
+            }
         }
 
         // Spectator
         spectators.remove(player);
     }
 
-    /**
-     * This function is called when the game-phase should be canceled.
-     * Actually, it's called when the ending-phase ends, to remove game hotbar and scoreboard.
-     */
-    public void clearPlayers() {
-        arena.getPlayers().forEach(player -> {
-            boardByPlayer.remove(player);
-            hotbars().view(player).removeHotbar(hotbar);
-        });
+    public boolean isEnding() {
+        return getPhase() instanceof EndingPhase;
+    }
+
+    public void end(Player winner) {
+        countdown.cancel();
+        setPhase(new EndingPhase(this, winner));
     }
 
     @Override
@@ -268,6 +269,8 @@ public class GamePhase extends Phase {
 
         shootings.values().forEach(Shot::cancel); // Cancels all tasks related to shots.
         shootings.clear();
+
+        arena.getPlayers().forEach(p -> clearPlayer(p, false));
     }
 
     @EventHandler
@@ -282,21 +285,16 @@ public class GamePhase extends Phase {
     @EventHandler
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
-            clearPlayer(e.getPlayer());
+            clearPlayer(e.getPlayer(), true);
 
-            if (gamers.size() == 1 && e.getReason() != ArenaQuitReason.ARENA_ABORT) {
+            // If a player left, the game is still playing, and the arena isn't aborting, the left player won.
+            if (gamers.size() == 1 && !isEnding() && e.getReason() != ArenaQuitReason.ARENA_ABORT) {
                 Player winner = gamers.get(0).getPlayer();
                 Dbg.p(String.format("[%s] The player %s is the only player left, he won!", arena.getName(), winner));
                 Bukkit.getScheduler().runTask(
                         Quake.get(),
-                        () -> getPhaseManager().setPhase(new EndingPhase(this, winner))
+                        () -> end(winner)
                 );
-                return;
-            }
-
-            if (gamers.isEmpty()) { // The game logic should never reach this code since when there's one player is switched to EndingPhase.
-                arena.getPlayers().forEach(p -> arena.quit(p, ArenaQuitReason.ARENA_END));
-                getPhaseManager().setPhase(new LobbyPhase(arena));
             }
         }
     }
@@ -356,7 +354,7 @@ public class GamePhase extends Phase {
     public boolean goOnIfHasWon(Player player) {
         if (getGamer(player).getKills() >= killsToWin) {
             Dbg.p(String.format("Game ended, %s has > %d kills", player.getName(), killsToWin));
-            getPhaseManager().setPhase(new EndingPhase(this, player));
+            end(player);
             return true;
         }
         return false;

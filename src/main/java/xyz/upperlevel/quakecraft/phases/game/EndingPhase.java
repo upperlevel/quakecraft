@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.phases.game;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
@@ -37,7 +38,7 @@ public class EndingPhase extends Phase {
     private final QuakeArena arena;
 
     @Getter
-    private Player winner;
+    private final Player winner;
 
     @Getter
     private final GamePhase gamePhase;
@@ -124,10 +125,9 @@ public class EndingPhase extends Phase {
         super.onDisable(next);
         winnerCelebration.cancel();
         endingTask.cancel();
-        gamePhase.clearPlayers();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onArenaJoin(ArenaJoinEvent e) {
         if (arena.equals(e.getArena())) {
             e.setCancelled(true); // Players can't join when the game ends.
@@ -138,7 +138,6 @@ public class EndingPhase extends Phase {
     public void onArenaQuit(ArenaQuitEvent e) {
         if (arena.equals(e.getArena())) {
             Player p = e.getPlayer();
-            gamePhase.clearPlayer(p);
             if (p == winner.getPlayer()) { // If the winner exits its celebration stops.
                 winnerCelebration.cancel();
             }
