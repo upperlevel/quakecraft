@@ -6,9 +6,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.phases.game.GamePhase;
 import xyz.upperlevel.uppercore.arena.Arena;
+import xyz.upperlevel.uppercore.util.Dbg;
 
 public class CompassTargeter extends BukkitRunnable {
-    public static final long delay = 20 * 2;
+    public static final long delay = 20;
 
     private final Arena arena;
     private final GamePhase gamePhase;
@@ -28,9 +29,8 @@ public class CompassTargeter extends BukkitRunnable {
         Location loc1 = subject.getLocation();
         for (Player player : arena.getPlayers()) {
             if (gamePhase.isGamer(player) && subject != player) {
-                Location loc2 = player.getLocation();
-                double dist = loc1.distance(loc2);
-                if (minDist < dist) {
+                double dist = loc1.distance(player.getLocation());
+                if (dist < minDist) {
                     nearest = player;
                     minDist = dist;
                 }
@@ -41,11 +41,15 @@ public class CompassTargeter extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player subject : arena.getPlayers()) {
-            Player target = getNearestGamer(subject);
-            if (target != null) { // Could be null, but actually should never.
-                subject.setCompassTarget(target.getLocation());
-            }
-        }
+        gamePhase.getGamers()
+                .stream()
+                .map(Gamer::getPlayer)
+                .forEach(subject -> {
+                    Player target = getNearestGamer(subject);
+                    if (target != null) { // Could be null, but actually should never.
+                        subject.setCompassTarget(target.getLocation());
+                    }
+                    //Dbg.pf("Updating compass target - player: %s - target: %s", subject.getName(), target != null ? target.getName() : "null");
+                });
     }
 }
