@@ -11,6 +11,8 @@ import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.config.Config;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.Dbg;
 import xyz.upperlevel.uppercore.util.FireworkUtil;
@@ -40,7 +42,7 @@ public class Shot extends BukkitRunnable {
      */
     public static final double rayStep = 0.5;
 
-    public static String defaultKillMessage;
+    public static PlaceholderValue<String> defaultKillMessage;
     public static Message shotMessage;
     public static Message headshotMessage;
 
@@ -82,12 +84,15 @@ public class Shot extends BukkitRunnable {
 
             Railgun gun = shooterAccount.getGun();
             Message message = headshot ? headshotMessage : shotMessage;
+            PlaceholderValue<String> killMessage = (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage();
             message = message.filter(
                     "killer", hit.getName(),
-                    "killed", hit.getName(),
-                    "kill_message", (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage()
+                    "killed", hit.getName()
             );
-            arena.broadcast(message, gamePhase.getPlaceholders());
+            PlaceholderRegistry<?> registry = PlaceholderRegistry.create(gamePhase.getPlaceholders())
+                    .set("kill_message", p -> killMessage.resolve(p, gamePhase.getPlaceholders()));
+
+            arena.broadcast(message, registry);
 
             gamePhase.getGamer(shooter).onKill(headshot);
             gamePhase.getGamer(hit).die();
@@ -160,7 +165,7 @@ public class Shot extends BukkitRunnable {
 
     public static void loadConfig() {
         Config config = Quake.getConfigSection("game");
-        defaultKillMessage = config.getString("default-kill-message");
+        defaultKillMessage = config.getMessageStrRequired("default-kill-message");
         shotMessage = config.getMessageRequired("shot-message");
         headshotMessage = config.getMessageRequired("headshot-message");
     }

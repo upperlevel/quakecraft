@@ -2,14 +2,13 @@ package xyz.upperlevel.quakecraft.shop.railgun;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.shop.gun.*;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
-import xyz.upperlevel.uppercore.util.TextUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,11 +27,11 @@ public class Railgun {
     private MuzzleManager.Muzzle muzzle;
     private TriggerManager.Trigger trigger;
 
-    private String killMessage;
+    private PlaceholderValue<String> killMessage;
 
-    private PlaceholderRegistry placeholders;
+    private PlaceholderRegistry<?> placeholders;
 
-    public Railgun(String id, PlaceholderValue<String> name, CaseManager.Case gcase, LaserManager.Laser laser, BarrelManager.Barrel barrel, MuzzleManager.Muzzle muzzle, TriggerManager.Trigger trigger, String killMessage) {
+    public Railgun(String id, PlaceholderValue<String> name, CaseManager.Case gcase, LaserManager.Laser laser, BarrelManager.Barrel barrel, MuzzleManager.Muzzle muzzle, TriggerManager.Trigger trigger, PlaceholderValue<String> killMessage) {
         this.id = id;
         this.name = name;
         this.gcase = gcase;
@@ -79,8 +78,7 @@ public class Railgun {
             throw config.invalidConfigException("trigger", "Cannot find trigger \"" + triggerName + "\"");
         }
 
-        String rawMessage = config.getString("message");
-        this.killMessage = rawMessage == null ? null : TextUtil.translatePlain(rawMessage);
+        this.killMessage = config.getMessageStr("message");
         this.placeholders = PlaceholderRegistry.create();
         processPlaceholders(placeholders);
     }
@@ -126,7 +124,7 @@ public class Railgun {
         reg.set("barrel", p -> barrel.getName().resolve(p));
         reg.set("muzzle", p -> muzzle.getName().resolve(p));
         reg.set("trigger", p -> trigger.getName().resolve(p));
-        reg.set("kill-message", p -> killMessage != null ? killMessage : "none");
+        reg.set("kill_message", p -> killMessage != null ? killMessage.resolve(p) : "none");
     }
 
     public static void loadConfig() {
