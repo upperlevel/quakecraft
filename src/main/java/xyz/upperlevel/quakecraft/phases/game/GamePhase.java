@@ -336,7 +336,7 @@ public class GamePhase extends Phase {
             long firingDelay = (long) Quake.getAccount(player).getSelectedTrigger().getFiringSpeed();
             Countdown.create(
                     firingDelay, 1,
-                    tick -> player.setExp((float) (tick / firingDelay)),
+                    tick -> player.setExp((float) tick / firingDelay),
                     () -> {
                         player.setExp(0.0f); // to be sure
                         shootings.remove(player);
