@@ -28,7 +28,7 @@ import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.link.Link;
 import xyz.upperlevel.uppercore.registry.Registry;
-import xyz.upperlevel.uppercore.storage.Database;
+import xyz.upperlevel.uppercore.storage.Storage;
 import xyz.upperlevel.uppercore.storage.StorageConnector;
 import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
 import xyz.upperlevel.uppercore.update.UpdateChecker;
@@ -51,7 +51,7 @@ public class Quake extends JavaPlugin {
     private Registry pluginRegistry;
     private Registry guis;
 
-    private Database remoteDatabase;
+    private Storage remoteDatabase;
 
     private Config customConfig;
 
@@ -75,8 +75,7 @@ public class Quake extends JavaPlugin {
             this.pluginRegistry = Uppercore.registry();
             this.guis = pluginRegistry.registerFolder("guis");
 
-            this.remoteDatabase = StorageConnector.read(this).database("quake");
-            this.remoteDatabase.create();
+            this.remoteDatabase = StorageConnector.read(this);
             QuakeAccount.loadTable();
 
             shop = new ShopCategory();
