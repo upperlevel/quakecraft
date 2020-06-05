@@ -25,7 +25,7 @@ public class LobbyPhase extends PhaseManager {
     private final QuakeArena arena;
 
     @Getter
-    private final PlaceholderRegistry placeholders;
+    private final PlaceholderRegistry<?> placeholders;
 
     public LobbyPhase(QuakeArena arena) {
         super("lobby");
@@ -69,7 +69,10 @@ public class LobbyPhase extends PhaseManager {
                 Dbg.pf("[%s] %s tried to join but the game is full!", arena.getName(), e.getPlayer().getName());
                 return;
             }
-            setupPlayer(e.getPlayer());
+
+            Player player = e.getPlayer();
+            player.teleport(arena.getLobby());
+            setupPlayer(player);
         }
     }
 

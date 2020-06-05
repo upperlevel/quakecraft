@@ -67,7 +67,6 @@ public class WaitingPhase extends Phase {
         if (arena.equals(event.getArena())) {
             Player player = event.getPlayer();
             setupPlayer(player);
-            player.teleport(arena.getLobby());
 
             // ArenaJoinEvent is called before the player's actually join (to permit cancellation).
             // For this reason, the code that has to read the new arena's players is run one tick later.
