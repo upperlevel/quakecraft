@@ -3,8 +3,8 @@ package xyz.upperlevel.quakecraft.phases.game;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
-import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.events.PlayerDashCooldownEnd;
 import xyz.upperlevel.quakecraft.events.PlayerDashEvent;
 import xyz.upperlevel.uppercore.config.Config;
@@ -12,6 +12,8 @@ import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static xyz.upperlevel.quakecraft.phases.game.GamePhase.gunSlot;
 
 public class Dash {
     public static final int MILLIS_IN_TICK = 50;
@@ -43,9 +45,11 @@ public class Dash {
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
 
-        dashing.put(player.getPlayer(), this);
+        Player p = player.getPlayer();
+        dashing.put(p, this);
+        p.setCooldown(p.getInventory().getItem(gunSlot).getType(), cooldownTicks);
         scheduler.runTaskLater(Quake.get(), this::cooldownEnd, cooldownTicks);
-        player.getPlayer().setVelocity(player.getPlayer().getLocation().getDirection().multiply(power * BASE_POWER));
+        p.setVelocity(p.getLocation().getDirection().multiply(power * BASE_POWER));
 
         startTime = System.currentTimeMillis();
         endTime = startTime + (cooldownTicks * MILLIS_IN_TICK);

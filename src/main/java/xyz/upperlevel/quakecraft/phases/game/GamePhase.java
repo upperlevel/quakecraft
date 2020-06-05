@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
-import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
@@ -55,7 +54,7 @@ public class GamePhase extends PhaseManager {
     private static int killsToWin;
 
     private static GameHotbar hotbar;
-    private static int gunSlot = 0;
+    public static int gunSlot = 0;
 
     @Getter
     private final QuakeArena arena;
