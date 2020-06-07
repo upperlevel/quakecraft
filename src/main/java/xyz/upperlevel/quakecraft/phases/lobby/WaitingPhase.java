@@ -9,16 +9,19 @@ import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
+import xyz.upperlevel.uppercore.arena.events.JoinSignUpdateEvent;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.board.SimpleBoardModel;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class WaitingPhase extends Phase {
     private static BoardModel board;
+    private static Message joinSign;
 
     @Getter
     private final LobbyPhase lobbyPhase;
@@ -59,6 +62,8 @@ public class WaitingPhase extends Phase {
     public void onEnable(Phase previous) {
         super.onEnable(previous);
         arena.getPlayers().forEach(this::setupPlayer);
+        arena.updateJoinSigns();
+
         tryStartCountdown();
     }
 
@@ -71,8 +76,8 @@ public class WaitingPhase extends Phase {
             // ArenaJoinEvent is called before the player's actually join (to permit cancellation).
             // For this reason, the code that has to read the new arena's players is run one tick later.
             Bukkit.getScheduler().runTask(Quake.get(), () -> {
-                tryStartCountdown();
                 boardByPlayer.forEach((p, b) -> b.render(p, placeholders));
+                tryStartCountdown();
             });
         }
     }
@@ -91,7 +96,15 @@ public class WaitingPhase extends Phase {
         }
     }
 
+    @EventHandler
+    public void onJoinSignUpdate(JoinSignUpdateEvent e) {
+        if (arena.equals(e.getArena())) {
+            e.getJoinSigns().forEach(sign -> joinSign.setSign(sign, null, placeholders));
+        }
+    }
+
     public static void loadConfig() {
         board = Quake.getConfigSection("lobby.waiting-board").get(SimpleBoardModel.class);
+        joinSign = Quake.getConfigSection("join-signs").getMessage("waiting");
     }
 }

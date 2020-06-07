@@ -25,6 +25,7 @@ import xyz.upperlevel.uppercore.arena.PhaseManager;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
+import xyz.upperlevel.uppercore.arena.events.JoinSignUpdateEvent;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.config.Config;
@@ -43,12 +44,10 @@ public class GamePhase extends PhaseManager {
     private static int gameCountdown;
 
     private static GameBoard gameBoard;
+    private static Message joinSign;
     private static Message startMessage;
     private static PlaySound startSound;
 
-    private static String defaultKillMessage;
-    private static Message shotMessage;
-    private static Message headshotMessage;
     private static boolean sneakDisabled;
     private static Message sneakDisabledMessage;
     private static int killsToWin;
@@ -87,6 +86,7 @@ public class GamePhase extends PhaseManager {
                 20,
                 tick -> {
                     updateBoards();
+                    arena.updateJoinSigns();
                 },
                 () -> {
                     Player winner = gamers.get(0).getPlayer();
@@ -228,6 +228,7 @@ public class GamePhase extends PhaseManager {
 
         // First thing done is to register all the present players as gamers.
         arena.getPlayers().forEach(this::addGamer);
+        arena.updateJoinSigns();
 
         updateBoards();
         compassTargeter.start();
@@ -295,6 +296,13 @@ public class GamePhase extends PhaseManager {
                         () -> end(winner)
                 );
             }
+        }
+    }
+
+    @EventHandler
+    public void onJoinSignUpdate(JoinSignUpdateEvent e) {
+        if (arena.equals(e.getArena())) {
+            e.getJoinSigns().forEach(sign -> joinSign.setSign(sign, null, placeholders));
         }
     }
 
@@ -394,5 +402,6 @@ public class GamePhase extends PhaseManager {
         sneakDisabledMessage = config.getMessageRequired("sneak-disabled-message");
         killsToWin = config.getIntRequired("kills-to-win");
         hotbar = config.getRequired("playing-hotbar", GameHotbar.class);
+        joinSign = Quake.getConfigSection("join-signs").getMessage("playing");
     }
 }

@@ -12,6 +12,7 @@ import xyz.upperlevel.quakecraft.phases.game.GamePhase;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
+import xyz.upperlevel.uppercore.arena.events.JoinSignUpdateEvent;
 import xyz.upperlevel.uppercore.board.Board;
 import xyz.upperlevel.uppercore.board.BoardModel;
 import xyz.upperlevel.uppercore.board.SimpleBoardModel;
@@ -31,6 +32,7 @@ public class CountdownPhase extends Phase {
     private static Map<Integer, Sound> countdownSounds; // Each countdown second corresponds to a sound
 
     private static BoardModel countdownBoard;
+    private static Message joinSign;
 
     @Getter
     private final LobbyPhase lobbyPhase;
@@ -86,6 +88,8 @@ public class CountdownPhase extends Phase {
     public void onEnable(Phase previous) {
         super.onEnable(previous);
         arena.getPlayers().forEach(this::setupPlayer);
+        arena.updateJoinSigns();
+
         countdown.runTaskTimer(Quake.get(), 0, 20);
     }
 
@@ -122,6 +126,13 @@ public class CountdownPhase extends Phase {
         }
     }
 
+    @EventHandler
+    public void onJoinSignUpdate(JoinSignUpdateEvent e) {
+        if (arena.equals(e.getArena())) {
+            e.getJoinSigns().forEach(sign -> joinSign.setSign(sign, null, placeholders));
+        }
+    }
+
     public class Countdown extends BukkitRunnable {
         @Getter
         private int seconds;
@@ -140,6 +151,7 @@ public class CountdownPhase extends Phase {
             for (Player player : arena.getPlayers()) {
                 player.setLevel(seconds);
                 updateBoard(player);
+                arena.updateJoinSigns();
                 if (message != null) {
                     message.send(player);
                 }
@@ -163,5 +175,6 @@ public class CountdownPhase extends Phase {
         countdownMessages = config.getRequired("countdown-messages", typeOf(Map.class, Integer.class, Message.class));
         countdownSounds = config.getRequired("countdown-sounds", typeOf(Map.class, Integer.class, Sound.class));
         countdownBoard = config.getRequired("countdown-board", SimpleBoardModel.class);
+        joinSign = Quake.getConfigSection("join-signs").getMessage("countdown");
     }
 }

@@ -12,6 +12,7 @@ import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.events.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent;
 import xyz.upperlevel.uppercore.arena.events.ArenaQuitEvent.ArenaQuitReason;
+import xyz.upperlevel.uppercore.arena.events.JoinSignUpdateEvent;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
@@ -33,6 +34,7 @@ public class EndingPhase extends Phase {
     private static GainType thirdGain;
 
     private static Message rejoinMessage;
+    private static Message joinSign;
 
     @Getter
     private final QuakeArena arena;
@@ -117,6 +119,8 @@ public class EndingPhase extends Phase {
         super.onEnable(prev);
         printRanking();
         winnerCelebration.start();
+        arena.updateJoinSigns();
+
         endingTask.runTaskLater(Quake.get(), 20 * 10);
     }
 
@@ -144,6 +148,13 @@ public class EndingPhase extends Phase {
         }
     }
 
+    @EventHandler
+    public void onJoinSignUpdate(JoinSignUpdateEvent e) {
+        if (arena.equals(e.getArena())) {
+            e.getJoinSigns().forEach(sign -> joinSign.setSign(sign, null, gamePhase.getPlaceholders()));
+        }
+    }
+
     public static void loadGains() {
         baseGain = GainType.create("base-gain");
         firstGain = GainType.create("1-place-gain");
@@ -162,7 +173,6 @@ public class EndingPhase extends Phase {
         endRankingFooter = endRanking.getMessageRequired("footer");
 
         rejoinMessage = Quake.getConfigSection("game").getMessageRequired("rejoin-message");
-
-        //signLines = manager.getConfig().getMessageStrList("ending-sign");
+        joinSign = Quake.getConfigSection("join-signs").getMessage("ending");
     }
 }
