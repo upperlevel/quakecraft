@@ -265,7 +265,7 @@ shop:
         click:
           actions:
             - open-gui: armor.main
-      - slot: 30
+      - slot: 31
         item:
           type: 'carrot on a stick'
           name: '&aDash Upgrades'
@@ -275,7 +275,7 @@ shop:
         click:
           actions:
             - open-gui: dash-upgrades
-      - slot: 32
+      - slot: 34
         item:
           type: 'jukebox'
           name: '&aKill Sounds'
@@ -285,16 +285,6 @@ shop:
         click:
           actions:
             - open-gui: kill-sounds
-      - slot: 34
-        item:
-          type: 'comparator'
-          name: '&aSettings'
-          lore:
-            - '&7Configure your personal'
-            - '&7settings!'
-        click:
-          actions:
-            - open-gui: settings
       - slot: 48
         item:
           type: 'arrow'
