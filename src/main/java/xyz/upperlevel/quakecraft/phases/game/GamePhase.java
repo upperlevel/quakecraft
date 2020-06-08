@@ -200,6 +200,9 @@ public class GamePhase extends PhaseManager {
         // Gamer
         Gamer g = gamersByPlayer.remove(player);
         if (g != null) {
+            // Always tries to clear all powerup effects that could be possible applied.
+            arena.getPowerups().forEach(powerup -> powerup.getEffect().clear(Collections.singleton(g)));
+
             gamers.remove(g);
             hotbars().view(player).removeHotbar(hotbar);
 
