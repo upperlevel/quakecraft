@@ -144,6 +144,8 @@ public class Quake extends JavaPlugin {
             playerManager.close();
 
         ArenaManager.get().unload();
+
+        remoteDatabase.close();
     }
 
     public static Quake get() {
