@@ -1,5 +1,6 @@
 package xyz.upperlevel.quakecraft.phases.game;
 
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +18,8 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderValue;
 import java.util.List;
 
 public class GameHotbar extends Hotbar {
+    @Getter
+    private final int gunSlot;
 
     @ConfigConstructor
     public GameHotbar(
@@ -25,6 +28,8 @@ public class GameHotbar extends Hotbar {
             @ConfigProperty("tracker.slot") int trackerSlot,
             @ConfigProperty("tracker.item") Tracker tracker
     ) {
+        this.gunSlot = gunSlot;
+
         setIcon(gunSlot, new ConfigIcon(gun));
         setIcon(trackerSlot, new ConfigIcon(tracker));
     }

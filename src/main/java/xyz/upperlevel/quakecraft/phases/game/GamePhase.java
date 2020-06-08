@@ -52,8 +52,7 @@ public class GamePhase extends PhaseManager {
     private static Message sneakDisabledMessage;
     private static int killsToWin;
 
-    private static GameHotbar hotbar;
-    public static int gunSlot = 0;
+    public static GameHotbar hotbar;
 
     @Getter
     private final QuakeArena arena;
@@ -374,7 +373,10 @@ public class GamePhase extends PhaseManager {
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (arena.equals(Quake.getArena(p))) {
-            if (p.getInventory().getHeldItemSlot() == gunSlot) { // Checks if the player is holding the gun item by slot (anything better).
+            // Checks if the holding item is at the same position where is supposed to be the gun.
+            // We check the slot because we don't know the actual item that is generated after placeholder replacement.
+            // TODO: find a way to have it and check for the item instead of the slot.
+            if (p.getInventory().getHeldItemSlot() == hotbar.getGunSlot()) {
                 // Right click: shoot
                 if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     onShoot(p);

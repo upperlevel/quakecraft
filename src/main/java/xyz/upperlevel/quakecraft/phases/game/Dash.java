@@ -13,7 +13,7 @@ import xyz.upperlevel.uppercore.placeholder.message.Message;
 import java.util.HashMap;
 import java.util.Map;
 
-import static xyz.upperlevel.quakecraft.phases.game.GamePhase.gunSlot;
+import static xyz.upperlevel.quakecraft.phases.game.GamePhase.hotbar;
 
 public class Dash {
     public static final int MILLIS_IN_TICK = 50;
@@ -47,7 +47,7 @@ public class Dash {
 
         Player p = player.getPlayer();
         dashing.put(p, this);
-        p.setCooldown(p.getInventory().getItem(gunSlot).getType(), cooldownTicks);
+        p.setCooldown(p.getInventory().getItem(hotbar.getGunSlot()).getType(), cooldownTicks);
         scheduler.runTaskLater(Quake.get(), this::cooldownEnd, cooldownTicks);
         p.setVelocity(p.getLocation().getDirection().multiply(power * BASE_POWER));
 
