@@ -24,7 +24,7 @@ public class Shot extends BukkitRunnable {
     /**
      * Imagine the ray as a cylinder. The size is half of the diameter of the cylinder's base.
      */
-    public static final double raySize = 0.3;
+    public static final double raySize = 0.4;
 
     /**
      * The distance from the origin after when the projectile can be destroyed.
@@ -97,7 +97,9 @@ public class Shot extends BukkitRunnable {
             gamePhase.getGamer(shooter).onKill(headshot);
             gamePhase.getGamer(hit).die();
 
+            shooterAccount.getSelectedKillSound().play(shooter.getLocation());
             shooterAccount.getSelectedKillSound().play(location);
+
             FireworkEffect.Type type = shooterAccount.getSelectedBarrel().getFireworkType();
             Color color = shooterAccount.getSelectedLaser().getFireworkColor();
             FireworkUtil.instantFirework( // Plays a firework in the location where the player has been killed.
