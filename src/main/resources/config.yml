@@ -1367,7 +1367,7 @@ shop:
             - '&7Barrel: &b%barrel%'
             - '&7Muzzle: &b%muzzle%'
             - '&7Trigger: &b%trigger%'
-            - '&7Kill message: %kill-message%'
+            - '&7Kill message: %kill_message%'
             - ''
           selected: '&aSelected'
           selectable: '&bClick to select'
