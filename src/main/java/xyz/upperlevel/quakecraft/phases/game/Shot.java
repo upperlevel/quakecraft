@@ -86,7 +86,7 @@ public class Shot extends BukkitRunnable {
             Message message = headshot ? headshotMessage : shotMessage;
             PlaceholderValue<String> killMessage = (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage();
             message = message.filter(
-                    "killer", hit.getName(),
+                    "killer", shooter.getName(),
                     "killed", hit.getName()
             );
             PlaceholderRegistry<?> registry = PlaceholderRegistry.create(gamePhase.getPlaceholders())
