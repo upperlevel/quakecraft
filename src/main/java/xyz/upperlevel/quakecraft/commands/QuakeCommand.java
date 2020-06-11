@@ -92,6 +92,9 @@ public class QuakeCommand extends NodeCommand {
             description = "Open the shop GUI.",
             sender = SenderType.PLAYER
     )
+    @WithPermission(
+            user = PermissionUser.AVAILABLE
+    )
     protected void shop(CommandSender sender) {
         Gui gui = Quake.get().getGuis().get("shop");
         if (gui == null) {
