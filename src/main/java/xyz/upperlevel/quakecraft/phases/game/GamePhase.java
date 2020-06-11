@@ -181,7 +181,8 @@ public class GamePhase extends PhaseManager {
         setupPlayer(player);
         spectators.add(player);
 
-        // TODO setup spectator
+        player.setGameMode(GameMode.SPECTATOR);
+        player.teleport(arena.getSpawns().get(0));
         player.sendMessage("You're a spectator for the arena: " + arena.getName() + "!");
     }
 
@@ -279,7 +280,7 @@ public class GamePhase extends PhaseManager {
     public void onArenaJoin(ArenaJoinEvent e) {
         if (arena.equals(e.getArena())) {
             Player p = e.getPlayer();
-            addSpectator(p);
+            Bukkit.getScheduler().runTask(Quake.get(), () -> addSpectator(p));
             Dbg.p(String.format("[%s] %s joined as a spectator", arena.getName(), p.getName()));
         }
     }
@@ -374,7 +375,7 @@ public class GamePhase extends PhaseManager {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-        if (arena.equals(Quake.getArena(p))) {
+        if (arena.equals(Quake.getArena(p)) && !spectators.contains(p)) {
             // Checks if the holding item is at the same position where is supposed to be the gun.
             // We check the slot because we don't know the actual item that is generated after placeholder replacement.
             // TODO: find a way to have it and check for the item instead of the slot.
@@ -393,7 +394,7 @@ public class GamePhase extends PhaseManager {
 
     @EventHandler
     public void onPlayerSneak(PlayerToggleSneakEvent e) {
-        if (arena.equals(Quake.getArena(e.getPlayer())) && sneakDisabled) {
+        if (sneakDisabled && arena.equals(Quake.getArena(e.getPlayer())) && !spectators.contains(e.getPlayer())) {
             e.setCancelled(true);
             sneakDisabledMessage.send(e.getPlayer(), placeholders);
         }
