@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.commands.DebugCommand;
-import xyz.upperlevel.quakecraft.commands.QuakeArgumentParsers;
+import xyz.upperlevel.quakecraft.commands.QuakeParameterHandler;
 import xyz.upperlevel.quakecraft.commands.QuakeCommand;
 import xyz.upperlevel.quakecraft.phases.game.*;
 import xyz.upperlevel.quakecraft.phases.lobby.CountdownPhase;
@@ -22,8 +22,6 @@ import xyz.upperlevel.quakecraft.shop.railgun.RailgunSelectGui;
 import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.arena.ArenaManager;
 import xyz.upperlevel.uppercore.command.CommandRegistry;
-import xyz.upperlevel.uppercore.command.functional.parser.ArgumentParserManager;
-import xyz.upperlevel.uppercore.command.functional.parser.FunctionalArgumentParser;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.link.Link;
@@ -102,7 +100,8 @@ public class Quake extends JavaPlugin {
     }
 
     private void registerCommands() {
-        ArgumentParserManager.register(FunctionalArgumentParser.load(new QuakeArgumentParsers()));
+        QuakeParameterHandler.register();
+
         CommandRegistry.register(new QuakeCommand());
         CommandRegistry.register(new DebugCommand());
     }
