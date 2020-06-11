@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
@@ -225,6 +226,23 @@ public class GamePhase extends PhaseManager {
         setPhase(new EndingPhase(this, winner));
     }
 
+    private void checkJustOneGamer() {
+        if (gamers.size() == 1 && !isEnding()) {
+            Player winner = gamers.get(0).getPlayer();
+            Bukkit.getScheduler().runTask(
+                    Quake.get(),
+                    () -> end(winner)
+            );
+        }
+    }
+
+    private void checkNoGamers() {
+        if (gamers.isEmpty() && !isEnding()) {
+            new ArrayList<>(arena.getPlayers()).forEach(p -> arena.quit(p, ArenaQuitReason.ARENA_ABORT));
+            arena.getPhaseManager().setPhase(new LobbyPhase(arena));
+        }
+    }
+
     @Override
     public void onEnable(Phase previous) {
         super.onEnable(previous);
@@ -254,6 +272,9 @@ public class GamePhase extends PhaseManager {
         }
 
         countdown.start();
+
+        checkJustOneGamer();
+        checkNoGamers(); // How did it start!? Should never reach this state.
     }
 
     @Override
@@ -290,14 +311,9 @@ public class GamePhase extends PhaseManager {
         if (arena.equals(e.getArena())) {
             clearPlayer(e.getPlayer(), true);
 
-            // If a player left, the game is still playing, and the arena isn't aborting, the left player won.
-            if (gamers.size() == 1 && !isEnding() && e.getReason() != ArenaQuitReason.ARENA_ABORT) {
-                Player winner = gamers.get(0).getPlayer();
-                Dbg.p(String.format("[%s] The player %s is the only player left, he won!", arena.getName(), winner));
-                Bukkit.getScheduler().runTask(
-                        Quake.get(),
-                        () -> end(winner)
-                );
+            if (e.getReason() != ArenaQuitReason.ARENA_ABORT && !isEnding()) {
+                checkJustOneGamer();
+                checkNoGamers();
             }
         }
     }
