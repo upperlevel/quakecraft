@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,7 +30,12 @@ public class QuakeArenaListener implements Listener {
         if (e.getEntity() instanceof Player && arena.hasPlayer((Player) e.getEntity())) {
             e.setCancelled(true);
             if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                Location spawn = arena.getSpawns().get(ThreadLocalRandom.current().nextInt(arena.getSpawns().size()));
+                Location spawn;
+                if (arena.getPhaseManager().getPhase() instanceof LobbyPhase) {
+                    spawn = arena.getLobby();
+                } else {
+                    spawn = arena.getSpawns().get(ThreadLocalRandom.current().nextInt(arena.getSpawns().size()));
+                }
                 e.getEntity().teleport(spawn);
             }
         }
