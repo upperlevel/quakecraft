@@ -287,6 +287,7 @@ public class QuakeAccount {
                 selectedDashPower = (DashPowerManager.DashPower) getPurchase(r, selected, "dash-power", "dash_power");
                 selectedDashCooldown = (DashCooldownManager.DashCooldown) getPurchase(r, selected, "dash-cooldown", "dash_cooldown");
             }
+            onGunComponentSelectChange();
         }
 
         get().getLogger().info("It took " + (System.currentTimeMillis() - startedAt) + " ms to load data from db for player: \"" + player.getName() + "\"");
