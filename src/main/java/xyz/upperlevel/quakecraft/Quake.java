@@ -65,6 +65,8 @@ public class Quake extends JavaPlugin {
         // This will initialize Uppercore.
         Uppercore.hook(this, BSTATS_ID);
 
+        // *** Critical part ***
+        // This part is susceptible to errors that may disable the plugin.
         try {
             // Quake configuration should be present in the plugin folder.
             // The plugin will not take care of saving its JAR included resources.
@@ -77,26 +79,26 @@ public class Quake extends JavaPlugin {
             QuakeAccount.loadTable();
 
             shop = new ShopCategory();
-            Bukkit.getScheduler().runTask(this, () -> {
-                if (EconomyManager.isEnabled()) {
-                    shop.load();//Requires Economy
-                } else {
-                    getLogger().severe("Cannot find any economy plugin installed!");
-                    setEnabled(false);
-                }
-            });
+            if (EconomyManager.isEnabled()) {
+                shop.load();
+            } else {
+                throw new IllegalStateException("Can't find economy plugin installed");
+            }
 
             defConfirmOptions = ConfirmPurchaseGui.load(customConfig);
-
-            registerCommands();
-
             playerManager = new AccountManager();
-
             updater = new SpigotUpdateChecker(this, SPIGOT_ID);
+
         } catch (Throwable t) {
             CrashUtil.saveCrash(this, t);
             setEnabled(false);
+            return;
         }
+
+        // *** Safe part ***
+        // If all went well, the plugin will finally reach this point.
+        registerCommands();
+        Quake.get().getLogger().info("The plugin has been fully loaded.");
     }
 
     private void registerCommands() {
@@ -144,7 +146,8 @@ public class Quake extends JavaPlugin {
 
         ArenaManager.get().unload();
 
-        remoteDatabase.close();
+        if (remoteDatabase != null)
+            remoteDatabase.close();
     }
 
     public static Quake get() {

@@ -1,6 +1,9 @@
 package xyz.upperlevel.quakecraft.phases.game;
 
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,7 +36,10 @@ public class GainNotifier {
             amount += lastGain;
         }
         List<String> message = GAIN.get(player.getPlayer(), "raw_gain", format(amount), "gain", EconomyManager.format(amount));
-        PlayerNms.sendActionBar(player.getPlayer(), message);
+        player.getPlayer().spigot().sendMessage(
+                ChatMessageType.ACTION_BAR,
+                TextComponent.fromLegacyText(String.join("\n", message))
+        );
         lastGainTime = currentTime;
         lastGain = amount;
     }

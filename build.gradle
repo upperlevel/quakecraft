@@ -69,3 +69,7 @@ processResources {
         expand('project': project)
     }
 }
+
+compileJava() {
+    options.compilerArgs += ['-parameters']
+}
