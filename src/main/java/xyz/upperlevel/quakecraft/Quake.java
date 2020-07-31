@@ -79,11 +79,13 @@ public class Quake extends JavaPlugin {
             QuakeAccount.loadTable();
 
             shop = new ShopCategory();
-            if (EconomyManager.isEnabled()) {
-                shop.load();
-            } else {
-                throw new IllegalStateException("Can't find economy plugin installed");
-            }
+            Bukkit.getScheduler().runTask(this, () -> {
+                if (EconomyManager.isEnabled()) {
+                    shop.load();
+                } else {
+                    throw new IllegalStateException("Can't find economy plugin installed");
+                }
+            });
 
             defConfirmOptions = ConfirmPurchaseGui.load(customConfig);
             playerManager = new AccountManager();
