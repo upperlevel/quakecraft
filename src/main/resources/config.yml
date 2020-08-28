@@ -61,6 +61,9 @@ lobby:
 
 # ------------------------------------------------------- Game -------------------------------------------------------
 game:
+  # The list of commands permtited during the game.
+  permitted-commands: ["/quake leave", "/q leave"]
+
   # Start:
   start-message:
     - '^a'
@@ -2908,7 +2911,7 @@ messages:
 
 
   game:
-    cannot-run-command-during-game: '&cCannot run commands during game! Only /quake quit is runnable.'
+    cannot-run-command-during-game: "&cYou're not permitted to run this command during the game."
 
     gain-message: "&aYou gained %gain_amount% because %gain_name%."
 
@@ -2917,8 +2920,6 @@ messages:
 
     shot: '&7%killer% %kill_message% &7%killed%'
     headshot: '&7%killer% %kill_message% &7%killed% &e&lHEADSHOT'
-
-    snake-disabled: '&cSneaking is disabled! Your name is still visible'
 
     end-ranking:
       header:

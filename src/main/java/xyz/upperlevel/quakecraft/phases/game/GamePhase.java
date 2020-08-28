@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -43,6 +44,9 @@ import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 public class GamePhase extends PhaseManager {
     private static int gameCountdown;
+
+    private static List<String> permittedCommands;
+    private static Message cannotRunCommandDuringGame;
 
     private static GameBoard gameBoard;
     private static Message joinSign;
@@ -416,8 +420,24 @@ public class GamePhase extends PhaseManager {
         }
     }
 
+    @EventHandler
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e) {
+        Player player = e.getPlayer();
+        String cmd = e.getMessage();
+        Dbg.pf("%s issued the command: %s", player.getName(), cmd);
+        if (permittedCommands.stream().noneMatch(cmd::startsWith)) {
+            cannotRunCommandDuringGame.send(player);
+            e.setCancelled(true);
+        }
+    }
+
     public static void loadConfig() {
+        Config msg = Quake.getConfigSection("messages.game");
+
         Config config = Quake.getConfigSection("game");
+        permittedCommands = config.getStringList("permitted-commands");
+        cannotRunCommandDuringGame = msg.getMessage("cannot-run-command-during-game");
+
         gameCountdown = config.getIntRequired("duration");
         gameBoard = config.getRequired("game-board", GameBoard.class);
         startMessage = config.getMessage("start-message");
