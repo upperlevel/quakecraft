@@ -301,7 +301,9 @@ public class QuakePlayer {
     }
 
     public void restoreItems() {
-        preJoinItems.restore(player);
-        preJoinItems = null;
+        if (preJoinItems != null) {
+            preJoinItems.restore(player);
+            preJoinItems = null;
+        }
     }
 }
