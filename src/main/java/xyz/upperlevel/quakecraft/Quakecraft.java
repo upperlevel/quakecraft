@@ -91,9 +91,19 @@ public class Quakecraft extends JavaPlugin {
             store = new Store(this);
 
             arenaManager = new ArenaManager();
-            arenaManager.load();
             gameManager = new GameManager();
-            gameManager.load();
+
+            Bukkit.getScheduler().runTask(this, () -> {
+                try {
+                    // Arenas are loaded one tick later in order to leave time to MultiVerse or whatever to load worlds.
+                    getLogger().info("Loading arenas...");
+                    arenaManager.load();
+                    gameManager.load();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    setEnabled(false);
+                }
+            });
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {

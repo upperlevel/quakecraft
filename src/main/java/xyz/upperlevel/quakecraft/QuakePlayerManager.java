@@ -72,7 +72,9 @@ public class QuakePlayerManager implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        onQuit(e.getPlayer());
+        Player p = e.getPlayer();
+        players.get(p).restoreItems();
+        onQuit(p);
     }
 
     public static QuakePlayerManager get() {

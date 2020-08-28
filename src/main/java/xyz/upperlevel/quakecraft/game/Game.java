@@ -10,6 +10,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -178,7 +179,6 @@ public class Game implements Listener {
             } else {
                 Quakecraft.get().getLogger().severe("global lobby location not set, use '/quake lobby set' to set the global lobby location");
             }
-            Quakecraft.get().getPlayerManager().getPlayer(player).restoreItems();
             return true;
         }
         return false;
@@ -218,7 +218,7 @@ public class Game implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(PlayerQuitEvent e) {
         if (getPlayers().contains(e.getPlayer()))
             leave(e.getPlayer());
