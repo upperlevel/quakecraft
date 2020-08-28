@@ -14,7 +14,7 @@ targetCompatibility = 1.8
 
 project.ext {
     mcVersion = '1.12-R0.1-SNAPSHOT'
-    coreVersion = '1.2.4'
+    coreVersion = '1.2.5'
 }
 
 repositories {
