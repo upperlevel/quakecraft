@@ -3,7 +3,7 @@ package xyz.upperlevel.quakecraft.shop.railgun;
 import lombok.AccessLevel;
 import lombok.Getter;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.gun.*;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 public class Railgun {
 
-    public static PlaceholderValue<String> CUSTOM_NAME ;
+    public static PlaceholderValue<String> CUSTOM_NAME;
     private final String id;
     private PlaceholderValue<String> name;
     @Getter(value = AccessLevel.NONE)
@@ -83,10 +83,10 @@ public class Railgun {
         processPlaceholders(placeholders);
     }
 
-    public boolean canSelect(QuakeAccount player) {
-        Set<Purchase<?>> purchases = player.getPurchases();
+    public boolean canSelect(Profile profile) {
+        Set<Purchase<?>> purchases = profile.getPurchases();
         for (Purchase<?> p : getComponents()) {
-            if(p.getCost() > 0 && !purchases.contains(p))
+            if (p.getCost() > 0 && !purchases.contains(p))
                 return false;
         }
         return true;
@@ -102,16 +102,16 @@ public class Railgun {
         );
     }
 
-    public void select(QuakeAccount player) {
-        player.setGunComponents(getComponents());
+    public void select(Profile profile) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setRailgun(getComponents()));
     }
 
-    public boolean isSelected(QuakeAccount player) {
-        return  player.getSelectedCase() == gcase &&
-                player.getSelectedLaser() == laser &&
-                player.getSelectedBarrel() == barrel &&
-                player.getSelectedMuzzle() == muzzle &&
-                player.getSelectedTrigger() == trigger;
+    public boolean isSelected(Profile profile) {
+        return profile.getSelectedCase() == gcase &&
+                profile.getSelectedLaser() == laser &&
+                profile.getSelectedBarrel() == barrel &&
+                profile.getSelectedMuzzle() == muzzle &&
+                profile.getSelectedTrigger() == trigger;
     }
 
     public CaseManager.Case getCase() {

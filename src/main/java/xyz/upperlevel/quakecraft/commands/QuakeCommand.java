@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.arena.QuakeArenaCommands;
+import xyz.upperlevel.quakecraft.profile.ProfileCommands;
 import xyz.upperlevel.uppercore.arena.command.ArenaCommands;
 import xyz.upperlevel.uppercore.arena.event.ArenaQuitEvent.ArenaQuitReason;
 import xyz.upperlevel.uppercore.command.NodeCommand;
@@ -35,6 +36,7 @@ public class QuakeCommand extends NodeCommand {
         // Registers all command used for arena editing, either from the game-api or not.
         FunctionalCommand.inject(this, new ArenaCommands(QuakeArena.class));
         FunctionalCommand.inject(this, new QuakeArenaCommands());
+        append(new ProfileCommands());
 
         // Registers must used commands as locals: such as join, quit, shop...
         FunctionalCommand.inject(this, this);

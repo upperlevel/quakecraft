@@ -1,7 +1,8 @@
 package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -20,13 +21,13 @@ public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging
     }
 
     @Override
-    public void setSelected(QuakeAccount player, Legging purchase) {
-        player.setSelectedLegging(purchase);
+    public void setSelected(Profile profile, Legging purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedLeggings(purchase));
     }
 
     @Override
-    public Legging getSelected(QuakeAccount player) {
-        return player.getSelectedLegging();
+    public Legging getSelected(Profile profile) {
+        return profile.getSelectedLeggings();
     }
 
     @Getter

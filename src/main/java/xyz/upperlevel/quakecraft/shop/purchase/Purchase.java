@@ -1,7 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.purchase;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.quakecraft.shop.require.Require;
 import xyz.upperlevel.quakecraft.shop.require.RequireSystem;
@@ -49,7 +49,7 @@ public abstract class Purchase<T extends Purchase<T>> {
         return manager.getPurchaseName() + ":" + id;
     }
 
-    public abstract UItem getIcon(QuakeAccount player);
+    public abstract UItem getIcon(Profile profile);
 
     protected void fillPlaceholderSession(PlaceholderRegistry session) {
         session.set("cost", getCostFormatted());
@@ -60,8 +60,8 @@ public abstract class Purchase<T extends Purchase<T>> {
         return EconomyManager.format(cost);
     }
 
-    public boolean isSelected(QuakeAccount player) {
-        return manager.getSelected(player) == this;
+    public boolean isSelected(Profile profile) {
+        return manager.getSelected(profile) == this;
     }
 
     @Override

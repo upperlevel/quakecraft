@@ -1,8 +1,0 @@
-storage:
-  type: 'nitritedb'
-
-  #host: localhost
-  #port: 25565
-  #username: user
-  #password: password
-  #database: quakecraft

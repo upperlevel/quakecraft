@@ -6,9 +6,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.upperlevel.quakecraft.AccountManager;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.ChestGui;
@@ -58,37 +57,37 @@ public class RailgunSelectGui extends ChestGui {
     @Override
     public Inventory create(Player player) {
         Inventory inv = super.create(player);
-        QuakeAccount qp = AccountManager.get().getAccount(player);
-        if(qp == null) {
+        Profile profile = Quake.getProfileController().getProfile(player);
+        if(profile == null) {
             Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
         }
-        printPurchases(inv, qp);
+        printPurchases(inv, profile);
         return inv;
     }
 
-    public void printPurchases(Inventory inv, QuakeAccount player) {
+    public void printPurchases(Inventory inv, Profile profile) {
         for (Map.Entry<Integer, Railgun> p : gunMap.entrySet())
-            inv.setItem(p.getKey(), getIcon(p.getValue(), player));
+            inv.setItem(p.getKey(), getIcon(p.getValue(), profile));
     }
 
-    protected ItemStack getIcon(Railgun gun, QuakeAccount player) {
+    protected ItemStack getIcon(Railgun gun, Profile profile) {
         UItem icon = gun.getCase().getIcon();
-        Player p = player.getPlayer();
+        Player p = profile.getPlayer();
 
         ItemStack item = icon.resolve(p);
         ItemMeta meta = item.getItemMeta();
 
-        processMeta(player, gun, meta);
+        processMeta(profile, gun, meta);
 
         item.setItemMeta(meta);
         return item;
     }
 
-    public void processMeta(QuakeAccount player, Railgun gun, ItemMeta meta) {
-        Player p = player.getPlayer();
-        boolean selected = player.getGun() == gun;
-        boolean selectable = selected || gun.canSelect(player);
+    public void processMeta(Profile profile, Railgun gun, ItemMeta meta) {
+        Player p = profile.getPlayer();
+        boolean selected = profile.getRailgun() == gun;
+        boolean selectable = selected || gun.canSelect(profile);
 
         meta.setDisplayName(ChatColor.RESET + getPrefix(selectable, selected) + gun.getName().resolve(p));
 
@@ -134,8 +133,8 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Railgun gun) {
-        QuakeAccount p = AccountManager.get().getAccount(player);
-        if(p.getGun() == gun) {
+        Profile p = Quake.getProfileController().getProfile(player);
+        if(p.getRailgun() == gun) {
             GUN_ALREADY_SELECTED.send(player);
             //You already have that gun equipped
         } else if(gun.canSelect(p)) {
@@ -156,8 +155,8 @@ public class RailgunSelectGui extends ChestGui {
         }
     }
 
-    private void selectAndReload(QuakeAccount p, int slot, Railgun gun) {
-        Railgun old = p.getGun();
+    private void selectAndReload(Profile p, int slot, Railgun gun) {
+        Railgun old = p.getRailgun();
         gun.select(p);
 
         //Find old gun's index

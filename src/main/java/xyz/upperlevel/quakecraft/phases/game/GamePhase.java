@@ -16,11 +16,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.powerup.Powerup;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.PhaseManager;
@@ -119,8 +119,8 @@ public class GamePhase extends PhaseManager {
         });
         placeholders.set("ranking_gun", (p, s) -> {
             try {
-                QuakeAccount player = Quake.get().getPlayerManager().getAccount(gamers.get(Integer.parseInt(s) - 1).getPlayer());
-                return player.getGun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getGun().getName().resolve(p);
+                Profile player = Quake.getProfileController().getProfile(gamers.get(Integer.parseInt(s) - 1).getPlayer());
+                return player.getRailgun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getRailgun().getName().resolve(p);
             } catch (Exception e) {
                 return null;
             }
@@ -159,12 +159,12 @@ public class GamePhase extends PhaseManager {
 
         hotbars().view(player).addHotbar(hotbar);
 
-        QuakeAccount account = Quake.getAccount(player);
+        Profile profile = Quake.getProfileController().getProfile(player);
         player.getInventory().setArmorContents(new ItemStack[]{ // Sets the account's selected armor.
-                account.getSelectedBoot().getItem().resolve(player),
-                account.getSelectedLegging().getItem().resolve(player),
-                account.getSelectedChestplate().getItem().resolve(player),
-                account.getSelectedHat().getItem().resolve(player)
+                profile.getSelectedBoots().getItem().resolve(player),
+                profile.getSelectedLeggings().getItem().resolve(player),
+                profile.getSelectedChestplate().getItem().resolve(player),
+                profile.getSelectedHat().getItem().resolve(player)
         });
 
         player.setGameMode(GameMode.ADVENTURE);
@@ -363,7 +363,7 @@ public class GamePhase extends PhaseManager {
             Gamer gamer = getGamer(player);
 
             player.setExp(1.0f);
-            long firingDelay = (long) (Quake.getAccount(player).getSelectedTrigger().getFiringSpeed() * gamer.getGunCooldownBase());
+            long firingDelay = (long) (Quake.getProfileController().getProfile(player).getSelectedTrigger().getFiringSpeed() * gamer.getGunCooldownBase());
             Countdown.create(
                     firingDelay, 1,
                     tick -> player.setExp((float) tick / firingDelay),

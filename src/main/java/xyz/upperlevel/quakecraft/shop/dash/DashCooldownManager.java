@@ -1,7 +1,8 @@
 package xyz.upperlevel.quakecraft.shop.dash;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.multi.MultiPurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
@@ -24,13 +25,13 @@ public class DashCooldownManager extends MultiPurchaseManager<DashCooldownManage
     }
 
     @Override
-    public void setSelected(QuakeAccount player, DashCooldown purchase) {
-        player.setSelectedDashCooldown(purchase);
+    public void setSelected(Profile profile, DashCooldown purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedDashCooldown(purchase));
     }
 
     @Override
-    public DashCooldown getSelected(QuakeAccount player) {
-        return player.getSelectedDashCooldown();
+    public DashCooldown getSelected(Profile profile) {
+        return profile.getSelectedDashCooldown();
     }
 
     public class DashCooldown extends BaseDashUpgrade<DashCooldown> {
@@ -43,8 +44,8 @@ public class DashCooldownManager extends MultiPurchaseManager<DashCooldownManage
         }
 
         @Override
-        public boolean isSelected(QuakeAccount player) {
-            return player.getSelectedDashCooldown() == this;
+        public boolean isSelected(Profile profile) {
+            return profile.getSelectedDashCooldown() == this;
         }
     }
 }

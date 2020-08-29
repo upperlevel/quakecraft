@@ -13,8 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
-import xyz.upperlevel.quakecraft.AccountManager;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseBuyEvent;
 import xyz.upperlevel.quakecraft.shop.event.PurchaseSelectEvent;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
@@ -84,7 +83,7 @@ public class PurchaseGui extends ChestGui {
     public void reprint() {
         this.purchaseMap.clear();
 
-        for(PurchaseAdapter adapter : adapters) {
+        for (PurchaseAdapter adapter : adapters) {
             Collection<SimplePurchase<?>> purchases = (Collection<SimplePurchase<?>>) adapter.manager.getPurchases().values();
             int[] slots = adapter.slots;
             int fillSize = purchases.size();
@@ -107,18 +106,18 @@ public class PurchaseGui extends ChestGui {
         if (dirty)
             reprint();
         Inventory inv = super.create(player);
-        QuakeAccount qp = AccountManager.get().getAccount(player);
-        if(qp == null) {
+        Profile profile = Quake.getProfileController().getProfile(player);
+        if (profile == null) {
             Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
         }
-        printPurchases(inv, qp);
+        printPurchases(inv, profile);
         return inv;
     }
 
-    public void printPurchases(Inventory inv, QuakeAccount player) {
+    public void printPurchases(Inventory inv, Profile profile) {
         for (Map.Entry<Integer, Purchase<?>> p : purchaseMap.entrySet())
-            inv.setItem(p.getKey(), getIcon(p.getValue(), player, p.getValue().isSelected(player)));
+            inv.setItem(p.getKey(), getIcon(p.getValue(), profile, p.getValue().isSelected(profile)));
     }
 
     @Override
@@ -131,14 +130,14 @@ public class PurchaseGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Purchase<?> purchase) {
-        QuakeAccount p = AccountManager.get().getAccount(player);
-        Set<Purchase<?>> purchases = p.getPurchases();
+        Profile profile = Quake.getProfileController().getProfile(player);
+        Set<Purchase<?>> purchases = profile.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test
-            if(purchase.getRequires().stream().anyMatch(r -> !r.test(p)))
+            if (purchase.getRequires().stream().anyMatch(r -> !r.test(profile)))
                 return;
 
-            if(purchase.getCost() > 0) {
+            if (purchase.getCost() > 0) {
                 Balance b = EconomyManager.get(player);
                 if (b == null) {
                     Quake.get().getLogger().severe("Economy not found!");
@@ -148,39 +147,39 @@ public class PurchaseGui extends ChestGui {
                     Quake.get().openConfirmPurchase(
                             player,
                             purchase,
-                            ((Link) n -> onPurchaseSucceed(p, purchase)).and(GuiAction.back()),
+                            ((Link) n -> onPurchaseSucceed(profile, purchase)).and(GuiAction.back()),
                             GuiAction.back()
                     );
                 } else {
                     notEnoughMoney.send(player, "required", String.valueOf(purchase.getCost()));
                 }
             } else {
-                onPurchaseSucceed(p, purchase);
-                printPurchases(p.getPlayer().getOpenInventory().getTopInventory(), p);
+                onPurchaseSucceed(profile, purchase);
+                printPurchases(profile.getPlayer().getOpenInventory().getTopInventory(), profile);
             }
         } else
-            reloadSelection(p, slot, purchase);
+            reloadSelection(profile, slot, purchase);
     }
 
     @SuppressWarnings("unchecked")
-    public void onPurchaseSucceed(QuakeAccount player, Purchase purchase) {
+    public void onPurchaseSucceed(Profile profile, Purchase purchase) {
         PluginManager eventManager = Bukkit.getPluginManager();
 
-        PurchaseBuyEvent buyEvent = new PurchaseBuyEvent(player, purchase);
+        PurchaseBuyEvent buyEvent = new PurchaseBuyEvent(profile, purchase);
         eventManager.callEvent(buyEvent);
-        if(!buyEvent.isCancelled()) {
-            player.getPurchases().add(purchase);
+        if (!buyEvent.isCancelled()) {
+            profile.getPurchases().add(purchase);
 
             PurchaseManager purchaseManager = purchase.getManager();
-            PurchaseSelectEvent event = new PurchaseSelectEvent(player, purchaseManager.getSelected(player), purchase);
+            PurchaseSelectEvent event = new PurchaseSelectEvent(profile, purchaseManager.getSelected(profile), purchase);
             if (!event.isCancelled())
-                purchaseManager.setSelected(player, event.getPurchase());
+                purchaseManager.setSelected(profile, event.getPurchase());
         }
     }
 
-    protected ItemStack getIcon(Purchase<?> purchase, QuakeAccount player, boolean selected) {
-        UItem icon = purchase.getIcon(player);
-        Player p = player.getPlayer();
+    protected ItemStack getIcon(Purchase<?> purchase, Profile profile, boolean selected) {
+        UItem icon = purchase.getIcon(profile);
+        Player p = profile.getPlayer();
         if (icon == null) {
             Quake.get().getLogger().severe("Null icon for purchase: \"" + purchase.getName());
             return null;
@@ -188,19 +187,19 @@ public class PurchaseGui extends ChestGui {
         ItemStack item = icon.resolve(p);
         ItemMeta meta = item.getItemMeta();
 
-        processMeta(player, purchase, meta, selected);
+        processMeta(profile, purchase, meta, selected);
 
         item.setItemMeta(meta);
         return item;
     }
 
-    public void processMeta(QuakeAccount player, Purchase<?> purchase, ItemMeta meta, boolean selected) {
-        Player p = player.getPlayer();
-        boolean purchased = selected || purchase.getCost() == 0 || player.getPurchases().contains(purchase);
+    public void processMeta(Profile profile, Purchase<?> purchase, ItemMeta meta, boolean selected) {
+        Player p = profile.getPlayer();
+        boolean purchased = selected || purchase.getCost() == 0 || profile.getPurchases().contains(purchase);
 
         meta.setDisplayName(ChatColor.RESET + getPrefix(purchased, selected) + purchase.getName().resolve(p));
 
-        if(selected && enchantSelected) {
+        if (selected && enchantSelected) {
             addGlow(meta);
         }
 
@@ -217,24 +216,24 @@ public class PurchaseGui extends ChestGui {
         );
 
         // Add requires
-        metaLore.addAll(processRequires(purchase, player));
+        metaLore.addAll(processRequires(purchase, profile));
         // Add "used to make %gun%" fields
-        metaLore.addAll(processUsedToMake(purchase, player));
+        metaLore.addAll(processUsedToMake(purchase, profile));
 
         meta.setLore(metaLore);
     }
 
-    public List<String> processRequires(Purchase<?> purchase, QuakeAccount player) {
+    public List<String> processRequires(Purchase<?> purchase, Profile profile) {
         List<String> lore = new ArrayList<>();
         List<Require> requires = purchase.getRequires();
-        for(Require require : requires) {
-            boolean pass = require.test(player);
+        for (Require require : requires) {
+            boolean pass = require.test(profile);
 
             PlaceholderValue<String> fmt = pass ? requireFound : requireMissing;
 
-            String reqStr = fmt.resolve(player.getPlayer(),
+            String reqStr = fmt.resolve(profile.getPlayer(),
                     PlaceholderRegistry.create()
-                            .set("require_name", require.getName(player))
+                            .set("require_name", require.getName(profile))
                             .set("require_type", require.getType())
             );
             String description = require.getDescription();
@@ -242,7 +241,7 @@ public class PurchaseGui extends ChestGui {
                 lore.add("");
             lore.add(ChatColor.RESET + " " + reqStr);
 
-            if(description != null) {
+            if (description != null) {
                 lore.add(ChatColor.RESET + "   " + description);
                 if (!pass) {
                     String progress = require.getProgress();
@@ -254,16 +253,15 @@ public class PurchaseGui extends ChestGui {
         return lore;
     }
 
-    public List<String> processUsedToMake(Purchase<?> purchase, QuakeAccount player) {
+    public List<String> processUsedToMake(Purchase<?> purchase, Profile profile) {
         List<String> lore = new ArrayList<>();
         List<Railgun> makes = purchase.getUsedToMake();
-        for(Railgun gun : makes) {
+        for (Railgun gun : makes) {
             PlaceholderRegistry reg = PlaceholderRegistry.create()
                     .set("gun_name", gun.getName())
                     .set("gun_id", gun.getId());
 
-
-            lore.add(ChatColor.RESET + " " + usedToMake.resolve(player.getPlayer(), reg));
+            lore.add(ChatColor.RESET + " " + usedToMake.resolve(profile.getPlayer(), reg));
         }
         return lore;
     }
@@ -296,15 +294,15 @@ public class PurchaseGui extends ChestGui {
     }
 
     @SuppressWarnings("unchecked")
-    protected void reloadSelection(QuakeAccount player, int slot, Purchase<?> sel) {
+    protected void reloadSelection(Profile profile, int slot, Purchase<?> sel) {
         PurchaseManager purchaseManager = sel.getManager();
-        Purchase<?> old = purchaseManager.getSelected(player);
-        if(old != sel) {
-            PurchaseSelectEvent event = new PurchaseSelectEvent(player, old, sel);
+        Purchase<?> old = purchaseManager.getSelected(profile);
+        if (old != sel) {
+            PurchaseSelectEvent event = new PurchaseSelectEvent(profile, old, sel);
             Bukkit.getPluginManager().callEvent(event);
-            if(!event.isCancelled()) {
-                purchaseManager.setSelected(player, event.getPurchase());
-                printPurchases(player.getPlayer().getOpenInventory().getTopInventory(), player);
+            if (!event.isCancelled()) {
+                purchaseManager.setSelected(profile, event.getPurchase());
+                printPurchases(profile.getPlayer().getOpenInventory().getTopInventory(), profile);
             }
         }
     }

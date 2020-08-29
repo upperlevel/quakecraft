@@ -1,7 +1,8 @@
 package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
@@ -19,13 +20,13 @@ public class TriggerManager extends SinglePurchaseManager<TriggerManager.Trigger
     }
 
     @Override
-    public void setSelected(QuakeAccount player, Trigger purchase) {
-        player.setSelectedTrigger(purchase);
+    public void setSelected(Profile profile, Trigger purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedTrigger(purchase));
     }
 
     @Override
-    public Trigger getSelected(QuakeAccount player) {
-        return player.getSelectedTrigger();
+    public Trigger getSelected(Profile profile) {
+        return profile.getSelectedTrigger();
     }
 
 

@@ -5,14 +5,14 @@ import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 
 @Getter
 public class PurchaseSelectEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private final QuakeAccount player;
+    private final Profile profile;
 
     private final Purchase<?> oldPurchase;
     @Setter
@@ -20,8 +20,8 @@ public class PurchaseSelectEvent extends Event implements Cancellable {
     @Setter
     private boolean cancelled = false;
 
-    public PurchaseSelectEvent(QuakeAccount player, Purchase<?> oldPurchase, Purchase<?> purchase) {
-        this.player = player;
+    public PurchaseSelectEvent(Profile profile, Purchase<?> oldPurchase, Purchase<?> purchase) {
+        this.profile = profile;
         this.oldPurchase = oldPurchase;
         this.purchase = purchase;
     }

@@ -2,7 +2,7 @@ package xyz.upperlevel.quakecraft.shop.dash;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
@@ -24,11 +24,10 @@ public class BaseDashUpgrade<P extends BaseDashUpgrade<P>> extends Purchase<P> {
     }
 
     @Override
-    public UItem getIcon(QuakeAccount player) {
-        Material mat = player.getPurchases().contains(this) ? GOT : MISSING;
+    public UItem getIcon(Profile profile) {
+        Material mat = profile.getPurchases().contains(this) ? GOT : MISSING;
         UItem item = new UItem(new ItemStack(mat));
         item.setLore(lore);
-
         return item;
     }
 }

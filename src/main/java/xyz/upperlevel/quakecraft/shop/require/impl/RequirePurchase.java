@@ -1,6 +1,6 @@
 package xyz.upperlevel.quakecraft.shop.require.impl;
 
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
 import xyz.upperlevel.quakecraft.shop.require.Require;
@@ -16,8 +16,8 @@ public class RequirePurchase implements Require {
     }
 
     @Override
-    public String getName(QuakeAccount player) {
-        return getRequired().getName().resolve(player.getPlayer());
+    public String getName(Profile profile) {
+        return getRequired().getName().resolve(profile.getPlayer());
     }
 
     @Override
@@ -31,8 +31,8 @@ public class RequirePurchase implements Require {
     }
 
     @Override
-    public boolean test(QuakeAccount player) {
-        return player.getPurchases().contains(getRequired());
+    public boolean test(Profile profile) {
+        return profile.getPurchases().contains(getRequired());
     }
 
     @Override

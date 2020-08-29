@@ -3,7 +3,7 @@ package xyz.upperlevel.quakecraft.shop.purchase;
 import lombok.Getter;
 import lombok.Setter;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.uppercore.config.Config;
 
 import java.util.Collections;
@@ -50,9 +50,9 @@ public abstract class PurchaseManager<P extends Purchase<P>> {
 
     public abstract P deserialize(String id, Config config);
 
-    public abstract void setSelected(QuakeAccount player, P purchase);
+    public abstract void setSelected(Profile profile, P purchase);
 
-    public abstract P getSelected(QuakeAccount player);
+    public abstract P getSelected(Profile profile);
 
     public P get(String name) {
         return purchases.get(normalizeId(name));

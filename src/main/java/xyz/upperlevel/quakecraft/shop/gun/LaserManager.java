@@ -2,14 +2,14 @@ package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
 import org.bukkit.Color;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 
 public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
-
     public LaserManager(PurchaseRegistry registry) {
         super(registry, "laser", "gun.lasers");
     }
@@ -20,15 +20,14 @@ public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
     }
 
     @Override
-    public void setSelected(QuakeAccount player, Laser purchase) {
-        player.setSelectedLaser(purchase);
+    public void setSelected(Profile profile, Laser purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedLaser(purchase));
     }
 
     @Override
-    public Laser getSelected(QuakeAccount player) {
-        return player.getSelectedLaser();
+    public Laser getSelected(Profile profile) {
+        return profile.getSelectedLaser();
     }
-
 
     @Getter
     public class Laser extends SimplePurchase<Laser> {

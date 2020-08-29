@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.arena.Arena;
 import xyz.upperlevel.uppercore.config.Config;
@@ -50,7 +50,7 @@ public class Shot extends BukkitRunnable {
     private final GamePhase gamePhase;
 
     private final Player shooter;
-    private final QuakeAccount shooterAccount;
+    private final Profile shooterAccount;
 
     private final Location location;
     private final Vector direction;
@@ -63,7 +63,7 @@ public class Shot extends BukkitRunnable {
         this.gamePhase = gamePhase;
 
         this.shooter = shooter;
-        this.shooterAccount = Quake.getAccount(shooter);
+        this.shooterAccount = Quake.getProfileController().getProfile(shooter.getUniqueId());
 
         this.location = shooter.getEyeLocation();
         this.direction = this.location.getDirection();
@@ -82,7 +82,7 @@ public class Shot extends BukkitRunnable {
 
             Dbg.p(String.format("[%s] Hit %s - headshot %b", shooter.getName(), hit.getName(), headshot));
 
-            Railgun gun = shooterAccount.getGun();
+            Railgun gun = shooterAccount.getRailgun();
             Message message = headshot ? headshotMessage : shotMessage;
             PlaceholderValue<String> killMessage = (gun == null || gun.getKillMessage() == null) ? defaultKillMessage : gun.getKillMessage();
             message = message.filter(

@@ -51,7 +51,7 @@ public class ConfirmPurchaseGui extends ChestGui {
         placeholders.set("item_name", purchaseName);
         Inventory inv = super.create(player);
 
-        UItem item = purchase.getIcon(Quake.get().getPlayerManager().getAccount(player));
+        UItem item = purchase.getIcon(Quake.getProfileController().getProfile(player));
         item.setDisplayName(PlaceholderValue.fake(purchaseName));
 
         inv.setItem(itemSlot, item.resolve(player));

@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigProperty;
 import xyz.upperlevel.uppercore.gui.ConfigIcon;
@@ -50,16 +50,16 @@ public class GameHotbar extends Hotbar {
         public ItemStack resolve(Player player) {
             // The gun is particular: name and lore are both configurable but can have some
             // extra placeholders, such as gun's components name.
-            QuakeAccount quake = Quake.get().getPlayerManager().getAccount(player);
-            UItem item = quake.getSelectedCase().getItem();
+            Profile profile = Quake.getProfileController().getProfile(player);
+            UItem item = profile.getSelectedCase().getItem();
             item.setDisplayName(name);
             item.setLore(lore);
             item.setPlaceholders(PlaceholderRegistry.create()
-                    .set("case", quake.getSelectedCase().getName().resolve(player))
-                    .set("laser", quake.getSelectedLaser().getName().resolve(player))
-                    .set("barrel", quake.getSelectedBarrel().getName().resolve(player))
-                    .set("muzzle", quake.getSelectedMuzzle().getName().resolve(player))
-                    .set("trigger", quake.getSelectedTrigger().getName().resolve(player)));
+                    .set("case", profile.getSelectedCase().getName().resolve(player))
+                    .set("laser", profile.getSelectedLaser().getName().resolve(player))
+                    .set("barrel", profile.getSelectedBarrel().getName().resolve(player))
+                    .set("muzzle", profile.getSelectedMuzzle().getName().resolve(player))
+                    .set("trigger", profile.getSelectedTrigger().getName().resolve(player)));
             return item.resolve(player);
         }
     }

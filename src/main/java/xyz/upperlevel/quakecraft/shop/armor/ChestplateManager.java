@@ -1,7 +1,8 @@
 package xyz.upperlevel.quakecraft.shop.armor;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -20,13 +21,13 @@ public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.C
     }
 
     @Override
-    public void setSelected(QuakeAccount player, Chestplate purchase) {
-        player.setSelectedChestplate(purchase);
+    public void setSelected(Profile profile, Chestplate purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedChestplate(purchase));
     }
 
     @Override
-    public Chestplate getSelected(QuakeAccount player) {
-        return player.getSelectedChestplate();
+    public Chestplate getSelected(Profile profile) {
+        return profile.getSelectedChestplate();
     }
 
     @Getter

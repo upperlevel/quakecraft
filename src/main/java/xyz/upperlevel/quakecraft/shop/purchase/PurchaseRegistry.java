@@ -1,6 +1,6 @@
 package xyz.upperlevel.quakecraft.shop.purchase;
 
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,7 +35,7 @@ public class PurchaseRegistry {
         return p;
     }
 
-    public boolean hasPurchase(QuakeAccount player, String fullId) {
+    public boolean hasPurchase(Profile player, String fullId) {
         return player.getPurchases().contains(getPurchase(fullId));
     }
 

@@ -36,6 +36,10 @@ repositories {
 dependencies {
     compileOnly group: 'org.spigotmc', name: 'spigot-api', version: mcVersion
     implementation group: 'xyz.upperlevel.uppercore', name: 'uppercore', version: coreVersion
+
+    compileOnly "org.mongodb:mongo-java-driver:3.12.4"
+    compileOnly "com.rethinkdb:rethinkdb-driver:2.3.3"
+    compileOnly "org.dizitart:nitrite:3.4.1"
 }
 
 shadowJar {

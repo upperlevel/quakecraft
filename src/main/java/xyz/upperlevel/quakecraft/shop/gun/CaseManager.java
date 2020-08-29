@@ -1,7 +1,8 @@
 package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -26,15 +27,14 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
     }
 
     @Override
-    public void setSelected(QuakeAccount player, Case purchase) {
-        player.setSelectedCase(purchase);
+    public void setSelected(Profile profile, Case purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedCase(purchase));
     }
 
     @Override
-    public Case getSelected(QuakeAccount player) {
-        return player.getSelectedCase();
+    public Case getSelected(Profile profile) {
+        return profile.getSelectedCase();
     }
-
 
     @Getter
     public class Case extends SimplePurchase<Case> {

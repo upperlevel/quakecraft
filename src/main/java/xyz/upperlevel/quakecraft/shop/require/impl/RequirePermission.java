@@ -1,6 +1,6 @@
 package xyz.upperlevel.quakecraft.shop.require.impl;
 
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.require.Require;
 
@@ -12,7 +12,7 @@ public class RequirePermission implements Require {
     }
 
     @Override
-    public String getName(QuakeAccount player) {
+    public String getName(Profile profile) {
         return permission;
     }
 
@@ -27,8 +27,8 @@ public class RequirePermission implements Require {
     }
 
     @Override
-    public boolean test(QuakeAccount player) {
-        return player.getPlayer().hasPermission(permission);
+    public boolean test(Profile profile) {
+        return profile.getPlayer().hasPermission(permission);
     }
 
     @Override

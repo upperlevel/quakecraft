@@ -4,9 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
 import xyz.upperlevel.quakecraft.events.PlayerDashCooldownEnd;
 import xyz.upperlevel.quakecraft.events.PlayerDashEvent;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
@@ -23,12 +23,12 @@ public class Dash {
 
     private static final Map<Player, Dash> dashing = new HashMap<>();
 
-    private final QuakeAccount player;
+    private final Profile player;
 
     private long startTime;
     private long endTime;
 
-    public Dash(QuakeAccount player) {
+    public Dash(Profile player) {
         this.player = player;
     }
 
@@ -67,8 +67,8 @@ public class Dash {
             return;
         }
 
-        QuakeAccount player = Quake.get().getPlayerManager().getAccount(p);
-        new Dash(player).swish();
+        Profile profile = Quake.getProfileController().getProfile(p);
+        new Dash(profile).swish();
     }
 
     public static void loadConfig() {

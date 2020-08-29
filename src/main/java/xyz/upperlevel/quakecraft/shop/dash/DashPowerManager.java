@@ -1,7 +1,8 @@
 package xyz.upperlevel.quakecraft.shop.dash;
 
 import lombok.Getter;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.multi.MultiPurchaseManager;
 import xyz.upperlevel.uppercore.config.Config;
@@ -23,13 +24,13 @@ public class DashPowerManager extends MultiPurchaseManager<DashPowerManager.Dash
     }
 
     @Override
-    public void setSelected(QuakeAccount player, DashPower purchase) {
-        player.setSelectedDashPower(purchase);
+    public void setSelected(Profile profile, DashPower purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedDashPower(purchase));
     }
 
     @Override
-    public DashPower getSelected(QuakeAccount player) {
-        return player.getSelectedDashPower();
+    public DashPower getSelected(Profile profile) {
+        return profile.getSelectedDashPower();
     }
 
     public class DashPower extends BaseDashUpgrade<DashPower> {
@@ -42,8 +43,8 @@ public class DashPowerManager extends MultiPurchaseManager<DashPowerManager.Dash
         }
 
         @Override
-        public boolean isSelected(QuakeAccount player) {
-            return player.getSelectedDashPower() == this;
+        public boolean isSelected(Profile profile) {
+            return profile.getSelectedDashPower() == this;
         }
     }
 }

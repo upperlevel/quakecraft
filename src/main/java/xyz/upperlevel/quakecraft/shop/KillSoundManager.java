@@ -2,7 +2,8 @@ package xyz.upperlevel.quakecraft.shop;
 
 import lombok.Getter;
 import org.bukkit.Location;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.Quake;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
 import xyz.upperlevel.quakecraft.shop.purchase.single.SinglePurchaseManager;
@@ -21,13 +22,13 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
     }
 
     @Override
-    public void setSelected(QuakeAccount player, KillSound purchase) {
-        player.setSelectedKillSound(purchase);
+    public void setSelected(Profile profile, KillSound purchase) {
+        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedKillSound(purchase));
     }
 
     @Override
-    public KillSound getSelected(QuakeAccount player) {
-        return player.getSelectedKillSound();
+    public KillSound getSelected(Profile profile) {
+        return profile.getSelectedKillSound();
     }
 
     public class KillSound extends SimplePurchase<KillSound> {

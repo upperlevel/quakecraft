@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import lombok.Getter;
 import xyz.upperlevel.quakecraft.Quake;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.gun.GunCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.uppercore.config.Config;
@@ -36,8 +36,14 @@ public class RailgunManager {
         }
     }
 
-    public Railgun computeSelected(QuakeAccount player) {
-        return byComponents.get(player.getGunComponents());
+    public Railgun computeSelected(Profile profile) {
+        return byComponents.get(Arrays.asList(
+                profile.getSelectedCase(),
+                profile.getSelectedLaser(),
+                profile.getSelectedBarrel(),
+                profile.getSelectedMuzzle(),
+                profile.getSelectedTrigger()
+        ));
     }
 
     public Collection<Railgun> getUsedFor(Purchase<?> component) {

@@ -1,0 +1,12 @@
+# The type of database to use, could be one of:
+# - nitritedb (local storage)
+# - mongodb
+# - mysql
+type: 'nitritedb'
+
+# Additional info that may be requested by the chosen database.
+#host: localhost
+#port: 3310
+#username: user
+#password: password
+#database: quake

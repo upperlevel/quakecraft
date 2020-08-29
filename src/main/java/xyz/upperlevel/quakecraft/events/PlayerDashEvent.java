@@ -5,13 +5,13 @@ import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.upperlevel.quakecraft.QuakeAccount;
+import xyz.upperlevel.quakecraft.profile.Profile;
 
 @Getter
 public class PlayerDashEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private final QuakeAccount player;
+    private final Profile player;
     @Setter
     private float power;
     @Setter
@@ -20,7 +20,7 @@ public class PlayerDashEvent extends Event implements Cancellable {
     @Setter
     private boolean cancelled;
 
-    public PlayerDashEvent(QuakeAccount player, float power, int cooldown) {
+    public PlayerDashEvent(Profile player, float power, int cooldown) {
         this.player = player;
         this.power = power;
         this.cooldown = cooldown;
