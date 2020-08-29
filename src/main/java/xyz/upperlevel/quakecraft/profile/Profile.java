@@ -54,8 +54,8 @@ public class Profile {
     }
 
     public Purchase<?> getSelectedPurchase(PurchaseManager<?> manager, String key) {
-        if (data.containsKey(key)) {
-            Uppercore.logger().warning(String.format("'%s' wasn't stored yet. Choosing default purchase.", key));
+        if (!data.containsKey(key)) {
+            // The searched purchase wasn't stored yet, choosing the default purchase.
             return manager.getDefault();
         }
         String id = (String) data.get(key);
