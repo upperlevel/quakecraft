@@ -103,7 +103,7 @@ public class Railgun {
     }
 
     public void select(Profile profile) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setRailgun(getComponents()));
+        profile.setRailgun(getComponents());
     }
 
     public boolean isSelected(Profile profile) {

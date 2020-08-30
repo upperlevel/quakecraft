@@ -22,7 +22,7 @@ public class BarrelManager extends SinglePurchaseManager<BarrelManager.Barrel> {
 
     @Override
     public void setSelected(Profile profile, Barrel purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedBarrel(purchase));
+        profile.setSelectedBarrel(purchase);
     }
 
     @Override

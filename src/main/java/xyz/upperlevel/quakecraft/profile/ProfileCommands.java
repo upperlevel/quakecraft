@@ -27,7 +27,7 @@ public class ProfileCommands extends NodeCommand {
             }
             name = sender.getName();
         }
-        Profile profile = Quake.getProfileController().getProfile(name);
+        Profile profile = Quake.getProfileController().getProfileCached(name);
         if (profile == null) {
             sender.sendMessage(RED + String.format("Profile not found for '%s', has the user ever joined the server?", name));
             return;
@@ -45,8 +45,8 @@ public class ProfileCommands extends NodeCommand {
             name = sender.getName();
         }
         ProfileController controller = Quake.getProfileController();
-        Profile profile = controller.getProfile(name);
-        if (profile == null || !controller.deleteProfile(profile.getId())) {
+        Profile profile = controller.getProfileCached(name);
+        if (profile == null || !controller.deleteProfileCached(profile.getId())) {
             sender.sendMessage(RED + String.format("Profile didn't found for: '%s'.", name));
             return;
         }

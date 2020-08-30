@@ -67,7 +67,7 @@ public class Dash {
             return;
         }
 
-        Profile profile = Quake.getProfileController().getProfile(p);
+        Profile profile = Quake.getProfileController().getProfileCached(p);
         new Dash(profile).swish();
     }
 

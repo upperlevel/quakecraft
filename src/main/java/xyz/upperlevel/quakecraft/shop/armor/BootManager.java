@@ -21,7 +21,7 @@ public class BootManager extends SinglePurchaseManager<BootManager.Boot> {
 
     @Override
     public void setSelected(Profile profile, Boot purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedBoots(purchase));
+        profile.setSelectedBoots(purchase);
     }
 
     @Override

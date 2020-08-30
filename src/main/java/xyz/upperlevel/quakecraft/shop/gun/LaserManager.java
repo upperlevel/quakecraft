@@ -21,7 +21,7 @@ public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
 
     @Override
     public void setSelected(Profile profile, Laser purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedLaser(purchase));
+        profile.setSelectedLaser(purchase);
     }
 
     @Override

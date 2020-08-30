@@ -106,7 +106,7 @@ public class PurchaseGui extends ChestGui {
         if (dirty)
             reprint();
         Inventory inv = super.create(player);
-        Profile profile = Quake.getProfileController().getProfile(player);
+        Profile profile = Quake.getProfileController().getProfileCached(player);
         if (profile == null) {
             Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
@@ -130,7 +130,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Purchase<?> purchase) {
-        Profile profile = Quake.getProfileController().getProfile(player);
+        Profile profile = Quake.getProfileController().getProfileCached(player);
         Set<Purchase<?>> purchases = profile.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test

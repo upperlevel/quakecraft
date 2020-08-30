@@ -21,14 +21,13 @@ public class TriggerManager extends SinglePurchaseManager<TriggerManager.Trigger
 
     @Override
     public void setSelected(Profile profile, Trigger purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedTrigger(purchase));
+        profile.setSelectedTrigger(purchase);
     }
 
     @Override
     public Trigger getSelected(Profile profile) {
         return profile.getSelectedTrigger();
     }
-
 
     @Getter
     public class Trigger extends SimplePurchase<Trigger> {

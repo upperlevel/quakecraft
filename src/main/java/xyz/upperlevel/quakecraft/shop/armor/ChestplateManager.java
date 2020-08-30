@@ -22,7 +22,7 @@ public class ChestplateManager extends SinglePurchaseManager<ChestplateManager.C
 
     @Override
     public void setSelected(Profile profile, Chestplate purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedChestplate(purchase));
+        profile.setSelectedChestplate(purchase);
     }
 
     @Override

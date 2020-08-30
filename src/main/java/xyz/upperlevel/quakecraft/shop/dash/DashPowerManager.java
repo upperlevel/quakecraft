@@ -25,7 +25,7 @@ public class DashPowerManager extends MultiPurchaseManager<DashPowerManager.Dash
 
     @Override
     public void setSelected(Profile profile, DashPower purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedDashPower(purchase));
+        profile.setSelectedDashPower(purchase);
     }
 
     @Override

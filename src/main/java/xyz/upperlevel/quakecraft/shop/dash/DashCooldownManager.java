@@ -26,7 +26,7 @@ public class DashCooldownManager extends MultiPurchaseManager<DashCooldownManage
 
     @Override
     public void setSelected(Profile profile, DashCooldown purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedDashCooldown(purchase));
+        profile.setSelectedDashCooldown(purchase);
     }
 
     @Override

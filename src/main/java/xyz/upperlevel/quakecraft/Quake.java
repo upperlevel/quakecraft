@@ -30,6 +30,7 @@ import xyz.upperlevel.uppercore.command.CommandRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.link.Link;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.storage.Storage;
 import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
@@ -68,6 +69,9 @@ public class Quake extends JavaPlugin implements Listener {
     @Getter
     private DbConnection connection;
 
+    @Getter
+    private PlaceholderRegistry<?> placeholders;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -86,6 +90,7 @@ public class Quake extends JavaPlugin implements Listener {
             this.guis = pluginRegistry.registerFolder("guis");
 
             loadDb();
+            getProfileController().registerPlaceholders(placeholders);
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {
@@ -211,7 +216,7 @@ public class Quake extends JavaPlugin implements Listener {
 
     @EventHandler
     private void tryCreateDbProfile(PlayerJoinEvent e) {
-        getProfileController().createProfile(e.getPlayer(), new Profile());
+        getProfileController().createProfileCached(e.getPlayer(), new Profile());
     }
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {
@@ -220,6 +225,8 @@ public class Quake extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        getProfileController().flushCache();
+
         HandlerList.unregisterAll((Listener) this);
 
         if (connection != null) connection.close();

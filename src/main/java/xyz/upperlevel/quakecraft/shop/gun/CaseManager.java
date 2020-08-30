@@ -28,7 +28,7 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
 
     @Override
     public void setSelected(Profile profile, Case purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedCase(purchase));
+        profile.setSelectedCase(purchase);
     }
 
     @Override

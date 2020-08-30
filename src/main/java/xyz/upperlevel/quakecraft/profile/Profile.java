@@ -34,8 +34,18 @@ public class Profile {
         return UUID.fromString((String) this.data.get("id"));
     }
 
+    public Profile setId(UUID id) {
+        this.data.put("id", id.toString());
+        return this;
+    }
+
     public String getName() {
         return (String) this.data.get("name");
+    }
+
+    public Profile setName(String name) {
+        this.data.put("name", name);
+        return this;
     }
 
     public Player getPlayer() {

@@ -23,7 +23,7 @@ public class KillSoundManager extends SinglePurchaseManager<KillSoundManager.Kil
 
     @Override
     public void setSelected(Profile profile, KillSound purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedKillSound(purchase));
+        profile.setSelectedKillSound(purchase);
     }
 
     @Override

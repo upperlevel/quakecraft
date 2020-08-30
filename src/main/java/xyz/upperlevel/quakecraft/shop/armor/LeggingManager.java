@@ -22,7 +22,7 @@ public class LeggingManager extends SinglePurchaseManager<LeggingManager.Legging
 
     @Override
     public void setSelected(Profile profile, Legging purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedLeggings(purchase));
+        profile.setSelectedLeggings(purchase);
     }
 
     @Override

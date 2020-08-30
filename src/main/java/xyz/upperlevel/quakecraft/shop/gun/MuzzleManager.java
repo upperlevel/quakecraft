@@ -27,7 +27,7 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
 
     @Override
     public void setSelected(Profile profile, Muzzle purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedMuzzle(purchase));
+        profile.setSelectedMuzzle(purchase);
     }
 
     @Override

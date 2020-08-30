@@ -22,7 +22,7 @@ public class HatManager extends SinglePurchaseManager<HatManager.Hat> {
 
     @Override
     public void setSelected(Profile profile, Hat purchase) {
-        Quake.getProfileController().updateProfile(profile.getId(), new Profile().setSelectedHat(purchase));
+        profile.setSelectedHat(purchase);
     }
 
     @Override
