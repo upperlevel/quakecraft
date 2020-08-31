@@ -24,6 +24,7 @@ public class RapidFirePowerupEffect extends TimeBasedPowerupEffect {
         player.setGunCooldownBase(1.0f);
     }
 
+    @Override
     public void load(Config config) {
         super.load(config);
         this.multiplier = config.getFloatRequired("cooldown");

@@ -25,6 +25,7 @@ public class SpeedPowerupEffect extends TimeBasedPowerupEffect {
         player.getPlayer().setWalkSpeed(DEF_WALK_VALUE);
     }
 
+    @Override
     public void load(Config config) {
         super.load(config);
         this.speed = config.getFloatRequired("value");

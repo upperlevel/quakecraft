@@ -3078,15 +3078,34 @@ powerups: # Here's all the powerup configs
     duration: 200 # In ticks
     value: 0.6 # The speed value (from -1 to  1)
     messages:
-      active: '%name% &6activated &b&lSpeed Boost&6!'
+      active: '&e%name% &6activated &b&lSpeed Boost&6!'
       deactive: []
+
   rapid-fire:
     display:
       type: arrow
     duration: 200 # In ticks
     cooldown: 0.2 # The multiplier that will be applied to the cooldown
     messages:
-      active: '%name% &6activated &c&lRapid Fire&6!'
+      active: '&e%name% &6activated &c&lRapid Fire&6!'
+      deactive: []
+
+  dash-boost:
+    display:
+      type: feather
+    duration: 200
+    value: 0.6
+    messages:
+      active: '&e%name% &6activated &1&lDash Boost&6!'
+      deactive: []
+
+  invisibility:
+    display:
+      type: white_stained_glass_pane
+    duration: 200
+    value: 0.6
+    messages:
+      active: '&e%name% &6activated &f&lInvisibility&6!'
       deactive: []
 
 purchase-gui:

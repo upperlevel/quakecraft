@@ -38,6 +38,10 @@ public class Gamer {
     private float gunCooldownBase = 1.0f;
 
     @Getter
+    @Setter
+    private float dashBoostBase = 1.0f;
+
+    @Getter
     private final GainNotifier gainNotifier = new GainNotifier(this);
 
     public float coins = 0f;

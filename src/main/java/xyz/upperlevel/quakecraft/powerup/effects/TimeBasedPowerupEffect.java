@@ -60,6 +60,7 @@ public abstract class TimeBasedPowerupEffect extends BasePowerupEffect {
         }
     }
 
+    @Override
     public void load(Config config) {
         super.load(config);
         this.duration = config.getIntRequired("duration");
