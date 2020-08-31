@@ -39,6 +39,7 @@ import xyz.upperlevel.uppercore.util.CrashUtil;
 import xyz.upperlevel.uppercore.util.DynLib;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -90,7 +91,6 @@ public class Quake extends JavaPlugin implements Listener {
             this.guis = pluginRegistry.registerFolder("guis");
 
             loadDb();
-            getProfileController().registerPlaceholders(placeholders);
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {
@@ -116,6 +116,14 @@ public class Quake extends JavaPlugin implements Listener {
         Quake.get().getLogger().info("The plugin has been fully loaded.");
 
         Bukkit.getPluginManager().registerEvents(this, this);
+
+        registerPlaceholders();
+    }
+
+    private void registerPlaceholders() {
+        placeholders = PlaceholderRegistry.create();
+
+        getProfileController().registerPlaceholders(placeholders);
     }
 
     private void registerCommands() {
@@ -156,29 +164,42 @@ public class Quake extends JavaPlugin implements Listener {
 
     private void setupDbDrivers(String type) {
         // TODO put this part of code in Uppercore if possible?
-        Map<String, List<Predicate<File>>> byName = new HashMap<String, List<Predicate<File>>>() {{
-            put("nitritedb", Arrays.asList(
-                    DynLib.reqAndCheck("https://oss.sonatype.org/content/repositories/releases/org/dizitart/nitrite/3.4.1/nitrite-3.4.1.jar", "org.dizitart.no2.Nitrite"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/com/h2database/h2-mvstore/1.4.200/h2-mvstore-1.4.200.jar"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/org/objenesis/objenesis/2.6/objenesis-2.6.jar"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-databind/2.10.1/jackson-databind-2.10.1.jar"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-annotations/2.10.1/jackson-annotations-2.10.1.jar"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/org/jasypt/jasypt/1.9.3/jasypt-1.9.3.jar"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/com/squareup/okhttp3/okhttp/4.3.1/okhttp-4.3.1.jar"),
-                    DynLib.req("https://oss.sonatype.org/content/repositories/releases/uk/co/jemos/podam/podam/7.2.3.RELEASE/podam-7.2.3.RELEASE.jar")
-            ));
-            put("mongodb", Collections.singletonList(
-                    DynLib.reqAndCheck("https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongo-java-driver/3.12.4/mongo-java-driver-3.12.4.jar", "com.mongodb.MongoClient")
-            ));
-            put("mysql", Collections.singletonList(
-                    DynLib.check("org.mysql.jdbc.Driver")
-            ));
+        Map<String, Runnable> byName = new HashMap<String, Runnable>() {{
+            // NitriteDb
+            put("nitritedb", () -> {
+                try {
+                    DynLib.parsePool(Arrays.asList(
+                            "https://oss.sonatype.org/content/repositories/releases/org/dizitart/nitrite/3.4.1/nitrite-3.4.1.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/com/h2database/h2-mvstore/1.4.200/h2-mvstore-1.4.200.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/org/objenesis/objenesis/2.6/objenesis-2.6.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-databind/2.10.1/jackson-databind-2.10.1.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-annotations/2.10.1/jackson-annotations-2.10.1.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/org/jasypt/jasypt/1.9.3/jasypt-1.9.3.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/com/squareup/okhttp3/okhttp/4.3.1/okhttp-4.3.1.jar",
+                            "https://oss.sonatype.org/content/repositories/releases/uk/co/jemos/podam/podam/7.2.3.RELEASE/podam-7.2.3.RELEASE.jar"
+                    )).install();
+                    DynLib.checkAssert("org.dizitart.no2.Nitrite");
+
+                } catch (IOException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
+            // MongoDb
+            put("mongodb", () -> {
+                try {
+                    DynLib.parsePool(
+                            Collections.singletonList("https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongo-java-driver/3.12.4/mongo-java-driver-3.12.4.jar")
+                    ).install();
+                } catch (IOException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
+            // MySQL
+            put("mysql", () ->
+                    DynLib.checkAssert("org.mysql.jdbc.Driver"));
         }};
-        File folder = new File(getDataFolder(), "dyn_libs");
-        folder.mkdirs();
-        for (Predicate<File> lib : byName.get(type))
-            lib.test(folder);
+        byName.get(type).run();
     }
 
     private void loadDb() {
