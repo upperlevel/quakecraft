@@ -163,14 +163,14 @@ public class QuakeArenaCommands {
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void removePowerup(Player player, int which) {
+    protected void rmPowerup(Player player, int which) {
         QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
         if (arena == null) {
             player.sendMessage(RED + "This world doesn't hold any arena.");
             return;
         }
         if (which <= 0 || which > arena.getPowerups().size()) {
-            player.sendMessage(RED + "'" + arena.getId() + "' powerup index can't be negative or higher than " + arena.getSpawns().size() + ".");
+            player.sendMessage(RED + "'" + arena.getId() + "' powerup index can't be negative or higher than " + arena.getPowerups().size() + ".");
             return;
         }
         arena.removePowerup(which - 1);

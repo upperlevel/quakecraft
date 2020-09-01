@@ -3094,7 +3094,7 @@ powerups: # Here's all the powerup configs
     display:
       type: feather
     duration: 200
-    value: 0.6
+    value: 1.2
     messages:
       active: '&e%name% &6activated &1&lDash Boost&6!'
       deactive: []
@@ -3102,7 +3102,7 @@ powerups: # Here's all the powerup configs
   invisibility:
     display:
       type: white_stained_glass_pane
-    duration: 200
+    duration: 400 # 20 seconds
     value: 0.6
     messages:
       active: '&e%name% &6activated &f&lInvisibility&6!'

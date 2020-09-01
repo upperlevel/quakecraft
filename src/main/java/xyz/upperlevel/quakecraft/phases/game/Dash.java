@@ -17,26 +17,25 @@ import static xyz.upperlevel.quakecraft.phases.game.GamePhase.hotbar;
 
 public class Dash {
     public static final int MILLIS_IN_TICK = 50;
-    private static float BASE_POWER = 2f;
 
     private static Message COOLDOWN_MESSAGE;
 
     private static final Map<Player, Dash> dashing = new HashMap<>();
 
-    private final Profile player;
+    private final Profile profile;
 
     private long startTime;
     private long endTime;
 
-    public Dash(Profile player) {
-        this.player = player;
+    public Dash(Profile profile) {
+        this.profile = profile;
     }
 
     public void swish() {
-        PlayerDashEvent event = new PlayerDashEvent(player, player.getSelectedDashPower().getPower(), player.getSelectedDashCooldown().getCooldown());
+        PlayerDashEvent event = new PlayerDashEvent(profile, profile.getSelectedDashPower().getPower(), profile.getSelectedDashCooldown().getCooldown());
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            dashing.remove(player.getPlayer());
+            dashing.remove(profile.getPlayer());
             return;
         }
 
@@ -45,19 +44,22 @@ public class Dash {
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
 
-        Player p = player.getPlayer();
+        Player p = profile.getPlayer();
         dashing.put(p, this);
         p.setCooldown(p.getInventory().getItem(hotbar.getGunSlot()).getType(), cooldownTicks);
         scheduler.runTaskLater(Quake.get(), this::cooldownEnd, cooldownTicks);
-        p.setVelocity(p.getLocation().getDirection().multiply(power * BASE_POWER));
+
+        Gamer gamer = Quake.getGamer(profile.getPlayer());
+        float basePower = power * 2;
+        p.setVelocity(p.getLocation().getDirection().multiply(basePower * gamer.getDashBoostBase()));
 
         startTime = System.currentTimeMillis();
         endTime = startTime + (cooldownTicks * MILLIS_IN_TICK);
     }
 
     public void cooldownEnd() {
-        Bukkit.getPluginManager().callEvent(new PlayerDashCooldownEnd(player));
-        dashing.remove(player.getPlayer());
+        Bukkit.getPluginManager().callEvent(new PlayerDashCooldownEnd(profile));
+        dashing.remove(profile.getPlayer());
     }
 
     public static void swish(Player p) {
@@ -73,7 +75,6 @@ public class Dash {
 
     public static void loadConfig() {
         Config conf = Quake.getConfigSection("game");
-        BASE_POWER = conf.getFloatRequired("dash-power");
         COOLDOWN_MESSAGE = conf.getMessage("dash-cooldown-message");
     }
 }

@@ -1,9 +1,7 @@
 package xyz.upperlevel.quakecraft.powerup;
 
 import org.yaml.snakeyaml.nodes.Tag;
-import xyz.upperlevel.quakecraft.powerup.effects.PowerupEffect;
-import xyz.upperlevel.quakecraft.powerup.effects.RapidFirePowerupEffect;
-import xyz.upperlevel.quakecraft.powerup.effects.SpeedPowerupEffect;
+import xyz.upperlevel.quakecraft.powerup.effects.*;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.config.ConfigConstructor;
 import xyz.upperlevel.uppercore.config.ConfigExternalDeclarator;
@@ -14,7 +12,7 @@ import xyz.upperlevel.uppercore.config.parser.ConfigParserRegistry;
 import java.util.*;
 
 public class PowerupEffectManager {
-    private static Map<String, PowerupEffect> effects = new HashMap<>();
+    private static final Map<String, PowerupEffect> effects = new HashMap<>();
 
     static {
         registerDef();
@@ -37,6 +35,8 @@ public class PowerupEffectManager {
     public static void registerDef() {
         register(new SpeedPowerupEffect());
         register(new RapidFirePowerupEffect());
+        register(new InvisibilityPowerupEffect());
+        register(new DashBoostPowerupEffect());
     }
 
     public static Collection<PowerupEffect> get() {

@@ -21,7 +21,7 @@ public class InvisibilityPowerupEffect extends TimeBasedPowerupEffect {
     public void start(Gamer gamer) {
         Player player = gamer.getPlayer();
         armorByPlayer.put(player, player.getInventory().getArmorContents());
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, Integer.MAX_VALUE));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
     }
 
     @Override
