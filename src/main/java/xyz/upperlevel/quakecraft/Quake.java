@@ -42,7 +42,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 
@@ -237,7 +236,7 @@ public class Quake extends JavaPlugin implements Listener {
 
     @EventHandler
     private void tryCreateDbProfile(PlayerJoinEvent e) {
-        getProfileController().createProfileCached(e.getPlayer(), new Profile());
+        getProfileController().createProfile(e.getPlayer(), new Profile());
     }
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {
@@ -246,8 +245,6 @@ public class Quake extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        getProfileController().flushCache();
-
         HandlerList.unregisterAll((Listener) this);
 
         if (connection != null) connection.close();
@@ -264,6 +261,10 @@ public class Quake extends JavaPlugin implements Listener {
 
     public static ProfileController getProfileController() {
         return instance.getConnection().getProfileController();
+    }
+
+    public static Profile getProfile(Player player) {
+        return getProfileController().getProfile(player);
     }
 
     public static Gamer getGamer(Player player) {

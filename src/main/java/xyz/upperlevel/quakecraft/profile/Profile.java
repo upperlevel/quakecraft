@@ -1,5 +1,6 @@
 package xyz.upperlevel.quakecraft.profile;
 
+import kotlin.Suppress;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -13,11 +14,13 @@ import xyz.upperlevel.quakecraft.shop.dash.DashPowerManager;
 import xyz.upperlevel.quakecraft.shop.gun.*;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseManager;
+import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
 import xyz.upperlevel.quakecraft.shop.railgun.Railgun;
 import xyz.upperlevel.uppercore.Uppercore;
 
 import java.io.StringWriter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Profile {
     public final Map<String, Object> data;
@@ -77,10 +80,59 @@ public class Profile {
         return selected;
     }
 
+    public Set<Purchase<?>> getSelectedPurchases() {
+        return new HashSet<>(Arrays.asList(
+                getSelectedCase(),
+                getSelectedLaser(),
+                getSelectedBarrel(),
+                getSelectedMuzzle(),
+                getSelectedTrigger(),
+
+                getSelectedBoots(),
+                getSelectedLeggings(),
+                getSelectedChestplate(),
+                getSelectedHat(),
+
+                getSelectedKillSound(),
+
+                getSelectedDashPower(),
+                getSelectedDashCooldown()
+        ));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Set<Purchase<?>> getPurchases() {
+        Set<Purchase<?>> purchases = ((List<String>) this.data.getOrDefault("purchases", Collections.emptyList()))
+                .stream()
+                .map(id -> {
+                    PurchaseRegistry registry = Quake.get().getShop().getRegistry();
+                    Purchase<?> purchase = registry.getPurchase(id);
+                    if (purchase == null) {
+                        Uppercore.logger().warning(String.format("Purchase couldn't be solved for: %s, changed?", id));
+                        return null;
+                    }
+                    return purchase;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        purchases.addAll( // This is a trick in order to add default purchases.
+                getSelectedPurchases()
+        );
+        return purchases;
+    }
+
+    public Profile setPurchases(Set<Purchase<?>> purchases) {
+        this.data.put("purchases", purchases.stream()
+                .map(Purchase::getFullId)
+                .collect(Collectors.toList())
+        );
+        return this;
+    }
+
     // ------------------------------------------------------------------------------------------------ Stats
 
     public int getKills() {
-        return (Integer) this.data.get("kills");
+        return (Integer) this.data.getOrDefault("kills", 0);
     }
 
     public Profile setKills(int kills) {
@@ -89,7 +141,7 @@ public class Profile {
     }
 
     public int getDeaths() {
-        return (Integer) this.data.get("deaths");
+        return (Integer) this.data.getOrDefault("deaths", 0);
     }
 
     public Profile setDeaths(int deaths) {
@@ -98,7 +150,7 @@ public class Profile {
     }
 
     public int getWonMatches() {
-        return (Integer) this.data.get("won_matches");
+        return (Integer) this.data.getOrDefault("won_matches", 0);
     }
 
     public Profile setWonMatches(int wonMatches) {
@@ -107,7 +159,7 @@ public class Profile {
     }
 
     public int getPlayedMatches() {
-        return (int) this.data.get("played_matches");
+        return (Integer) this.data.getOrDefault("played_matches", 0);
     }
 
     public Profile setPlayedMatches(int playedMatches) {
@@ -217,7 +269,7 @@ public class Profile {
     }
 
     public Profile setSelectedBoots(BootManager.Boot boot) {
-        this.data.put("selected_boot", boot.getId());
+        this.data.put("selected_boots", boot.getId());
         return this;
     }
 
@@ -228,7 +280,7 @@ public class Profile {
     }
 
     public Profile setSelectedKillSound(KillSoundManager.KillSound killSound) {
-        this.data.put("selected_killsound", killSound.getId());
+        this.data.put("selected_kill_sound", killSound.getId());
         return this;
     }
 
@@ -254,25 +306,5 @@ public class Profile {
     public Profile setSelectedDashCooldown(DashCooldownManager.DashCooldown dashCooldown) {
         this.data.put("selected_dash_cooldown", dashCooldown.getId());
         return this;
-    }
-
-    public Set<Purchase<?>> getPurchases() {
-        return new HashSet<>(Arrays.asList(
-                getSelectedCase(),
-                getSelectedLaser(),
-                getSelectedBarrel(),
-                getSelectedMuzzle(),
-                getSelectedTrigger(),
-
-                getSelectedBoots(),
-                getSelectedChestplate(),
-                getSelectedLeggings(),
-                getSelectedHat(),
-
-                getSelectedKillSound(),
-
-                getSelectedDashPower(),
-                getSelectedDashCooldown()
-        ));
     }
 }

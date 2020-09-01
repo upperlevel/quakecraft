@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
 import org.bukkit.Color;
+import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.SimplePurchase;
@@ -20,8 +21,8 @@ public class LaserManager extends SinglePurchaseManager<LaserManager.Laser> {
     }
 
     @Override
-    public void setSelected(Profile profile, Laser purchase) {
-        profile.setSelectedLaser(purchase);
+    public void setSelected(Player player, Laser purchase) {
+        Quake.getProfileController().updateProfile(player.getUniqueId(), new Profile().setSelectedLaser(purchase));
     }
 
     @Override

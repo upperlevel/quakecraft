@@ -39,6 +39,7 @@ import xyz.upperlevel.uppercore.util.Dbg;
 
 import java.util.*;
 
+import static xyz.upperlevel.quakecraft.Quake.getProfileController;
 import static xyz.upperlevel.uppercore.Uppercore.hotbars;
 
 
@@ -119,7 +120,7 @@ public class GamePhase extends PhaseManager {
         });
         placeholders.set("ranking_gun", (p, s) -> {
             try {
-                Profile player = Quake.getProfileController().getProfileCached(gamers.get(Integer.parseInt(s) - 1).getPlayer());
+                Profile player = getProfileController().getProfile(gamers.get(Integer.parseInt(s) - 1).getPlayer());
                 return player.getRailgun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getRailgun().getName().resolve(p);
             } catch (Exception e) {
                 return null;
@@ -159,7 +160,7 @@ public class GamePhase extends PhaseManager {
 
         hotbars().view(player).addHotbar(hotbar);
 
-        Profile profile = Quake.getProfileController().getProfileCached(player);
+        Profile profile = getProfileController().getProfile(player);
         player.getInventory().setArmorContents(new ItemStack[]{ // Sets the account's selected armor.
                 profile.getSelectedBoots().getItem().resolve(player),
                 profile.getSelectedLeggings().getItem().resolve(player),
@@ -254,6 +255,11 @@ public class GamePhase extends PhaseManager {
         // First thing done is to register all the present players as gamers.
         arena.getPlayers().forEach(this::addGamer);
         arena.updateJoinSigns();
+
+        gamers.stream().map(Gamer::getPlayer).forEach(player -> {
+            Profile profile = getProfileController().getProfile(player);
+            getProfileController().updateProfile(player.getUniqueId(), new Profile().setPlayedMatches(profile.getPlayedMatches() + 1));
+        });
 
         updateBoards();
         compassTargeter.start();
@@ -363,7 +369,7 @@ public class GamePhase extends PhaseManager {
             Gamer gamer = getGamer(player);
 
             player.setExp(1.0f);
-            long firingDelay = (long) (Quake.getProfileController().getProfileCached(player).getSelectedTrigger().getFiringSpeed() * gamer.getGunCooldownBase());
+            long firingDelay = (long) (getProfileController().getProfile(player).getSelectedTrigger().getFiringSpeed() * gamer.getGunCooldownBase());
             Countdown.create(
                     firingDelay, 1,
                     tick -> player.setExp((float) tick / firingDelay),
@@ -424,10 +430,11 @@ public class GamePhase extends PhaseManager {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
         String cmd = e.getMessage();
-        Dbg.pf("%s issued the command: %s", player.getName(), cmd);
-        if (permittedCommands.stream().noneMatch(cmd::startsWith)) {
-            cannotRunCommandDuringGame.send(player);
-            e.setCancelled(true);
+        if (getGamer(player) != null) {
+            if (permittedCommands.stream().noneMatch(cmd::startsWith)) {
+                cannotRunCommandDuringGame.send(player);
+                e.setCancelled(true);
+            }
         }
     }
 

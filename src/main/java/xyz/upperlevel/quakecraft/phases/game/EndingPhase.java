@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.uppercore.arena.Phase;
 import xyz.upperlevel.uppercore.arena.event.ArenaJoinEvent;
 import xyz.upperlevel.uppercore.arena.event.ArenaQuitEvent;
@@ -21,6 +22,8 @@ import xyz.upperlevel.uppercore.placeholder.message.Message;
 import xyz.upperlevel.uppercore.util.TypeUtil;
 
 import java.util.*;
+
+import static xyz.upperlevel.quakecraft.Quake.getProfileController;
 
 public class EndingPhase extends Phase {
     private static Message endGainMessage;
@@ -117,6 +120,10 @@ public class EndingPhase extends Phase {
     @Override
     public void onEnable(Phase prev) {
         super.onEnable(prev);
+
+        Profile winnerProfile = getProfileController().getProfile(winner);
+        getProfileController().updateProfile(winner.getUniqueId(), new Profile().setWonMatches(winnerProfile.getWonMatches() + 1));
+
         printRanking();
         winnerCelebration.start();
         arena.updateJoinSigns();

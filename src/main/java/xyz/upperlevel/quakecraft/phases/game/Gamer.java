@@ -5,9 +5,12 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
+import xyz.upperlevel.quakecraft.profile.Profile;
 
 import java.util.List;
 import java.util.Random;
+
+import static xyz.upperlevel.quakecraft.Quake.getProfileController;
 
 public class Gamer {
     private static GainType killGain;
@@ -62,9 +65,13 @@ public class Gamer {
      */
     public void onKill(boolean headshot) {
         kills++;
-        if (headshot) {
+
+        Profile profile = getProfileController().getProfile(player);
+        getProfileController().updateProfile(player.getUniqueId(), new Profile().setKills(profile.getKills() + 1));
+
+        if (headshot)
             headshotGain.grant(this);
-        }
+
         killGain.grant(this);
         if (++killsSinceDeath >= nextKillStreak.getKills()) {
             nextKillStreak = nextKillStreak.reach(gamePhase, this);
@@ -74,6 +81,11 @@ public class Gamer {
     }
 
     public void die() {
+        deaths++;
+
+        Profile profile = getProfileController().getProfile(player);
+        getProfileController().updateProfile(player.getUniqueId(), new Profile().setDeaths(profile.getDeaths() + 1));
+
         killsSinceDeath = 0;
         nextKillStreak = KillStreak.get(0);
 

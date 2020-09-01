@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static xyz.upperlevel.quakecraft.Quake.getProfileController;
+
 @Getter
 public class Railgun {
 
@@ -103,7 +105,10 @@ public class Railgun {
     }
 
     public void select(Profile profile) {
-        profile.setRailgun(getComponents());
+        getProfileController().updateProfile(
+                profile.getId(),
+                new Profile().setRailgun(getComponents())
+        );
     }
 
     public boolean isSelected(Profile profile) {

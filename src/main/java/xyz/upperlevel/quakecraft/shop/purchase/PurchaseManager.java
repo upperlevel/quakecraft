@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.shop.purchase;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.uppercore.config.Config;
@@ -50,7 +51,7 @@ public abstract class PurchaseManager<P extends Purchase<P>> {
 
     public abstract P deserialize(String id, Config config);
 
-    public abstract void setSelected(Profile profile, P purchase);
+    public abstract void setSelected(Player player, P purchase);
 
     public abstract P getSelected(Profile profile);
 

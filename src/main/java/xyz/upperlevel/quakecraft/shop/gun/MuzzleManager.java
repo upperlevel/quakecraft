@@ -1,6 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
@@ -26,8 +27,8 @@ public class MuzzleManager extends SinglePurchaseManager<MuzzleManager.Muzzle> {
     }
 
     @Override
-    public void setSelected(Profile profile, Muzzle purchase) {
-        profile.setSelectedMuzzle(purchase);
+    public void setSelected(Player player, Muzzle purchase) {
+        Quake.getProfileController().updateProfile(player.getUniqueId(), new Profile().setSelectedMuzzle(purchase));
     }
 
     @Override

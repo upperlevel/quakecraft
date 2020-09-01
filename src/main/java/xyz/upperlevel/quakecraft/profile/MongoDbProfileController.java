@@ -17,7 +17,7 @@ public class MongoDbProfileController extends ProfileController {
     }
 
     @Override
-    public boolean createProfile(UUID id, String name, Profile profile) {
+    public boolean createProfile0(UUID id, String name, Profile profile) {
         try {
             Map<String, Object> data = new HashMap<>(profile.data);
             data.put("id", id.toString());
@@ -31,25 +31,25 @@ public class MongoDbProfileController extends ProfileController {
     }
 
     @Override
-    public Profile getProfile(UUID id) {
+    public Profile getProfile0(UUID id) {
         Map<String, Object> data = database.getCollection("profiles").find(new Document("_id", id.toString())).first();
         return data != null ? new Profile(data) : null;
     }
 
     @Override
-    public Profile getProfile(String name) {
+    public Profile getProfile0(String name) {
         Map<String, Object> data = database.getCollection("profiles").find(new Document("name", name)).first();
         return data != null ? new Profile(data) : null;
     }
 
     @Override
-    public boolean updateProfile(UUID id, Profile profile) {
+    public boolean updateProfile0(UUID id, Profile profile) {
         UpdateResult result = database.getCollection("profiles").updateOne(new Document("_id", id.toString()), new Document(profile.data));
         return result.getModifiedCount() > 0;
     }
 
     @Override
-    public boolean deleteProfile(UUID id) {
+    public boolean deleteProfile0(UUID id) {
         DeleteResult result = database.getCollection("profiles").deleteOne(new Document("_id", id.toString()));
         return result.getDeletedCount() > 0;
     }

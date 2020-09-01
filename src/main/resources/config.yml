@@ -2992,6 +2992,13 @@ messages:
     shop:
       no-shop: "&cCannot find shop gui!"
 
+    stats:
+      - "&f%player_name% &estats:"
+      - "&e- Kills: &7%kills%"
+      - "&e- Deaths: &7%deaths%"
+      - "&e- Won matches: &7%won_matches%"
+      - "&e- Played matches: &7%played_matches%"
+
     arena:
       spawn:
         add:

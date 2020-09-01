@@ -1,6 +1,7 @@
 package xyz.upperlevel.quakecraft.shop.gun;
 
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.shop.purchase.PurchaseRegistry;
@@ -27,8 +28,8 @@ public class CaseManager extends SinglePurchaseManager<CaseManager.Case> {
     }
 
     @Override
-    public void setSelected(Profile profile, Case purchase) {
-        profile.setSelectedCase(purchase);
+    public void setSelected(Player player, Case purchase) {
+        Quake.getProfileController().updateProfile(player.getUniqueId(), new Profile().setSelectedCase(purchase));
     }
 
     @Override

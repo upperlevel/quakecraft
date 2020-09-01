@@ -1,5 +1,9 @@
 package xyz.upperlevel.quakecraft.profile;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
+
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +35,8 @@ public class MySqlProfileController extends ProfileController {
 
         put("selected_dash_power", "varchar(1024)");
         put("selected_dash_cooldown", "varchar(1024)");
+
+        put("purchases", "json");
     }};
 
     public MySqlProfileController(MySqlConnection connection) {
@@ -68,8 +74,18 @@ public class MySqlProfileController extends ProfileController {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private void stringifyPurchases(Map<String, Object> profileData) {
+        List<String> purchases = (List<String>) profileData.get("purchases");
+        if (purchases != null) { // If purchases are found then they are stringified in order to be inserted in MySQL.
+            JSONArray json = new JSONArray();
+            json.addAll(purchases);
+            profileData.put("purchases", json.toJSONString());
+        }
+    }
+
     @Override
-    public boolean createProfile(UUID id, String name, Profile profile) {
+    public boolean createProfile0(UUID id, String name, Profile profile) {
         try {
             Map<String, Object> data = new HashMap<>(profile.data);
             data.put("id", id.toString());
@@ -91,7 +107,7 @@ public class MySqlProfileController extends ProfileController {
     }
 
     @Override
-    public Profile getProfile(UUID id) {
+    public Profile getProfile0(UUID id) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM `profiles` WHERE `id`=?");
             statement.setString(1, id.toString());
@@ -103,7 +119,7 @@ public class MySqlProfileController extends ProfileController {
     }
 
     @Override
-    public Profile getProfile(String name) {
+    public Profile getProfile0(String name) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM `profiles` WHERE `name`=?");
             statement.setString(1, name);
@@ -114,11 +130,13 @@ public class MySqlProfileController extends ProfileController {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public boolean updateProfile(UUID id, Profile profile) {
+    public boolean updateProfile0(UUID id, Profile profile) {
         try {
             Map<String, Object> data = new HashMap<>(profile.data);
             data.remove("id");
+            stringifyPurchases(profile.data);
 
             String updateQuery = data.keySet().stream().map(key -> key + "=?").collect(Collectors.joining(", "));
             List<Object> values = new ArrayList<>(data.values());
@@ -136,7 +154,7 @@ public class MySqlProfileController extends ProfileController {
     }
 
     @Override
-    public boolean deleteProfile(UUID id) {
+    public boolean deleteProfile0(UUID id) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM `profiles` WHERE `id`=?");
             statement.setString(1, id.toString());

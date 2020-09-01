@@ -1,9 +1,7 @@
 package xyz.upperlevel.quakecraft.profile;
 
-import org.dizitart.no2.Cursor;
-import org.dizitart.no2.Document;
-import org.dizitart.no2.Nitrite;
-import org.dizitart.no2.WriteResult;
+import org.dizitart.no2.*;
+import org.dizitart.no2.exceptions.UniqueConstraintException;
 import org.dizitart.no2.filters.Filters;
 
 import java.util.HashMap;
@@ -12,45 +10,54 @@ import java.util.UUID;
 
 public class NitriteDbProfileController extends ProfileController {
     private final Nitrite connection;
+    private final NitriteCollection collection;
 
     public NitriteDbProfileController(NitriteDbConnection connection) {
         this.connection = connection.getHandle();
+
+        collection = this.connection.getCollection("profiles");
+        if (!collection.hasIndex("id")) collection.createIndex("id", IndexOptions.indexOptions(IndexType.Unique));
+        if (!collection.hasIndex("name")) collection.createIndex("name", IndexOptions.indexOptions(IndexType.Unique));
     }
 
     @Override
-    public boolean createProfile(UUID id, String name, Profile profile) {
+    public boolean createProfile0(UUID id, String name, Profile profile) {
         Map<String, Object> data = new HashMap<>(profile.data);
         data.put("id", id.toString());
         data.put("name", name);
 
-        WriteResult result = connection.getCollection("profiles").insert(new Document(data));
-        return result.getAffectedCount() > 0;
+        try {
+            collection.insert(new Document(data));
+            return true;
+        } catch (UniqueConstraintException ignored) {
+            return false;
+        }
     }
 
     @Override
-    public Profile getProfile(UUID id) {
-        Cursor cursor = connection.getCollection("profiles").find(Filters.eq("id", id.toString()));
+    public Profile getProfile0(UUID id) {
+        Cursor cursor = collection.find(Filters.eq("id", id.toString()));
         return cursor.size() > 0 ? new Profile(cursor.firstOrDefault()) : null;
     }
 
     @Override
-    public Profile getProfile(String name) {
-        Cursor cursor = connection.getCollection("profiles").find(Filters.eq("name", name));
+    public Profile getProfile0(String name) {
+        Cursor cursor = collection.find(Filters.eq("name", name));
         return cursor.size() > 0 ? new Profile(cursor.firstOrDefault()) : null;
     }
 
     @Override
-    public boolean updateProfile(UUID id, Profile profile) {
+    public boolean updateProfile0(UUID id, Profile profile) {
         HashMap<String, Object> data = new HashMap<>(profile.data);
         data.remove("id");
 
-        WriteResult result = connection.getCollection("profiles").update(Filters.eq("id", id.toString()), new Document(data));
+        WriteResult result = collection.update(Filters.eq("id", id.toString()), new Document(data));
         return result.getAffectedCount() > 0;
     }
 
     @Override
-    public boolean deleteProfile(UUID id) {
-        WriteResult result = connection.getCollection("profiles").remove(Filters.eq("id", id.toString()));
+    public boolean deleteProfile0(UUID id) {
+        WriteResult result = collection.remove(Filters.eq("id", id.toString()));
         return result.getAffectedCount() > 0;
     }
 }

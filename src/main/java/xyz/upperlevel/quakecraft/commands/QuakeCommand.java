@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.arena.QuakeArenaCommands;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.quakecraft.profile.ProfileCommands;
 import xyz.upperlevel.uppercore.arena.command.ArenaCommands;
 import xyz.upperlevel.uppercore.arena.event.ArenaQuitEvent.ArenaQuitReason;
@@ -13,9 +14,11 @@ import xyz.upperlevel.uppercore.command.PermissionUser;
 import xyz.upperlevel.uppercore.command.SenderType;
 import xyz.upperlevel.uppercore.command.functional.AsCommand;
 import xyz.upperlevel.uppercore.command.functional.FunctionalCommand;
+import xyz.upperlevel.uppercore.command.functional.WithOptional;
 import xyz.upperlevel.uppercore.command.functional.WithPermission;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.gui.Gui;
+import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.placeholder.message.Message;
 
 import static org.bukkit.ChatColor.LIGHT_PURPLE;
@@ -26,6 +29,7 @@ public class QuakeCommand extends NodeCommand {
     private static Message ARENA_NOT_FOUND;
     private static Message ARENA_JOINED;
     private static Message ARENA_QUIT;
+    private static Message statsMsg;
 
     public QuakeCommand() {
         super("quake");
@@ -106,10 +110,38 @@ public class QuakeCommand extends NodeCommand {
         guis().open((Player) sender, gui);
     }
 
+    /* quake stats */
+
+    @AsCommand(description = "Open the shop GUI.")
+    public void stats(CommandSender sender, @WithOptional String name) {
+        if (name == null) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(RED + "Specify the player's name.");
+                return;
+            }
+            name = sender.getName();
+        }
+
+        Profile profile = Quake.getProfileController().getProfile(name);
+        if (profile == null) {
+            sender.sendMessage(RED + String.format("Profile not found for: '%s'.", name));
+            return;
+        }
+        statsMsg.send(sender, PlaceholderRegistry.create()
+                .set("player_name", profile.getName())
+                .set("kills", profile.getKills())
+                .set("deaths", profile.getDeaths())
+                .set("won_matches", profile.getWonMatches())
+                .set("played_matches", profile.getPlayedMatches())
+        );
+    }
+
     public static void loadConfig() {
-        Config mex = Quake.getConfigSection("messages.commands.arena");
-        ARENA_NOT_FOUND = mex.getMessageRequired("join.arena-not-found");
-        ARENA_JOINED = mex.getMessageRequired("join.success");
-        ARENA_QUIT = mex.getMessageRequired("leave.success");
+        Config cmdCfg = Quake.getConfigSection("messages.commands");
+        Config arenaCfg = cmdCfg.getConfig("arena");
+        ARENA_NOT_FOUND = arenaCfg.getMessageRequired("join.arena-not-found");
+        ARENA_JOINED = arenaCfg.getMessageRequired("join.success");
+        ARENA_QUIT = arenaCfg.getMessageRequired("leave.success");
+        statsMsg = cmdCfg.getMessageRequired("stats");
     }
 }

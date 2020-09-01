@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.shop.event;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,7 +15,7 @@ import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
 public class PurchaseBuyEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private final Profile profile;
+    private final Player player;
     private final Purchase<?> purchase;
 
     @Setter

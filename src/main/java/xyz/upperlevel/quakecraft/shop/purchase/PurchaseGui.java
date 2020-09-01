@@ -38,6 +38,9 @@ import xyz.upperlevel.uppercore.util.EnchantUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static xyz.upperlevel.quakecraft.Quake.getProfile;
+import static xyz.upperlevel.quakecraft.Quake.getProfileController;
+
 public class PurchaseGui extends ChestGui {
     public static List<PlaceholderValue<String>> buyingLores, boughtLores, selectedLores;
     public static String prefixSelected, prefixSelectable, prefixBuying;
@@ -106,16 +109,12 @@ public class PurchaseGui extends ChestGui {
         if (dirty)
             reprint();
         Inventory inv = super.create(player);
-        Profile profile = Quake.getProfileController().getProfileCached(player);
-        if (profile == null) {
-            Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
-            return inv;
-        }
-        printPurchases(inv, profile);
+        printPurchases(inv, player);
         return inv;
     }
 
-    public void printPurchases(Inventory inv, Profile profile) {
+    public void printPurchases(Inventory inv, Player player) {
+        Profile profile = getProfile(player);
         for (Map.Entry<Integer, Purchase<?>> p : purchaseMap.entrySet())
             inv.setItem(p.getKey(), getIcon(p.getValue(), profile, p.getValue().isSelected(profile)));
     }
@@ -130,7 +129,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Purchase<?> purchase) {
-        Profile profile = Quake.getProfileController().getProfileCached(player);
+        Profile profile = getProfile(player);
         Set<Purchase<?>> purchases = profile.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test
@@ -147,33 +146,44 @@ public class PurchaseGui extends ChestGui {
                     Quake.get().openConfirmPurchase(
                             player,
                             purchase,
-                            ((Link) n -> onPurchaseSucceed(profile, purchase)).and(GuiAction.back()),
+                            ((Link) n -> onPurchaseSucceed(player, purchase)).and(GuiAction.back()),
                             GuiAction.back()
                     );
                 } else {
                     notEnoughMoney.send(player, "required", String.valueOf(purchase.getCost()));
                 }
             } else {
-                onPurchaseSucceed(profile, purchase);
-                printPurchases(profile.getPlayer().getOpenInventory().getTopInventory(), profile);
+                onPurchaseSucceed(player, purchase);
+                printPurchases(player.getOpenInventory().getTopInventory(), player);
             }
-        } else
-            reloadSelection(profile, slot, purchase);
+        } else { // The item was already purchased, reloads the selection.
+            reloadSelection(player, slot, purchase);
+        }
     }
 
-    @SuppressWarnings("unchecked")
-    public void onPurchaseSucceed(Profile profile, Purchase purchase) {
+    public void onPurchaseSucceed(Player player, Purchase<?> purchase) {
         PluginManager eventManager = Bukkit.getPluginManager();
 
-        PurchaseBuyEvent buyEvent = new PurchaseBuyEvent(profile, purchase);
+        PurchaseBuyEvent buyEvent = new PurchaseBuyEvent(player, purchase);
         eventManager.callEvent(buyEvent);
         if (!buyEvent.isCancelled()) {
-            profile.getPurchases().add(purchase);
+            Profile profile = getProfileController().getProfile(player);
+
+            // DB update:
+            // Are retrived the current purchases, the new one is inserted among them,
+            // and finally the whole list is sent back to the storage.
+            // Could have been done better? Definitely yes.
+            Set<Purchase<?>> purchases = profile.getPurchases();
+            purchases.add(purchase);
+            getProfileController().updateProfile(
+                    player.getUniqueId(),
+                    new Profile().setPurchases(purchases)
+            );
 
             PurchaseManager purchaseManager = purchase.getManager();
-            PurchaseSelectEvent event = new PurchaseSelectEvent(profile, purchaseManager.getSelected(profile), purchase);
+            PurchaseSelectEvent event = new PurchaseSelectEvent(player, purchaseManager.getSelected(profile), purchase);
             if (!event.isCancelled())
-                purchaseManager.setSelected(profile, event.getPurchase());
+                purchaseManager.setSelected(profile.getPlayer(), event.getPurchase());
         }
     }
 
@@ -294,15 +304,15 @@ public class PurchaseGui extends ChestGui {
     }
 
     @SuppressWarnings("unchecked")
-    protected void reloadSelection(Profile profile, int slot, Purchase<?> sel) {
+    protected void reloadSelection(Player player, int slot, Purchase<?> sel) {
         PurchaseManager purchaseManager = sel.getManager();
-        Purchase<?> old = purchaseManager.getSelected(profile);
+        Purchase<?> old = purchaseManager.getSelected(getProfile(player));
         if (old != sel) {
-            PurchaseSelectEvent event = new PurchaseSelectEvent(profile, old, sel);
+            PurchaseSelectEvent event = new PurchaseSelectEvent(player, old, sel);
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                purchaseManager.setSelected(profile, event.getPurchase());
-                printPurchases(profile.getPlayer().getOpenInventory().getTopInventory(), profile);
+                purchaseManager.setSelected(player, event.getPurchase());
+                printPurchases(player.getOpenInventory().getTopInventory(), player);
             }
         }
     }
