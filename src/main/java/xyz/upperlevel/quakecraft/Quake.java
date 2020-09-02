@@ -40,8 +40,12 @@ import xyz.upperlevel.uppercore.util.DynLib;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
-import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 
@@ -67,7 +71,9 @@ public class Quake extends JavaPlugin implements Listener {
     private ConfirmPurchaseGui.Options defConfirmOptions;
 
     @Getter
-    private DbConnection connection;
+    private Connection connection;
+
+    private ProfileController profileController;
 
     @Getter
     private PlaceholderRegistry<?> placeholders;
@@ -89,7 +95,8 @@ public class Quake extends JavaPlugin implements Listener {
             this.pluginRegistry = Uppercore.registry();
             this.guis = pluginRegistry.registerFolder("guis");
 
-            loadDb();
+            connectToDatabase();
+            profileController = new ProfileController(connection);
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {
@@ -117,6 +124,9 @@ public class Quake extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
 
         registerPlaceholders();
+
+
+        Uppercore.logger().info("QUAKE IS ALIVE!");
     }
 
     private void registerPlaceholders() {
@@ -161,82 +171,50 @@ public class Quake extends JavaPlugin implements Listener {
 
     // ------------------------------------------------------------------------------------------------ Database
 
-    private void setupDbDrivers(String type) {
-        // TODO put this part of code in Uppercore if possible?
-        Map<String, Runnable> byName = new HashMap<String, Runnable>() {{
-            // NitriteDb
-            put("nitritedb", () -> {
-                try {
-                    DynLib.parsePool(Arrays.asList(
-                            "https://oss.sonatype.org/content/repositories/releases/org/dizitart/nitrite/3.4.1/nitrite-3.4.1.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/com/h2database/h2-mvstore/1.4.200/h2-mvstore-1.4.200.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/org/objenesis/objenesis/2.6/objenesis-2.6.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-databind/2.10.1/jackson-databind-2.10.1.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/com/fasterxml/jackson/core/jackson-annotations/2.10.1/jackson-annotations-2.10.1.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/org/jasypt/jasypt/1.9.3/jasypt-1.9.3.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/com/squareup/okhttp3/okhttp/4.3.1/okhttp-4.3.1.jar",
-                            "https://oss.sonatype.org/content/repositories/releases/uk/co/jemos/podam/podam/7.2.3.RELEASE/podam-7.2.3.RELEASE.jar"
-                    )).install();
-                    DynLib.checkAssert("org.dizitart.no2.Nitrite");
-
-                } catch (IOException e) {
-                    throw new IllegalStateException(e);
-                }
-            });
-            // MongoDb
-            put("mongodb", () -> {
-                try {
-                    DynLib.parsePool(
-                            Collections.singletonList("https://oss.sonatype.org/content/repositories/releases/org/mongodb/mongo-java-driver/3.12.4/mongo-java-driver-3.12.4.jar")
-                    ).install();
-                } catch (IOException e) {
-                    throw new IllegalStateException(e);
-                }
-            });
-            // MySQL
-            put("mysql", () ->
-                    DynLib.checkAssert("org.mysql.jdbc.Driver"));
-        }};
-        byName.get(type).run();
-    }
-
-    private void loadDb() {
-        Map<String, Function<Config, DbConnection>> byName = new HashMap<String, Function<Config, DbConnection>>() {{
-            put("nitritedb", cfg -> NitriteDbConnection.create(
-                    new File(getDataFolder(), "quake.db")
-            ));
-            put("mongodb", cfg -> MongoDbConnection.create(
-                    cfg.getStringRequired("host"),
-                    cfg.getIntRequired("port"),
-                    cfg.getString("database"),
-                    cfg.getString("username"),
-                    cfg.getString("password")
-            ));
-            put("mysql", cfg -> MySqlConnection.create(
-                    cfg.getStringRequired("host"),
-                    cfg.getIntRequired("port"),
-                    cfg.getStringRequired("database"),
-                    cfg.getStringRequired("username"),
-                    cfg.getStringRequired("password")
-            ));
-        }};
+    private void connectToDatabase() {
         Config cfg = Config.fromYaml(new File(getDataFolder(), "db.yml"));
-
         String type = cfg.getStringRequired("type");
-        if (!byName.containsKey(type))
-            throw new IllegalArgumentException("Invalid db type: " + type);
 
-        Uppercore.logger().info(String.format("DB found: %s", type));
-        setupDbDrivers(type);
+        String driverUrl = new HashMap<String, String>() {{
+            put("sqlite", "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.32.3.2/sqlite-jdbc-3.32.3.2.jar");
+            // PosgreSQL
+        }}.get(type);
 
-        Function<Config, DbConnection> connector = byName.get(type);
-        this.connection = connector.apply(cfg);
+        if (driverUrl != null) {
+            try {
+                DynLib.from(driverUrl).install();
+            } catch (IOException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        try {
+            if ("sqlite".equals(type)) {
+                File file = new File(getDataFolder(), "quake.db");
+                this.connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", file.getPath()));
+            } else {
+                String user = cfg.getString("user");
+                String password = cfg.getString("password");
+                if (user != null) user = "user=" + user;
+                if (password != null) password = "password=" + password;
+
+                String query = Stream.of(user, password).filter(Objects::nonNull).collect(Collectors.joining("&"));
+                String url = "jdbc:%s://%s:%d/%s" + (query.isEmpty() ? "" : "?" + query);
+                this.connection = DriverManager.getConnection(String.format(url,
+                        type,
+                        cfg.getStringRequired("host"),
+                        cfg.getIntRequired("port"),
+                        cfg.getStringRequired("database")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException(String.format("Unsupported JDBC DB: '%s'", type), e);
+        }
     }
 
     @EventHandler
     private void tryCreateDbProfile(PlayerJoinEvent e) {
-        getProfileController().createProfile(e.getPlayer(), new Profile());
+        getProfileController().createProfileAsync(e.getPlayer(), new Profile());
     }
 
     public void openConfirmPurchase(Player player, Purchase<?> purchase, Link onAccept, Link onDecline) {
@@ -247,7 +225,11 @@ public class Quake extends JavaPlugin implements Listener {
     public void onDisable() {
         HandlerList.unregisterAll((Listener) this);
 
-        if (connection != null) connection.close();
+        try {
+            if (connection != null)
+                connection.close();
+        } catch (SQLException ignored) {
+        }
 
         ArenaManager.get().unload();
 
@@ -260,7 +242,7 @@ public class Quake extends JavaPlugin implements Listener {
     }
 
     public static ProfileController getProfileController() {
-        return instance.getConnection().getProfileController();
+        return instance.profileController;
     }
 
     public static Profile getProfile(Player player) {

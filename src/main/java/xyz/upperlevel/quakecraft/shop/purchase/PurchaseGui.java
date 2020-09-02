@@ -170,9 +170,9 @@ public class PurchaseGui extends ChestGui {
             Profile profile = getProfileController().getProfile(player);
 
             // DB update:
-            // Are retrived the current purchases, the new one is inserted among them,
+            // T current purchases are retrieved, the new one is inserted among them,
             // and finally the whole list is sent back to the storage.
-            // Could have been done better? Definitely yes.
+            // Could it has been done better? Definitely yes.
             Set<Purchase<?>> purchases = profile.getPurchases();
             purchases.add(purchase);
             getProfileController().updateProfile(

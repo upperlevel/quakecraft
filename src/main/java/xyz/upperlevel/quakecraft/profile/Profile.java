@@ -1,9 +1,11 @@
 package xyz.upperlevel.quakecraft.profile;
 
-import kotlin.Suppress;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.yaml.snakeyaml.Yaml;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.shop.KillSoundManager;
@@ -21,33 +23,32 @@ import xyz.upperlevel.uppercore.Uppercore;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class Profile {
-    public final Map<String, Object> data;
-
+public class Profile extends HashMap<String, Object> {
     public Profile() {
-        this(new HashMap<>());
+        super();
     }
 
     public Profile(Map<String, Object> data) {
-        this.data = data;
+        super(data);
     }
 
     public UUID getId() {
-        return UUID.fromString((String) this.data.get("id"));
+        return UUID.fromString((String) get("id"));
     }
 
     public Profile setId(UUID id) {
-        this.data.put("id", id.toString());
+        put("id", id.toString());
         return this;
     }
 
     public String getName() {
-        return (String) this.data.get("name");
+        return (String) get("name");
     }
 
     public Profile setName(String name) {
-        this.data.put("name", name);
+        put("name", name);
         return this;
     }
 
@@ -62,16 +63,16 @@ public class Profile {
     @Override
     public String toString() {
         StringWriter writer = new StringWriter();
-        new Yaml().dump(this.data, writer);
+        new Yaml().dump(this, writer);
         return writer.toString();
     }
 
     public Purchase<?> getSelectedPurchase(PurchaseManager<?> manager, String key) {
-        if (!data.containsKey(key)) {
+        if (!containsKey(key)) {
             // The searched purchase wasn't stored yet, choosing the default purchase.
             return manager.getDefault();
         }
-        String id = (String) data.get(key);
+        String id = (String) get(key);
         Purchase<?> selected = manager.get(id);
         if (selected == null) {
             Uppercore.logger().warning(String.format("Purchase not found for the manager '%s': %s", manager.getPurchaseName(), id));
@@ -100,70 +101,78 @@ public class Profile {
         ));
     }
 
-    @SuppressWarnings("unchecked")
     public Set<Purchase<?>> getPurchases() {
-        Set<Purchase<?>> purchases = ((List<String>) this.data.getOrDefault("purchases", Collections.emptyList()))
-                .stream()
-                .map(id -> {
-                    PurchaseRegistry registry = Quake.get().getShop().getRegistry();
-                    Purchase<?> purchase = registry.getPurchase(id);
-                    if (purchase == null) {
-                        Uppercore.logger().warning(String.format("Purchase couldn't be solved for: %s, changed?", id));
-                        return null;
-                    }
-                    return purchase;
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-        purchases.addAll( // This is a trick in order to add default purchases.
-                getSelectedPurchases()
-        );
-        return purchases;
+        if (!containsKey("purchases")) {
+            return new HashSet<>();
+        }
+        try {
+            // Yup, every time purchases are requested, we need to parse their serializated value.
+            JSONArray array = (JSONArray) new JSONParser().parse((String) get("purchases"));
+            Set<Purchase<?>> purchases = new HashSet<>();
+            for (Object object : array) {
+                String id = (String) object;
+                PurchaseRegistry registry = Quake.get().getShop().getRegistry();
+                Purchase<?> purchase = registry.getPurchase(id);
+                if (purchase == null) {
+                    Uppercore.logger().warning(String.format("Purchase couldn't be solved for: %s, changed?", id));
+                    continue;
+                }
+                purchases.add(purchase);
+            }
+            // Makes default purchases bought by the player.
+            // This is a trick in order to add default selected purchases (like "none" boots, "none" chestplate...)
+            purchases.addAll(getSelectedPurchases());
+            return purchases;
+        } catch (ParseException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     public Profile setPurchases(Set<Purchase<?>> purchases) {
-        this.data.put("purchases", purchases.stream()
-                .map(Purchase::getFullId)
-                .collect(Collectors.toList())
-        );
+        JSONArray array = new JSONArray();
+        purchases.forEach(purchase -> array.add(purchase.getFullId()));
+
+        // Yup, every time purchases are set they are JSONified in order to be DB-ready.
+        put("purchases", array.toJSONString());
         return this;
     }
 
     // ------------------------------------------------------------------------------------------------ Stats
 
     public int getKills() {
-        return (Integer) this.data.getOrDefault("kills", 0);
+        return (Integer) getOrDefault("kills", 0);
     }
 
     public Profile setKills(int kills) {
-        this.data.put("kills", kills);
+        put("kills", kills);
         return this;
     }
 
     public int getDeaths() {
-        return (Integer) this.data.getOrDefault("deaths", 0);
+        return (Integer) getOrDefault("deaths", 0);
     }
 
     public Profile setDeaths(int deaths) {
-        this.data.put("deaths", deaths);
+        put("deaths", deaths);
         return this;
     }
 
     public int getWonMatches() {
-        return (Integer) this.data.getOrDefault("won_matches", 0);
+        return (Integer) getOrDefault("won_matches", 0);
     }
 
     public Profile setWonMatches(int wonMatches) {
-        this.data.put("won_matches", wonMatches);
+        put("won_matches", wonMatches);
         return this;
     }
 
     public int getPlayedMatches() {
-        return (Integer) this.data.getOrDefault("played_matches", 0);
+        return (Integer) getOrDefault("played_matches", 0);
     }
 
     public Profile setPlayedMatches(int playedMatches) {
-        this.data.put("played_matches", playedMatches);
+        put("played_matches", playedMatches);
         return this;
     }
 
@@ -178,7 +187,7 @@ public class Profile {
     }
 
     public Profile setSelectedBarrel(BarrelManager.Barrel barrel) {
-        this.data.put("selected_barrel", barrel.getId());
+        put("selected_barrel", barrel.getId());
         return this;
     }
 
@@ -187,7 +196,7 @@ public class Profile {
     }
 
     public Profile setSelectedCase(CaseManager.Case _case) {
-        this.data.put("selected_case", _case.getId());
+        put("selected_case", _case.getId());
         return this;
     }
 
@@ -196,7 +205,7 @@ public class Profile {
     }
 
     public Profile setSelectedLaser(LaserManager.Laser laser) {
-        this.data.put("selected_laser", laser.getId());
+        put("selected_laser", laser.getId());
         return this;
     }
 
@@ -205,7 +214,7 @@ public class Profile {
     }
 
     public Profile setSelectedMuzzle(MuzzleManager.Muzzle muzzle) {
-        this.data.put("selected_muzzle", muzzle.getId());
+        put("selected_muzzle", muzzle.getId());
         return this;
     }
 
@@ -214,7 +223,7 @@ public class Profile {
     }
 
     public Profile setSelectedTrigger(TriggerManager.Trigger trigger) {
-        this.data.put("selected_trigger", trigger.getId());
+        put("selected_trigger", trigger.getId());
         return this;
     }
 
@@ -242,7 +251,7 @@ public class Profile {
     }
 
     public Profile setSelectedHat(HatManager.Hat hat) {
-        this.data.put("selected_hat", hat.getId());
+        put("selected_hat", hat.getId());
         return this;
     }
 
@@ -251,7 +260,7 @@ public class Profile {
     }
 
     public Profile setSelectedChestplate(ChestplateManager.Chestplate chestplate) {
-        this.data.put("selected_chestplate", chestplate.getId());
+        put("selected_chestplate", chestplate.getId());
         return this;
     }
 
@@ -260,7 +269,7 @@ public class Profile {
     }
 
     public Profile setSelectedLeggings(LeggingManager.Legging leggings) {
-        this.data.put("selected_leggings", leggings.getId());
+        put("selected_leggings", leggings.getId());
         return this;
     }
 
@@ -269,7 +278,7 @@ public class Profile {
     }
 
     public Profile setSelectedBoots(BootManager.Boot boot) {
-        this.data.put("selected_boots", boot.getId());
+        put("selected_boots", boot.getId());
         return this;
     }
 
@@ -280,7 +289,7 @@ public class Profile {
     }
 
     public Profile setSelectedKillSound(KillSoundManager.KillSound killSound) {
-        this.data.put("selected_kill_sound", killSound.getId());
+        put("selected_kill_sound", killSound.getId());
         return this;
     }
 
@@ -295,7 +304,7 @@ public class Profile {
     }
 
     public Profile setSelectedDashPower(DashPowerManager.DashPower dashPower) {
-        this.data.put("selected_dash_power", dashPower.getId());
+        put("selected_dash_power", dashPower.getId());
         return this;
     }
 
@@ -304,7 +313,7 @@ public class Profile {
     }
 
     public Profile setSelectedDashCooldown(DashCooldownManager.DashCooldown dashCooldown) {
-        this.data.put("selected_dash_cooldown", dashCooldown.getId());
+        put("selected_dash_cooldown", dashCooldown.getId());
         return this;
     }
 }
