@@ -90,9 +90,7 @@ public class ProfileController {
                 profile.put("name", name);
 
                 table.insert(profile);
-            } catch (SQLException e) {
-                if (e.getErrorCode() != 1062) // If the error isn't a duplicated entry error, then throw.
-                    throw new IllegalStateException(e);
+            } catch (SQLException ignored) {
             }
         });
     }
