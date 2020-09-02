@@ -175,18 +175,20 @@ public class Quake extends JavaPlugin implements Listener {
         Config cfg = Config.fromYaml(new File(getDataFolder(), "db.yml"));
         String type = cfg.getStringRequired("type");
 
-        String driverUrl = new HashMap<String, String>() {{
-            put("sqlite", "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.32.3.2/sqlite-jdbc-3.32.3.2.jar");
-            // PosgreSQL
+        Runnable getDriver = new HashMap<String, Runnable>() {{
+            // MariaDB
+            put("mariadb", () -> {
+                try {
+                    DynLib.from("https://downloads.mariadb.com/Connectors/java/connector-java-2.6.2/mariadb-java-client-2.6.2.jar").install();
+                    Class.forName("org.mariadb.jdbc.Driver");
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                }
+            });
         }}.get(type);
 
-        if (driverUrl != null) {
-            try {
-                DynLib.from(driverUrl).install();
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
-            }
-        }
+        if (getDriver != null)
+            getDriver.run();
 
         try {
             if ("sqlite".equals(type)) {

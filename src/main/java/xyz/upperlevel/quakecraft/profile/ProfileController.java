@@ -5,6 +5,7 @@ import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.profile.util.SqlTableHelper;
 import xyz.upperlevel.quakecraft.profile.util.SqlTableHelper.WhereClause;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
+import xyz.upperlevel.uppercore.util.Dbg;
 
 import java.sql.*;
 import java.util.*;
@@ -25,7 +26,7 @@ public class ProfileController {
     private void trySetup() {
         try {
             this.table.create(
-                    "id varchar(32) PRIMARY KEY",
+                    "id varchar(128) PRIMARY KEY",
                     "name varchar(256) NOT NULL UNIQUE",
 
                     "kills int",
@@ -89,7 +90,9 @@ public class ProfileController {
                 profile.put("name", name);
 
                 table.insert(profile);
-            } catch (SQLException ignored) {
+            } catch (SQLException e) {
+                if (e.getErrorCode() != 1062) // If the error isn't a duplicated entry error, then throw.
+                    throw new IllegalStateException(e);
             }
         });
     }
