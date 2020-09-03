@@ -112,7 +112,12 @@ public class QuakeCommand extends NodeCommand {
 
     /* quake stats */
 
-    @AsCommand(description = "Open the shop GUI.")
+    @AsCommand(
+            description = "Permits to view stats about a player."
+    )
+    @WithPermission(
+            user = PermissionUser.AVAILABLE
+    )
     public void stats(CommandSender sender, @WithOptional String name) {
         if (name == null) {
             if (!(sender instanceof Player)) {

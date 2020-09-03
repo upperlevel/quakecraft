@@ -72,7 +72,7 @@ public class QuakeArenaCommands {
     @WithPermission(
             user = PermissionUser.OP
     )
-    protected void removeSpawn(Player player, int which) {
+    protected void rmSpawn(Player player, int which) {
         QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
         if (arena == null) {
             player.sendMessage(RED + "This world doesn't hold any arena.");
