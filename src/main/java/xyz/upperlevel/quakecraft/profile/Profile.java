@@ -22,8 +22,6 @@ import xyz.upperlevel.uppercore.Uppercore;
 
 import java.io.StringWriter;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Profile extends HashMap<String, Object> {
     public Profile() {

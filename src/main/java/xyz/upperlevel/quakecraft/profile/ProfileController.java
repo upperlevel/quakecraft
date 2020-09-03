@@ -134,12 +134,4 @@ public class ProfileController {
             }
         });
     }
-
-    public void registerPlaceholders(PlaceholderRegistry<?> placeholders) {
-        placeholders
-                .set("quake_player_kills", player -> String.valueOf(getProfile(player).getKills()))
-                .set("quake_player_deaths", player -> String.valueOf(getProfile(player).getDeaths()))
-                .set("quake_player_played_matches", player -> String.valueOf(getProfile(player).getPlayedMatches()))
-                .set("quake_player_won_matches", player -> String.valueOf(getProfile(player).getWonMatches()));
-    }
 }

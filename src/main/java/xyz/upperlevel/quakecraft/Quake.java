@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -75,9 +76,6 @@ public class Quake extends JavaPlugin implements Listener {
 
     private ProfileController profileController;
 
-    @Getter
-    private PlaceholderRegistry<?> placeholders;
-
     @Override
     public void onEnable() {
         instance = this;
@@ -123,16 +121,12 @@ public class Quake extends JavaPlugin implements Listener {
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
-        registerPlaceholders();
-
+        new QuakePlaceholderExtension(this).register();
 
         Uppercore.logger().info("QUAKE IS ALIVE!");
     }
 
     private void registerPlaceholders() {
-        placeholders = PlaceholderRegistry.create();
-
-        getProfileController().registerPlaceholders(placeholders);
     }
 
     private void registerCommands() {
@@ -249,6 +243,10 @@ public class Quake extends JavaPlugin implements Listener {
 
     public static Profile getProfile(Player player) {
         return getProfileController().getProfile(player);
+    }
+
+    public static Profile getProfile(OfflinePlayer player) {
+        return getProfileController().getProfile(player.getUniqueId());
     }
 
     public static Gamer getGamer(Player player) {
