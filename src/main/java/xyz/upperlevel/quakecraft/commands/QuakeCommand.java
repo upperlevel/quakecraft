@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.arena.QuakeArenaCommands;
@@ -36,6 +37,8 @@ public class QuakeCommand extends NodeCommand {
 
         description("Main commands of Quakecraft plugin.");
         aliases("q");
+
+        setPermissionPortion(new Permission("quake", PermissionUser.AVAILABLE.get()));
 
         // Registers all command used for arena editing, either from the game-api or not.
         FunctionalCommand.inject(this, new ArenaCommands(QuakeArena.class));
