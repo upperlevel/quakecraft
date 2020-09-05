@@ -1,12 +1,13 @@
 # The type of database to use, could be one of:
-# - nitritedb (local storage)
-# - mongodb
+# - sqlite
 # - mysql
-type: 'nitritedb'
+# - mariadb
+type: 'sqlite'
 
 # Additional info that may be requested by the chosen database.
-#host: localhost
-#port: 3310
-#username: user
-#password: password
-#database: quake
+# Concretely, are needed only if the database isn't sqlite.
+#host: 'localhost'
+#port: 3306
+#database: "quake"
+#user: "quake"
+#password: "12345"

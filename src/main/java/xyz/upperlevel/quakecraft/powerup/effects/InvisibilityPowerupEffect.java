@@ -3,6 +3,7 @@ package xyz.upperlevel.quakecraft.powerup.effects;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.upperlevel.quakecraft.phases.game.Gamer;
@@ -20,7 +21,10 @@ public class InvisibilityPowerupEffect extends TimeBasedPowerupEffect {
     @Override
     public void start(Gamer gamer) {
         Player player = gamer.getPlayer();
+
         armorByPlayer.put(player, player.getInventory().getArmorContents());
+        player.getInventory().setArmorContents(null);
+
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
     }
 

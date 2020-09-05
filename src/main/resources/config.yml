@@ -3071,9 +3071,9 @@ messages:
         success: "&aKills to win set to '%arena_kills_to_win%' for arena '%arena%'"
       join:
         arena-not-found: '&cNo arena found for this id.'
-        success: 'You joined the arena %arena_name%.'
+        success: '&eYou joined the arena %arena_name%.'
       leave:
-        success: 'Arena %arena_name% successfully quit.'
+        success: []
 
 
 # -------------------------------------------------------- Misc --------------------------------------------------------

@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +19,8 @@ import xyz.upperlevel.quakecraft.phases.lobby.CountdownPhase;
 import xyz.upperlevel.quakecraft.phases.lobby.LobbyPhase;
 import xyz.upperlevel.quakecraft.phases.lobby.WaitingPhase;
 import xyz.upperlevel.quakecraft.powerup.PowerupEffectManager;
-import xyz.upperlevel.quakecraft.profile.*;
+import xyz.upperlevel.quakecraft.profile.Profile;
+import xyz.upperlevel.quakecraft.profile.ProfileController;
 import xyz.upperlevel.quakecraft.shop.ShopCategory;
 import xyz.upperlevel.quakecraft.shop.purchase.ConfirmPurchaseGui;
 import xyz.upperlevel.quakecraft.shop.purchase.Purchase;
@@ -31,7 +33,6 @@ import xyz.upperlevel.uppercore.command.CommandRegistry;
 import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.economy.EconomyManager;
 import xyz.upperlevel.uppercore.gui.link.Link;
-import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.registry.Registry;
 import xyz.upperlevel.uppercore.storage.Storage;
 import xyz.upperlevel.uppercore.update.SpigotUpdateChecker;
@@ -40,14 +41,16 @@ import xyz.upperlevel.uppercore.util.CrashUtil;
 import xyz.upperlevel.uppercore.util.DynLib;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.bukkit.ChatColor.AQUA;
+import static org.bukkit.ChatColor.YELLOW;
 import static xyz.upperlevel.uppercore.Uppercore.guis;
 
 @Getter
@@ -123,10 +126,7 @@ public class Quake extends JavaPlugin implements Listener {
 
         new QuakePlaceholderExtension(this).register();
 
-        Uppercore.logger().info("QUAKE IS ALIVE!");
-    }
-
-    private void registerPlaceholders() {
+        Bukkit.getConsoleSender().sendMessage(AQUA + "[Quake] Quake has been successfully loaded and it's enabled.");
     }
 
     private void registerCommands() {
@@ -161,6 +161,16 @@ public class Quake extends JavaPlugin implements Listener {
         PowerupEffectManager.load(customConfig.getConfigRequired("powerups"));
 
         ArenaManager.get().load(QuakeArena.class);
+    }
+
+    @EventHandler
+    private void notifyUnsetQuake(PlayerJoinEvent e) {
+        Player player = e.getPlayer();
+        boolean unset = ArenaManager.get().getArenas().isEmpty();
+        if (player.isOp() && unset) {
+            Bukkit.getScheduler().runTask(this, () ->
+                    player.sendMessage(AQUA + "Quake hasn't found any arena.\nConsider following the setup wiki: " + YELLOW + "https://upperlevel.github.io/quake"));
+        }
     }
 
     // ------------------------------------------------------------------------------------------------ Database

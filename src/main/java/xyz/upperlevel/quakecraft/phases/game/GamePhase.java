@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -436,6 +437,13 @@ public class GamePhase extends PhaseManager {
                 e.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        // Any player inside of the arena is absolutely denied to interact with its own inventory during game.
+        if (arena.hasPlayer((Player) e.getWhoClicked()))
+            e.setCancelled(true);
     }
 
     public static void loadConfig() {
