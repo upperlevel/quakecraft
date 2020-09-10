@@ -174,6 +174,16 @@ public class Profile extends HashMap<String, Object> {
         return this;
     }
 
+    public double getKdRatio() {
+        return getKills() / (double) getDeaths();
+    }
+
+    public double getWinRatio() {
+        int won = getWonMatches();
+        int lost = getPlayedMatches() - won;
+        return won / (double) lost;
+    }
+
     // ------------------------------------------------------------------------------------------------ Gun
 
     public GunCategory getGunCategory() {

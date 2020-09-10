@@ -141,6 +141,8 @@ public class QuakeCommand extends NodeCommand {
                 .set("deaths", profile.getDeaths())
                 .set("won_matches", profile.getWonMatches())
                 .set("played_matches", profile.getPlayedMatches())
+                .set("kd_ratio", profile.getKdRatio())
+                .set("win_ratio", profile.getWinRatio())
         );
     }
 

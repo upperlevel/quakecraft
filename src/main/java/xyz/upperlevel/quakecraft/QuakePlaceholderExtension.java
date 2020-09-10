@@ -2,6 +2,7 @@ package xyz.upperlevel.quakecraft;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
+import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.uppercore.util.Dbg;
 
 public class QuakePlaceholderExtension extends PlaceholderExpansion {
@@ -50,6 +51,12 @@ public class QuakePlaceholderExtension extends PlaceholderExpansion {
 
             case "player_played_matches":
                 return String.valueOf(Quake.getProfile(player).getPlayedMatches());
+
+            case "player_kd_ratio":
+                return String.valueOf(Quake.getProfile(player).getKdRatio());
+
+            case "player_win_ratio":
+                return String.valueOf(Quake.getProfile(player).getWinRatio());
 
             default:
                 return null;

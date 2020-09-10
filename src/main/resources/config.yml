@@ -2996,6 +2996,8 @@ messages:
       - "&e- Deaths: &7%deaths%"
       - "&e- Won matches: &7%won_matches%"
       - "&e- Played matches: &7%played_matches%"
+      - "&e- K/D ratio: &7%kd_ratio%"
+      - "&e- Win/lost ratio: &7%win_ratio%"
 
     arena:
       spawn:
