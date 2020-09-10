@@ -53,10 +53,10 @@ public class QuakePlaceholderExtension extends PlaceholderExpansion {
                 return String.valueOf(Quake.getProfile(player).getPlayedMatches());
 
             case "player_kd_ratio":
-                return String.valueOf(Quake.getProfile(player).getKdRatio());
+                return String.format("%.2f", Quake.getProfile(player).getKdRatio());
 
             case "player_win_ratio":
-                return String.valueOf(Quake.getProfile(player).getWinRatio());
+                return String.format("%.2f", Quake.getProfile(player).getWinRatio());
 
             default:
                 return null;
