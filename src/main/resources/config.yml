@@ -228,8 +228,6 @@ game:
   sneak-disabled: true
   sneak-disabled-message: '&cSneaking is disabled! Your name is still visible'
 
-  kills-to-win: 20
-
   # If set to true the players at the end of a game will rejoin automatically the lobby they were in
   auto-join: false
   # Clickable message displayed at the end of a game that, when clicked, will make the players rejoin the lobby

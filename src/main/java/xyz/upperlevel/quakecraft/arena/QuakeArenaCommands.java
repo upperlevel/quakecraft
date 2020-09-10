@@ -176,4 +176,24 @@ public class QuakeArenaCommands {
         arena.removePowerup(which - 1);
         player.sendMessage(GREEN + "Powerup " + which + " removed from '" + arena.getId() + "'.");
     }
+
+    @AsCommand(
+            description = "Sets the kills needed to win for an arena."
+    )
+    @WithPermission(
+            user = PermissionUser.OP
+    )
+    protected void setKillsToWin(Player player, int killsToWin) {
+        QuakeArena arena = (QuakeArena) ArenaManager.get().get(player.getWorld());
+        if (arena == null) {
+            player.sendMessage(RED + "This world doesn't hold any arena.");
+            return;
+        }
+        if (killsToWin <= 0) {
+            player.sendMessage(RED + "Kills to win must be higher (>) than 0.");
+            return;
+        }
+        arena.setKillsToWin(killsToWin);
+        player.sendMessage(GREEN + String.format("Kills to win set to %d for '%s'.", killsToWin, arena.getId()));
+    }
 }

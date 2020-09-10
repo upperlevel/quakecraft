@@ -57,7 +57,6 @@ public class GamePhase extends PhaseManager {
 
     private static boolean sneakDisabled;
     private static Message sneakDisabledMessage;
-    private static int killsToWin;
 
     public static GameHotbar hotbar;
 
@@ -391,8 +390,8 @@ public class GamePhase extends PhaseManager {
     }
 
     public boolean goOnIfHasWon(Player player) {
-        if (getGamer(player).getKills() >= killsToWin) {
-            Dbg.p(String.format("Game ended, %s has > %d kills", player.getName(), killsToWin));
+        if (getGamer(player).getKills() >= arena.getKillsToWin()) {
+            Dbg.p(String.format("Game ended, %s has > %d kills", player.getName(), arena.getKillsToWin()));
             end(player);
             return true;
         }
@@ -459,7 +458,6 @@ public class GamePhase extends PhaseManager {
         startSound = config.getPlaySound("start-sound");
         sneakDisabled = config.getBoolRequired("sneak-disabled");
         sneakDisabledMessage = config.getMessageRequired("sneak-disabled-message");
-        killsToWin = config.getIntRequired("kills-to-win");
         hotbar = config.getRequired("playing-hotbar", GameHotbar.class);
         joinSign = Quake.getConfigSection("join-signs").getMessage("playing");
     }

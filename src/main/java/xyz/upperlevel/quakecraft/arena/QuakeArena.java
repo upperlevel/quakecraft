@@ -19,16 +19,17 @@ import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.util.Dbg;
 import xyz.upperlevel.uppercore.util.LocUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class QuakeArena extends Arena {
     @Getter
     @Setter
     private int minPlayers = -1, maxPlayers = -1;
+
+    @Getter
+    @Setter
+    private int killsToWin;
 
     private List<Location> spawns = new ArrayList<>();
     private List<Powerup> powerups = new ArrayList<>();
@@ -49,13 +50,15 @@ public class QuakeArena extends Arena {
             @ConfigProperty("spawns") List<Location> spawns,
             @ConfigProperty("powerups") List<Powerup> powerups,
             @ConfigProperty("min-players") int minPlayers,
-            @ConfigProperty("max-players") int maxPlayers
-    ) {
+            @ConfigProperty("max-players") int maxPlayers,
+            @ConfigProperty("kills-to-win") Optional<Integer> killsToWin
+            ) {
         super(id, lobby, joinSigns);
         this.spawns = spawns;
         this.powerups = powerups;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
+        this.killsToWin = killsToWin.orElse(20);
         init();
     }
 
@@ -163,6 +166,7 @@ public class QuakeArena extends Arena {
         data.put("powerups", powerups.stream()
                 .map(Powerup::serialize)
                 .collect(Collectors.toList()));
+        data.put("kills-to-win", killsToWin);
         return data;
     }
 }
