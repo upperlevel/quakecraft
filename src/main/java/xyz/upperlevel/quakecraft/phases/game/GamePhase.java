@@ -14,6 +14,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.upperlevel.quakecraft.Quake;
@@ -351,9 +352,29 @@ public class GamePhase extends PhaseManager {
         if (e.getEntityType() != EntityType.PLAYER) return;
 
         Gamer gamer = getGamer((Player) e.getEntity());
+        if (gamer != null) {
+            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                e.setCancelled(true);
+                gamer.die();
+            }
+        }
+    }
 
-        if (gamer != null && e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-            e.setCancelled(true);
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent e) {
+        Player p = e.getPlayer();
+
+        Gamer gamer = getGamer(p);
+        if (gamer == null) return;
+
+        // Before the player starts to get void damage kills him.
+        // Apparently there's an issue with VOID damage calls as Spigot
+        // could fire EntityDamageEvent (cause: VOID) many times even if
+        // the player has been teleported in the first call. This would lead
+        // the player to teleport around the Quake's spawns.
+        double y = p.getLocation().getY();
+        if (y < -10) {
+            Dbg.pf("%s is falling (%.2f), killing him", gamer.getName(), y);
             gamer.die();
         }
     }

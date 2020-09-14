@@ -2,8 +2,10 @@ package xyz.upperlevel.quakecraft.phases.lobby;
 
 import lombok.Getter;
 import org.bukkit.GameMode;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
@@ -89,6 +91,17 @@ public class LobbyPhase extends PhaseManager {
         if (arena.hasPlayer(e.getPlayer())) {
             e.setRespawnLocation(arena.getLobby());
         }
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent e) {
+        if (e.getEntityType() != EntityType.PLAYER) return;
+
+        Player player = (Player) e.getEntity();
+        if (!arena.hasPlayer(player)) return;
+
+        if (e.getCause() == EntityDamageEvent.DamageCause.VOID)
+            player.teleport(arena.getLobby());
     }
 
     public static void loadConfig() {

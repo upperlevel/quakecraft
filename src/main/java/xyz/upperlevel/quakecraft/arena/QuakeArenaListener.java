@@ -28,16 +28,7 @@ public class QuakeArenaListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player && arena.hasPlayer((Player) e.getEntity())) {
-            e.setCancelled(true);
-            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                Location spawn;
-                if (arena.getPhaseManager().getPhase() instanceof LobbyPhase) {
-                    spawn = arena.getLobby();
-                } else {
-                    spawn = arena.getSpawns().get(ThreadLocalRandom.current().nextInt(arena.getSpawns().size()));
-                }
-                e.getEntity().teleport(spawn);
-            }
+            e.setCancelled(true); // Any kind of damage to a player in the arena is disabled.
         }
     }
 

@@ -4,8 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.profile.Profile;
+import xyz.upperlevel.uppercore.Uppercore;
+import xyz.upperlevel.uppercore.util.Dbg;
 
 import java.util.List;
 import java.util.Random;
@@ -81,16 +84,22 @@ public class Gamer {
     }
 
     public void die() {
-        deaths++;
-
-        Profile profile = getProfileController().getProfile(player);
-        getProfileController().updateProfile(player.getUniqueId(), new Profile().setDeaths(profile.getDeaths() + 1));
-
-        killsSinceDeath = 0;
-        nextKillStreak = KillStreak.get(0);
+        // The FALL damage is completely disabled within the arena.
 
         List<Location> s = gamePhase.getArena().getSpawns();
-        player.teleport(s.get(new Random().nextInt(s.size())));
+        boolean respawned = player.teleport(s.get(new Random().nextInt(s.size())));
+
+        if (respawned) {
+            deaths++;
+
+            Profile profile = getProfileController().getProfile(player);
+            getProfileController().updateProfile(player.getUniqueId(), new Profile().setDeaths(profile.getDeaths() + 1));
+
+            killsSinceDeath = 0;
+            nextKillStreak = KillStreak.get(0);
+        } else {
+            Uppercore.logger().severe(String.format("%s teleport after death blocked?", player.getName()));
+        }
     }
 
     public static void loadGains() {
