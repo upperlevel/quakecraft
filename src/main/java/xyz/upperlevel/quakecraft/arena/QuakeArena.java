@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import xyz.upperlevel.quakecraft.Quake;
@@ -60,6 +61,14 @@ public class QuakeArena extends Arena {
         this.maxPlayers = maxPlayers;
         this.killsToWin = killsToWin.orElse(20);
         init();
+    }
+
+    public void preload() {
+        super.preload();
+
+        World world = getWorld();
+        this.spawns.forEach(spawn -> world.loadChunk(spawn.getChunk()));
+        this.powerups.forEach(powerup -> world.loadChunk(powerup.getLocation().getChunk()));
     }
 
     public PlaceholderRegistry createPlaceholders() {
