@@ -25,23 +25,23 @@ public class Shot extends BukkitRunnable {
     /**
      * Imagine the ray as a cylinder. The size is half of the diameter of the cylinder's base.
      */
-    public static final double raySize = 0.4;
+    public static double raySize;// = 0.4;
 
     /**
      * The distance from the origin after when the projectile can be destroyed.
      */
-    public static final double maxDistance = 150.0;
+    public static double maxDistance;// = 150.0;
 
     /**
      * The speed of the projectile expressed in m/s (or blocks per second).
      */
-    public static final double speed = 100.0;
+    public static double speed;// = 100.0;
 
     /**
      * The step that must be used for computing the players intersection and spawning the particles.
      * It's measured in blocks.
      */
-    public static final double rayStep = 0.5;
+    public static double rayStep;// = 0.5;
 
     public static PlaceholderValue<String> defaultKillMessage;
     public static Message shotMessage;
@@ -137,11 +137,12 @@ public class Shot extends BukkitRunnable {
     @Override
     public void run() {
         double speedPerTick = speed / 20.0;
+        double maxDistPerTick = speedPerTick;
 
         // The step that should be done within this tick (speedPerTick) is subdivided into many small steps
         // long as rayStep. Every rayStep intersections are checked and a particles are spawned.
         double pStep = 0;
-        while (pStep < speedPerTick) {
+        while (pStep < maxDistPerTick) {
             if (!location.getBlock().isPassable()) {
                 Dbg.p(String.format("[%s] Canceling shot because hit a non-passable block", shooter.getName()));
                 cancel();
@@ -172,9 +173,10 @@ public class Shot extends BukkitRunnable {
                 }
             }
 
-            pStep += rayStep;
-            location.add(direction.normalize().multiply(rayStep));
-            distance += rayStep;
+            double distInc = Math.min(rayStep, maxDistPerTick - pStep);
+            pStep += distInc;
+            location.add(direction.normalize().multiply(distInc));
+            distance += distInc;
 
             if (distance >= maxDistance) { // If the ray exceed its max distance halts all.
                 Dbg.p(String.format("[%s] Max distance reached, canceling shot", shooter.getName()));
@@ -186,6 +188,12 @@ public class Shot extends BukkitRunnable {
 
     public static void loadConfig() {
         Config config = Quake.getConfigSection("game");
+
+        raySize = config.getDoubleRequired("ray-size");
+        maxDistance = config.getDoubleRequired("ray-max-distance");
+        speed = config.getDoubleRequired("ray-speed");
+        rayStep = config.getDoubleRequired("ray-step");
+
         defaultKillMessage = config.getMessageStrRequired("default-kill-message");
         shotMessage = config.getMessageRequired("shot-message");
         headshotMessage = config.getMessageRequired("headshot-message");

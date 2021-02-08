@@ -67,6 +67,24 @@ game:
   respawn-cooldown: 100 # In ticks (20 ticks = 1 sec)
   cant-hit-player-because-respawning-message: "&cYou can't hit the player &4%shot_player%&c, he's still respawning."
 
+  # ---------------------------------
+  # Shot configuration
+  # ---------------------------------
+
+  # Imagine the ray as a cylinder, this is half of it's diameter measured in block units.
+  ray-size: 0.4
+
+  # The max distance the ray can reached, measured in blocks.
+  ray-max-distance: 150.0
+
+  # The speed of the ray measured in blocks per second.
+  ray-speed: 1000.0
+
+  # The step used to compute the player's intersection and spawn the particle. Measured in blocks.
+  ray-step: 0.5
+
+  # ---------------------------------
+
   # Start:
   start-message:
     - '^a'
