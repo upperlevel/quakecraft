@@ -64,6 +64,9 @@ game:
   # The list of commands permtited during the game.
   permitted-commands: ["/quake leave", "/q leave"]
 
+  respawn-cooldown: 100 # In ticks (20 ticks = 1 sec)
+  cant-hit-player-because-respawning-message: "&cYou can't hit the player &4%shot_player%&c, he's still respawning."
+
   # Start:
   start-message:
     - '^a'

@@ -1,5 +1,6 @@
 package xyz.upperlevel.quakecraft.phases.game;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -45,6 +46,7 @@ public class Shot extends BukkitRunnable {
     public static PlaceholderValue<String> defaultKillMessage;
     public static Message shotMessage;
     public static Message headshotMessage;
+    public static Message cantHitPlayerBecauseRespawningMsg;
 
     private final Arena arena;
     private final GamePhase gamePhase;
@@ -77,7 +79,23 @@ public class Shot extends BukkitRunnable {
     }
 
     private void kill(List<Player> hits) {
+
+        int hitsCount = 0;
+
         for (Player hit : hits) {
+            if (!gamePhase.getGamer(hit).die()) {
+                if (cantHitPlayerBecauseRespawningMsg != null) {
+                    cantHitPlayerBecauseRespawningMsg.send(
+                            this.shooter,
+                            PlaceholderRegistry.create(gamePhase.getPlaceholders())
+                                .set("shot_player", hit.getName())
+                        );
+                }
+                continue;
+            }
+
+            hitsCount++;
+
             boolean headshot = location.getY() - hit.getLocation().getY() > 1.4; // Head height
 
             Dbg.p(String.format("[%s] Hit %s - headshot %b", shooter.getName(), hit.getName(), headshot));
@@ -95,7 +113,6 @@ public class Shot extends BukkitRunnable {
             arena.broadcast(message, registry);
 
             gamePhase.getGamer(shooter).onKill(headshot);
-            gamePhase.getGamer(hit).die();
 
             shooterAccount.getSelectedKillSound().play(shooter.getLocation());
             shooterAccount.getSelectedKillSound().play(location);
@@ -112,7 +129,7 @@ public class Shot extends BukkitRunnable {
 
         }
 
-        MultiStab.tryReach(gamePhase, gamePhase.getGamer(shooter), hits.size());
+        MultiStab.tryReach(gamePhase, gamePhase.getGamer(shooter), hitsCount);
 
         gamePhase.goOnIfHasWon(shooter);
     }
@@ -172,5 +189,6 @@ public class Shot extends BukkitRunnable {
         defaultKillMessage = config.getMessageStrRequired("default-kill-message");
         shotMessage = config.getMessageRequired("shot-message");
         headshotMessage = config.getMessageRequired("headshot-message");
+        cantHitPlayerBecauseRespawningMsg = config.getMessage("cant-hit-player-because-respawning-message");
     }
 }

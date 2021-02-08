@@ -5,9 +5,11 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.arena.QuakeArena;
 import xyz.upperlevel.quakecraft.profile.Profile;
 import xyz.upperlevel.uppercore.Uppercore;
+import xyz.upperlevel.uppercore.config.Config;
 import xyz.upperlevel.uppercore.util.Dbg;
 
 import java.util.List;
@@ -18,6 +20,8 @@ import static xyz.upperlevel.quakecraft.Quake.getProfileController;
 public class Gamer {
     private static GainType killGain;
     private static GainType headshotGain;//TODO: use
+
+    public static long RESPAWN_COOLDOWN; // In ticks
 
     @Getter
     private final GamePhase gamePhase;
@@ -52,6 +56,9 @@ public class Gamer {
 
     public float coins = 0f;
 
+    @Getter
+    private long lastDeathAt = 0L;
+
     public Gamer(GamePhase gamePhase, Player player) {
         this.gamePhase = gamePhase;
         this.arena = gamePhase.getArena();
@@ -83,8 +90,18 @@ public class Gamer {
         gamePhase.updateBoards();
     }
 
-    public void die() {
+    public boolean canDie() {
+        return this.lastDeathAt + RESPAWN_COOLDOWN * (1000 / 20) < System.currentTimeMillis();
+    }
+
+    public boolean die() {
         // The FALL damage is completely disabled within the arena.
+
+        if (!canDie()) { // You're too young to die!
+            Dbg.pf("%s wanna die but he's too young so can't.", getName());
+            return false;
+        }
+        this.lastDeathAt = System.currentTimeMillis();
 
         List<Location> s = gamePhase.getArena().getSpawns();
         boolean respawned = player.teleport(s.get(new Random().nextInt(s.size())));
@@ -99,12 +116,20 @@ public class Gamer {
             nextKillStreak = KillStreak.get(0);
         } else {
             Uppercore.logger().severe(String.format("%s teleport after death blocked?", player.getName()));
+            return false;
         }
+
+        return true;
     }
 
     public static void loadGains() {
         killGain = GainType.create("kill-gain");
         headshotGain = GainType.create("headshot-gain");
+    }
+
+    public static void loadConfig() {
+        Config cfg = Quake.getConfigSection("game");
+        RESPAWN_COOLDOWN = cfg.getLong("respawn-cooldown");
     }
 
     @Override

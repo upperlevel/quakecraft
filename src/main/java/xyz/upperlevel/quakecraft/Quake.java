@@ -154,6 +154,7 @@ public class Quake extends JavaPlugin implements Listener {
 
         WaitingPhase.loadConfig();
         GamePhase.loadConfig();
+        Gamer.loadConfig();
         CountdownPhase.loadConfig();
         EndingPhase.loadConfig();
         LobbyPhase.loadConfig();
