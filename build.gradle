@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'xyz.upperlevel.quakecraft'
-version = '2.1.1'
+version = '2.1.2'
 
 description = """A core used by the Upperlevel group"""
 
@@ -15,7 +15,7 @@ targetCompatibility = 1.8
 
 project.ext {
     mcVersion = '1.15.2-R0.1-SNAPSHOT'
-    coreVersion = '2.0'
+    coreVersion = '2.0.2'
 }
 
 repositories {
