@@ -3,4 +3,4 @@ version: ${project.version}
 main: xyz.upperlevel.quakecraft.Quake
 author: Upperlevel
 api-version: 1.13
-softdepend: [Vault, PlaceholderAPI, ProtocolLib]
+softdepend: [Vault, PlaceholderAPI, ProtocolLib, Multiverse-Core]
