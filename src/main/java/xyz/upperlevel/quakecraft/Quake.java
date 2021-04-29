@@ -1,8 +1,9 @@
 package xyz.upperlevel.quakecraft;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,12 +43,9 @@ import xyz.upperlevel.uppercore.util.DynLib;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 import static org.bukkit.ChatColor.AQUA;
 import static org.bukkit.ChatColor.YELLOW;
@@ -75,7 +73,7 @@ public class Quake extends JavaPlugin implements Listener {
     private ConfirmPurchaseGui.Options defConfirmOptions;
 
     @Getter
-    private Connection connection;
+    private DbConnectionPool dbConnectionPool;
 
     private ProfileController profileController;
 
@@ -96,8 +94,8 @@ public class Quake extends JavaPlugin implements Listener {
             this.pluginRegistry = Uppercore.registry();
             this.guis = pluginRegistry.registerFolder("guis");
 
-            connectToDatabase();
-            profileController = new ProfileController(connection);
+            dbConnectionPool = new DbConnectionPool(this);
+            profileController = new ProfileController();
 
             shop = new ShopCategory();
             Bukkit.getScheduler().runTask(this, () -> {
@@ -176,49 +174,6 @@ public class Quake extends JavaPlugin implements Listener {
 
     // ------------------------------------------------------------------------------------------------ Database
 
-    private void connectToDatabase() {
-        Config cfg = Config.fromYaml(new File(getDataFolder(), "db.yml"));
-        String type = cfg.getStringRequired("type");
-
-        Runnable getDriver = new HashMap<String, Runnable>() {{
-            // MariaDB
-            put("mariadb", () -> {
-                try {
-                    DynLib.from("https://downloads.mariadb.com/Connectors/java/connector-java-2.6.2/mariadb-java-client-2.6.2.jar").install();
-                    Class.forName("org.mariadb.jdbc.Driver");
-                } catch (Exception e) {
-                    throw new IllegalStateException(e);
-                }
-            });
-        }}.get(type);
-
-        if (getDriver != null)
-            getDriver.run();
-
-        try {
-            if ("sqlite".equals(type)) {
-                File file = new File(getDataFolder(), "quake.db");
-                this.connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", file.getPath()));
-            } else {
-                String user = cfg.getString("user");
-                String password = cfg.getString("password");
-                if (user != null) user = "user=" + user;
-                if (password != null) password = "password=" + password;
-
-                String query = Stream.of(user, password).filter(Objects::nonNull).collect(Collectors.joining("&"));
-                String url = "jdbc:%s://%s:%d/%s" + (query.isEmpty() ? "" : "?" + query);
-                this.connection = DriverManager.getConnection(String.format(url,
-                        type,
-                        cfg.getStringRequired("host"),
-                        cfg.getIntRequired("port"),
-                        cfg.getStringRequired("database")
-                ));
-            }
-        } catch (SQLException e) {
-            throw new IllegalStateException(String.format("Unsupported JDBC DB: '%s'", type), e);
-        }
-    }
-
     @EventHandler
     private void tryCreateDbProfile(PlayerJoinEvent e) {
         getProfileController().createProfileAsync(e.getPlayer(), new Profile());
@@ -232,10 +187,8 @@ public class Quake extends JavaPlugin implements Listener {
     public void onDisable() {
         HandlerList.unregisterAll((Listener) this);
 
-        try {
-            if (connection != null)
-                connection.close();
-        } catch (SQLException ignored) {
+        if (dbConnectionPool != null) {
+            dbConnectionPool.close();
         }
 
         ArenaManager.get().unload();

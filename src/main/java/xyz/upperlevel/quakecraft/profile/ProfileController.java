@@ -14,13 +14,10 @@ import java.util.*;
 import static org.bukkit.Bukkit.getScheduler;
 
 public class ProfileController {
-    private final Connection connection;
     private final SqlTableHelper<Profile> table;
 
-    public ProfileController(Connection connection) {
-        this.connection = connection;
-
-        this.table = new SqlTableHelper<>(connection, "profiles");
+    public ProfileController() {
+        this.table = new SqlTableHelper<>(Quake.get().getDbConnectionPool(), "profiles");
         trySetup();
     }
 

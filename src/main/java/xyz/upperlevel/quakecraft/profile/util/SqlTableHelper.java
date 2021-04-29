@@ -2,6 +2,8 @@ package xyz.upperlevel.quakecraft.profile.util;
 
 import lombok.Getter;
 import lombok.NonNull;
+import xyz.upperlevel.quakecraft.DbConnectionPool;
+import xyz.upperlevel.uppercore.util.Dbg;
 
 import java.sql.*;
 import java.util.*;
@@ -37,13 +39,13 @@ public class SqlTableHelper<T extends Map<String, Object>> {
     }
 
     @Getter
-    private final Connection connection;
+    private final DbConnectionPool pool;
 
     @Getter
     protected final String name;
 
-    public SqlTableHelper(Connection connection, String name) {
-        this.connection = connection;
+    public SqlTableHelper(DbConnectionPool pool, String name) {
+        this.pool = pool;
         this.name = name;
     }
 
@@ -52,7 +54,10 @@ public class SqlTableHelper<T extends Map<String, Object>> {
 
         //Dbg.pf("Create table query: %s", sql);
 
-        connection.prepareStatement(sql).executeUpdate();
+        try (Connection conn = this.pool.getConnection()) {
+            int res = conn.prepareStatement(sql).executeUpdate();
+            Dbg.pf("Table `%s` creation result: %d", name, res);
+        }
     }
 
     protected List<Map<String, Object>> gatherResultSet(ResultSet resultSet) throws SQLException {
@@ -81,12 +86,13 @@ public class SqlTableHelper<T extends Map<String, Object>> {
 
         //Dbg.pf("Select query: %s (%s)", sql, params.stream().map(Object::toString).collect(Collectors.toList()));
 
-        PreparedStatement statement = connection.prepareStatement(sql);
-        for (int i = 0; i < params.size(); i++)
-            statement.setObject(i + 1, params.get(i));
-        ResultSet resultSet = statement.executeQuery();
-
-        return gatherResultSet(resultSet);
+        try (Connection conn = this.pool.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            for (int i = 0; i < params.size(); i++)
+                statement.setObject(i + 1, params.get(i));
+            ResultSet resultSet = statement.executeQuery();
+            return gatherResultSet(resultSet);
+        }
     }
 
     public boolean insert(T data) throws SQLException {
@@ -98,10 +104,13 @@ public class SqlTableHelper<T extends Map<String, Object>> {
 
         //Dbg.pf("Insert query: %s (%s)", sql, params.stream().map(Object::toString).collect(Collectors.toList()));
 
-        PreparedStatement statement = connection.prepareStatement(sql);
-        for (int i = 0; i < params.size(); i++)
-            statement.setObject(i + 1, params.get(i));
-        return statement.executeUpdate() > 0;
+        try (Connection conn = this.pool.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            for (int i = 0; i < params.size(); i++) {
+                statement.setObject(i + 1, params.get(i));
+            }
+            return statement.executeUpdate() > 0;
+        }
     }
 
     public boolean update(WhereClause where, T data) throws SQLException {
@@ -115,10 +124,13 @@ public class SqlTableHelper<T extends Map<String, Object>> {
 
         //Dbg.pf("Update query: %s (%s)", sql, params.stream().map(Object::toString).collect(Collectors.toList()));
 
-        PreparedStatement statement = connection.prepareStatement(sql);
-        for (int i = 0; i < params.size(); i++)
-            statement.setObject(i + 1, params.get(i));
-        return statement.executeUpdate() > 0;
+        try (Connection conn = this.pool.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            for (int i = 0; i < params.size(); i++) {
+                statement.setObject(i + 1, params.get(i));
+            }
+            return statement.executeUpdate() > 0;
+        }
     }
 
     public boolean delete(WhereClause where) throws SQLException {
@@ -128,10 +140,12 @@ public class SqlTableHelper<T extends Map<String, Object>> {
 
         //Dbg.pf("Delete query: %s (%s)", sql, params.stream().map(Object::toString).collect(Collectors.toList()));
 
-        PreparedStatement statement = connection.prepareStatement(sql);
-        for (int i = 0; i < params.size(); i++)
-            statement.setObject(i + 1, params.get(i));
-        return statement.executeUpdate() > 0;
+        try (Connection conn = this.pool.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            for (int i = 0; i < params.size(); i++)
+                statement.setObject(i + 1, params.get(i));
+            return statement.executeUpdate() > 0;
+        }
     }
 
     public void drop() throws SQLException {
@@ -139,7 +153,9 @@ public class SqlTableHelper<T extends Map<String, Object>> {
 
         //Dbg.pf("Drop query: %s", sql);
 
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.executeUpdate();
+        try (Connection conn = this.pool.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.executeUpdate();
+        }
     }
 }

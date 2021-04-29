@@ -38,12 +38,14 @@ dependencies {
     compileOnly group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
     implementation group: 'xyz.upperlevel.uppercore', name: 'uppercore', version: coreVersion
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '4.0.3'
 
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
 shadowJar {
     relocate "xyz.upperlevel.uppercore", "${project.group}.uppercore"
+    relocate "com.zaxxer.hikari", "${project.group}.hikaricp"
 }
 
 distributions {
