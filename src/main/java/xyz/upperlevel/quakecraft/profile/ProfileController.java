@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.profile.util.SqlTableHelper;
 import xyz.upperlevel.quakecraft.profile.util.SqlTableHelper.WhereClause;
+import xyz.upperlevel.uppercore.Uppercore;
 import xyz.upperlevel.uppercore.placeholder.PlaceholderRegistry;
 import xyz.upperlevel.uppercore.util.Dbg;
 
@@ -27,7 +28,7 @@ public class ProfileController {
         try {
             this.table.create(
                     "id varchar(128) PRIMARY KEY",
-                    "name varchar(256) NOT NULL UNIQUE",
+                    "name varchar(128) NOT NULL UNIQUE",
 
                     "kills int",
                     "deaths int",
@@ -50,10 +51,12 @@ public class ProfileController {
                     "selected_dash_power varchar(1024)",
                     "selected_dash_cooldown varchar(1024)",
 
-                    "purchases json"
+                    "purchases mediumtext"
             );
-        } catch (SQLException ignored) {
-            // An exception could be thrown if the table already exists, ignores it.
+        } catch (SQLException e) {
+
+            Uppercore.logger().warning("This may not be a severe error, just reporting SQL state:");
+            e.printStackTrace(); // An exception could be thrown even if the table already exists!
         }
     }
 
