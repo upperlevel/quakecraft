@@ -38,7 +38,6 @@ import xyz.upperlevel.uppercore.util.EnchantUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static xyz.upperlevel.quakecraft.Quake.getProfile;
 import static xyz.upperlevel.quakecraft.Quake.getProfileController;
 
 public class PurchaseGui extends ChestGui {
@@ -114,7 +113,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public void printPurchases(Inventory inv, Player player) {
-        Profile profile = getProfile(player);
+        Profile profile = Quake.getProfileController().getOrCreateProfile(player);
         for (Map.Entry<Integer, Purchase<?>> p : purchaseMap.entrySet())
             inv.setItem(p.getKey(), getIcon(p.getValue(), profile, p.getValue().isSelected(profile)));
     }
@@ -129,7 +128,7 @@ public class PurchaseGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Purchase<?> purchase) {
-        Profile profile = getProfile(player);
+        Profile profile = Quake.getProfileController().getOrCreateProfile(player);
         Set<Purchase<?>> purchases = profile.getPurchases();
         if (!purchases.contains(purchase)) {
             //Require test
@@ -167,7 +166,7 @@ public class PurchaseGui extends ChestGui {
         PurchaseBuyEvent buyEvent = new PurchaseBuyEvent(player, purchase);
         eventManager.callEvent(buyEvent);
         if (!buyEvent.isCancelled()) {
-            Profile profile = getProfileController().getProfile(player);
+            Profile profile = Quake.getProfileController().getOrCreateProfile(player);
 
             // DB update:
             // T current purchases are retrieved, the new one is inserted among them,
@@ -306,7 +305,7 @@ public class PurchaseGui extends ChestGui {
     @SuppressWarnings("unchecked")
     protected void reloadSelection(Player player, int slot, Purchase<?> sel) {
         PurchaseManager purchaseManager = sel.getManager();
-        Purchase<?> old = purchaseManager.getSelected(getProfile(player));
+        Purchase<?> old = purchaseManager.getSelected(Quake.getProfileController().getOrCreateProfile(player));
         if (old != sel) {
             PurchaseSelectEvent event = new PurchaseSelectEvent(player, old, sel);
             Bukkit.getPluginManager().callEvent(event);

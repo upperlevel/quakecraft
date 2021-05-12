@@ -205,14 +205,6 @@ public class Quake extends JavaPlugin implements Listener {
         return instance.profileController;
     }
 
-    public static Profile getProfile(Player player) {
-        return getProfileController().getProfile(player);
-    }
-
-    public static Profile getProfile(OfflinePlayer player) {
-        return getProfileController().getProfile(player.getUniqueId());
-    }
-
     public static Gamer getGamer(Player player) {
         QuakeArena a = getArena(player);
         if (a != null && a.getPhaseManager().getPhase() instanceof GamePhase) {

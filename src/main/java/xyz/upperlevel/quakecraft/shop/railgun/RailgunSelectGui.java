@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static xyz.upperlevel.quakecraft.Quake.getProfile;
 import static xyz.upperlevel.quakecraft.shop.purchase.PurchaseGui.getPrefix;
 
 public class RailgunSelectGui extends ChestGui {
@@ -58,7 +57,7 @@ public class RailgunSelectGui extends ChestGui {
     @Override
     public Inventory create(Player player) {
         Inventory inv = super.create(player);
-        Profile profile = Quake.getProfileController().getProfile(player);
+        Profile profile = Quake.getProfileController().getOrCreateProfile(player);
         if(profile == null) {
             Quake.get().getLogger().severe("Player not registered in quake registry: " + player.getName());
             return inv;
@@ -134,7 +133,7 @@ public class RailgunSelectGui extends ChestGui {
     }
 
     public void onClick(Player player, int slot, Railgun gun) {
-        Profile p = getProfile(player);
+        Profile p = Quake.getProfileController().getOrCreateProfile(player);
         if(p.getRailgun() == gun) {
             GUN_ALREADY_SELECTED.send(player);
             //You already have that gun equipped

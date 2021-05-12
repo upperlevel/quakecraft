@@ -121,7 +121,7 @@ public class GamePhase extends PhaseManager {
         });
         placeholders.set("ranking_gun", (p, s) -> {
             try {
-                Profile player = getProfileController().getProfile(gamers.get(Integer.parseInt(s) - 1).getPlayer());
+                Profile player = getProfileController().getOrCreateProfile(gamers.get(Integer.parseInt(s) - 1).getPlayer());
                 return player.getRailgun() == null ? Railgun.CUSTOM_NAME.resolve(p) : player.getRailgun().getName().resolve(p);
             } catch (Exception e) {
                 return null;
@@ -161,7 +161,7 @@ public class GamePhase extends PhaseManager {
 
         hotbars().view(player).addHotbar(hotbar);
 
-        Profile profile = getProfileController().getProfile(player);
+        Profile profile = getProfileController().getOrCreateProfile(player);
         player.getInventory().setArmorContents(new ItemStack[]{ // Sets the account's selected armor.
                 profile.getSelectedBoots().getItem().resolve(player),
                 profile.getSelectedLeggings().getItem().resolve(player),
@@ -258,7 +258,7 @@ public class GamePhase extends PhaseManager {
         arena.updateJoinSigns();
 
         gamers.stream().map(Gamer::getPlayer).forEach(player -> {
-            Profile profile = getProfileController().getProfile(player);
+            Profile profile = getProfileController().getOrCreateProfile(player);
             getProfileController().updateProfile(player.getUniqueId(), new Profile().setPlayedMatches(profile.getPlayedMatches() + 1));
         });
 
@@ -390,7 +390,7 @@ public class GamePhase extends PhaseManager {
             Gamer gamer = getGamer(player);
 
             player.setExp(1.0f);
-            long firingDelay = (long) (getProfileController().getProfile(player).getSelectedTrigger().getFiringSpeed() * gamer.getGunCooldownBase());
+            long firingDelay = (long) (getProfileController().getOrCreateProfile(player).getSelectedTrigger().getFiringSpeed() * gamer.getGunCooldownBase());
             Countdown.create(
                     firingDelay, 1,
                     tick -> player.setExp((float) tick / firingDelay),

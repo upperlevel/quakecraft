@@ -65,7 +65,7 @@ public class Shot extends BukkitRunnable {
         this.gamePhase = gamePhase;
 
         this.shooter = shooter;
-        this.shooterAccount = Quake.getProfileController().getProfile(shooter.getUniqueId());
+        this.shooterAccount = Quake.getProfileController().getOrCreateProfile(shooter);
 
         this.location = shooter.getEyeLocation();
         this.direction = this.location.getDirection();

@@ -39,24 +39,29 @@ public class QuakePlaceholderExtension extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String identifier) {
+        Profile profile = Quake.getProfileController().getProfile(player.getUniqueId());
+
+        // The profile could be `null` whether the requested player isn't an actual player (could happen).
+        // Then, in this cases, we just return a default value.
+
         switch (identifier) {
             case "player_kills":
-                return String.valueOf(Quake.getProfile(player).getKills());
+                return profile != null ? String.valueOf(profile.getKills()) : "0";
 
             case "player_deaths":
-                return String.valueOf(Quake.getProfile(player).getDeaths());
+                return profile != null ? String.valueOf(profile.getDeaths()) : "0";
 
             case "player_won_matches":
-                return String.valueOf(Quake.getProfile(player).getWonMatches());
+                return profile != null ? String.valueOf(profile.getWonMatches()) : "0";
 
             case "player_played_matches":
-                return String.valueOf(Quake.getProfile(player).getPlayedMatches());
+                return profile != null ? String.valueOf(profile.getPlayedMatches()) : "0";
 
             case "player_kd_ratio":
-                return String.format("%.2f", Quake.getProfile(player).getKdRatio());
+                return profile != null ? String.format("%.2f", profile.getKdRatio()) : "0";
 
             case "player_win_ratio":
-                return String.format("%.2f", Quake.getProfile(player).getWinRatio());
+                return profile != null ? String.format("%.2f", profile.getWinRatio()) : "0";
 
             default:
                 return null;

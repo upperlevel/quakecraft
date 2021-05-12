@@ -121,7 +121,7 @@ public class EndingPhase extends Phase {
     public void onEnable(Phase prev) {
         super.onEnable(prev);
 
-        Profile winnerProfile = getProfileController().getProfile(winner);
+        Profile winnerProfile = getProfileController().getOrCreateProfile(winner);
         getProfileController().updateProfile(winner.getUniqueId(), new Profile().setWonMatches(winnerProfile.getWonMatches() + 1));
 
         printRanking();

@@ -50,7 +50,7 @@ public class GameHotbar extends Hotbar {
         public ItemStack resolve(Player player) {
             // The gun is particular: name and lore are both configurable but can have some
             // extra placeholders, such as gun's components name.
-            Profile profile = Quake.getProfileController().getProfile(player);
+            Profile profile = Quake.getProfileController().getOrCreateProfile(player);
             UItem item = profile.getSelectedCase().getItem();
             item.setDisplayName(name);
             item.setLore(lore);

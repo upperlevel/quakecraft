@@ -76,7 +76,7 @@ public class Gamer {
     public void onKill(boolean headshot) {
         kills++;
 
-        Profile profile = getProfileController().getProfile(player);
+        Profile profile = getProfileController().getOrCreateProfile(player);
         getProfileController().updateProfile(player.getUniqueId(), new Profile().setKills(profile.getKills() + 1));
 
         if (headshot)
@@ -109,7 +109,7 @@ public class Gamer {
         if (respawned) {
             deaths++;
 
-            Profile profile = getProfileController().getProfile(player);
+            Profile profile = getProfileController().getOrCreateProfile(player);
             getProfileController().updateProfile(player.getUniqueId(), new Profile().setDeaths(profile.getDeaths() + 1));
 
             killsSinceDeath = 0;

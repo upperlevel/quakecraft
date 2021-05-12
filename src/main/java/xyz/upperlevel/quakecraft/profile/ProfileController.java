@@ -1,5 +1,6 @@
 package xyz.upperlevel.quakecraft.profile;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import xyz.upperlevel.quakecraft.Quake;
 import xyz.upperlevel.quakecraft.profile.util.SqlTableHelper;
@@ -83,16 +84,33 @@ public class ProfileController {
         return getProfile(player.getUniqueId());
     }
 
-    public void createProfileAsync(UUID id, String name, Profile profile) {
-        getScheduler().runTaskAsynchronously(Quake.get(), () -> {
-            try {
-                profile.put("id", id.toString());
-                profile.put("name", name);
+    public Profile getOrCreateProfile(OfflinePlayer player) {
+        Profile existing = getProfile(player.getUniqueId());
+        if (existing == null) {
+            return createProfile(player.getUniqueId(), player.getName(), new Profile());
+        } else {
+            return existing;
+        }
+    }
 
-                table.insert(profile);
-            } catch (SQLException ignored) {
-            }
-        });
+    public Profile createProfile(UUID id, String name, Profile profile) {
+        try {
+            profile.put("id", id.toString());
+            profile.put("name", name);
+
+            Uppercore.logger().info(String.format("Creating profile for player: %s (%s)", name, id.toString()));
+
+            table.insert(profile);
+
+            return profile;
+
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public void createProfileAsync(UUID id, String name, Profile profile) {
+        getScheduler().runTaskAsynchronously(Quake.get(), () -> createProfile(id, name, profile));
     }
 
     public void createProfileAsync(Player player, Profile profile) {
