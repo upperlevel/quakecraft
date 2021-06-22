@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'xyz.upperlevel.quakecraft'
-version = '2.1.4'
+version = '2.1.5'
 
 description = """A core used by the Upperlevel group"""
 
