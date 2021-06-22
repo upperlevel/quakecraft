@@ -102,7 +102,8 @@ public class Quake extends JavaPlugin implements Listener {
                 if (EconomyManager.isEnabled()) {
                     shop.load();
                 } else {
-                    throw new IllegalStateException("Can't find economy plugin installed");
+                    getLogger().severe("An economy plugin is required, please install one");
+                    setEnabled(false);
                 }
             });
 
