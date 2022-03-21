@@ -1,1 +1,10 @@
 theme: jekyll-theme-leap-day
+
+quake:
+  spigot:
+    resource_url: "https://www.spigotmc.org/resources/quakecraft.45928/"
+  mc_market:
+    resource_url: "https://google.it"
+
+github:
+  owner_name: "Upperlevel"

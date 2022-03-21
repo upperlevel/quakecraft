@@ -1,0 +1,45 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+header {
+    background-image: none;
+    background-color: #cf360c;
+}
+
+header h1 {
+    text-shadow: 0px 2px 0px #8a2a0f;
+}
+
+header p {
+    color: white;
+    text-shadow: none;
+}
+
+#banner {
+    background: #ff5d30;
+    border: 1px solid #ff5d30;
+
+    text-align: right;
+}
+
+@media print, screen and (max-width: 1060px) {
+    #banner {
+        text-align: left;
+    }
+}
+
+body {
+    background-image: none;
+    background-color: black;
+}
+
+nav ul a {
+    color: #9c9c9c !important;
+}
+
+footer {
+    color: #9c9c9c !important;
+}
+
