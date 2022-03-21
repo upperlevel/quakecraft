@@ -1,6 +1,6 @@
 # Quakecraft
 
-Quake is a classical minigame featured on many Minecraft networks including one of the most popular "Hypixel". With the latter in mind, we've decided to develop the minigame from scratch and [make it available on Spigot](https://www.spigotmc.org/resources/quakecraft.45928/). As it's public, we've also provided it with highly customizable config that permits to edit almost all aspects of the plugin: messages, shop purchases, powerups...
+Quakecraft is a classical Minecraft minigame featured on many networks. We've decided to develop it from scratch and [make it available on Spigot](https://www.spigotmc.org/resources/quakecraft.45928/).
 
 ## Usage
 
